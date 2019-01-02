@@ -1,0 +1,28 @@
+version: '3'
+services:
+  zookeeper:
+    image: wurstmeister/zookeeper
+    ports:
+      - "2181:2181"
+
+  kafka:
+    image: wurstmeister/kafka
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_CREATE_TOPICS: "ffi:1:1"
+      KAFKA_ADVERTISED_HOST_NAME: "kafka"
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+    depends_on:
+      - zookeeper
+    links:
+      - zookeeper
+
+  app:
+    image: ffi-kafka
+    volumes:
+      - .:/app
+    depends_on:
+      - kafka
+    links:
+      - kafka

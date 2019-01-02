@@ -1,0 +1,14 @@
+{
+    "autoload": {
+        "psr-4": {
+            "": "src/"
+        },
+        "files": [
+          "src/constants.php",
+          "src/functions.php"
+        ]
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^7.1"
+    }
+}
