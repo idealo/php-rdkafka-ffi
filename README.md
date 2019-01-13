@@ -1,4 +1,4 @@
-# rdkafka lib based on PHP 7.4, FFI extension and librdkafka
+# rdkafka lib based on PHP 7.4 dev, FFI extension and librdkafka
 
 __EXTREMLY EXPERIMENTAL WIP__
 
@@ -9,7 +9,8 @@ Playing around with
 * experimental [php ffi extension](https://github.com/dstogov/php-ffi) for php7.4 ([rfc](https://wiki.php.net/rfc/ffi))
 * [librdkafka 0.11.6](https://github.com/edenhill/librdkafka) ([docs](https://docs.confluent.io/current/clients/librdkafka/rdkafka_8h.html))
 * [php rdkafka stubs](https://github.com/kwn/php-rdkafka-stubs)
-* php7.4-dev
+* [php7.4-dev](https://github.com/php/php-src/tree/master)
+* [Kafka](https://hub.docker.com/r/wurstmeister/kafka/) / [Zookeeper](https://hub.docker.com/r/wurstmeister/zookeeper/) docker images from wurstmeister
 
 ## Get started
 
@@ -23,15 +24,15 @@ Test - should show 7.4.0-dev version
 
 Build container with ffi & librdkafka
 
-    docker build -t ffi-kafka ./docker/ffi-kafka
+    docker build -t php-ffi-librdkafka ./docker/php-ffi-librdkafka
 
 Test - should show FFI in modules list
 
-    docker run -it ffi-kafka php -m
+    docker run -it php-ffi-librdkafka php -m
 
 Test ffi kafka lib binding - should show 0.11.6 version of librdkafka:
 
-    docker run -it -v `pwd`:/app -w /app ffi-kafka php bin/version.php
+    docker run -it -v `pwd`:/app -w /app php-ffi-librdkafka php bin/version.php
 
 ## Having fun with kafka
 
@@ -39,9 +40,9 @@ Startup php & kafka (with topic ffi)
 
     docker-compose up -d
 
-Updating Dependencies
+Updating Dependencies (using the [official composer docker image](https://hub.docker.com/_/composer) )
 
-    docker-compose run app composer update
+    docker run --rm --interactive --tty -v $PWD:/app composer update
 
 Producing ...
 
@@ -54,7 +55,7 @@ Consuming ...
 ## Todos
 
 * MetaData API Support
-* Callbacks (are currently not fully supported by ffi)
+* Callbacks (currently not fully supported by ffi and do work really quirky)
 * High Level KafkaConsumer
 * Logging
 * sig Handling

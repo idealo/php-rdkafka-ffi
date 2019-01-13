@@ -7,8 +7,5 @@
           "src/constants.php",
           "src/functions.php"
         ]
-    },
-    "require-dev": {
-        "phpunit/phpunit": "^7.1"
     }
 }

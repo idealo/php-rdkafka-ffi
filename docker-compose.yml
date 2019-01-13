@@ -19,7 +19,7 @@ services:
       - zookeeper
 
   app:
-    image: ffi-kafka
+    image: php-ffi-librdkafka
     volumes:
       - .:/app
     depends_on:
