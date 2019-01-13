@@ -30,7 +30,7 @@ Test - should show FFI in modules list
 
     docker run -it php-ffi-librdkafka php -m
 
-Test ffi kafka lib binding - should show 0.11.6 version of librdkafka:
+Test ffi rdkafka lib binding - should show 0.11.6 version of librdkafka:
 
     docker run -it -v `pwd`:/app -w /app php-ffi-librdkafka php bin/version.php
 

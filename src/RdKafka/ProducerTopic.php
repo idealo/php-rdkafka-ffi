@@ -66,7 +66,7 @@ class ProducerTopic extends Topic
             is_null($payload) ? null : strlen($payload),
             $key,
             is_null($key) ? null : strlen($key),
-            NULL
+            null
         );
 
         if ($ret == -1) {
