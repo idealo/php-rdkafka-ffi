@@ -2,7 +2,7 @@
 
 __EXTREMLY EXPERIMENTAL WIP__
 
-A php based rdkafka lib as replacement for [php rdkafka extension]()https://github.com/arnaud-lb/php-rdkafka .
+A php based rdkafka lib as replacement for [php rdkafka extension](https://github.com/arnaud-lb/php-rdkafka).
 
 Playing around with
 
