@@ -9,13 +9,8 @@ var_dump($topicConf->dump());
 
 $conf = new \RdKafka\Conf();
 $conf->set('group.id', 'test');
+$conf->set('debug', 'all');
 var_dump($conf->dump());
-
-//$conf->setDrMsgCb(function (\RdKafka\Producer $producer, \RdKafka\Message $message) {
-//    if ($message->err !== RD_KAFKA_RESP_ERR_NO_ERROR) {
-//        echo  $message->errstr() . PHP_EOL;
-//    }
-//});
 
 //pcntl_sigprocmask(SIG_BLOCK, [SIGIO]);
 //$conf->set('internal.termination.signal', SIGIO);
@@ -29,12 +24,10 @@ $topic = $consumer->newTopic('ffi', $topicConf);
 var_dump($topic);
 
 $topic->consumeStart(0, RD_KAFKA_OFFSET_STORED);
-do {
-    $message = $topic->consume(0, 1000);
-    if ($message === null) {
-        usleep(10000);
-    }
-    var_dump($message);
-} while ($message !== null);
+while ($message = $topic->consume(0, 1000)) {
+    echo sprintf('consume msg: %s, ts: %s', $message->payload, $message->timestamp) . PHP_EOL;
+    $events = $consumer->poll(1); // >1 = triggers log output
+    echo sprintf('polling triggered %d events', $events) . PHP_EOL;
+}
 $topic->consumeStop(0);
 

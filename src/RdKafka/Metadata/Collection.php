@@ -4,6 +4,11 @@ namespace RdKafka\Metadata;
 
 class Collection implements \Iterator, \Countable
 {
+    public function __construct()
+    {
+        throw new \Exception('Not implemented.');
+    }
+
     /**
      * @return mixed
      */

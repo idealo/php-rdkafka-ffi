@@ -14,6 +14,11 @@ class Conf extends Api
      */
     private $drMsgCb;
 
+    /**
+     * @var callable
+     */
+    private $loggerCb;
+
     public function __construct()
     {
         parent::__construct();
@@ -22,6 +27,8 @@ class Conf extends Api
 
     public function __destruct()
     {
+        unset($this->drMsgCb);
+        self::$ffi->rd_kafka_conf_destroy($this->conf);
     }
 
     /**
@@ -29,9 +36,6 @@ class Conf extends Api
      */
     public function getCData()
     {
-        var_dump($this->conf);
-        var_dump(\FFI::typeof($this->conf));
-
         return $this->conf;
     }
 
@@ -98,22 +102,39 @@ class Conf extends Api
     public function setDrMsgCb(callable $callback)
     {
         if ($this->drMsgCb === null) {
-            $this->drMsgCb = $callback;
-            echo "registered";
-            self::$ffi->rd_kafka_conf_set_dr_msg_cb($this->conf, function () {
-                echo "test";
-//                $this->drMsgCb(
-//                    Producer::resolveFromCData($producer),
-//                    new Message($message)
-//                );
-            });
-        } else {
-            $this->drMsgCb = $callback;
+            self::$ffi->rd_kafka_conf_set_dr_msg_cb($this->conf, [$this, 'drMsgCbProxy']);
         }
+        $this->drMsgCb = $callback;
+    }
+
+    public function drMsgCbProxy($nativeProducer, $nativeMessage, $opaque = null)
+    {
+        $producer = Producer::resolveFromCData($nativeProducer);
+        $message = new Message($nativeMessage);
+
+        $drMsgCb = $this->drMsgCb;
+        $drMsgCb($producer, $message);
     }
 
 
+    /**
+     * @param callable $callback
+     *
+     * @return void
+     */
+    public function setLoggerCb(callable $callback)
+    {
+        if ($this->loggerCb === null) {
+            self::$ffi->rd_kafka_conf_set_log_cb($this->conf, [$this, 'loggerCbProxy']);
+        }
+        $this->loggerCb = $callback;
+    }
 
+    public function loggerCbProxy($nativeProducer, $level, $fac, $buf)
+    {
+        $loggerCb = $this->loggerCb;
+        $loggerCb(Producer::resolveFromCData($nativeProducer), (int)$level, (string)$fac, (string)$buf);
+    }
 
     /**
      * @param callable $callback
@@ -122,6 +143,7 @@ class Conf extends Api
      */
     public function setErrorCb(callable $callback)
     {
+        throw new \Exception('Not implemented.');
     }
 
     /**
@@ -131,6 +153,7 @@ class Conf extends Api
      */
     public function setRebalanceCb(callable $callback)
     {
+        throw new \Exception('Not implemented.');
     }
 
     /**
@@ -140,5 +163,6 @@ class Conf extends Api
      */
     public function setStatsCb(callable $callback)
     {
+        throw new \Exception('Not implemented.');
     }
 }

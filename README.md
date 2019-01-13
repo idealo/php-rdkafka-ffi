@@ -54,13 +54,8 @@ Consuming ...
 ## Todos
 
 * MetaData API Support
-* Callbacks
+* Callbacks (are currently not fully supported by ffi)
 * High Level KafkaConsumer
+* Logging
+* sig Handling
 * Tests
-
-
-
-
-
-
-

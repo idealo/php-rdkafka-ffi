@@ -8,6 +8,11 @@ use RdKafka\Metadata\Topic;
 
 class Metadata
 {
+    public function __construct()
+    {
+        throw new \Exception('Not implemented.');
+    }
+
     /**
      * @return Collection|Broker[]
      */

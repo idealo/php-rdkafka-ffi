@@ -20,7 +20,7 @@ abstract class RdKafka extends Api
     public static function resolveFromCData($producer)
     {
         foreach (self::$instances as $instance) {
-            if ($producer === $instance->getCData()) {
+            if ($producer == $instance->getCData()) {
                 return $instance;
             }
         }
@@ -50,14 +50,22 @@ abstract class RdKafka extends Api
 
     public function __destruct()
     {
+        // like in php rdkafka extension
         while ($this->getOutQLen() > 0) {
             $this->poll(1);
         }
 
         self::$ffi->rd_kafka_destroy($this->kafka);
         self::$ffi->rd_kafka_wait_destroyed(1000);
-    }
 
+        // clean up reference
+        foreach (self::$instances as $i => $instance) {
+            if ($this === $instance) {
+                unset(self::$instances[$i]);
+                break;
+            }
+        }
+    }
 
     public function getCData()
     {
@@ -84,6 +92,7 @@ abstract class RdKafka extends Api
      */
     public function getMetadata(bool $all_topics, Topic $only_topic = null, int $timeout_ms)
     {
+        throw new \Exception('Not implemented.');
     }
 
     /**
@@ -97,9 +106,9 @@ abstract class RdKafka extends Api
     /**
      * @param int $timeout_ms
      *
-     * @return void
+     * @return int Number of triggered events
      */
-    public function poll(int $timeout_ms)
+    public function poll(int $timeout_ms): int
     {
         return self::$ffi->rd_kafka_poll($this->kafka, $timeout_ms);
     }

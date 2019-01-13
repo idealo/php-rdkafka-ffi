@@ -17,6 +17,7 @@ class TopicConf extends Api
 
     public function __destruct()
     {
+        self::$ffi->rd_kafka_topic_conf_destroy($this->topicConf);
     }
 
     /**
@@ -78,5 +79,6 @@ class TopicConf extends Api
      */
     public function setPartitioner(int $partitioner)
     {
+        throw new \Exception('Not implemented.');
     }
 }

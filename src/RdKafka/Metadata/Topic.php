@@ -4,6 +4,11 @@ namespace RdKafka\Metadata;
 
 class Topic
 {
+    public function __construct()
+    {
+        throw new \Exception('Not implemented.');
+    }
+
     /**
      * @return string
      */

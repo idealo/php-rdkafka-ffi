@@ -4,6 +4,11 @@ namespace RdKafka\Metadata;
 
 class Broker
 {
+    public function __construct()
+    {
+        throw new \Exception('Not implemented.');
+    }
+
     /**
      * @return int
      */

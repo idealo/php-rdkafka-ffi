@@ -74,8 +74,6 @@ class ProducerTopic extends Topic
             NULL
         );
 
-        var_dump($ret . ' - ' . $payload);
-
         if ($ret == -1) {
             $err = self::$ffi->rd_kafka_last_error();
             $errstr = self::$ffi->rd_kafka_err2str($err);

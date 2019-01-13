@@ -9,6 +9,7 @@ class KafkaConsumer
      */
     public function __construct(Conf $conf)
     {
+        throw new \Exception('Not implemented.');
     }
 
     /**
@@ -61,9 +62,9 @@ class KafkaConsumer
     }
 
     /**
-     * @param bool               $all_topics
+     * @param bool $all_topics
      * @param KafkaConsumerTopic $only_topic
-     * @param int                $timeout_ms
+     * @param int $timeout_ms
      *
      * @throws Exception
      * @return Metadata
