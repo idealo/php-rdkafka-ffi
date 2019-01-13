@@ -4,11 +4,6 @@ namespace RdKafka;
 
 class ProducerTopic extends Topic
 {
-    const RD_KAFKA_MSG_F_FREE = 0x1;
-    const RD_KAFKA_MSG_F_COPY = 0x2;
-    const RD_KAFKA_MSG_F_BLOCK = 0x4;
-    const RD_KAFKA_MSG_F_PARTITION = 0x8;
-
     /**
      * @var \FFI\CData
      */
@@ -66,7 +61,7 @@ class ProducerTopic extends Topic
         $ret = self::$ffi->rd_kafka_produce(
             $this->topic,
             $partition,
-            $msgflags | self::RD_KAFKA_MSG_F_COPY,
+            $msgflags | RD_KAFKA_MSG_F_COPY,
             $payload,
             is_null($payload) ? null : strlen($payload),
             $key,
