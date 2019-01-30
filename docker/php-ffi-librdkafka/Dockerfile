@@ -8,7 +8,6 @@ RUN apt-get update; \
 RUN set -e; \
     git clone --branch master --depth 1 https://github.com/dstogov/php-ffi.git /tmp/php-ffi; \
     cd /tmp/php-ffi; \
-    ln -s /usr/include/x86_64-linux-gnu/ffi.h /usr/include/ffi.h; \
     phpize; \
     ./configure --with-ffi=; \
     make; \

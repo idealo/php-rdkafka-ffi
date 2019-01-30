@@ -9,7 +9,7 @@ Playing around with
 * experimental [php ffi extension](https://github.com/dstogov/php-ffi) for php7.4 ([rfc](https://wiki.php.net/rfc/ffi))
 * [librdkafka 0.11.6](https://github.com/edenhill/librdkafka) ([docs](https://docs.confluent.io/current/clients/librdkafka/rdkafka_8h.html))
 * [php rdkafka stubs](https://github.com/kwn/php-rdkafka-stubs)
-* [php7.4-dev](https://github.com/php/php-src/tree/master)
+* [php7.4-dev](https://github.com/php/php-src/tree/PHP-7.4)
 * [Kafka](https://hub.docker.com/r/wurstmeister/kafka/) / [Zookeeper](https://hub.docker.com/r/wurstmeister/zookeeper/) docker images from wurstmeister
 
 ## Get started
@@ -30,7 +30,7 @@ Test - should show FFI in modules list
 
     docker run -it php-ffi-librdkafka php -m
 
-Test ffi rdkafka lib binding - should show 0.11.6 version of librdkafka:
+Test ffi librdkafka binding - should show 0.11.6 version of librdkafka:
 
     docker run -it -v `pwd`:/app -w /app php-ffi-librdkafka php bin/version.php
 
