@@ -72,6 +72,7 @@ RUN set -xe; \
 	unzip php.zip; \
 	rm php.zip; \
 	cd php-src-PHP-7.4; \
+	ls -la; \
 	./buildconf --force; \
 	cd /usr/src; \
 	tar -cJf php.tar.xz php-src-PHP-7.4; \
@@ -81,6 +82,8 @@ RUN set -xe; \
 
 COPY docker-php-source /usr/local/bin/
 
+ARG PHP_EXTRA_CONFIGURE_ARGS
+ARG PHP_EXTRA_BUILD_DEPS
 RUN set -eux; \
 	\
 	savedAptMark="$(apt-mark showmanual)"; \
@@ -185,11 +188,7 @@ RUN set -eux; \
 	; \
 	apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false bison; \
 	\
-	php --version; \
-	\
-# https://github.com/docker-library/php/issues/443
-	pecl update-channels; \
-	rm -rf /tmp/pear ~/.pearrc
+	php --version;
 
 COPY docker-php-ext-* docker-php-entrypoint /usr/local/bin/
 

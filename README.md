@@ -6,7 +6,7 @@ A php based rdkafka lib as replacement for [php rdkafka extension](https://githu
 
 Playing around with
 
-* experimental [php ffi extension](https://github.com/dstogov/php-ffi) for php7.4 ([rfc](https://wiki.php.net/rfc/ffi))
+* [ffi extension](https://github.com/php/php-src/tree/PHP-7.4/ext/ffi) for php7.4 ([rfc](https://wiki.php.net/rfc/ffi))
 * [librdkafka 0.11.6](https://github.com/edenhill/librdkafka) ([docs](https://docs.confluent.io/current/clients/librdkafka/rdkafka_8h.html))
 * [php rdkafka stubs](https://github.com/kwn/php-rdkafka-stubs)
 * [php7.4-dev](https://github.com/php/php-src/tree/PHP-7.4)
@@ -14,21 +14,21 @@ Playing around with
 
 ## Get started
 
-Build php7.4 base container (based on php master src)
+Build php7.4 base container with ffi enabled (based on php 7.4.0-dev src)
 
-    docker build -t php74-cli ./docker/php74-cli
+    docker build -t php74-cli:latest --build-arg PHP_EXTRA_BUILD_DEPS="libffi-dev" --build-arg PHP_EXTRA_CONFIGURE_ARGS="--with-ffi --without-pear" ./docker/php74-cli
 
 Test - should show 7.4.0-dev version
 
     docker run -it php74-cli php -v
 
-Build container with ffi & librdkafka
-
-    docker build -t php-ffi-librdkafka ./docker/php-ffi-librdkafka
-
 Test - should show FFI in modules list
 
     docker run -it php-ffi-librdkafka php -m
+
+Build container with librdkafka
+
+    docker build -t php-ffi-librdkafka ./docker/php-ffi-librdkafka
 
 Test ffi librdkafka binding - should show 0.11.6 version of librdkafka:
 
