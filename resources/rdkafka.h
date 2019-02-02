@@ -5064,7 +5064,3 @@ rd_kafka_DescribeConfigs_result_resources (
         size_t *cntp);
 
 /**@}*/
-
-
-
-#endif /* _RDKAFKA_H_ */
