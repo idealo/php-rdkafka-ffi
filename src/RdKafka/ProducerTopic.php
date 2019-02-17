@@ -5,11 +5,6 @@ namespace RdKafka;
 class ProducerTopic extends Topic
 {
     /**
-     * @var \FFI\CData
-     */
-    private $topic;
-
-    /**
      * @param Producer $producer
      * @param string $name
      * @param TopicConf $conf
@@ -17,25 +12,7 @@ class ProducerTopic extends Topic
      */
     public function __construct(Producer $producer, string $name, TopicConf $conf)
     {
-        parent::__construct($name);
-
-        $this->topic = self::$ffi->rd_kafka_topic_new(
-            $producer->getCData(),
-            $name,
-            $conf->getCData()
-        );
-
-        if ($this->topic === null) {
-            $err = self::$ffi->rd_kafka_last_error();
-            $errstr = self::$ffi->rd_kafka_err2str($err);
-            throw new Exception($errstr);
-        }
-    }
-
-    public function __destruct()
-    {
-        // todo handle error
-        self::$ffi->rd_kafka_topic_destroy($this->topic);
+        parent::__construct($producer, $name, $conf);
     }
 
     /**

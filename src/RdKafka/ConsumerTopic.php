@@ -5,11 +5,6 @@ namespace RdKafka;
 class ConsumerTopic extends Topic
 {
     /**
-     * @var \FFI\CData
-     */
-    private $topic;
-
-    /**
      * @var array
      */
     private $consuming = [];
@@ -22,25 +17,7 @@ class ConsumerTopic extends Topic
      */
     public function __construct(Consumer $consumer, string $name, TopicConf $conf)
     {
-        parent::__construct($name);
-
-        $this->topic = self::$ffi->rd_kafka_topic_new(
-            $consumer->getCData(),
-            $name,
-            $conf->getCData()
-        );
-
-        if ($this->topic === null) {
-            $err = self::$ffi->rd_kafka_last_error();
-            $errstr = self::$ffi->rd_kafka_err2str($err);
-            throw new Exception($errstr);
-        }
-    }
-
-    public function __destruct()
-    {
-        // todo handle error
-        self::$ffi->rd_kafka_topic_destroy($this->topic);
+        parent::__construct($consumer, $name, $conf);
     }
 
     /**
