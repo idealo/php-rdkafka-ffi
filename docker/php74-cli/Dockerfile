@@ -97,6 +97,7 @@ RUN set -eux; \
 		libssl-dev \
 		libxml2-dev \
 		zlib1g-dev \
+		libonig-dev \
 		${PHP_EXTRA_BUILD_DEPS:-} \
 	; \
 ##<argon2>##
