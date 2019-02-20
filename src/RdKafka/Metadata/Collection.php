@@ -4,9 +4,14 @@ namespace RdKafka\Metadata;
 
 class Collection implements \Iterator, \Countable
 {
-    public function __construct()
+    /**
+     * @var array
+     */
+    private $items;
+
+    public function __construct(array $items = [])
     {
-        throw new \Exception('Not implemented.');
+        $this->items = $items;
     }
 
     /**
@@ -14,6 +19,7 @@ class Collection implements \Iterator, \Countable
      */
     public function current()
     {
+        return $this->current($this->items);
     }
 
     /**
@@ -21,6 +27,7 @@ class Collection implements \Iterator, \Countable
      */
     public function next()
     {
+        next($this->items);
     }
 
     /**
@@ -28,6 +35,7 @@ class Collection implements \Iterator, \Countable
      */
     public function key()
     {
+        return key($this->items);
     }
 
     /**
@@ -35,6 +43,7 @@ class Collection implements \Iterator, \Countable
      */
     public function valid()
     {
+        return isset($this->items[$this->key()]);
     }
 
     /**
@@ -42,6 +51,7 @@ class Collection implements \Iterator, \Countable
      */
     public function rewind()
     {
+        $this->rewind($this->items);
     }
 
     /**
@@ -49,5 +59,6 @@ class Collection implements \Iterator, \Countable
      */
     public function count()
     {
+        return count($this->items);
     }
 }

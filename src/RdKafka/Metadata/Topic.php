@@ -4,29 +4,41 @@ namespace RdKafka\Metadata;
 
 class Topic
 {
-    public function __construct()
+    /**
+     * @var string
+     */
+    private $topic;
+    /**
+     * @var Collection
+     */
+    private $partitions;
+    /**
+     * @var int
+     */
+    private $err;
+
+    public function __construct(string $topic, Collection $partitions, int $err)
     {
-        throw new \Exception('Not implemented.');
+        $this->topic = $topic;
+        $this->partitions = $partitions;
+        $this->err = $err;
+    }
+
+    public function getTopic(): string
+    {
+        return $this->topic;
     }
 
     /**
-     * @return string
+     * @return Collection|Partition[]
      */
-    public function getTopic()
+    public function getPartitions(): Collection
     {
+        return $this->partitions;
     }
 
-    /**
-     * @return Partition[]
-     */
-    public function getPartitions()
+    public function getErr(): int
     {
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getErr()
-    {
+        return $this->err;
     }
 }

@@ -51,12 +51,15 @@ Producing ...
 Consuming ...
 
     docker-compose run app php app/bin/consumer.php
+    
+Broker metadata ...
+
+    docker-compose run app php app/bin/metadata.php
 
 ## Todos
 
-* MetaData API Support
 * Callbacks (currently not fully supported by ffi and do work really quirky)
 * High Level KafkaConsumer
 * Logging
-* sig Handling
+* sig Handling & destruct
 * Tests

@@ -4,29 +4,38 @@ namespace RdKafka\Metadata;
 
 class Broker
 {
-    public function __construct()
+    /**
+     * @var int
+     */
+    private $id;
+    /**
+     * @var string
+     */
+    private $host;
+    /**
+     * @var int
+     */
+    private $port;
+
+    public function __construct(int $id, string $host, int $port)
     {
-        throw new \Exception('Not implemented.');
+        $this->id = $id;
+        $this->host = $host;
+        $this->port = $port;
     }
 
-    /**
-     * @return int
-     */
-    public function getId()
+    public function getId(): int
     {
+        return $this->id;
     }
 
-    /**
-     * @return string
-     */
-    public function getHost()
+    public function getHost(): string
     {
+        return $this->host;
     }
 
-    /**
-     * @return int
-     */
-    public function getPort()
+    public function getPort(): int
     {
+        return $this->port;
     }
 }

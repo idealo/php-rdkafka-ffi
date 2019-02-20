@@ -39,6 +39,12 @@ var_dump($added);
 $topic = $producer->newTopic('ffi', $topicConf);
 var_dump($topic);
 
+$metadata = $producer->getMetadata(false, $topic, 1000);
+var_dump($metadata->getOrigBrokerName());
+var_dump($metadata->getOrigBrokerId());
+var_dump($metadata->getBrokers());
+var_dump($metadata->getTopics());
+
 for ($i = 0; $i < 10000; $i++) {
     $payload = 'test-' . $i;
     echo sprintf('produce msg: %s', $payload) . PHP_EOL;

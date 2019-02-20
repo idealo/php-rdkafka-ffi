@@ -23,6 +23,12 @@ var_dump($added);
 $topic = $consumer->newTopic('ffi', $topicConf);
 var_dump($topic);
 
+$metadata = $consumer->getMetadata(false, $topic, 1000);
+var_dump($metadata->getOrigBrokerName());
+var_dump($metadata->getOrigBrokerId());
+var_dump($metadata->getBrokers());
+var_dump($metadata->getTopics());
+
 $topic->consumeStart(0, RD_KAFKA_OFFSET_STORED);
 while ($message = $topic->consume(0, 1000)) {
     echo sprintf('consume msg: %s, ts: %s', $message->payload, $message->timestamp) . PHP_EOL;

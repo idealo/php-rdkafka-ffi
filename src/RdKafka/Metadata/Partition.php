@@ -4,43 +4,58 @@ namespace RdKafka\Metadata;
 
 class Partition
 {
-    public function __construct()
+    /**
+     * @var
+     */
+    private $id;
+    /**
+     * @var
+     */
+    private $err;
+    /**
+     * @var
+     */
+    private $leader;
+    /**
+     * @var
+     */
+    private $replicas;
+    /**
+     * @var
+     */
+    private $isrs;
+
+    public function __construct(int $id, int $err, int $leader, array $replicas, array $isrs)
     {
-        throw new \Exception('Not implemented.');
+        $this->id = $id;
+        $this->err = $err;
+        $this->leader = $leader;
+        $this->replicas = $replicas;
+        $this->isrs = $isrs;
     }
 
-    /**
-     * @return int
-     */
-    public function getId()
+    public function getId(): int
     {
+        return $this->id;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getErr()
+    public function getErr(): int
     {
+        return $this->err;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getLeader()
+    public function getLeader(): int
     {
+        return $this->leader;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getReplicas()
+    public function getReplicas(): array
     {
+        return $this->replicas;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getIsrs()
+    public function getIsrs(): array
     {
+        return $this->isrs;
     }
 }

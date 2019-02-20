@@ -41,7 +41,7 @@ abstract class RdKafka extends Api
             \FFI::sizeOf($errstr)
         );
 
-        if ($this->kafka === NULL) {
+        if ($this->kafka === null) {
             throw new Exception($errstr);
         }
 
@@ -90,9 +90,9 @@ abstract class RdKafka extends Api
      * @throws Exception
      * @return Metadata
      */
-    public function getMetadata(bool $all_topics, Topic $only_topic = null, int $timeout_ms)
+    public function getMetadata(bool $all_topics, Topic $only_topic = null, int $timeout_ms): Metadata
     {
-        throw new \Exception('Not implemented.');
+        return new Metadata($this, $all_topics, $only_topic, $timeout_ms);
     }
 
     /**
