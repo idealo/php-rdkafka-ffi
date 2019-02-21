@@ -16,6 +16,8 @@ abstract class Topic extends Api
 
     public function __construct(\RdKafka $kafka, string $name, TopicConf $conf = null)
     {
+        parent::__construct();
+
         $this->name = $name;
 
         $this->topic = self::$ffi->rd_kafka_topic_new(

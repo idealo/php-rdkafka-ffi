@@ -13,6 +13,8 @@ class Metadata extends Api
 
     public function __construct(\RdKafka $kafka, bool $all_topics, Topic $only_topic = null, int $timeout_ms)
     {
+        parent::__construct();
+
         $this->metadata = self::$ffi->new('const rd_kafka_metadata_t *metadata');
 
         $err = (int)self::$ffi->rd_kafka_metadata(
@@ -113,17 +115,11 @@ class Metadata extends Api
         return $items;
     }
 
-    /**
-     * @return int
-     */
     public function getOrigBrokerId(): int
     {
         return $this->metadata->orig_broker_id;
     }
 
-    /**
-     * @return string
-     */
     public function getOrigBrokerName(): string
     {
         return \FFI::string($this->metadata->orig_broker_name);
