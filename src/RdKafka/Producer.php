@@ -24,7 +24,7 @@ class Producer extends \RdKafka
 
     /**
      * @param string $topic_name
-     * @param TopicConf $topic_conf
+     * @param TopicConf|null $topic_conf
      *
      * @return ProducerTopic
      * @throws Exception
