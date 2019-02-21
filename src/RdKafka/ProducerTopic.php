@@ -10,7 +10,7 @@ class ProducerTopic extends Topic
      * @param TopicConf $conf
      * @throws Exception
      */
-    public function __construct(Producer $producer, string $name, TopicConf $conf)
+    public function __construct(Producer $producer, string $name, TopicConf $conf = null)
     {
         parent::__construct($producer, $name, $conf);
     }

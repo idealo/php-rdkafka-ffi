@@ -10,17 +10,21 @@ var_dump($topicConf->dump());
 $conf = new \RdKafka\Conf();
 $conf->set('group.id', 'test');
 $conf->set('debug', 'all');
+$conf->setDefaultTopicConf($topicConf);
+if (function_exists('pcntl_sigprocmask')) {
+    pcntl_sigprocmask(SIG_BLOCK, [SIGIO]);
+    $conf->set('internal.termination.signal', SIGIO);
+} else {
+    $conf->set('queue.buffering.max.ms', 1);
+}
 var_dump($conf->dump());
-
-//pcntl_sigprocmask(SIG_BLOCK, [SIGIO]);
-//$conf->set('internal.termination.signal', SIGIO);
 
 $consumer = new \RdKafka\Consumer($conf);
 $consumer->setLogLevel(LOG_DEBUG);
 $added = $consumer->addBrokers('kafka:9092');
 var_dump($added);
 
-$topic = $consumer->newTopic('ffi', $topicConf);
+$topic = $consumer->newTopic('ffi'); //, $topicConf);
 var_dump($topic);
 
 $metadata = $consumer->getMetadata(false, $topic, 1000);

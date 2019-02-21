@@ -15,7 +15,7 @@ class ConsumerTopic extends Topic
      * @param TopicConf $conf
      * @throws Exception
      */
-    public function __construct(Consumer $consumer, string $name, TopicConf $conf)
+    public function __construct(Consumer $consumer, string $name, TopicConf $conf = null)
     {
         parent::__construct($consumer, $name, $conf);
     }

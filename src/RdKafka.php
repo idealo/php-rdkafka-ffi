@@ -27,16 +27,15 @@ abstract class RdKafka extends Api
         return null;
     }
 
-    public function __construct(int $type, Conf $conf)
+    public function __construct(int $type, Conf $conf = null)
     {
         parent::__construct();
 
         $errstr = \FFI::new("char[512]");
 
-        // todo: handle default conf
         $this->kafka = self::$ffi->rd_kafka_new(
             $type,
-            $conf->getCData(),
+            $conf ? $conf->getCData() : null,
             $errstr,
             \FFI::sizeOf($errstr)
         );

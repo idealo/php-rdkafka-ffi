@@ -25,18 +25,21 @@ $conf->set('debug', 'all');
 //$conf->setLoggerCb(function ($producer, $level, $fac, $buf) {
 //    var_dump($producer, $level, $fac, $buf);
 //});
-//$conf->setDefaultTopicConf($topicConf);
+$conf->setDefaultTopicConf($topicConf);
+if (function_exists('pcntl_sigprocmask')) {
+    pcntl_sigprocmask(SIG_BLOCK, [SIGIO]);
+    $conf->set('internal.termination.signal', SIGIO);
+} else {
+    $conf->set('queue.buffering.max.ms', 1);
+}
 var_dump($conf->dump());
-
-//pcntl_sigprocmask(SIG_BLOCK, [SIGIO]);
-//$conf->set('internal.termination.signal', SIGIO);
 
 $producer = new \RdKafka\Producer($conf);
 $producer->setLogLevel(LOG_DEBUG);
 $added = $producer->addBrokers('kafka:9092');
 var_dump($added);
 
-$topic = $producer->newTopic('ffi', $topicConf);
+$topic = $producer->newTopic('ffi'); //, $topicConf);
 var_dump($topic);
 
 $metadata = $producer->getMetadata(false, $topic, 1000);

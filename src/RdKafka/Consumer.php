@@ -8,7 +8,7 @@ class Consumer extends \RdKafka
      * @param Conf|null $conf
      * @throws Exception
      */
-    public function __construct(Conf $conf = null)
+    public function __construct(Conf $conf)
     {
         parent::__construct(RD_KAFKA_CONSUMER, $conf);
     }
