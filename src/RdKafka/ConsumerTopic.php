@@ -46,7 +46,7 @@ class ConsumerTopic extends Topic
                 return null;
             }
 
-            $errstr = self::$ffi->rd_kafka_err2str($err);
+            $errstr = self::err2str($err);
             throw new Exception($errstr);
         }
 
@@ -89,7 +89,7 @@ class ConsumerTopic extends Topic
 
         if ($ret == -1) {
             $err = self::$ffi->rd_kafka_last_error();
-            $errstr = self::$ffi->rd_kafka_err2str($err);
+            $errstr = self::err2str($err);
             throw new Exception($errstr);
         }
 
@@ -127,7 +127,7 @@ class ConsumerTopic extends Topic
 
         if ($ret == -1) {
             $err = self::$ffi->rd_kafka_last_error();
-            $errstr = self::$ffi->rd_kafka_err2str($err);
+            $errstr = self::err2str($err);
             throw new Exception($errstr);
         }
 
@@ -149,7 +149,7 @@ class ConsumerTopic extends Topic
 
         if ($ret == -1) {
             $err = self::$ffi->rd_kafka_last_error();
-            $errstr = self::$ffi->rd_kafka_err2str($err);
+            $errstr = self::err2str($err);
             throw new Exception($errstr);
         }
 
@@ -173,7 +173,7 @@ class ConsumerTopic extends Topic
         );
 
         if ($err != RD_KAFKA_RESP_ERR_NO_ERROR) {
-            $errstr = self::$ffi->rd_kafka_err2str($err);
+            $errstr = self::err2str($err);
             throw new Exception($errstr);
         }
     }

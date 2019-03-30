@@ -29,24 +29,6 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-/**
- * @file rdkafka.h
- * @brief Apache Kafka C/C++ consumer and producer client library.
- *
- * rdkafka.h contains the public API for librdkafka.
- * The API is documented in this file as comments prefixing the function, type,
- * enum, define, etc.
- *
- * @sa For the C++ interface see rdkafkacpp.h
- *
- * @tableofcontents
- */
-
-#include <stdio.h>
-#include <inttypes.h>
-#include <sys/types.h>
-
-#include <sys/socket.h> /* for sockaddr, .. */
 
 /**
  * @brief Returns the librdkafka version as integer.
@@ -65,16 +47,6 @@ int rd_kafka_version(void);
  */
 
 const char *rd_kafka_version_str (void);
-
-/**@}*/
-
-
-/**
- * @name Constants, errors, types
- * @{
- *
- *
- */
 
 
 /**
@@ -112,8 +84,6 @@ typedef enum rd_kafka_timestamp_type_t {
 
 const char *rd_kafka_get_debug_contexts(void);
 
-
-/* @cond NO_DOC */
 /* Private types to provide ABI compatibility */
 typedef struct rd_kafka_s rd_kafka_t;
 typedef struct rd_kafka_topic_s rd_kafka_topic_t;
@@ -122,8 +92,6 @@ typedef struct rd_kafka_topic_conf_s rd_kafka_topic_conf_t;
 typedef struct rd_kafka_queue_s rd_kafka_queue_t;
 typedef struct rd_kafka_op_s rd_kafka_event_t;
 typedef struct rd_kafka_topic_result_s rd_kafka_topic_result_t;
-/* @endcond */
-
 
 /**
  * @enum rd_kafka_resp_err_t
@@ -234,6 +202,20 @@ typedef enum {
         RD_KAFKA_RESP_ERR__UNDERFLOW = -155,
         /** Invalid type */
         RD_KAFKA_RESP_ERR__INVALID_TYPE = -154,
+        /** Retry operation */
+        RD_KAFKA_RESP_ERR__RETRY = -153,
+        /** Purged in queue */
+        RD_KAFKA_RESP_ERR__PURGE_QUEUE = -152,
+        /** Purged in flight */
+        RD_KAFKA_RESP_ERR__PURGE_INFLIGHT = -151,
+        /** Fatal error: see rd_kafka_fatal_error() */
+        RD_KAFKA_RESP_ERR__FATAL = -150,
+        /** Inconsistent state */
+        RD_KAFKA_RESP_ERR__INCONSISTENT = -149,
+        /** Gap-less ordering would not be guaranteed if proceeding */
+        RD_KAFKA_RESP_ERR__GAPLESS_GUARANTEE = -148,
+        /** Maximum poll interval exceeded */
+        RD_KAFKA_RESP_ERR__MAX_POLL_EXCEEDED = -147,
 
 	/** End internal error codes */
 	RD_KAFKA_RESP_ERR__END = -100,
@@ -329,7 +311,7 @@ typedef enum {
 	RD_KAFKA_RESP_ERR_INVALID_REQUEST = 42,
 	/** Message format on broker does not support request */
 	RD_KAFKA_RESP_ERR_UNSUPPORTED_FOR_MESSAGE_FORMAT = 43,
-        /** Isolation policy volation */
+        /** Policy violation */
         RD_KAFKA_RESP_ERR_POLICY_VIOLATION = 44,
         /** Broker received an out of order sequence number */
         RD_KAFKA_RESP_ERR_OUT_OF_ORDER_SEQUENCE_NUMBER = 45,
@@ -358,8 +340,46 @@ typedef enum {
         RD_KAFKA_RESP_ERR_SECURITY_DISABLED = 54,
         /** Operation not attempted */
         RD_KAFKA_RESP_ERR_OPERATION_NOT_ATTEMPTED = 55,
+        /** Disk error when trying to access log file on the disk */
+        RD_KAFKA_RESP_ERR_KAFKA_STORAGE_ERROR = 56,
+        /** The user-specified log directory is not found in the broker config */
+        RD_KAFKA_RESP_ERR_LOG_DIR_NOT_FOUND = 57,
+        /** SASL Authentication failed */
+        RD_KAFKA_RESP_ERR_SASL_AUTHENTICATION_FAILED = 58,
+        /** Unknown Producer Id */
+        RD_KAFKA_RESP_ERR_UNKNOWN_PRODUCER_ID = 59,
+        /** Partition reassignment is in progress */
+        RD_KAFKA_RESP_ERR_REASSIGNMENT_IN_PROGRESS = 60,
+        /** Delegation Token feature is not enabled */
+        RD_KAFKA_RESP_ERR_DELEGATION_TOKEN_AUTH_DISABLED = 61,
+        /** Delegation Token is not found on server */
+        RD_KAFKA_RESP_ERR_DELEGATION_TOKEN_NOT_FOUND = 62,
+        /** Specified Principal is not valid Owner/Renewer */
+        RD_KAFKA_RESP_ERR_DELEGATION_TOKEN_OWNER_MISMATCH = 63,
+        /** Delegation Token requests are not allowed on this connection */
+        RD_KAFKA_RESP_ERR_DELEGATION_TOKEN_REQUEST_NOT_ALLOWED = 64,
+        /** Delegation Token authorization failed */
+        RD_KAFKA_RESP_ERR_DELEGATION_TOKEN_AUTHORIZATION_FAILED = 65,
+        /** Delegation Token is expired */
+        RD_KAFKA_RESP_ERR_DELEGATION_TOKEN_EXPIRED = 66,
+        /** Supplied principalType is not supported */
+        RD_KAFKA_RESP_ERR_INVALID_PRINCIPAL_TYPE = 67,
+        /** The group is not empty */
+        RD_KAFKA_RESP_ERR_NON_EMPTY_GROUP = 68,
+        /** The group id does not exist */
+        RD_KAFKA_RESP_ERR_GROUP_ID_NOT_FOUND = 69,
+        /** The fetch session ID was not found */
+        RD_KAFKA_RESP_ERR_FETCH_SESSION_ID_NOT_FOUND = 70,
+        /** The fetch session epoch is invalid */
+        RD_KAFKA_RESP_ERR_INVALID_FETCH_SESSION_EPOCH = 71,
+        /** No matching listener */
+        RD_KAFKA_RESP_ERR_LISTENER_NOT_FOUND = 72,
+        /** Topic deletion is disabled */
+        RD_KAFKA_RESP_ERR_TOPIC_DELETION_DISABLED = 73,
+        /** Unsupported compression type */
+        RD_KAFKA_RESP_ERR_UNSUPPORTED_COMPRESSION_TYPE = 74,
 
-	RD_KAFKA_RESP_ERR_END_ALL,
+        RD_KAFKA_RESP_ERR_END_ALL,
 } rd_kafka_resp_err_t;
 
 
@@ -457,7 +477,7 @@ rd_kafka_resp_err_t rd_kafka_last_error (void);
  *
  * @sa rd_kafka_last_error()
  */
-
+ 
 rd_kafka_resp_err_t rd_kafka_errno2err(int errnox);
 
 
@@ -473,9 +493,60 @@ rd_kafka_resp_err_t rd_kafka_errno2err(int errnox);
  * @deprecated Use rd_kafka_last_error() to retrieve the last error code
  *             set by the legacy librdkafka APIs.
  */
-
+ 
 int rd_kafka_errno (void);
 
+
+
+
+/**
+ * @brief Returns the first fatal error set on this client instance,
+ *        or RD_KAFKA_RESP_ERR_NO_ERROR if no fatal error has occurred.
+ *
+ * This function is to be used with the Idempotent Producer and \c error_cb
+ * to detect fatal errors.
+ *
+ * Generally all errors raised by \c error_cb are to be considered
+ * informational and temporary, the client will try to recover from all
+ * errors in a graceful fashion (by retrying, etc).
+ *
+ * However, some errors should logically be considered fatal to retain
+ * consistency; in particular a set of errors that may occur when using the
+ * Idempotent Producer and the in-order or exactly-once producer guarantees
+ * can't be satisfied.
+ *
+ * @param errstr A human readable error string (nul-terminated) is written to
+ *               this location that must be of at least \p errstr_size bytes.
+ *               The \p errstr is only written to if there is a fatal error.
+ *
+ *
+ * @returns RD_KAFKA_RESP_ERR_NO_ERROR if no fatal error has been raised, else
+ *          any other error code.
+ */
+
+rd_kafka_resp_err_t rd_kafka_fatal_error (rd_kafka_t *rk,
+                                          char *errstr, size_t errstr_size);
+
+
+/**
+ * @brief Trigger a fatal error for testing purposes.
+ *
+ * Since there is no practical way to trigger real fatal errors in the
+ * idempotent producer, this method allows an application to trigger
+ * fabricated fatal errors in tests to check its error handling code.
+ *
+ * @param err The underlying error code.
+ * @param reason A human readable error reason.
+ *               Will be prefixed with "test_fatal_error: " to differentiate
+ *               from real fatal errors.
+ *
+ * @returns RD_KAFKA_RESP_ERR_NO_ERROR if a fatal error was triggered, or
+ *          RD_KAFKA_RESP_ERR__PREV_IN_PROGRESS if a previous fatal error
+ *          has already been triggered.
+ */
+ rd_kafka_resp_err_t
+rd_kafka_test_fatal_error (rd_kafka_t *rk, rd_kafka_resp_err_t err,
+                           const char *reason);
 
 
 /**
@@ -867,16 +938,14 @@ typedef struct rd_kafka_message_s {
 				    * - \c err==0: Optional message key */
 	size_t  key_len;           /**< Depends on the value of \c err :
 				    * - \c err==0: Optional message key length*/
-	int64_t offset;            /**< Consume:
+	int64_t offset;            /**< Consumer:
                                     * - Message offset (or offset for error
 				    *   if \c err!=0 if applicable).
-                                    * - dr_msg_cb:
+                                    *   Producer, dr_msg_cb:
                                     *   Message offset assigned by broker.
-                                    *   If \c produce.offset.report is set then
-                                    *   each message will have this field set,
-                                    *   otherwise only the last message in
-                                    *   each produced internal batch will
-                                    *   have this field set, otherwise 0. */
+                                    *   May be RD_KAFKA_OFFSET_INVALID
+                                    *   for retried messages when
+                                    *   idempotence is enabled. */
 	void  *_private;           /**< Consume:
 				    *  - rdkafka private pointer: DO NOT MODIFY
 				    *  - dr_msg_cb:
@@ -903,7 +972,7 @@ void rd_kafka_message_destroy(rd_kafka_message_t *rkmessage);
  */
 
 int64_t rd_kafka_message_timestamp (const rd_kafka_message_t *rkmessage,
-				   rd_kafka_timestamp_type_t *tstype);
+				    rd_kafka_timestamp_type_t *tstype);
 
 
 
@@ -976,6 +1045,36 @@ void rd_kafka_message_set_headers (rd_kafka_message_t *rkmessage,
  */
  size_t rd_kafka_header_cnt (const rd_kafka_headers_t *hdrs);
 
+
+/**
+ * @enum rd_kafka_msg_status_t
+ * @brief Message persistence status can be used by the application to
+ *        find out if a produced message was persisted in the topic log.
+ */
+typedef enum {
+        /**< Message was never transmitted to the broker, or failed with
+         *   an error indicating it was not written to the log.
+         *   Application retry risks ordering, but not duplication. */
+        RD_KAFKA_MSG_STATUS_NOT_PERSISTED = 0,
+
+        /**< Message was transmitted to broker, but no acknowledgement was
+         *   received.
+         *   Application retry risks ordering and duplication. */
+        RD_KAFKA_MSG_STATUS_POSSIBLY_PERSISTED = 1,
+
+        /**< Message was written to the log and acknowledged by the broker. */
+        RD_KAFKA_MSG_STATUS_PERSISTED =  2
+} rd_kafka_msg_status_t;
+
+
+/**
+ * @brief Returns the message's persistence status in the topic log.
+ *
+ * @remark The message status is not available in on_acknowledgement
+ *         interceptors.
+ */
+ rd_kafka_msg_status_t
+rd_kafka_message_status (const rd_kafka_message_t *rkmessage);
 
 /**@}*/
 
@@ -1136,8 +1235,8 @@ rd_kafka_conf_set_background_event_cb (rd_kafka_conf_t *conf,
 
 
 /**
- @deprecated See rd_kafka_conf_set_dr_msg_cb()
-*/
+ * @deprecated See rd_kafka_conf_set_dr_msg_cb()
+ */
 
 void rd_kafka_conf_set_dr_cb(rd_kafka_conf_t *conf,
 			      void (*dr_cb) (rd_kafka_t *rk,
@@ -1160,6 +1259,15 @@ void rd_kafka_conf_set_dr_cb(rd_kafka_conf_t *conf,
  *
  * An application must call rd_kafka_poll() at regular intervals to
  * serve queued delivery report callbacks.
+ *
+ * The broker-assigned offset can be retrieved with \c rkmessage->offset
+ * and the timestamp can be retrieved using rd_kafka_message_timestamp().
+ *
+ * @remark The Idempotent Producer may return invalid timestamp
+ *         (RD_KAFKA_TIMESTAMP_NOT_AVAILABLE), and
+ *         and offset (RD_KAFKA_OFFSET_INVALID) for retried messages
+ *         that were previously successfully delivered but not properly
+ *         acknowledged.
  */
 
 void rd_kafka_conf_set_dr_msg_cb(rd_kafka_conf_t *conf,
@@ -1286,8 +1394,18 @@ void rd_kafka_conf_set_offset_commit_cb (
 /**
  * @brief Set error callback in provided conf object.
  *
- * The error callback is used by librdkafka to signal critical errors
+ * The error callback is used by librdkafka to signal warnings and errors
  * back to the application.
+ *
+ * These errors should generally be considered informational and non-permanent,
+ * the client will try to recover automatically from all type of errors.
+ * Given that the client and cluster configuration is correct the
+ * application should treat these as temporary errors.
+ *
+ * \p error_cb will be triggered with \c err set to RD_KAFKA_RESP_ERR__FATAL
+ * if a fatal error has been raised; in this case use rd_kafka_fatal_error() to
+ * retrieve the fatal error code and error string, and then begin terminating
+ * the client instance.
  *
  * If no \p error_cb is registered, or RD_KAFKA_EVENT_ERROR has not been set
  * with rd_kafka_conf_set_events, then the errors will be logged instead.
@@ -1423,13 +1541,10 @@ rd_kafka_conf_set_connect_cb (rd_kafka_conf_t *conf,
  *
  * @remark The callback will be called from an internal librdkafka thread.
  */
- void rd_kafka_conf_set_closesocket_cb (rd_kafka_conf_t *conf,
+ void
+rd_kafka_conf_set_closesocket_cb (rd_kafka_conf_t *conf,
                                   int (*closesocket_cb) (int sockfd,
                                                          void *opaque));
-
-
-
-
 
 /**
  * @brief Sets the application's opaque pointer that will be passed to callbacks
@@ -1446,9 +1561,17 @@ void *rd_kafka_opaque(const rd_kafka_t *rk);
 
 
 /**
- * Sets the default topic configuration to use for automatically
- * subscribed topics (e.g., through pattern-matched topics).
- * The topic config object is not usable after this call.
+ * @brief Sets the default topic configuration to use for automatically
+ *        subscribed topics (e.g., through pattern-matched topics).
+ *        The topic config object is not usable after this call.
+ *
+ * @warning Any topic configuration settings that have been set on the
+ *          global rd_kafka_conf_t object will be overwritten by this call
+ *          since the implicitly created default topic config object is
+ *          replaced by the user-supplied one.
+ *
+ * @deprecated Set default topic level configuration on the
+ *             global rd_kafka_conf_t object instead.
  */
 
 void rd_kafka_conf_set_default_topic_conf (rd_kafka_conf_t *conf,
@@ -2647,6 +2770,14 @@ rd_kafka_subscription (rd_kafka_t *rk,
  * @remark on_consume() interceptors may be called from this function prior to
  *         passing message to application.
  *
+ * @remark When subscribing to topics the application must call poll at
+ *         least every \c max.poll.interval.ms to remain a member of the
+ *         consumer group.
+ *
+ * Noteworthy errors returned in \c ->err:
+ * - RD_KAFKA_RESP_ERR__MAX_POLL_EXCEEDED - application failed to call
+ *   poll within `max.poll.interval.ms`.
+ *
  * @sa rd_kafka_message_t
  */
 
@@ -2902,6 +3033,8 @@ rd_kafka_position (rd_kafka_t *rk,
  *               (RD_KAFKA_RESP_ERR__UNKNOWN_PARTITION)
  *  - ENOENT   - topic is unknown in the Kafka cluster.
  *               (RD_KAFKA_RESP_ERR__UNKNOWN_TOPIC)
+ *  - ECANCELED - fatal error has been raised on producer, see
+ *                rd_kafka_fatal_error().
  *
  * @sa Use rd_kafka_errno2err() to convert `errno` to rdkafka error code.
  */
@@ -2947,6 +3080,10 @@ rd_kafka_resp_err_t rd_kafka_producev (rd_kafka_t *rk, ...);
  *  - err            Will be set according to success or failure.
  *                   Application only needs to check for errors if
  *                   return value != \p message_cnt.
+ *
+ * @remark If \c RD_KAFKA_MSG_F_PARTITION is set in \p msgflags, the
+ *         \c .partition field of the \p rkmessages is used instead of
+ *         \p partition.
  *
  * @returns the number of messages succesfully enqueued for producing.
  *
@@ -3221,18 +3358,20 @@ int rd_kafka_brokers_add(rd_kafka_t *rk, const char *brokerlist);
  *
  * @remark \p rk may be passed as NULL in the callback.
  */
-
+ 
 void rd_kafka_set_logger(rd_kafka_t *rk,
 			  void (*func) (const rd_kafka_t *rk, int level,
 					const char *fac, const char *buf));
 
 
 /**
- * @brief Specifies the maximum logging level produced by
+ * @brief Specifies the maximum logging level emitted by
  *        internal kafka logging and debugging.
  *
- * If the \p \"debug\" configuration property is set the level is automatically
- * adjusted to \c LOG_DEBUG (7).
+ * @deprecated Set the \c "log_level" configuration property instead.
+ *
+ * @remark If the \p \"debug\" configuration property is set the log level is
+ *         automatically adjusted to \c LOG_DEBUG (7).
  */
 
 void rd_kafka_set_log_level(rd_kafka_t *rk, int level);
@@ -3288,7 +3427,7 @@ int         rd_kafka_outq_len(rd_kafka_t *rk);
  * for brokers, topics, partitions, etc.
  */
 
-# void rd_kafka_dump(FILE *fp, rd_kafka_t *rk);
+//void rd_kafka_dump(FILE *fp, rd_kafka_t *rk);
 
 
 
@@ -3445,6 +3584,8 @@ size_t rd_kafka_event_message_count (rd_kafka_event_t *rkev);
 /**
  * @returns the error code for the event.
  *
+ * Use rd_kafka_event_error_is_fatal() to detect if this is a fatal error.
+ *
  * Event types:
  *  - all
  */
@@ -3463,6 +3604,17 @@ rd_kafka_resp_err_t rd_kafka_event_error (rd_kafka_event_t *rkev);
 
 const char *rd_kafka_event_error_string (rd_kafka_event_t *rkev);
 
+
+/**
+ * @returns 1 if the error is a fatal error, else 0.
+ *
+ * Event types:
+ *  - RD_KAFKA_EVENT_ERROR
+ *
+ * @sa rd_kafka_fatal_error()
+ */
+
+int rd_kafka_event_error_is_fatal (rd_kafka_event_t *rkev);
 
 
 /**

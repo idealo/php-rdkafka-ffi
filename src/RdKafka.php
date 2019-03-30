@@ -13,6 +13,11 @@ abstract class RdKafka extends Api
     protected $kafka;
 
     /**
+     * @var Queue
+     */
+    protected $logQueue;
+
+    /**
      * @var self[]
      */
     private static $instances = [];
@@ -44,7 +49,22 @@ abstract class RdKafka extends Api
             throw new Exception($errstr);
         }
 
+        if ($conf->hasLoggerCb()) {
+            $this->initLogQueue();
+        }
+
         self::$instances[] = $this;
+    }
+
+    private function initLogQueue()
+    {
+        $this->logQueue = $this->newQueue();
+        $err = self::$ffi->rd_kafka_set_log_queue($this->kafka, $this->logQueue->getCData());
+
+        if ($err != RD_KAFKA_RESP_ERR_NO_ERROR) {
+            $errstr = self::err2str($err);
+            throw new Exception($errstr);
+        }
     }
 
     public function __destruct()
@@ -109,7 +129,17 @@ abstract class RdKafka extends Api
      */
     public function poll(int $timeout_ms): int
     {
+        $this->consumeLogQueue();
+
         return self::$ffi->rd_kafka_poll($this->kafka, $timeout_ms);
+    }
+
+    private function consumeLogQueue()
+    {
+        if ($this->logQueue !== null) {
+            // trigger log callback
+            $this->logQueue->consume(0);
+        }
     }
 
     /**
@@ -122,7 +152,7 @@ abstract class RdKafka extends Api
 
     public function newQueue(): Queue
     {
-        return new Queue($this->kafka);
+        return new Queue($this);
     }
 
     public function setLogLevel(int $level)

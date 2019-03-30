@@ -84,6 +84,6 @@ class Message extends Api
      */
     public function errstr()
     {
-        return self::$ffi->rd_kafka_err2str($this->err);
+        return self::err2str($this->err);
     }
 }

@@ -15,7 +15,7 @@ class Metadata extends Api
     {
         parent::__construct();
 
-        $this->metadata = self::$ffi->new('const rd_kafka_metadata_t *metadata');
+        $this->metadata = self::$ffi->new('struct rd_kafka_metadata*');
 
         $err = (int)self::$ffi->rd_kafka_metadata(
             $kafka->getCData(),
@@ -26,7 +26,7 @@ class Metadata extends Api
         );
 
         if ($err !== RD_KAFKA_RESP_ERR_NO_ERROR) {
-            $errstr = self::$ffi->rd_kafka_err2str($err);
+            $errstr = self::err2str($err);
             throw new Exception($errstr);
         }
     }

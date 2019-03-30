@@ -7,7 +7,7 @@
  */
 function rd_kafka_err2str(int $err): string
 {
-    throw new \Exception('Not implemented.');
+    return \RdKafka\Api::err2str($err);
 }
 
 /**

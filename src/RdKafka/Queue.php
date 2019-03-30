@@ -47,7 +47,7 @@ class Queue extends Api
                 return null;
             }
 
-            $errstr = self::$ffi->rd_kafka_err2str($err);
+            $errstr = self::err2str($err);
             throw new Exception($errstr);
         }
 

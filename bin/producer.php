@@ -12,19 +12,18 @@ var_dump($topicConf->dump());
 
 $conf = new \RdKafka\Conf();
 $conf->set('socket.timeout.ms', (string)50);
-$conf->set('socket.blocking.max.ms', (string)40);
 $conf->set('queue.buffering.max.messages', (string)1000);
 $conf->set('max.in.flight.requests.per.connection', (string)1);
 $conf->set('debug', 'all');
-//$conf->setDrMsgCb(function (\RdKafka\Producer $producer, \RdKafka\Message $message) {
-//    var_dump($producer, $message);
-//    if ($message->err !== RD_KAFKA_RESP_ERR_NO_ERROR) {
-//        var_dump($message);
-//    }
-//});
-//$conf->setLoggerCb(function ($producer, $level, $fac, $buf) {
-//    var_dump($producer, $level, $fac, $buf);
-//});
+$conf->setDrMsgCb(function (\RdKafka\Producer $producer, \RdKafka\Message $message) {
+    if ($message->err !== RD_KAFKA_RESP_ERR_NO_ERROR) {
+        var_dump($message->errstr());
+    }
+    var_dump($message);
+});
+$conf->setLoggerCb(function ($producer, $level, $fac, $buf) {
+    echo "log: $level $fac $buf" . PHP_EOL;
+});
 $conf->setDefaultTopicConf($topicConf);
 if (function_exists('pcntl_sigprocmask')) {
     pcntl_sigprocmask(SIG_BLOCK, [SIGIO]);
@@ -48,11 +47,11 @@ var_dump($metadata->getOrigBrokerId());
 var_dump($metadata->getBrokers());
 var_dump($metadata->getTopics());
 
-for ($i = 0; $i < 10000; $i++) {
+for ($i = 0; $i < 1000; $i++) {
     $payload = 'test-' . $i;
     echo sprintf('produce msg: %s', $payload) . PHP_EOL;
     $topic->produce(RD_KAFKA_PARTITION_UA, 0, $payload);
-    $events = $producer->poll(1); // >1 = triggers log output
+    $events = $producer->poll(1); // triggers log output
     echo sprintf('polling triggered %d events', $events) . PHP_EOL;
 }
 

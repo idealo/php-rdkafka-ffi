@@ -121,10 +121,12 @@ class Conf extends Api
      * @param callable $callback
      *
      * @return void
+     * @throws Exception
      */
     public function setLoggerCb(callable $callback)
     {
         if ($this->loggerCb === null) {
+            $this->set('log.queue', 'true');
             self::$ffi->rd_kafka_conf_set_log_cb($this->conf, [$this, 'loggerCbProxy']);
         }
         $this->loggerCb = $callback;
@@ -134,6 +136,11 @@ class Conf extends Api
     {
         $loggerCb = $this->loggerCb;
         $loggerCb(Producer::resolveFromCData($nativeProducer), (int)$level, (string)$fac, (string)$buf);
+    }
+
+    public function hasLoggerCb(): bool
+    {
+        return ($this->loggerCb !== null);
     }
 
     /**

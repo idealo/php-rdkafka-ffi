@@ -5,7 +5,7 @@ namespace RdKafka;
 class Api
 {
     /**
-     * @var \FFI librdkafka binding - see https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html
+     * @var \FFI librdkafka binding - see https://docs.confluent.io/current/clients/librdkafka/rdkafka_8h.html
      */
     protected static $ffi;
 
@@ -19,5 +19,10 @@ class Api
     private static function initFFI()
     {
         self::$ffi = \FFI::load(dirname(__DIR__, 2) . '/resources/rdkafka.h');
+    }
+
+    public static function err2str(int $err): string
+    {
+        return self::$ffi->rd_kafka_err2str($err);
     }
 }

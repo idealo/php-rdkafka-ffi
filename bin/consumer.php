@@ -10,6 +10,9 @@ var_dump($topicConf->dump());
 $conf = new \RdKafka\Conf();
 $conf->set('group.id', 'test');
 $conf->set('debug', 'all');
+$conf->setLoggerCb(function ($consumer, $level, $fac, $buf) {
+    echo "log: $level $fac $buf" . PHP_EOL;
+});
 $conf->setDefaultTopicConf($topicConf);
 if (function_exists('pcntl_sigprocmask')) {
     pcntl_sigprocmask(SIG_BLOCK, [SIGIO]);
@@ -36,7 +39,7 @@ var_dump($metadata->getTopics());
 $topic->consumeStart(0, RD_KAFKA_OFFSET_STORED);
 while ($message = $topic->consume(0, 1000)) {
     echo sprintf('consume msg: %s, ts: %s', $message->payload, $message->timestamp) . PHP_EOL;
-    $events = $consumer->poll(1); // >1 = triggers log output
+    $events = $consumer->poll(1); // triggers log output
     echo sprintf('polling triggered %d events', $events) . PHP_EOL;
 }
 $topic->consumeStop(0);
