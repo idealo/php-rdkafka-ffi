@@ -26,7 +26,7 @@ class Message extends Api
         }
 
         if ($nativeMessage->key !== null) {
-            $this->payload = \FFI::string($nativeMessage->key, $nativeMessage->key_len);
+            $this->key = \FFI::string($nativeMessage->key, $nativeMessage->key_len);
         }
 
         $this->offset = (int)$nativeMessage->offset;
