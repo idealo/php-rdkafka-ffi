@@ -106,8 +106,8 @@ abstract class RdKafka extends Api
      * @param Topic $only_topic
      * @param int $timeout_ms
      *
-     * @throws Exception
      * @return Metadata
+     * @throws Exception
      */
     public function getMetadata(bool $all_topics, Topic $only_topic = null, int $timeout_ms): Metadata
     {
@@ -129,16 +129,15 @@ abstract class RdKafka extends Api
      */
     public function poll(int $timeout_ms): int
     {
-        $this->consumeLogQueue();
+        $this->pollLogQueueCallback();
 
         return self::$ffi->rd_kafka_poll($this->kafka, $timeout_ms);
     }
 
-    private function consumeLogQueue()
+    private function pollLogQueueCallback()
     {
         if ($this->logQueue !== null) {
-            // trigger log callback
-            $this->logQueue->consume(0);
+            self::$ffi->rd_kafka_queue_poll_callback($this->logQueue->getCData(), 0);
         }
     }
 
