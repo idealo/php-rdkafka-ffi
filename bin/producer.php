@@ -38,7 +38,7 @@ $producer->setLogLevel(LOG_DEBUG);
 $added = $producer->addBrokers('kafka:9092');
 var_dump($added);
 
-$topic = $producer->newTopic('ffi'); //, $topicConf);
+$topic = $producer->newTopic('playground'); //, $topicConf);
 var_dump($topic);
 
 $metadata = $producer->getMetadata(false, $topic, 1000);

@@ -1,6 +1,9 @@
 <?php
+declare(strict_types=1);
 
 namespace RdKafka;
+
+use FFI;
 
 class Message extends Api
 {
@@ -9,7 +12,7 @@ class Message extends Api
         parent::__construct();
 
         $timestampType = self::$ffi->new('rd_kafka_timestamp_type_t');
-        $this->timestamp = (int)self::$ffi->rd_kafka_message_timestamp($nativeMessage, \FFI::addr($timestampType));
+        $this->timestamp = (int)self::$ffi->rd_kafka_message_timestamp($nativeMessage, FFI::addr($timestampType));
         $this->timestampType = (int)$timestampType;
 
         $this->err = $nativeMessage->err;
@@ -21,12 +24,12 @@ class Message extends Api
         $this->partition = (int)$nativeMessage->partition;
 
         if ($nativeMessage->payload !== null) {
-            $this->payload = \FFI::string($nativeMessage->payload, $nativeMessage->len);
+            $this->payload = FFI::string($nativeMessage->payload, $nativeMessage->len);
             $this->len = (int)$nativeMessage->len;
         }
 
         if ($nativeMessage->key !== null) {
-            $this->key = \FFI::string($nativeMessage->key, $nativeMessage->key_len);
+            $this->key = FFI::string($nativeMessage->key, $nativeMessage->key_len);
         }
 
         $this->offset = (int)$nativeMessage->offset;

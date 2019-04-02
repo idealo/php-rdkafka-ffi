@@ -1,7 +1,11 @@
 <?php
+declare(strict_types=1);
 
 namespace RdKafka;
 
+use FFI;
+use FFI\CData;
+use RdKafka;
 use RdKafka\Metadata\Broker;
 use RdKafka\Metadata\Collection;
 use RdKafka\Metadata\Partition;
@@ -9,9 +13,9 @@ use RdKafka\Metadata\Topic as MetadataTopic;
 
 class Metadata extends Api
 {
-    private $metadata;
+    private CData $metadata;
 
-    public function __construct(\RdKafka $kafka, bool $all_topics, Topic $only_topic = null, int $timeout_ms)
+    public function __construct(RdKafka $kafka, bool $all_topics, Topic $only_topic = null, int $timeout_ms)
     {
         parent::__construct();
 
@@ -21,7 +25,7 @@ class Metadata extends Api
             $kafka->getCData(),
             (int)$all_topics,
             $only_topic ? $only_topic->getCData() : null,
-            \FFI::addr($this->metadata),
+            FFI::addr($this->metadata),
             $timeout_ms
         );
 
@@ -51,7 +55,7 @@ class Metadata extends Api
             $data = $metadata->brokers[$i];
             $items[] = new Broker(
                 (int)$data->id,
-                \FFI::string($data->host),
+                FFI::string($data->host),
                 (int)$data->port
             );
         }
@@ -72,7 +76,7 @@ class Metadata extends Api
         for ($i = 0; $i < $metadata->topic_cnt; $i++) {
             $data = $metadata->topics[$i];
             $items[] = new MetadataTopic(
-                \FFI::string($data->topic),
+                FFI::string($data->topic),
                 $this->mapPartitions($data),
                 (int)$data->err
             );
@@ -122,6 +126,6 @@ class Metadata extends Api
 
     public function getOrigBrokerName(): string
     {
-        return \FFI::string($this->metadata->orig_broker_name);
+        return FFI::string($this->metadata->orig_broker_name);
     }
 }

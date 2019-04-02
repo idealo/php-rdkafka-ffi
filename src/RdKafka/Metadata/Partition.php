@@ -1,29 +1,15 @@
 <?php
+declare(strict_types=1);
 
 namespace RdKafka\Metadata;
 
 class Partition
 {
-    /**
-     * @var
-     */
-    private $id;
-    /**
-     * @var
-     */
-    private $err;
-    /**
-     * @var
-     */
-    private $leader;
-    /**
-     * @var
-     */
-    private $replicas;
-    /**
-     * @var
-     */
-    private $isrs;
+    private int $id;
+    private int $err;
+    private int $leader;
+    private array $replicas;
+    private array $isrs;
 
     public function __construct(int $id, int $err, int $leader, array $replicas, array $isrs)
     {

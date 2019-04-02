@@ -1,21 +1,13 @@
 <?php
+declare(strict_types=1);
 
 namespace RdKafka\Metadata;
 
 class Broker
 {
-    /**
-     * @var int
-     */
-    private $id;
-    /**
-     * @var string
-     */
-    private $host;
-    /**
-     * @var int
-     */
-    private $port;
+    private int $id;
+    private string $host;
+    private int $port;
 
     public function __construct(int $id, string $host, int $port)
     {

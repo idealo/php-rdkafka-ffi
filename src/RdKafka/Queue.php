@@ -1,12 +1,16 @@
 <?php
+declare(strict_types=1);
 
 namespace RdKafka;
 
+use FFI\CData;
+use RdKafka;
+
 class Queue extends Api
 {
-    private $queue;
+    private CData $queue;
 
-    public function __construct(\RdKafka $kafka)
+    public function __construct(RdKafka $kafka)
     {
         parent::__construct();
 
@@ -22,7 +26,7 @@ class Queue extends Api
         self::$ffi->rd_kafka_queue_destroy($this->queue);
     }
 
-    public function getCData()
+    public function getCData(): CData
     {
         return $this->queue;
     }

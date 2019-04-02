@@ -1,21 +1,13 @@
 <?php
+declare(strict_types=1);
 
 namespace RdKafka\Metadata;
 
 class Topic
 {
-    /**
-     * @var string
-     */
-    private $topic;
-    /**
-     * @var Collection
-     */
-    private $partitions;
-    /**
-     * @var int
-     */
-    private $err;
+    private string $topic;
+    private Collection $partitions;
+    private int $err;
 
     public function __construct(string $topic, Collection $partitions, int $err)
     {

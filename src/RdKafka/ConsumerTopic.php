@@ -1,6 +1,9 @@
 <?php
+declare(strict_types=1);
 
 namespace RdKafka;
+
+use InvalidArgumentException;
 
 class ConsumerTopic extends Topic
 {
@@ -30,7 +33,7 @@ class ConsumerTopic extends Topic
     public function consume(int $partition, int $timeout_ms)
     {
         if ($partition != RD_KAFKA_PARTITION_UA && ($partition < 0 || $partition > 0x7FFFFFFF)) {
-            throw new \InvalidArgumentException(sprintf("Out of range value '%d' for partition", $partition));
+            throw new InvalidArgumentException(sprintf("Out of range value '%d' for partition", $partition));
         }
 
         $nativeMessage = self::$ffi->rd_kafka_consume(
@@ -68,7 +71,7 @@ class ConsumerTopic extends Topic
     public function consumeQueueStart(int $partition, int $offset, Queue $queue)
     {
         if ($partition != RD_KAFKA_PARTITION_UA && ($partition < 0 || $partition > 0x7FFFFFFF)) {
-            throw new \InvalidArgumentException(sprintf("Out of range value '%d' for partition", $partition));
+            throw new InvalidArgumentException(sprintf("Out of range value '%d' for partition", $partition));
         }
 
         $key = $this->getName() . ':' . $partition;
@@ -106,7 +109,7 @@ class ConsumerTopic extends Topic
     public function consumeStart(int $partition, int $offset)
     {
         if ($partition != RD_KAFKA_PARTITION_UA && ($partition < 0 || $partition > 0x7FFFFFFF)) {
-            throw new \InvalidArgumentException(sprintf("Out of range value '%d' for partition", $partition));
+            throw new InvalidArgumentException(sprintf("Out of range value '%d' for partition", $partition));
         }
 
         $key = $this->getName() . ':' . $partition;

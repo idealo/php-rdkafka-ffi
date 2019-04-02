@@ -1,20 +1,18 @@
 <?php
+declare(strict_types=1);
 
 namespace RdKafka;
 
+use FFI\CData;
+use RdKafka;
+
 abstract class Topic extends Api
 {
-    /**
-     * @var \FFI\CData
-     */
-    protected $topic;
+    protected CData $topic;
 
-    /**
-     * @var string
-     */
-    private $name;
+    private string $name;
 
-    public function __construct(\RdKafka $kafka, string $name, TopicConf $conf = null)
+    public function __construct(RdKafka $kafka, string $name, TopicConf $conf = null)
     {
         parent::__construct();
 
@@ -24,7 +22,7 @@ abstract class Topic extends Api
             $kafka->getCData(),
             $name,
             $conf ? $conf->getCData() : null,
-        );
+            );
 
         if ($this->topic === null) {
             $err = self::$ffi->rd_kafka_last_error();
@@ -38,7 +36,7 @@ abstract class Topic extends Api
         self::$ffi->rd_kafka_topic_destroy($this->topic);
     }
 
-    public function getCData()
+    public function getCData(): CData
     {
         return $this->topic;
     }

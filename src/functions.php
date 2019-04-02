@@ -1,4 +1,7 @@
 <?php
+declare(strict_types=1);
+
+use RdKafka\Api;
 
 /**
  * @param int $err Error code
@@ -7,7 +10,7 @@
  */
 function rd_kafka_err2str(int $err): string
 {
-    return \RdKafka\Api::err2str($err);
+    return Api::err2str($err);
 }
 
 /**
@@ -17,7 +20,7 @@ function rd_kafka_err2str(int $err): string
  */
 function rd_kafka_errno2err(int $errnox): int
 {
-    throw new \Exception('Not implemented.');
+    throw new Exception('Not implemented.');
 }
 
 /**
@@ -25,7 +28,7 @@ function rd_kafka_errno2err(int $errnox): int
  */
 function rd_kafka_errno(): int
 {
-    throw new \Exception('Not implemented.');
+    throw new Exception('Not implemented.');
 }
 
 /**
@@ -35,5 +38,5 @@ function rd_kafka_errno(): int
  */
 function rd_kafka_offset_tail(int $cnt): int
 {
-    throw new \Exception('Not implemented.');
+    return RD_KAFKA_OFFSET_TAIL_BASE - $cnt;
 }

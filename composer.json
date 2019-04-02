@@ -7,5 +7,14 @@
           "src/constants.php",
           "src/functions.php"
         ]
+    },
+    "minimum-stability": "dev",
+    "require": {
+        "php" : "^7.4",
+        "ext-ffi": "*"
+    },
+    "require-dev": {
+        "ircmaxell/ffime": "master",
+        "phpunit/phpunit": "^8.0"
     }
 }

@@ -1,8 +1,11 @@
 <?php
+declare(strict_types=1);
 
 namespace RdKafka;
 
-class Producer extends \RdKafka
+use RdKafka;
+
+class Producer extends RdKafka
 {
     /**
      * @param Conf|null $conf

@@ -1,13 +1,14 @@
 <?php
+declare(strict_types=1);
 
 namespace RdKafka\Metadata;
 
-class Collection implements \Iterator, \Countable
+use Countable;
+use Iterator;
+
+class Collection implements Iterator, Countable
 {
-    /**
-     * @var array
-     */
-    private $items;
+    private array $items;
 
     public function __construct(array $items = [])
     {
@@ -19,45 +20,33 @@ class Collection implements \Iterator, \Countable
      */
     public function current()
     {
-        return $this->current($this->items);
+        return current($this->items);
     }
 
-    /**
-     * @return void
-     */
-    public function next()
+    public function next(): void
     {
         next($this->items);
     }
 
     /**
-     * @return mixed
+     * @return int|string
      */
     public function key()
     {
         return key($this->items);
     }
 
-    /**
-     * @return boolean
-     */
-    public function valid()
+    public function valid(): bool
     {
         return isset($this->items[$this->key()]);
     }
 
-    /**
-     * @return void
-     */
-    public function rewind()
+    public function rewind(): void
     {
-        $this->rewind($this->items);
+        reset($this->items);
     }
 
-    /**
-     * @return int
-     */
-    public function count()
+    public function count(): int
     {
         return count($this->items);
     }

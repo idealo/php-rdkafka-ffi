@@ -12,4 +12,17 @@ RUN set -e; \
     make install; \
     rm -rf /tmp/*;
 
+# enable ffi for phpdbg
+RUN cp /usr/local/etc/php/php.ini-development /usr/local/etc/php/php.ini; \
+    echo "ffi.enable=true" >> /usr/local/etc/php/php.ini
+
+# install dev tooling
+# xdebug - needs https://github.com/xdebug/xdebug/pull/436
+# RUN curl https://codeload.github.com/xdebug/xdebug/tar.gz/master -o /tmp/xdebug-master.tar.gz;\
+#     tar -xzf /tmp/xdebug-master.tar.gz; \
+#     cd /tmp/xdebug-master; \
+#     sh rebuild.sh; \
+#     docker-php-ext-enable xdebug; \
+#     rm -rf /tmp/*;
+
 WORKDIR /app

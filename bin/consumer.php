@@ -27,7 +27,7 @@ $consumer->setLogLevel(LOG_DEBUG);
 $added = $consumer->addBrokers('kafka:9092');
 var_dump($added);
 
-$topic = $consumer->newTopic('ffi'); //, $topicConf);
+$topic = $consumer->newTopic('playground'); //, $topicConf);
 var_dump($topic);
 
 $metadata = $consumer->getMetadata(false, $topic, 1000);

@@ -1,5 +1,7 @@
 <?php
+declare(strict_types=1);
 
+use FFI\CData;
 use RdKafka\Api;
 use RdKafka\Conf;
 use RdKafka\Exception;
@@ -10,12 +12,14 @@ use RdKafka\TopicConf;
 
 abstract class RdKafka extends Api
 {
-    protected $kafka;
+    protected CData $kafka;
+
+    private ?Conf $conf;
 
     /**
      * @var self[]
      */
-    private static $instances = [];
+    private static array $instances = [];
 
     public static function resolveFromCData($producer)
     {
@@ -31,28 +35,32 @@ abstract class RdKafka extends Api
     {
         parent::__construct();
 
-        $errstr = \FFI::new("char[512]");
+        $this->conf = $conf;
+
+        $errstr = FFI::new("char[512]");
 
         $this->kafka = self::$ffi->rd_kafka_new(
             $type,
             $conf ? $conf->getCData() : null,
             $errstr,
-            \FFI::sizeOf($errstr)
+            FFI::sizeOf($errstr)
         );
 
         if ($this->kafka === null) {
             throw new Exception($errstr);
         }
 
-        if ($conf->hasLoggerCb()) {
-            $this->initLogQueue();
-        }
+        $this->initLogQueue();
 
         self::$instances[] = $this;
     }
 
     private function initLogQueue()
     {
+        if ($this->conf === null || !$this->conf->hasLoggerCb()) {
+            return;
+        }
+
         $err = self::$ffi->rd_kafka_set_log_queue($this->kafka, null);
 
         if ($err != RD_KAFKA_RESP_ERR_NO_ERROR) {
@@ -80,7 +88,7 @@ abstract class RdKafka extends Api
         }
     }
 
-    public function getCData()
+    public function getCData(): CData
     {
         return $this->kafka;
     }

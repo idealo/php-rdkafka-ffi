@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace RdKafka;
 
@@ -11,6 +12,7 @@ class TopicPartition
      */
     public function __construct($topic, $partition, $offset = null)
     {
+        throw new \Exception('Not implemented.');
     }
 
     /**

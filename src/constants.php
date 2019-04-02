@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 const RD_KAFKA_CONF_INVALID = -1;
 const RD_KAFKA_CONF_OK = 0;
@@ -16,6 +17,7 @@ const RD_KAFKA_MSG_PARTITIONER_RANDOM = 0;
 const RD_KAFKA_OFFSET_BEGINNING = -2;
 const RD_KAFKA_OFFSET_END = -1;
 const RD_KAFKA_OFFSET_STORED = -1000;
+const RD_KAFKA_OFFSET_TAIL_BASE = -2000; /* used only internally */
 const RD_KAFKA_PARTITION_UA = -1;
 const RD_KAFKA_PRODUCER = 0;
 const RD_KAFKA_RESP_ERR__ALL_BROKERS_DOWN = -187;

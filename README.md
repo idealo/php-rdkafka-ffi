@@ -16,15 +16,15 @@ Playing around with
 
 Build php7.4 base container with ffi enabled (based on php 7.4.0-dev src)
 
-    docker build --no-cache -t php74-cli:latest --build-arg PHP_EXTRA_BUILD_DEPS="libffi-dev" --build-arg PHP_EXTRA_CONFIGURE_ARGS="--with-ffi --without-pear" ./docker/php74-cli
+    docker build --no-cache -t php74-cli:latest --build-arg PHP_EXTRA_BUILD_DEPS="libffi-dev" --build-arg PHP_EXTRA_CONFIGURE_ARGS="--with-ffi" ./docker/php74-cli
 
 Test - should show 7.4.0-dev version
 
-    docker run -it php74-cli php -v
+    docker run php74-cli php -v
 
 Test - should show FFI in modules list
 
-    docker run -it php-ffi-librdkafka php -m
+    docker run php-ffi-librdkafka php -m
 
 Build container with librdkafka
 
@@ -32,29 +32,45 @@ Build container with librdkafka
 
 Test ffi librdkafka binding - should show 1.0.0 version of librdkafka:
 
-    docker run -it -v `pwd`:/app -w /app php-ffi-librdkafka php bin/version.php
+    docker run -v `pwd`:/app -w /app php-ffi-librdkafka php bin/version.php
 
 ## Having fun with kafka
 
-Startup php & kafka (with topic ffi)
+Startup php & kafka (scripts use topic 'playground')
 
     docker-compose up -d
 
 Updating Dependencies (using the [official composer docker image](https://hub.docker.com/_/composer) )
 
-    docker run --rm --interactive --tty -v $PWD:/app composer update
+    docker run --rm -it -v $PWD:/app composer update --ignore-platform-reqs
 
 Producing ...
 
-    docker-compose run app php bin/producer.php
+    docker-compose run --rm app php bin/producer.php
 
 Consuming ...
 
-    docker-compose run app php bin/consumer.php
+    docker-compose run --rm app php bin/consumer.php
     
 Broker metadata ...
 
-    docker-compose run app php bin/metadata.php
+    docker-compose run --rm app php bin/metadata.php
+
+## Dev Setup
+
+Startup php & kafka (tests use topic 'test')
+
+    docker-compose up -d
+
+Run tests
+
+    docker-compose run --rm app vendor/bin/phpunit
+
+Run tests with coverage
+
+    docker-compose run --rm app phpdbg -qrr vendor/bin/phpunit --coverage-html build/coverage
+
+For PHPSTORM you may use phpdgb & integrated coverage with this [dirty proxy trick](https://gist.github.com/MitchellMacpherson/973ef6343d1a38cf1badbc788ad9caf2).
 
 ## Todos
 

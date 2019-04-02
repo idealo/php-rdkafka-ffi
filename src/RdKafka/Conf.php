@@ -1,13 +1,17 @@
 <?php
+declare(strict_types=1);
 
 namespace RdKafka;
+
+use FFI;
+use FFI\CData;
 
 /**
  * Configuration reference: https://github.com/edenhill/librdkafka/blob/master/CONFIGURATION.md
  */
 class Conf extends Api
 {
-    private $conf;
+    private CData $conf;
 
     /**
      * @var callable
@@ -27,14 +31,14 @@ class Conf extends Api
 
     public function __destruct()
     {
-        unset($this->drMsgCb);
-        self::$ffi->rd_kafka_conf_destroy($this->conf);
+        // todo producer/consumer handle this when connected,
+        //self::$ffi->rd_kafka_conf_destroy($this->conf);
     }
 
     /**
-     * @return \FFI\CData
+     * @return CData
      */
-    public function getCData()
+    public function getCData(): CData
     {
         return $this->conf;
     }
@@ -44,8 +48,8 @@ class Conf extends Api
      */
     public function dump(): array
     {
-        $count = \FFI::new('size_t');
-        $dump = self::$ffi->rd_kafka_conf_dump($this->conf, \FFI::addr($count));
+        $count = FFI::new('size_t');
+        $dump = self::$ffi->rd_kafka_conf_dump($this->conf, FFI::addr($count));
 
         $result = [];
         for ($i = 0; $i < $count; $i += 2) {
@@ -68,13 +72,13 @@ class Conf extends Api
      */
     public function set(string $name, string $value)
     {
-        $errstr = \FFI::new("char[512]");
-        $result = self::$ffi->rd_kafka_conf_set($this->conf, $name, $value, $errstr, \FFI::sizeOf($errstr));
+        $errstr = FFI::new("char[512]");
+        $result = self::$ffi->rd_kafka_conf_set($this->conf, $name, $value, $errstr, 512);
 
         switch ($result) {
             case RD_KAFKA_CONF_UNKNOWN:
             case RD_KAFKA_CONF_INVALID:
-                throw new Exception(\FFI::string($errstr, \FFI::sizeOf($errstr)), $result);
+                throw new Exception(FFI::string($errstr), $result);
                 break;
             case RD_KAFKA_CONF_OK:
             default:

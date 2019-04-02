@@ -1,6 +1,9 @@
 <?php
+declare(strict_types=1);
 
 namespace RdKafka;
+
+use InvalidArgumentException;
 
 class ProducerTopic extends Topic
 {
@@ -27,12 +30,12 @@ class ProducerTopic extends Topic
     public function produce(int $partition, int $msgflags, string $payload, string $key = null)
     {
         if ($partition != RD_KAFKA_PARTITION_UA && ($partition < 0 || $partition > 0x7FFFFFFF)) {
-            throw new \InvalidArgumentException(sprintf("Out of range value '%d' for partition", $partition));
+            throw new InvalidArgumentException(sprintf("Out of range value '%d' for partition", $partition));
         }
 
         // todo why?
         if ($msgflags != 0) {
-            throw new \InvalidArgumentException(sprintf("Invalid value '%d' for msgflags", $msgflags));
+            throw new InvalidArgumentException(sprintf("Invalid value '%d' for msgflags", $msgflags));
         }
 
         $ret = self::$ffi->rd_kafka_produce(

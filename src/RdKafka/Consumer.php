@@ -1,14 +1,17 @@
 <?php
+declare(strict_types=1);
 
 namespace RdKafka;
 
-class Consumer extends \RdKafka
+use RdKafka;
+
+class Consumer extends RdKafka
 {
     /**
      * @param Conf|null $conf
      * @throws Exception
      */
-    public function __construct(Conf $conf)
+    public function __construct(Conf $conf = null)
     {
         parent::__construct(RD_KAFKA_CONSUMER, $conf);
     }

@@ -1,6 +1,9 @@
 <?php
+declare(strict_types=1);
 
 namespace RdKafka;
+
+use InvalidArgumentException;
 
 class KafkaConsumer
 {
@@ -15,8 +18,8 @@ class KafkaConsumer
     /**
      * @param TopicPartition[] $topic_partitions
      *
-     * @throws Exception
      * @return void
+     * @throws Exception
      */
     public function assign($topic_partitions = null)
     {
@@ -25,8 +28,8 @@ class KafkaConsumer
     /**
      * @param null|Message|TopicPartition[] $message_or_offsets
      *
-     * @throws Exception
      * @return void
+     * @throws Exception
      */
     public function commit($message_or_offsets = null)
     {
@@ -35,8 +38,8 @@ class KafkaConsumer
     /**
      * @param string $message_or_offsets
      *
-     * @throws Exception
      * @return void
+     * @throws Exception
      */
     public function commitAsync($message_or_offsets = null)
     {
@@ -45,17 +48,17 @@ class KafkaConsumer
     /**
      * @param string $timeout_ms
      *
-     * @throws Exception
-     * @throws \InvalidArgumentException
      * @return Message
+     * @throws InvalidArgumentException
+     * @throws Exception
      */
     public function consume($timeout_ms)
     {
     }
 
     /**
-     * @throws Exception
      * @return TopicPartition[]
+     * @throws Exception
      */
     public function getAssignment()
     {
@@ -66,8 +69,8 @@ class KafkaConsumer
      * @param KafkaConsumerTopic $only_topic
      * @param int $timeout_ms
      *
-     * @throws Exception
      * @return Metadata
+     * @throws Exception
      */
     public function getMetadata($all_topics, $only_topic = null, $timeout_ms)
     {
@@ -83,16 +86,16 @@ class KafkaConsumer
     /**
      * @param array $topics
      *
-     * @throws Exception
      * @return void
+     * @throws Exception
      */
     public function subscribe($topics)
     {
     }
 
     /**
-     * @throws Exception
      * @return void
+     * @throws Exception
      */
     public function unsubscribe()
     {
