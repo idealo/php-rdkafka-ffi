@@ -14,20 +14,19 @@ abstract class RdKafka extends Api
 {
     protected CData $kafka;
 
-    private ?Conf $conf;
-
     /**
      * @var self[]
      */
     private static array $instances = [];
 
-    public static function resolveFromCData($producer)
+    public static function resolveFromCData(CData $kafka = null)
     {
         foreach (self::$instances as $instance) {
-            if ($producer == $instance->getCData()) {
+            if ($kafka == $instance->getCData()) {
                 return $instance;
             }
         }
+
         return null;
     }
 
@@ -35,13 +34,11 @@ abstract class RdKafka extends Api
     {
         parent::__construct();
 
-        $this->conf = $conf;
-
         $errstr = FFI::new("char[512]");
 
         $this->kafka = self::$ffi->rd_kafka_new(
             $type,
-            $conf ? $conf->getCData() : null,
+            $this->duplicateConfCData($conf),
             $errstr,
             FFI::sizeOf($errstr)
         );
@@ -50,14 +47,23 @@ abstract class RdKafka extends Api
             throw new Exception($errstr);
         }
 
-        $this->initLogQueue();
+        $this->initLogQueue($conf);
 
         self::$instances[] = $this;
     }
 
-    private function initLogQueue()
+    private function duplicateConfCData(Conf $conf = null): ?CData
     {
-        if ($this->conf === null || !$this->conf->hasLoggerCb()) {
+        if ($conf === null) {
+            return null;
+        }
+
+        return self::$ffi->rd_kafka_conf_dup($conf->getCData());
+    }
+
+    private function initLogQueue(Conf $conf = null)
+    {
+        if ($conf === null || $conf->get('log.queue') !== 'true') {
             return;
         }
 

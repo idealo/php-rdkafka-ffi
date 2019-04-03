@@ -4,10 +4,11 @@ declare(strict_types=1);
 namespace RdKafka;
 
 use FFI;
+use FFI\CData;
 
 class Message extends Api
 {
-    public function __construct($nativeMessage)
+    public function __construct(CData $nativeMessage)
     {
         parent::__construct();
 

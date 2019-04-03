@@ -5,61 +5,75 @@ namespace RdKafka;
 
 class TopicPartition
 {
+    private string $topic;
+    private int $partition;
+    private ?int $offset = null;
+    private ?string $metadata = null;
     /**
-     * @param string $topic
-     * @param int $partition
-     * @param int $offset
+     * @var mixed
      */
-    public function __construct($topic, $partition, $offset = null)
-    {
-        throw new \Exception('Not implemented.');
+    private $opaque = null;
+    private ?int $err = null;
+
+
+    public function __construct(
+        string $topic_name,
+        int $partition,
+        int $offset = null,
+        string $metadata = null,
+        $opaque = null,
+        int $err = null
+    ) {
+        $this->topic = $topic_name;
+        $this->partition = $partition;
+        $this->offset = $offset;
+        $this->metadata = $metadata;
+        $this->opaque = $opaque;
+        $this->err = $err;
     }
 
-    /**
-     * @return int
-     */
-    public function getOffset()
+    public function getOffset(): ?int
     {
+        return $this->offset;
     }
 
-    /**
-     * @return int
-     */
-    public function getPartition()
+    public function getPartition(): int
     {
+        return $this->partition;
     }
 
-    /**
-     * @return string
-     */
-    public function getTopic()
+    public function getTopic(): string
     {
+        return $this->topic;
     }
 
-    /**
-     * @param string $offset
-     *
-     * @return void
-     */
-    public function setOffset($offset)
+    public function getMetadata(): string
     {
+        return $this->metadata;
     }
 
-    /**
-     * @param string $partition
-     *
-     * @return void
-     */
-    public function setPartition($partition)
+    public function getOpqaque()
     {
+        return $this->opaque;
     }
 
-    /**
-     * @param string $topic_name
-     *
-     * @return void
-     */
-    public function setTopic($topic_name)
+    public function getErr(): ?int
     {
+        return $this->err;
+    }
+
+    public function setOffset(int $offset)
+    {
+        $this->offset = $offset;
+    }
+
+    public function setPartition(int $partition)
+    {
+        $this->partition = $partition;
+    }
+
+    public function setTopic(string $topic_name)
+    {
+        $this->topic = $topic_name;
     }
 }

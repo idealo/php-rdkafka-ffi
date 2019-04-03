@@ -2,18 +2,27 @@
 
 require_once dirname(__DIR__) . '/vendor/autoload.php';
 
-$topicConf = new \RdKafka\TopicConf();
-$topicConf->set('auto.commit.interval.ms', 100);
-$topicConf->set('auto.offset.reset', 'smallest');
-var_dump($topicConf->dump());
-
 $conf = new \RdKafka\Conf();
 $conf->set('group.id', 'test');
+
 $conf->set('debug', 'all');
 $conf->setLoggerCb(function ($consumer, $level, $fac, $buf) {
     echo "log: $level $fac $buf" . PHP_EOL;
 });
+
+$conf->set('statistics.interval.ms', 500);
+$conf->setStatsCb(function ($consumer, $json, $json_len, $opaque) {
+    echo "stats: $json" . PHP_EOL;
+});
+
+$topicConf = new \RdKafka\TopicConf();
+$topicConf->set('enable.auto.commit', 'true');
+$topicConf->set('auto.commit.interval.ms', (string)100);
+$topicConf->set('auto.offset.reset', 'smallest');
+var_dump($topicConf->dump());
+
 $conf->setDefaultTopicConf($topicConf);
+
 if (function_exists('pcntl_sigprocmask')) {
     pcntl_sigprocmask(SIG_BLOCK, [SIGIO]);
     $conf->set('internal.termination.signal', SIGIO);

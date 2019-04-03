@@ -12,7 +12,7 @@ class ConfTest extends TestCase
 {
     public function testDump()
     {
-        $expectedNames = [
+        $expectedProperties = [
             'builtin.features',
             'client.id',
             'message.max.bytes',
@@ -92,9 +92,9 @@ class ConfTest extends TestCase
         ];
 
         $conf = new Conf();
-        $names = array_keys($conf->dump());
+        $properties = array_keys($conf->dump());
 
-        $this->assertEquals($expectedNames, $names);
+        $this->assertEquals($expectedProperties, $properties);
     }
 
     public function testSet()
@@ -105,5 +105,24 @@ class ConfTest extends TestCase
         $dump = $conf->dump();
 
         $this->assertEquals('abc', $dump['client.id']);
+    }
+
+    public function testGet()
+    {
+        $conf = new Conf();
+        $conf->set('client.id', 'abc');
+
+        $value = $conf->get('client.id');
+
+        $this->assertEquals('abc', $value);
+    }
+
+    public function testGetWithUnknownProperty()
+    {
+        $conf = new Conf();
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionCode(RD_KAFKA_CONF_UNKNOWN);
+        $conf->get('unknown.property');
     }
 }

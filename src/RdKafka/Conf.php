@@ -5,6 +5,7 @@ namespace RdKafka;
 
 use FFI;
 use FFI\CData;
+use RdKafka;
 
 /**
  * Configuration reference: https://github.com/edenhill/librdkafka/blob/master/CONFIGURATION.md
@@ -31,8 +32,7 @@ class Conf extends Api
 
     public function __destruct()
     {
-        // todo producer/consumer handle this when connected,
-        //self::$ffi->rd_kafka_conf_destroy($this->conf);
+        self::$ffi->rd_kafka_conf_destroy($this->conf);
     }
 
     /**
@@ -73,7 +73,7 @@ class Conf extends Api
     public function set(string $name, string $value)
     {
         $errstr = FFI::new("char[512]");
-        $result = self::$ffi->rd_kafka_conf_set($this->conf, $name, $value, $errstr, 512);
+        $result = self::$ffi->rd_kafka_conf_set($this->conf, $name, $value, $errstr, FFI::sizeOf($errstr));
 
         switch ($result) {
             case RD_KAFKA_CONF_UNKNOWN:
@@ -84,6 +84,25 @@ class Conf extends Api
             default:
                 break;
         }
+    }
+
+    /**
+     * @param string $name
+     *
+     * @return string|null
+     * @throws Exception
+     */
+    public function get(string $name): string
+    {
+        $value = FFI::new("char[512]");
+        $valueSize = FFI::new('size_t');
+
+        $result = self::$ffi->rd_kafka_conf_get($this->conf, $name, $value, FFI::addr($valueSize));
+        if ($result === RD_KAFKA_CONF_UNKNOWN) {
+            throw new Exception('Unknown property name.', $result);
+        }
+
+        return FFI::string($value);
     }
 
     /**
@@ -105,21 +124,16 @@ class Conf extends Api
      */
     public function setDrMsgCb(callable $callback)
     {
-        if ($this->drMsgCb === null) {
-            self::$ffi->rd_kafka_conf_set_dr_msg_cb($this->conf, [$this, 'drMsgCbProxy']);
-        }
-        $this->drMsgCb = $callback;
+        $proxyCallback = function ($producer, $nativeMessage, $opaque = null) use ($callback) {
+            $callback(
+                RdKafka::resolveFromCData($producer),
+                new Message($nativeMessage),
+                $opaque
+            );
+        };
+
+        self::$ffi->rd_kafka_conf_set_dr_msg_cb($this->conf, $proxyCallback);
     }
-
-    public function drMsgCbProxy($nativeProducer, $nativeMessage, $opaque = null)
-    {
-        $producer = Producer::resolveFromCData($nativeProducer);
-        $message = new Message($nativeMessage);
-
-        $drMsgCb = $this->drMsgCb;
-        $drMsgCb($producer, $message);
-    }
-
 
     /**
      * @param callable $callback
@@ -129,22 +143,19 @@ class Conf extends Api
      */
     public function setLoggerCb(callable $callback)
     {
-        if ($this->loggerCb === null) {
-            $this->set('log.queue', 'true');
-            self::$ffi->rd_kafka_conf_set_log_cb($this->conf, [$this, 'loggerCbProxy']);
-        }
-        $this->loggerCb = $callback;
-    }
+        $this->set('log.queue', 'true');
 
-    public function loggerCbProxy($nativeProducer, $level, $fac, $buf)
-    {
-        $loggerCb = $this->loggerCb;
-        $loggerCb(Producer::resolveFromCData($nativeProducer), (int)$level, (string)$fac, (string)$buf);
-    }
+        $proxyCallback = function ($consumerOrProducer, $level, $fac, $buf) use ($callback) {
+            $callback(
+                RdKafka::resolveFromCData($consumerOrProducer),
+                (int)$level,
+                (string)$fac,
+                (string)$buf
+            );
+        };
 
-    public function hasLoggerCb(): bool
-    {
-        return ($this->loggerCb !== null);
+        self::$ffi->rd_kafka_conf_set_log_cb($this->conf, $proxyCallback);
+
     }
 
     /**
@@ -154,7 +165,16 @@ class Conf extends Api
      */
     public function setErrorCb(callable $callback)
     {
-        throw new \Exception('Not implemented.');
+        $proxyCallback = function ($consumerOrProducer, $err, $reason, $opaque = null) use ($callback) {
+            $callback(
+                RdKafka::resolveFromCData($consumerOrProducer),
+                (int)$err,
+                (string)$reason,
+                $opaque
+            );
+        };
+
+        self::$ffi->rd_kafka_conf_set_error_cb($this->conf, $proxyCallback);
     }
 
     /**
@@ -164,7 +184,16 @@ class Conf extends Api
      */
     public function setRebalanceCb(callable $callback)
     {
-        throw new \Exception('Not implemented.');
+        $proxyCallback = function ($consumer, $err, $topicPartitionList, $opaque = null) use ($callback) {
+            $callback(
+                RdKafka::resolveFromCData($consumer),
+                (int)$err,
+                TopicPartitionList::fromCData($topicPartitionList),
+                $opaque
+            );
+        };
+
+        self::$ffi->rd_kafka_conf_set_error_cb($this->conf, $proxyCallback);
     }
 
     /**
@@ -173,6 +202,44 @@ class Conf extends Api
      * @return void
      */
     public function setStatsCb(callable $callback)
+    {
+        $proxyCallback = function ($consumerOrProducer, $json, $json_len, $opaque = null) use ($callback) {
+            $callback(
+                RdKafka::resolveFromCData($consumerOrProducer),
+                FFI::string($json, $json_len),
+                (int)$json_len,
+                $opaque
+            );
+        };
+
+        self::$ffi->rd_kafka_conf_set_stats_cb($this->conf, $proxyCallback);
+    }
+
+    /**
+     * @param callable $callback
+     *
+     * @return void
+     */
+    public function setOffsetCommitCallback(callable $callback)
+    {
+        $proxyCallback = function ($consumer, $err, $topicPartitionList, $opaque = null) use ($callback) {
+            $callback(
+                RdKafka::resolveFromCData($consumer),
+                (int)$err,
+                TopicPartitionList::fromCData($topicPartitionList),
+                $opaque
+            );
+        };
+
+        self::$ffi->rd_kafka_conf_set_offset_commit_cb($this->conf, $proxyCallback);
+    }
+
+    /**
+     * @param callable $callback
+     *
+     * @return void
+     */
+    public function setThrottleCallback(callable $callback)
     {
         throw new \Exception('Not implemented.');
     }

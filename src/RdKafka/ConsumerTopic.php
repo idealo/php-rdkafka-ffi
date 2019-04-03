@@ -169,7 +169,7 @@ class ConsumerTopic extends Topic
      */
     public function offsetStore(int $partition, int $offset)
     {
-        $err = self::$ffi->rd_kafka_consume_stop(
+        $err = self::$ffi->rd_kafka_offset_store(
             $this->topic,
             $partition,
             $offset
