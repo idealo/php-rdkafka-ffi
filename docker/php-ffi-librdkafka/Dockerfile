@@ -35,7 +35,7 @@ RUN cd /tmp; \
     make test; \
     make install; \
     docker-php-ext-enable pcov; \
-    echo "pcov.enabled=true" > /usr/local/etc/php/php.ini; \
+    echo "pcov.enabled=true" >> /usr/local/etc/php/conf.d/docker-php-ext-pcov.ini; \
     rm -rf /tmp/*;
 
 WORKDIR /app

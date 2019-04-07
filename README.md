@@ -11,6 +11,7 @@ Playing around with
 * [php rdkafka stubs](https://github.com/kwn/php-rdkafka-stubs)
 * [php7.4-dev](https://github.com/php/php-src/tree/PHP-7.4)
 * [Kafka](https://hub.docker.com/r/wurstmeister/kafka/) / [Zookeeper](https://hub.docker.com/r/wurstmeister/zookeeper/) docker images from wurstmeister
+* [pcov](https://github.com/krakjoe/pcov) for test code coverage
 
 ## Get started
 
@@ -66,11 +67,9 @@ Run tests
 
     docker-compose run --rm app vendor/bin/phpunit
 
-Run tests with coverage
+Run tests with coverage:
 
-    docker-compose run --rm app phpdbg -qrr vendor/bin/phpunit --coverage-html build/coverage
-
-For PHPSTORM you may use phpdgb & integrated coverage with this [dirty proxy trick](https://gist.github.com/MitchellMacpherson/973ef6343d1a38cf1badbc788ad9caf2).
+    docker-compose run --rm app vendor/bin/phpunit --coverage-html build/coverage
 
 ## Todos
 
