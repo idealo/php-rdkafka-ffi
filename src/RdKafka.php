@@ -19,7 +19,7 @@ abstract class RdKafka extends Api
      */
     private static array $instances = [];
 
-    public static function resolveFromCData(CData $kafka = null)
+    public static function resolveFromCData(CData $kafka = null): ?self
     {
         foreach (self::$instances as $instance) {
             if ($kafka == $instance->getCData()) {

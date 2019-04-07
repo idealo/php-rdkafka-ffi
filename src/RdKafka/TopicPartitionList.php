@@ -18,7 +18,7 @@ class TopicPartitionList implements Iterator, Countable
         for ($i = 0; $i < (int)$topicPartitionList->cnt; $i++) {
             $data = $topicPartitionList->elems[$i];
             $items[] = new TopicPartition(
-                FFI::string($data->topic),
+                (string)$data->topic,
                 (int)$data->partition,
                 (int)$data->offset,
                 FFI::string($data->metadata, $data->metadata_size),
@@ -33,7 +33,7 @@ class TopicPartitionList implements Iterator, Countable
     /**
      * @param TopicPartitionList[] $items
      */
-    public function __construct(array $items = [])
+    public function __construct(TopicPartition ...$items)
     {
         $this->items = $items;
     }
