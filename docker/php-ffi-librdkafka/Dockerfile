@@ -25,4 +25,17 @@ RUN cp /usr/local/etc/php/php.ini-development /usr/local/etc/php/php.ini; \
 #     docker-php-ext-enable xdebug; \
 #     rm -rf /tmp/*;
 
+# install pcov
+RUN cd /tmp; \
+    git clone https://github.com/krakjoe/pcov.git; \
+    cd pcov; \
+    phpize; \
+    ./configure --enable-pcov; \
+    make; \
+    make test; \
+    make install; \
+    docker-php-ext-enable pcov; \
+    echo "pcov.enabled=true" > /usr/local/etc/php/php.ini; \
+    rm -rf /tmp/*;
+
 WORKDIR /app
