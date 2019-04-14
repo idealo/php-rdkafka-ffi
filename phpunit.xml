@@ -1,0 +1,25 @@
+<phpunit bootstrap="vendor/autoload.php"
+         colors="true"
+         verbose="true"
+         convertErrorsToExceptions="true"
+         convertNoticesToExceptions="true"
+         convertWarningsToExceptions="true"
+         stopOnFailure="false"
+         failOnWarning="true">
+    <testsuites>
+        <testsuite name="FFI RdKafka Bindings">
+            <directory suffix=".php">tests/</directory>
+        </testsuite>
+    </testsuites>
+
+    <filter>
+        <whitelist processUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">src/</directory>
+        </whitelist>
+    </filter>
+
+    <php>
+        <const name="KAFKA_BROKERS" value="kafka:9092" />
+        <const name="KAFKA_TEST_TOPIC" value="test" />
+    </php>
+</phpunit>
