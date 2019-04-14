@@ -16,10 +16,11 @@ addons:
   hosts:
     - kafka
 env:
-#  - LIBRDKAFKA_VERSION=master
-  - LIBRDKAFKA_VERSION=v1.0.0
   global:
     - CC_TEST_REPORTER_ID=c543ca814944c789fa9a5ee4c553866eee2e7498d1644258575a24bc05302641
+  matrix:
+#     - LIBRDKAFKA_VERSION=master
+    - LIBRDKAFKA_VERSION=v1.0.0
 before_script:
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
   - chmod +x ./cc-test-reporter
