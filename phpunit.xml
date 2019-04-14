@@ -21,5 +21,6 @@
     <php>
         <const name="KAFKA_BROKERS" value="kafka:9092" />
         <const name="KAFKA_TEST_TOPIC" value="test" />
+        <const name="KAFKA_TEST_TIMEOUT_MS" value="5000" />
     </php>
 </phpunit>
