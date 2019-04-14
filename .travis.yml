@@ -18,7 +18,7 @@ env:
 script:
   - ./travis.sh
   - echo "ffi.enable=true" >> $HOME/.phpenv/versions/$TRAVIS_PHP_VERSION/etc/conf.d/ffi.ini
-  - pecl install pcov
+#  - pecl install pcov
   - php -m
   - composer update --prefer-lowest --prefer-stable --no-interaction --no-suggest
   - docker-compose up -d kafka
