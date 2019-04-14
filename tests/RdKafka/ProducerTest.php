@@ -42,7 +42,7 @@ class ProducerTest extends TestCase
 
     public function testGetMetadata()
     {
-        $metadata = $this->producer->getMetadata(true, null, 2000);
+        $metadata = $this->producer->getMetadata(true, null, KAFKA_TEST_TIMEOUT_MS);
 
         self::assertInstanceOf(Metadata::class, $metadata);
     }
