@@ -9,7 +9,7 @@ cache:
 php:
   - 7.4snapshot
 env:
-  - LIBRDKAFKA_VERSION=1.0.0
+  - LIBRDKAFKA_VERSION=v1.0.0
 #  - LIBRDKAFKA_VERSION=master
 script:
   - ./travis.sh
