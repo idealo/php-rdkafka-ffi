@@ -13,7 +13,7 @@ services:
       KAFKA_CREATE_TOPICS: "playground:1:1:3,test:1:1:1"
       KAFKA_ADVERTISED_HOST_NAME: "kafka"
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_BROKER_ID: 1001
+      KAFKA_BROKER_ID: 111
     depends_on:
       - zookeeper
     links:

@@ -48,7 +48,7 @@ class MetadataTest extends TestCase
         $topics = $this->metadata->getTopics();
 
         $this->assertInstanceOf(Collection::class, $topics);
-        $this->assertGreaterThan(1, $topics->count());
+        $this->assertGreaterThan(0, $topics->count());
 
         /** @var Topic $topic */
         $topic = $topics->current();
@@ -63,18 +63,18 @@ class MetadataTest extends TestCase
         $partition = $partitions->current();
 
         $this->assertEquals(0, $partition->getId());
-        $this->assertEquals([1001], $partition->getIsrs());
-        $this->assertEquals(1001, $partition->getLeader());
-        $this->assertEquals([1001], $partition->getReplicas());
+        $this->assertEquals([111], $partition->getIsrs());
+        $this->assertEquals(111, $partition->getLeader());
+        $this->assertEquals([111], $partition->getReplicas());
     }
 
     public function testGetOrigBrokerId()
     {
-        $this->assertEquals(1001, $this->metadata->getOrigBrokerId());
+        $this->assertEquals(111, $this->metadata->getOrigBrokerId());
     }
 
     public function testGetOrigBrokerName()
     {
-        $this->assertEquals(KAFKA_BROKERS . '/1001', $this->metadata->getOrigBrokerName());
+        $this->assertEquals(KAFKA_BROKERS . '/111', $this->metadata->getOrigBrokerName());
     }
 }
