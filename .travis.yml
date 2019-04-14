@@ -12,6 +12,7 @@ addons:
   apt:
     packages:
       - libonig-dev
+      - libffi-dev
 env:
   - LIBRDKAFKA_VERSION=v1.0.0
 #  - LIBRDKAFKA_VERSION=master
