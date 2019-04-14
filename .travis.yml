@@ -12,10 +12,9 @@ env:
   - LIBRDKAFKA_VERSION=1.0.0
 #  - LIBRDKAFKA_VERSION=master
 script:
-  - travis.sh
+  - ./travis.sh
   - php -m
   - composer update --prefer-lowest --prefer-stable --no-interaction --no-suggest
-  - vendor/bin/phpunit
   - docker-compose up -d kafka
   - php vendor/bin/phpunit
 after_script:
