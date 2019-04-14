@@ -18,19 +18,8 @@ env:
 #  - LIBRDKAFKA_VERSION=master
 script:
   - ./travis.sh
-  - echo "extension=ffi.so" >> $HOME/.phpenv/versions/$TRAVIS_PHP_VERSION/etc/conf.d/ffi.ini
-  - echo "ffi.enable=true" >> $HOME/.phpenv/versions/$TRAVIS_PHP_VERSION/etc/conf.d/ffi.ini
-  - echo "extension=pcov.so" >> $HOME/.phpenv/versions/$TRAVIS_PHP_VERSION/etc/conf.d/pcov.ini
-  - echo "pcov.enabled=true" >> $HOME/.phpenv/versions/$TRAVIS_PHP_VERSION/etc/conf.d/pcov.ini
-#   - cat $HOME/.phpenv/versions/$TRAVIS_PHP_VERSION/etc/php.ini
-#  - ls -la $HOME/.phpenv/versions/$TRAVIS_PHP_VERSION
-#  - which phpize
-  - php -v
-  - php -m
-  - ls -la /home/travis/.phpenv/versions/$TRAVIS_PHP_VERSION/lib/php/extensions/no-debug-zts-20180731/
-  - ls -la /home/travis/.phpenv/versions/$TRAVIS_PHP_VERSION/
-#  - composer update --prefer-lowest --prefer-stable --no-interaction --no-suggest
-#  - docker-compose up -d kafka
-#  - php vendor/bin/phpunit
+  - composer update --prefer-lowest --prefer-stable --no-interaction --no-suggest
+  - docker-compose up -d kafka
+  - php vendor/bin/phpunit
 after_script:
-#  - docker-compose down
+  - docker-compose down
