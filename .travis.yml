@@ -8,6 +8,10 @@ cache:
     - $HOME/.composer/cache
 php:
   - 7.4snapshot
+addons:
+  apt:
+    packages:
+      - libonig-dev
 env:
   - LIBRDKAFKA_VERSION=v1.0.0
 #  - LIBRDKAFKA_VERSION=master
