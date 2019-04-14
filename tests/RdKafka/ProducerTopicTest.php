@@ -46,7 +46,7 @@ class ProducerTopicTest extends TestCase
 
         $topic->produce(RD_KAFKA_PARTITION_UA, 0, 'payload-topic-produce', 'key-topic-produce');
 
-        $producer->poll(KAFKA_TEST_TIMEOUT_MS);
+        $producer->poll((int) KAFKA_TEST_TIMEOUT_MS);
 
         $this->assertEquals('payload-topic-produce', $payload);
     }

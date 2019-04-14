@@ -34,7 +34,7 @@ class ConsumerTest extends TestCase
     {
         $consumer = new Consumer();
         $consumer->addBrokers(KAFKA_BROKERS);
-        $metadata = $consumer->getMetadata(true, null, KAFKA_TEST_TIMEOUT_MS);
+        $metadata = $consumer->getMetadata(true, null, (int) KAFKA_TEST_TIMEOUT_MS);
 
         $this->assertInstanceOf(Metadata::class, $metadata);
     }
