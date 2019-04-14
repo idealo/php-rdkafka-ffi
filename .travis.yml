@@ -19,7 +19,7 @@ env:
 script:
   - ./travis.sh
 #  - echo "ffi.enable=true" >> $HOME/.phpenv/versions/$TRAVIS_PHP_VERSION/etc/php.ini
-   - cat $HOME/.phpenv/versions/$TRAVIS_PHP_VERSION/etc/php.ini
+#   - cat $HOME/.phpenv/versions/$TRAVIS_PHP_VERSION/etc/php.ini
 #  - ls -la $HOME/.phpenv/versions/$TRAVIS_PHP_VERSION
 #  - which phpize
   - php -v
