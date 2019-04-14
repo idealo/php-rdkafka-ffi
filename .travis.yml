@@ -18,7 +18,9 @@ env:
 #  - LIBRDKAFKA_VERSION=master
 script:
   - ./travis.sh
+  - echo "extension=ffi.so" >> $HOME/.phpenv/versions/$TRAVIS_PHP_VERSION/etc/conf.d/ffi.ini
   - echo "ffi.enable=true" >> $HOME/.phpenv/versions/$TRAVIS_PHP_VERSION/etc/conf.d/ffi.ini
+  - echo "extension=pcov.so" >> $HOME/.phpenv/versions/$TRAVIS_PHP_VERSION/etc/conf.d/pcov.ini
   - echo "pcov.enabled=true" >> $HOME/.phpenv/versions/$TRAVIS_PHP_VERSION/etc/conf.d/pcov.ini
 #   - cat $HOME/.phpenv/versions/$TRAVIS_PHP_VERSION/etc/php.ini
 #  - ls -la $HOME/.phpenv/versions/$TRAVIS_PHP_VERSION

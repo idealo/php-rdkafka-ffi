@@ -8,7 +8,7 @@ git clone --depth 1 --branch "$LIBRDKAFKA_VERSION" https://github.com/edenhill/l
     cd librdkafka
     ./configure
     make
-    sudo make install
+    make install
 )
 sudo ldconfig
 
@@ -19,7 +19,7 @@ git clone --depth 1 --branch "PHP-7.4" https://github.com/php/php-src.git
     phpize
     ./configure --with-ffi
     make
-    sudo make install
+    make install
 )
 
 # install pcov
@@ -29,5 +29,5 @@ git clone --depth 1 https://github.com/krakjoe/pcov.git
     phpize
     ./configure --enable-pcov
     make
-    sudo make install
+    make install
 )
