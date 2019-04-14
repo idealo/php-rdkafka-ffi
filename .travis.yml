@@ -13,6 +13,8 @@ addons:
     packages:
       - libonig-dev
       - libffi-dev
+  hosts:
+    - kafka
 env:
   - LIBRDKAFKA_VERSION=v1.0.0
 #  - LIBRDKAFKA_VERSION=master
