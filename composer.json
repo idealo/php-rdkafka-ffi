@@ -14,7 +14,6 @@
         "ext-ffi": "*"
     },
     "require-dev": {
-        "ircmaxell/ffime": "master",
         "phpunit/phpunit": "^8.0"
     }
 }
