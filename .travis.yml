@@ -24,7 +24,7 @@ env:
 before_script:
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
   - chmod +x ./cc-test-reporter
-  - if [ "LIBRDKAFKA_VERSION" = "v1.0.0" ]; then ./cc-test-reporter before-build; fi
+  - if [ "$LIBRDKAFKA_VERSION" = "v1.0.0" ]; then ./cc-test-reporter before-build; fi
 script:
   - ./travis.sh
   - composer update --prefer-lowest --prefer-stable --no-interaction --no-suggest
@@ -32,4 +32,4 @@ script:
   - php vendor/bin/phpunit --coverage-text --coverage-clover=clover.xml
 after_script:
   - docker-compose down
-  - if [ "LIBRDKAFKA_VERSION" = "v1.0.0" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT; fi
+  - if [ "$LIBRDKAFKA_VERSION" = "v1.0.0" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT; fi
