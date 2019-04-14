@@ -42,7 +42,7 @@ class ProducerTest extends TestCase
 
     public function testGetMetadata()
     {
-        $metadata = $this->producer->getMetadata(true, null, 1000);
+        $metadata = $this->producer->getMetadata(true, null, 2000);
 
         self::assertInstanceOf(Metadata::class, $metadata);
     }

@@ -46,7 +46,7 @@ class ProducerTopicTest extends TestCase
 
         $topic->produce(RD_KAFKA_PARTITION_UA, 0, 'payload-topic-produce', 'key-topic-produce');
 
-        $producer->poll(1000);
+        $producer->poll(2000);
 
         $this->assertEquals('payload-topic-produce', $payload);
     }

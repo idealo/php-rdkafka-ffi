@@ -2,6 +2,8 @@
 
 __EXTREMLY EXPERIMENTAL WIP__
 
+[![Build Status](https://travis-ci.org/dirx/php-ffi-librdkafka.svg?branch=master)](https://travis-ci.org/dirx/php-ffi-librdkafka)
+
 A php based rdkafka lib as replacement for [php rdkafka extension](https://github.com/arnaud-lb/php-rdkafka).
 
 Playing around with
@@ -73,10 +75,9 @@ Run tests with coverage:
 
 ## Todos
 
-* Callbacks (log & msg callback kind of work, look into rd_kafka_conf_set_background_event_cb)
-* High Level KafkaConsumer
-* sig Handling & destruct (expect seg faults & lost msgs)
-* Tests, tests, tests, ... and travis
-* Generate binding class with https://github.com/ircmaxell/FFIMe
-* Support admin
-
+* [x] Callbacks
+* [ ] High Level KafkaConsumer
+* [ ] sig Handling & destruct (expect seg faults & lost msgs)
+* [ ] Tests, tests, tests, ... and travis
+* [ ] Generate binding class with https://github.com/ircmaxell/FFIMe
+* [ ] Support admin features

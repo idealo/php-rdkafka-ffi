@@ -27,7 +27,7 @@ class MessageTest extends TestCase
         $consumerTopic = $consumer->newTopic(KAFKA_TEST_TOPIC);
         $consumerTopic->consumeStart(0, rd_kafka_offset_tail(1));
 
-        $this->message = $consumerTopic->consume(0, 1000);
+        $this->message = $consumerTopic->consume(0, 2000);
 
         $consumerTopic->consumeStop(0);
     }
