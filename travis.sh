@@ -2,6 +2,8 @@
 
 set -xe
 
+printenv
+
 # install librdkafka
 git clone --depth 1 --branch "$LIBRDKAFKA_VERSION" https://github.com/edenhill/librdkafka.git
 (

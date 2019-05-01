@@ -13,7 +13,6 @@ addons:
     packages:
       - libonig-dev
       - libffi-dev
-      - pkg-config
   hosts:
     - kafka
 env:
