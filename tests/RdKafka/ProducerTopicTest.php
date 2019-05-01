@@ -79,7 +79,6 @@ class ProducerTopicTest extends TestCase
         $conf->setDrMsgCb(function (\RdKafka $kafka, Message $message) use (&$payload, &$headers) {
             $payload = $message->payload;
             $headers = $message->headers;
-            var_dump($message);
         });
         $producer = new Producer($conf);
         $producer->addBrokers(KAFKA_BROKERS);
