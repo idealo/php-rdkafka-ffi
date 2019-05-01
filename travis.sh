@@ -2,8 +2,6 @@
 
 set -xe
 
-printenv
-
 # install librdkafka
 git clone --depth 1 --branch "$LIBRDKAFKA_VERSION" https://github.com/edenhill/librdkafka.git
 (
@@ -19,7 +17,7 @@ git clone --depth 1 --branch "PHP-7.4" https://github.com/php/php-src.git
 (
     cd php-src/ext/ffi
     phpize
-    ./configure --with-ffi
+    ./configure --with-ffi=/usr/include/x86_64-linux-gnu/ffi.h
     make
     sudo make install
 )
