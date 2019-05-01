@@ -12,11 +12,14 @@ abstract class Topic extends Api
 
     private string $name;
 
+    protected RdKafka $kafka;
+
     public function __construct(RdKafka $kafka, string $name, TopicConf $conf = null)
     {
         parent::__construct();
 
         $this->name = $name;
+        $this->kafka = $kafka;
 
         $this->topic = self::$ffi->rd_kafka_topic_new(
             $kafka->getCData(),

@@ -23,11 +23,12 @@ class ProducerTopic extends Topic
      * @param int $msgflags
      * @param string $payload
      * @param string $key
+     * @param array $headers
      *
      * @return void
      * @throws Exception
      */
-    public function produce(int $partition, int $msgflags, string $payload, string $key = null)
+    public function produce(int $partition, int $msgflags, string $payload = null, string $key = null, array $headers = [])
     {
         if ($partition != RD_KAFKA_PARTITION_UA && ($partition < 0 || $partition > 0x7FFFFFFF)) {
             throw new InvalidArgumentException(sprintf("Out of range value '%d' for partition", $partition));
@@ -38,15 +39,35 @@ class ProducerTopic extends Topic
             throw new InvalidArgumentException(sprintf("Invalid value '%d' for msgflags", $msgflags));
         }
 
-        $ret = self::$ffi->rd_kafka_produce(
+        $args = [
+            RD_KAFKA_VTYPE_RKT,
             $this->topic,
+            RD_KAFKA_VTYPE_PARTITION,
             $partition,
+            RD_KAFKA_VTYPE_MSGFLAGS,
             $msgflags | RD_KAFKA_MSG_F_COPY,
+            RD_KAFKA_VTYPE_VALUE,
             $payload,
             is_null($payload) ? null : strlen($payload),
+            RD_KAFKA_VTYPE_KEY,
             $key,
             is_null($key) ? null : strlen($key),
-            null
+        ];
+
+        if (!empty($headers)) {
+            foreach ($headers as $headerName => $headerValue) {
+                $args[] = RD_KAFKA_VTYPE_HEADER;
+                $args[] = $headerName;
+                $args[] = $headerValue;
+                $args[] = strlen($headerValue);
+            }
+        }
+
+        $args[] = RD_KAFKA_VTYPE_END;
+
+        $ret = self::$ffi->rd_kafka_producev(
+            $this->kafka->getCData(),
+            ...$args
         );
 
         if ($ret == -1) {
