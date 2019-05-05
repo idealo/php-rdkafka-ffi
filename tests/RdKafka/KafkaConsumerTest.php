@@ -120,7 +120,7 @@ class KafkaConsumerTest extends TestCase
         $consumer = new KafkaConsumer($conf);
         $consumer->subscribe([KAFKA_TEST_TOPIC]);
 
-        sleep(1);
+        sleep(2);
 
         $lastMessage = null;
         while (true) {
@@ -166,6 +166,7 @@ class KafkaConsumerTest extends TestCase
     {
         $conf = new Conf();
         $conf->set('group.id', __METHOD__);
+        $conf->set('enable.auto.commit', 'false');
         $conf->set('metadata.broker.list', KAFKA_BROKERS);
         $topicConf = new TopicConf();
         $topicConf->set('auto.offset.reset', 'smallest');
@@ -185,7 +186,7 @@ class KafkaConsumerTest extends TestCase
         $message = $consumer->consume((int)KAFKA_TEST_TIMEOUT_MS);
         $consumer->commit($message);
 
-        // consume to trigger callback
+        // just trigger callback
         $consumer->consume((int)KAFKA_TEST_TIMEOUT_MS);
 
         $this->assertEquals($message->offset + 1, $offset);
@@ -195,6 +196,7 @@ class KafkaConsumerTest extends TestCase
     {
         $conf = new Conf();
         $conf->set('group.id', __METHOD__);
+        $conf->set('enable.auto.commit', 'false');
 
         $consumer = new KafkaConsumer($conf);
         $consumer->addBrokers(KAFKA_BROKERS);
@@ -216,6 +218,8 @@ class KafkaConsumerTest extends TestCase
     {
         $conf = new Conf();
         $conf->set('group.id', __METHOD__);
+        $conf->set('enable.auto.commit', 'false');
+        $conf->set('auto.commit.interval.ms', '900');
 
         $consumer = new KafkaConsumer($conf);
         $consumer->addBrokers(KAFKA_BROKERS);
