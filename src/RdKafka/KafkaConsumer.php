@@ -9,8 +9,6 @@ use RdKafka;
 
 class KafkaConsumer extends RdKafka
 {
-    private Conf $conf;
-
     public function __construct(Conf $conf)
     {
         try {
@@ -22,8 +20,6 @@ class KafkaConsumer extends RdKafka
         parent::__construct(RD_KAFKA_CONSUMER, $conf);
 
         self::$ffi->rd_kafka_poll_set_consumer($this->kafka);
-
-        $this->conf = $conf;
     }
 
     public function __destruct()
