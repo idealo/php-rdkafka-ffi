@@ -6,7 +6,6 @@ use RdKafka\Api;
 use RdKafka\Conf;
 use RdKafka\Exception;
 use RdKafka\Metadata;
-use RdKafka\Queue;
 use RdKafka\Topic;
 use RdKafka\TopicConf;
 
@@ -117,7 +116,7 @@ abstract class RdKafka extends Api
      * @return Metadata
      * @throws Exception
      */
-    public function getMetadata(bool $all_topics, Topic $only_topic = null, int $timeout_ms): Metadata
+    public function getMetadata(bool $all_topics, ?Topic $only_topic, int $timeout_ms): Metadata
     {
         return new Metadata($this, $all_topics, $only_topic, $timeout_ms);
     }
@@ -135,7 +134,7 @@ abstract class RdKafka extends Api
      *
      * @return int Number of triggered events
      */
-    public function poll(int $timeout_ms): int
+    protected function poll(int $timeout_ms): int
     {
         return self::$ffi->rd_kafka_poll($this->kafka, $timeout_ms);
     }
@@ -143,14 +142,9 @@ abstract class RdKafka extends Api
     /**
      * @return int
      */
-    public function getOutQLen(): int
+    protected function getOutQLen(): int
     {
         return self::$ffi->rd_kafka_outq_len($this->kafka);
-    }
-
-    public function newQueue(): Queue
-    {
-        return new Queue($this);
     }
 
     public function setLogLevel(int $level)

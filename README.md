@@ -77,9 +77,10 @@ Run tests with coverage:
 
 ## Todos
 
-* [x] Callbacks
-* [ ] High Level KafkaConsumer
+* [x] Callbacks (
+* [x] High Level KafkaConsumer
 * [ ] sig Handling & destruct (expect seg faults & lost msgs)
 * [ ] Tests, tests, tests, ... and travis
-* [ ] Generate binding class with https://github.com/ircmaxell/FFIMe
+* [ ] Generate binding class with https://github.com/ircmaxell/FFIMe / use default header file
 * [ ] Support admin features
+* [ ] Documentation

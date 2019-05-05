@@ -14,16 +14,6 @@ class Conf extends Api
 {
     private CData $conf;
 
-    /**
-     * @var callable
-     */
-    private $drMsgCb;
-
-    /**
-     * @var callable
-     */
-    private $loggerCb;
-
     public function __construct()
     {
         parent::__construct();
@@ -155,7 +145,6 @@ class Conf extends Api
         };
 
         self::$ffi->rd_kafka_conf_set_log_cb($this->conf, $proxyCallback);
-
     }
 
     /**
@@ -184,11 +173,11 @@ class Conf extends Api
      */
     public function setRebalanceCb(callable $callback)
     {
-        $proxyCallback = function ($consumer, $err, $topicPartitionList, $opaque = null) use ($callback) {
+        $proxyCallback = function ($consumer, $err, $nativeTopicPartitionList, $opaque = null) use ($callback) {
             $callback(
                 RdKafka::resolveFromCData($consumer),
                 (int)$err,
-                TopicPartitionList::fromCData($topicPartitionList),
+                TopicPartitionList::fromCData($nativeTopicPartitionList)->asArray(),
                 $opaque
             );
         };
@@ -216,17 +205,17 @@ class Conf extends Api
     }
 
     /**
-     * @param callable $callback
+     * @param callable $callback function(Consumer $consumer, int $err, TopicPartition[], mixed $opaque = null)
      *
      * @return void
      */
-    public function setOffsetCommitCallback(callable $callback)
+    public function setOffsetCommitCb(callable $callback)
     {
-        $proxyCallback = function ($consumer, $err, $topicPartitionList, $opaque = null) use ($callback) {
+        $proxyCallback = function ($consumer, $err, $nativeTopicPartitionList, $opaque = null) use ($callback) {
             $callback(
                 RdKafka::resolveFromCData($consumer),
                 (int)$err,
-                TopicPartitionList::fromCData($topicPartitionList),
+                TopicPartitionList::fromCData($nativeTopicPartitionList)->asArray(),
                 $opaque
             );
         };
@@ -239,7 +228,7 @@ class Conf extends Api
      *
      * @return void
      */
-    public function setThrottleCallback(callable $callback)
+    public function setThrottleCb(callable $callback)
     {
         throw new \Exception('Not implemented.');
     }

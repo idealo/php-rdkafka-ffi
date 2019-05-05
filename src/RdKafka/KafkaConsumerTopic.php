@@ -5,9 +5,9 @@ namespace RdKafka;
 
 class KafkaConsumerTopic extends Topic
 {
-    public function __construct(string $name)
+    public function __construct(KafkaConsumer $consumer, string $name, TopicConf $conf = null)
     {
-        throw new \Exception('Not implemented.');
+        parent::__construct($consumer, $name, $conf);
     }
 
     /**
@@ -15,8 +15,18 @@ class KafkaConsumerTopic extends Topic
      * @param int $offset
      *
      * @return void
+     * @throws Exception
      */
-    public function offsetStore($partition, $offset)
+    public function offsetStore(int $partition, int $offset)
     {
+        $err = self::$ffi->rd_kafka_offset_store(
+            $this->topic,
+            $partition,
+            $offset
+        );
+
+        if ($err != RD_KAFKA_RESP_ERR_NO_ERROR) {
+            throw new Exception(self::err2str($err));
+        }
     }
 }

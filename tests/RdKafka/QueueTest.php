@@ -25,7 +25,7 @@ class QueueTest extends TestCase
         $consumerTopic = $consumer->newTopic(KAFKA_TEST_TOPIC);
         $consumerTopic->consumeQueueStart(0, rd_kafka_offset_tail(1), $queue);
 
-        $message = $queue->consume((int) KAFKA_TEST_TIMEOUT_MS);
+        $message = $queue->consume((int)KAFKA_TEST_TIMEOUT_MS);
 
         $this->assertInstanceOf(Message::class, $message);
         $this->assertEquals('payload-consumer-via-queue', $message->payload);

@@ -38,7 +38,7 @@ class Collection implements Iterator, Countable
 
     public function valid(): bool
     {
-        return isset($this->items[$this->key()]);
+        return array_key_exists(key($this->items), $this->items);
     }
 
     public function rewind(): void

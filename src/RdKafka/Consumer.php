@@ -16,6 +16,11 @@ class Consumer extends RdKafka
         parent::__construct(RD_KAFKA_CONSUMER, $conf);
     }
 
+    public function poll(int $timeout_ms): int
+    {
+        return parent::poll($timeout_ms);
+    }
+
     /**
      * @param string $topic_name
      * @param TopicConf|null $topic_conf
@@ -26,5 +31,15 @@ class Consumer extends RdKafka
     public function newTopic(string $topic_name, TopicConf $topic_conf = null)
     {
         return new ConsumerTopic($this, $topic_name, $topic_conf);
+    }
+
+    public function newQueue(): Queue
+    {
+        return new Queue($this);
+    }
+
+    public function getOutQLen(): int
+    {
+        return parent::getOutQLen();
     }
 }

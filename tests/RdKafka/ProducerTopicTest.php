@@ -5,9 +5,11 @@ namespace RdKafka;
 
 use FFI\CData;
 use PHPUnit\Framework\TestCase;
+use RdKafka;
 
 /**
  * @covers \RdKafka\ProducerTopic
+ * @covers \RdKafka\Topic
  */
 class ProducerTopicTest extends TestCase
 {
@@ -37,7 +39,7 @@ class ProducerTopicTest extends TestCase
         $payload = '';
 
         $conf = new Conf();
-        $conf->setDrMsgCb(function (\RdKafka $kafka, Message $message) use (&$payload) {
+        $conf->setDrMsgCb(function (RdKafka $kafka, Message $message) use (&$payload) {
             $payload = $message->payload;
         });
         $producer = new Producer($conf);
@@ -56,7 +58,7 @@ class ProducerTopicTest extends TestCase
         $payload = '';
 
         $conf = new Conf();
-        $conf->setDrMsgCb(function (\RdKafka $kafka, Message $message) use (&$payload) {
+        $conf->setDrMsgCb(function (RdKafka $kafka, Message $message) use (&$payload) {
             $payload = $message->payload;
         });
         $producer = new Producer($conf);
@@ -76,9 +78,9 @@ class ProducerTopicTest extends TestCase
         $headers = [];
 
         $conf = new Conf();
-        $conf->setDrMsgCb(function (\RdKafka $kafka, Message $message) use (&$payload, &$headers) {
+        $conf->setDrMsgCb(function (RdKafka $kafka, Message $message) use (&$payload, &$headers) {
             $payload = $message->payload;
-            $headers = $message->headers;
+            $headers = $message->headers();
         });
         $producer = new Producer($conf);
         $producer->addBrokers(KAFKA_BROKERS);

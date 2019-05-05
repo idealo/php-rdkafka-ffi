@@ -10,7 +10,7 @@ class Message extends Api
 {
     public int $err;
 
-    public string $topic_name;
+    public ?string $topic_name;
 
     public int $partition;
 
@@ -26,7 +26,7 @@ class Message extends Api
 
     public int $timestampType;
 
-    public array $headers;
+    private array $headers;
 
     public function __construct(CData $nativeMessage)
     {
@@ -40,6 +40,8 @@ class Message extends Api
 
         if ($nativeMessage->rkt !== null) {
             $this->topic_name = (string)self::$ffi->rd_kafka_topic_name($nativeMessage->rkt);
+        } else {
+            $this->topic_name = null;
         }
 
         $this->partition = (int)$nativeMessage->partition;
@@ -63,12 +65,14 @@ class Message extends Api
         $this->headers = $this->parseHeaders($nativeMessage);
     }
 
-    /**
-     * @return string
-     */
-    public function errstr()
+    public function errstr(): string
     {
         return self::err2str($this->err);
+    }
+
+    public function headers(): array
+    {
+        return $this->headers;
     }
 
     private function parseHeaders(CData $nativeMessage): array

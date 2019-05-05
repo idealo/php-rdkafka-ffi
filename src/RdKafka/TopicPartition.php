@@ -3,6 +3,9 @@ declare(strict_types=1);
 
 namespace RdKafka;
 
+use FFI;
+use FFI\CData;
+
 class TopicPartition
 {
     private string $topic;
@@ -15,21 +18,29 @@ class TopicPartition
     private $opaque = null;
     private ?int $err = null;
 
+    public static function fromCData(CData $topicPartition): self
+    {
+        $topar = new self(
+            FFI::string($topicPartition->topic),
+            (int)$topicPartition->partition,
+            (int)$topicPartition->offset
+        );
+
+        $topar->metadata = FFI::string($topicPartition->metadata, $topicPartition->metadata_size);
+        $topar->opaque = $topicPartition->opaque;
+        $topar->err = (int)$topicPartition->err;
+
+        return $topar;
+    }
 
     public function __construct(
-        string $topic_name,
+        string $topic,
         int $partition,
-        int $offset = null,
-        string $metadata = null,
-        $opaque = null,
-        int $err = null
+        int $offset = null
     ) {
-        $this->topic = $topic_name;
+        $this->topic = $topic;
         $this->partition = $partition;
         $this->offset = $offset;
-        $this->metadata = $metadata;
-        $this->opaque = $opaque;
-        $this->err = $err;
     }
 
     public function getOffset(): ?int
@@ -47,7 +58,7 @@ class TopicPartition
         return $this->topic;
     }
 
-    public function getMetadata(): string
+    public function getMetadata(): ?string
     {
         return $this->metadata;
     }

@@ -25,6 +25,11 @@ class Producer extends RdKafka
         parent::__destruct();
     }
 
+    public function poll(int $timeout_ms): int
+    {
+        return parent::poll($timeout_ms);
+    }
+
     /**
      * @param string $topic_name
      * @param TopicConf|null $topic_conf
@@ -35,5 +40,15 @@ class Producer extends RdKafka
     public function newTopic(string $topic_name, TopicConf $topic_conf = null)
     {
         return new ProducerTopic($this, $topic_name, $topic_conf);
+    }
+
+    public function newQueue(): Queue
+    {
+        return new Queue($this);
+    }
+
+    public function getOutQLen(): int
+    {
+        return parent::getOutQLen();
     }
 }
