@@ -49,8 +49,7 @@ class ConsumerTopic extends Topic
                 return null;
             }
 
-            $errstr = self::err2str($err);
-            throw new Exception($errstr);
+            throw new Exception(self::err2str($err));
         }
 
         $message = new Message($nativeMessage);
@@ -92,8 +91,7 @@ class ConsumerTopic extends Topic
 
         if ($ret == -1) {
             $err = self::$ffi->rd_kafka_last_error();
-            $errstr = self::err2str($err);
-            throw new Exception($errstr);
+            throw new Exception(self::err2str($err));
         }
 
         $this->consuming[$key] = true;
@@ -130,8 +128,7 @@ class ConsumerTopic extends Topic
 
         if ($ret == -1) {
             $err = self::$ffi->rd_kafka_last_error();
-            $errstr = self::err2str($err);
-            throw new Exception($errstr);
+            throw new Exception(self::err2str($err));
         }
 
         $this->consuming[$key] = true;
@@ -152,8 +149,7 @@ class ConsumerTopic extends Topic
 
         if ($ret == -1) {
             $err = self::$ffi->rd_kafka_last_error();
-            $errstr = self::err2str($err);
-            throw new Exception($errstr);
+            throw new Exception(self::err2str($err));
         }
 
         $key = $this->getName() . ':' . $partition;
@@ -176,8 +172,7 @@ class ConsumerTopic extends Topic
         );
 
         if ($err != RD_KAFKA_RESP_ERR_NO_ERROR) {
-            $errstr = self::err2str($err);
-            throw new Exception($errstr);
+            throw new Exception(self::err2str($err));
         }
     }
 }

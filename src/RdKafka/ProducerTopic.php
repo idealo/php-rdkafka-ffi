@@ -72,8 +72,23 @@ class ProducerTopic extends Topic
 
         if ($ret == -1) {
             $err = self::$ffi->rd_kafka_last_error();
-            $errstr = self::err2str($err);
-            throw new Exception($errstr);
+            throw new Exception(self::err2str($err));
         }
+    }
+
+    /**
+     * @param int $partition
+     * @param int $msgflags
+     * @param string|null $payload
+     * @param string|null $key
+     * @param array $headers
+     *
+     * @return void
+     * @throws Exception
+     * @deprecated
+     */
+    public function producev(int $partition, int $msgflags, string $payload = null, string $key = null, array $headers = [])
+    {
+        return $this->produce($partition, $msgflags, $payload, $key, $headers);
     }
 }

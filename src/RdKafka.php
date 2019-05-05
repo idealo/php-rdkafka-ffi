@@ -69,8 +69,7 @@ abstract class RdKafka extends Api
         $err = self::$ffi->rd_kafka_set_log_queue($this->kafka, null);
 
         if ($err != RD_KAFKA_RESP_ERR_NO_ERROR) {
-            $errstr = self::err2str($err);
-            throw new Exception($errstr);
+            throw new Exception(self::err2str($err));
         }
     }
 

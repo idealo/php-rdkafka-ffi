@@ -51,8 +51,7 @@ class Queue extends Api
                 return null;
             }
 
-            $errstr = self::err2str($err);
-            throw new Exception($errstr);
+            throw new Exception(self::err2str($err));
         }
 
         $message = new Message($nativeMessage);

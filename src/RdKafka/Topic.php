@@ -29,8 +29,7 @@ abstract class Topic extends Api
 
         if ($this->topic === null) {
             $err = self::$ffi->rd_kafka_last_error();
-            $errstr = self::err2str($err);
-            throw new Exception($errstr);
+            throw new Exception(self::err2str($err));
         }
     }
 

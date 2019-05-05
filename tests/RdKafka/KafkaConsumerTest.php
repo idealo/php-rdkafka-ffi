@@ -40,14 +40,14 @@ class KafkaConsumerTest extends TestCase
 
         $consumer = new KafkaConsumer($conf);
         $consumer->assign([
-            new TopicPartition('test', 0),
+            new TopicPartition(KAFKA_TEST_TOPIC, 0),
             new TopicPartition('test_KafkaConsumer', 2),
         ]);
 
         $topicPartitions = $consumer->getAssignment();
 
         $this->assertCount(2, $topicPartitions);
-        $this->assertEquals('test', $topicPartitions[0]->getTopic());
+        $this->assertEquals(KAFKA_TEST_TOPIC, $topicPartitions[0]->getTopic());
         $this->assertEquals(0, $topicPartitions[0]->getPartition());
         $this->assertEquals('test_KafkaConsumer', $topicPartitions[1]->getTopic());
         $this->assertEquals(2, $topicPartitions[1]->getPartition());
@@ -60,7 +60,7 @@ class KafkaConsumerTest extends TestCase
 
         $consumer = new KafkaConsumer($conf);
         $consumer->assign([
-            new TopicPartition('test', 0),
+            new TopicPartition(KAFKA_TEST_TOPIC, 0),
         ]);
 
         $this->assertCount(1, $consumer->getAssignment());
@@ -77,14 +77,14 @@ class KafkaConsumerTest extends TestCase
 
         $consumer = new KafkaConsumer($conf);
         $consumer->subscribe([
-            'test',
+            KAFKA_TEST_TOPIC,
             'test_KafkaConsumer',
         ]);
 
         $topicPartitions = $consumer->getSubscription();
 
         $this->assertCount(2, $topicPartitions);
-        $this->assertEquals('test', $topicPartitions[0]);
+        $this->assertEquals(KAFKA_TEST_TOPIC, $topicPartitions[0]);
         $this->assertEquals('test_KafkaConsumer', $topicPartitions[1]);
     }
 
@@ -95,7 +95,7 @@ class KafkaConsumerTest extends TestCase
 
         $consumer = new KafkaConsumer($conf);
         $consumer->subscribe([
-            'test',
+            KAFKA_TEST_TOPIC,
         ]);
 
         $topicPartitions = $consumer->getSubscription();
@@ -105,7 +105,7 @@ class KafkaConsumerTest extends TestCase
         $consumer->unsubscribe();
 
         $this->assertCount(0, $consumer->getSubscription());
-        $this->assertEquals('test', $topicPartitions[0]);
+        $this->assertEquals(KAFKA_TEST_TOPIC, $topicPartitions[0]);
     }
 
     public function testConsume()
@@ -118,7 +118,7 @@ class KafkaConsumerTest extends TestCase
         $conf->setDefaultTopicConf($topicConf);
 
         $consumer = new KafkaConsumer($conf);
-        $consumer->subscribe(['test']);
+        $consumer->subscribe([KAFKA_TEST_TOPIC]);
 
         $lastMessage = null;
         while (true) {
@@ -195,12 +195,12 @@ class KafkaConsumerTest extends TestCase
 
         $consumer = new KafkaConsumer($conf);
         $consumer->addBrokers(KAFKA_BROKERS);
-        $consumer->subscribe(['test']);
-        $consumer->commit([new TopicPartition('test', 0, 1)]);
+        $consumer->subscribe([KAFKA_TEST_TOPIC]);
+        $consumer->commit([new TopicPartition(KAFKA_TEST_TOPIC, 0, 1)]);
 
         $topicPartitions = $consumer->getCommittedOffsets(
             [
-                new TopicPartition('test', 0),
+                new TopicPartition(KAFKA_TEST_TOPIC, 0),
             ],
             (int)KAFKA_TEST_TIMEOUT_MS
         );
@@ -216,13 +216,13 @@ class KafkaConsumerTest extends TestCase
 
         $consumer = new KafkaConsumer($conf);
         $consumer->addBrokers(KAFKA_BROKERS);
-        $consumer->commitAsync([new TopicPartition('test', 0, 2)]);
+        $consumer->commitAsync([new TopicPartition(KAFKA_TEST_TOPIC, 0, 2)]);
 
         sleep((int)KAFKA_TEST_TIMEOUT_MS / 1000);
 
         $topicPartitions = $consumer->getCommittedOffsets(
             [
-                new TopicPartition('test', 0),
+                new TopicPartition(KAFKA_TEST_TOPIC, 0),
             ],
             (int)KAFKA_TEST_TIMEOUT_MS
         );
@@ -241,11 +241,11 @@ class KafkaConsumerTest extends TestCase
         $conf->setDefaultTopicConf($topicConf);
 
         $consumer = new KafkaConsumer($conf);
-        $consumer->subscribe(['test']);
+        $consumer->subscribe([KAFKA_TEST_TOPIC]);
 
         $topicPartitions = $consumer->getCommittedOffsets(
             [
-                new TopicPartition('test', 0),
+                new TopicPartition(KAFKA_TEST_TOPIC, 0),
             ],
             (int)KAFKA_TEST_TIMEOUT_MS
         );
@@ -260,7 +260,7 @@ class KafkaConsumerTest extends TestCase
 
         $topicPartitions = $consumer->getCommittedOffsets(
             [
-                new TopicPartition('test', 0),
+                new TopicPartition(KAFKA_TEST_TOPIC, 0),
             ],
             (int)KAFKA_TEST_TIMEOUT_MS
         );

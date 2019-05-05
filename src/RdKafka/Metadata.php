@@ -30,8 +30,7 @@ class Metadata extends Api
         );
 
         if ($err !== RD_KAFKA_RESP_ERR_NO_ERROR) {
-            $errstr = self::err2str($err);
-            throw new Exception($errstr);
+            throw new Exception(self::err2str($err));
         }
     }
 
