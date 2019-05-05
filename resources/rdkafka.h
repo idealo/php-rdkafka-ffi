@@ -2,6 +2,11 @@
 #define FFI_LIB "/usr/local/lib/librdkafka.so"
 
 /*
+* manually filtered version to work with php ffi ext.
+* See original: https://github.com/edenhill/librdkafka/blob/v1.0.0/src/rdkafka.h
+*/
+
+/*
  * librdkafka - Apache Kafka C library
  *
  * Copyright (c) 2012-2018 Magnus Edenhill
