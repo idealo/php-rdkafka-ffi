@@ -120,6 +120,8 @@ class KafkaConsumerTest extends TestCase
         $consumer = new KafkaConsumer($conf);
         $consumer->subscribe([KAFKA_TEST_TOPIC]);
 
+        sleep(1);
+
         $lastMessage = null;
         while (true) {
             $message = $consumer->consume((int)KAFKA_TEST_TIMEOUT_MS);
@@ -130,6 +132,7 @@ class KafkaConsumerTest extends TestCase
             $lastMessage = $message;
         }
 
+        $this->assertInstanceOf(Message::class, $message);
         $this->assertEquals('payload-kafka-consumer-2', $message->payload);
     }
 
@@ -218,7 +221,7 @@ class KafkaConsumerTest extends TestCase
         $consumer->addBrokers(KAFKA_BROKERS);
         $consumer->commitAsync([new TopicPartition(KAFKA_TEST_TOPIC, 0, 2)]);
 
-        sleep((int)KAFKA_TEST_TIMEOUT_MS / 1000);
+        sleep(1);
 
         $topicPartitions = $consumer->getCommittedOffsets(
             [
