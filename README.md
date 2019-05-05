@@ -17,7 +17,7 @@ Playing around with
 * [Kafka](https://hub.docker.com/r/wurstmeister/kafka/) / [Zookeeper](https://hub.docker.com/r/wurstmeister/zookeeper/) docker images from wurstmeister
 * [pcov](https://github.com/krakjoe/pcov) for test code coverage
 
-## Get started
+## Getting started
 
 Build php7.4 base container with ffi enabled (based on php 7.4.0-dev src)
 
@@ -37,9 +37,9 @@ Build container with librdkafka
 
 Test ffi librdkafka binding - should show 1.0.0 version of librdkafka:
 
-    docker run -v `pwd`:/app -w /app php-ffi-librdkafka php bin/version.php
+    docker run -v `pwd`:/app -w /app php-ffi-librdkafka php examples/version.php
 
-## Having fun with kafka
+## Having fun with examples
 
 Startup php & kafka (scripts use topic 'playground')
 
@@ -51,15 +51,15 @@ Updating Dependencies (using the [official composer docker image](https://hub.do
 
 Producing ...
 
-    docker-compose run --rm app php bin/producer.php
+    docker-compose run --rm app php examples/producer.php
 
 Consuming ...
 
-    docker-compose run --rm app php bin/consumer.php
+    docker-compose run --rm app php examples/consumer.php
     
 Broker metadata ...
 
-    docker-compose run --rm app php bin/metadata.php
+    docker-compose run --rm app php examples/metadata.php
 
 ## Dev Setup
 
