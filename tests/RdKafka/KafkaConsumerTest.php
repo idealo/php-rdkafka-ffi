@@ -225,7 +225,7 @@ class KafkaConsumerTest extends TestCase
         $consumer->addBrokers(KAFKA_BROKERS);
         $consumer->commitAsync([new TopicPartition(KAFKA_TEST_TOPIC, 0, 2)]);
 
-        sleep(1);
+        sleep(2);
 
         $topicPartitions = $consumer->getCommittedOffsets(
             [
