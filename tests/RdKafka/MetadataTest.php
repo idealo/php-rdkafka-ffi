@@ -17,7 +17,7 @@ use RdKafka\Metadata\Topic;
  */
 class MetadataTest extends TestCase
 {
-    private Metadata $metadata;
+    private $metadata;
 
     protected function setUp(): void
     {
@@ -63,9 +63,9 @@ class MetadataTest extends TestCase
         $partition = $partitions->current();
 
         $this->assertEquals(0, $partition->getId());
-        $this->assertEquals([111], $partition->getIsrs());
+        $this->assertEquals(111, $partition->getIsrs()->current());
         $this->assertEquals(111, $partition->getLeader());
-        $this->assertEquals([111], $partition->getReplicas());
+        $this->assertEquals(111, $partition->getReplicas()->current());
     }
 
     public function testGetOrigBrokerId()

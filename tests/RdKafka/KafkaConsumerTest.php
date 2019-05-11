@@ -145,7 +145,7 @@ class KafkaConsumerTest extends TestCase
 
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessageRegExp('/\bcommit\b/');
-        $this->expectExceptionMessageRegExp('/stdClass/');
+        $this->expectExceptionMessageRegExp('/object/');
         $consumer->commit(new stdClass());
     }
 
@@ -175,12 +175,11 @@ class KafkaConsumerTest extends TestCase
 
         $offset = 0;
 
-        $conf->setOffsetCommitCb(function (RdKafka $kafka, int $err, array $topicPartitions, $opaque = null) use (&$offset) {
+        $conf->setOffsetCommitCb(function (KafkaConsumer $kafka, int $err, array $topicPartitions, $opaque = null) use (&$offset) {
             $offset = $topicPartitions[0]->getOffset();
         });
 
         $consumer = new KafkaConsumer($conf);
-        $consumer->addBrokers(KAFKA_BROKERS);
         $consumer->subscribe([KAFKA_TEST_TOPIC]);
 
         $message = $consumer->consume((int)KAFKA_TEST_TIMEOUT_MS);
@@ -196,10 +195,10 @@ class KafkaConsumerTest extends TestCase
     {
         $conf = new Conf();
         $conf->set('group.id', __METHOD__);
+        $conf->set('metadata.broker.list', KAFKA_BROKERS);
         $conf->set('enable.auto.commit', 'false');
 
         $consumer = new KafkaConsumer($conf);
-        $consumer->addBrokers(KAFKA_BROKERS);
         $consumer->subscribe([KAFKA_TEST_TOPIC]);
         $consumer->commit([new TopicPartition(KAFKA_TEST_TOPIC, 0, 1)]);
 
@@ -218,11 +217,11 @@ class KafkaConsumerTest extends TestCase
     {
         $conf = new Conf();
         $conf->set('group.id', __METHOD__);
+        $conf->set('metadata.broker.list', KAFKA_BROKERS);
         $conf->set('enable.auto.commit', 'false');
         $conf->set('auto.commit.interval.ms', '900');
 
         $consumer = new KafkaConsumer($conf);
-        $consumer->addBrokers(KAFKA_BROKERS);
         $consumer->commitAsync([new TopicPartition(KAFKA_TEST_TOPIC, 0, 2)]);
 
         sleep(2);
@@ -258,7 +257,7 @@ class KafkaConsumerTest extends TestCase
         );
 
         $this->assertCount(1, $topicPartitions);
-        $this->assertEquals(RD_KAFKA_OFFSET_INVALID, $topicPartitions[0]->getOffset());
+        $this->assertEquals(-1001 /*RD_KAFKA_OFFSET_INVALID*/, $topicPartitions[0]->getOffset());
 
         $message = $consumer->consume((int)KAFKA_TEST_TIMEOUT_MS);
         $consumer->commit($message);
@@ -280,9 +279,9 @@ class KafkaConsumerTest extends TestCase
     {
         $conf = new Conf();
         $conf->set('group.id', __METHOD__);
+        $conf->set('metadata.broker.list', KAFKA_BROKERS);
 
         $consumer = new KafkaConsumer($conf);
-        $consumer->addBrokers(KAFKA_BROKERS);
 
         $metadata = $consumer->getMetadata(true, null, (int)KAFKA_TEST_TIMEOUT_MS);
 
@@ -293,10 +292,13 @@ class KafkaConsumerTest extends TestCase
     {
         $conf = new Conf();
         $conf->set('group.id', __METHOD__);
+        $conf->set('metadata.broker.list', KAFKA_BROKERS);
 
         $consumer = new KafkaConsumer($conf);
+        $consumer->subscribe([KAFKA_TEST_TOPIC]);
         $topic = $consumer->newTopic(KAFKA_TEST_TOPIC);
 
+        $this->assertInstanceOf(KafkaConsumer::class, $consumer);
         $this->assertInstanceOf(KafkaConsumerTopic::class, $topic);
     }
 }

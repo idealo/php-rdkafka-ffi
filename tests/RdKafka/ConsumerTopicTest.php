@@ -12,6 +12,9 @@ use PHPUnit\Framework\TestCase;
  */
 class ConsumerTopicTest extends TestCase
 {
+    /**
+     * @group ffiOnly
+     */
     public function testGetCData()
     {
         $consumer = new Consumer();

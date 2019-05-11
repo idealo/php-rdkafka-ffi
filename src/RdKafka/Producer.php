@@ -25,6 +25,16 @@ class Producer extends RdKafka
         parent::__destruct();
     }
 
+    /**
+     * @param string $broker_list
+     *
+     * @return int
+     */
+    public function addBrokers(string $broker_list): int
+    {
+        return self::$ffi->rd_kafka_brokers_add($this->kafka, $broker_list);
+    }
+
     public function poll(int $timeout_ms): int
     {
         return parent::poll($timeout_ms);

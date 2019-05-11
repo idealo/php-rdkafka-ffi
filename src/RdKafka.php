@@ -98,16 +98,6 @@ abstract class RdKafka extends Api
     }
 
     /**
-     * @param string $broker_list
-     *
-     * @return int
-     */
-    public function addBrokers(string $broker_list): int
-    {
-        return self::$ffi->rd_kafka_brokers_add($this->kafka, $broker_list);
-    }
-
-    /**
      * @param bool $all_topics
      * @param Topic $only_topic
      * @param int $timeout_ms

@@ -20,13 +20,13 @@ class ProducerTest extends TestCase
      */
     private $producer;
 
-    private string $callbackPayload;
+    private $callbackPayload;
 
     protected function setUp(): void
     {
         $this->callbackPayload = '';
         $conf = new Conf();
-        $conf->setDrMsgCb(function (RdKafka $kafka, Message $message) {
+        $conf->setDrMsgCb(function (RdKafka $kafka, Message $message, $opaque = null) {
             $this->callbackPayload = $message->payload;
         });
 
@@ -55,6 +55,9 @@ class ProducerTest extends TestCase
         self::assertEquals(0, $outQLen);
     }
 
+    /**
+     * todo: seg fault with php7.2 rdkafka extension
+     */
     public function testNewQueue()
     {
         $queue = $this->producer->newQueue();
@@ -79,6 +82,9 @@ class ProducerTest extends TestCase
         self::assertEquals(self::MESSAGE_PAYLOAD, $this->callbackPayload);
     }
 
+    /**
+     * @group ffiOnly
+     */
     public function testResolveFromCData()
     {
         $producer1 = new Producer();

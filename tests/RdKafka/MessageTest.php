@@ -10,8 +10,8 @@ use PHPUnit\Framework\TestCase;
  */
 class MessageTest extends TestCase
 {
-    private Message $message;
-    private int $beforeProducingTimestamp;
+    private $message;
+    private $beforeProducingTimestamp;
 
     protected function setUp(): void
     {
@@ -20,7 +20,7 @@ class MessageTest extends TestCase
         $producer = new Producer();
         $producer->addBrokers(KAFKA_BROKERS);
         $producerTopic = $producer->newTopic(KAFKA_TEST_TOPIC);
-        $producerTopic->produce(0, 0, 'payload-msg', 'key-msg', ['header-name' => 'header-value']);
+        $producerTopic->producev(0, 0, 'payload-msg', 'key-msg', ['header-name' => 'header-value']);
 
         $consumer = new Consumer();
         $consumer->addBrokers(KAFKA_BROKERS);
@@ -39,12 +39,12 @@ class MessageTest extends TestCase
         $this->assertEquals(0, $this->message->partition);
         $this->assertEquals('payload-msg', $this->message->payload);
         $this->assertEquals('key-msg', $this->message->key);
-        $this->assertEquals(['header-name' => 'header-value'], $this->message->headers());
+        $this->assertEquals(['header-name' => 'header-value'], $this->message->headers);
 
         $this->assertEquals(RD_KAFKA_RESP_ERR_NO_ERROR, $this->message->err);
 
         $this->assertGreaterThan($this->beforeProducingTimestamp, $this->message->timestamp);
-        $this->assertEquals(RD_KAFKA_TIMESTAMP_CREATE_TIME, $this->message->timestampType);
+        $this->assertEquals(1 /*RD_KAFKA_TIMESTAMP_CREATE_TIME*/, $this->message->timestampType);
 
         $this->assertGreaterThan(0, $this->message->offset);
     }

@@ -24,6 +24,9 @@ class ProducerTopicTest extends TestCase
         $this->assertEquals(KAFKA_TEST_TOPIC, $topicName);
     }
 
+    /**
+     * @group ffiOnly
+     */
     public function testGetCData()
     {
         $producer = new Producer();
@@ -53,7 +56,7 @@ class ProducerTopicTest extends TestCase
         $this->assertEquals('payload-topic-produce', $payload);
     }
 
-    public function testProduceWithTombstone()
+    public function testProducevWithTombstone()
     {
         $payload = '';
 
@@ -65,14 +68,14 @@ class ProducerTopicTest extends TestCase
         $producer->addBrokers(KAFKA_BROKERS);
         $topic = $producer->newTopic(KAFKA_TEST_TOPIC);
 
-        $topic->produce(RD_KAFKA_PARTITION_UA, 0, null, 'key-topic-produce');
+        $topic->producev(RD_KAFKA_PARTITION_UA, 0, null, 'key-topic-produce');
 
         $producer->poll((int)KAFKA_TEST_TIMEOUT_MS);
 
         $this->assertEquals(null, $payload);
     }
 
-    public function testProduceWithHeader()
+    public function testProducevWithHeader()
     {
         $payload = '';
         $headers = [];
@@ -80,13 +83,12 @@ class ProducerTopicTest extends TestCase
         $conf = new Conf();
         $conf->setDrMsgCb(function (RdKafka $kafka, Message $message) use (&$payload, &$headers) {
             $payload = $message->payload;
-            $headers = $message->headers();
+            $headers = $message->headers;
         });
         $producer = new Producer($conf);
         $producer->addBrokers(KAFKA_BROKERS);
         $topic = $producer->newTopic(KAFKA_TEST_TOPIC);
-
-        $topic->produce(
+        $topic->producev(
             RD_KAFKA_PARTITION_UA,
             0,
             'payload-topic-produce',

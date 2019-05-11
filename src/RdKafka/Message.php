@@ -26,7 +26,7 @@ class Message extends Api
 
     public int $timestampType;
 
-    private array $headers;
+    public array $headers;
 
     public function __construct(CData $nativeMessage)
     {
@@ -68,11 +68,6 @@ class Message extends Api
     public function errstr(): string
     {
         return self::err2str($this->err);
-    }
-
-    public function headers(): array
-    {
-        return $this->headers;
     }
 
     private function parseHeaders(CData $nativeMessage): array

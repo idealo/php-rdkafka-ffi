@@ -21,6 +21,9 @@ class ConsumerTest extends TestCase
         $this->assertEquals(1, $addedBrokersNumber);
     }
 
+    /**
+     * @group ffiOnly
+     */
     public function testGetCData()
     {
         $consumer = new Consumer();

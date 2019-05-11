@@ -100,22 +100,22 @@ class Metadata extends Api
         return new Collection($items);
     }
 
-    private function mapReplicas($partition)
+    private function mapReplicas($partition):Collection
     {
         $items = [];
         for ($i = 0; $i < $partition->replica_cnt; $i++) {
             $items[] = (int)$partition->replicas[$i];
         }
-        return $items;
+        return new Collection($items);
     }
 
-    private function mapIsrs($partition)
+    private function mapIsrs($partition):Collection
     {
         $items = [];
         for ($i = 0; $i < $partition->isr_cnt; $i++) {
             $items[] = (int)$partition->isrs[$i];
         }
-        return $items;
+        return new Collection($items);
     }
 
     public function getOrigBrokerId(): int

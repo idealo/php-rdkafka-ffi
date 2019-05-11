@@ -24,7 +24,7 @@ abstract class Topic extends Api
         $this->topic = self::$ffi->rd_kafka_topic_new(
             $kafka->getCData(),
             $name,
-            $conf ? $conf->getCData() : null,
+            $this->duplicateConfCData($conf),
             );
 
         if ($this->topic === null) {
@@ -36,6 +36,15 @@ abstract class Topic extends Api
     public function __destruct()
     {
         self::$ffi->rd_kafka_topic_destroy($this->topic);
+    }
+
+    private function duplicateConfCData(TopicConf $conf = null): ?CData
+    {
+        if ($conf === null) {
+            return null;
+        }
+
+        return self::$ffi->rd_kafka_topic_conf_dup($conf->getCData());
     }
 
     public function getCData(): CData

@@ -19,8 +19,17 @@ services:
     links:
       - zookeeper
 
-  app:
-    image: php-ffi-librdkafka
+  php74:
+    image: php74-ffi-librdkafka
+    volumes:
+      - .:/app
+    depends_on:
+      - kafka
+    links:
+      - kafka
+
+  php72:
+    image: php72-librdkafka
     volumes:
       - .:/app
     depends_on:

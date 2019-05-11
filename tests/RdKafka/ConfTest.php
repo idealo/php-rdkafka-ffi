@@ -107,6 +107,9 @@ class ConfTest extends TestCase
         $this->assertEquals('abc', $dump['client.id']);
     }
 
+    /**
+     * @group ffiOnly
+     */
     public function testGet()
     {
         $conf = new Conf();
@@ -117,6 +120,9 @@ class ConfTest extends TestCase
         $this->assertEquals('abc', $value);
     }
 
+    /**
+     * @group ffiOnly
+     */
     public function testGetWithUnknownProperty()
     {
         $conf = new Conf();

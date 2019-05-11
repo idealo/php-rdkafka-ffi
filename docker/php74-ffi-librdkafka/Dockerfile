@@ -10,6 +10,7 @@ RUN set -e; \
     ./configure; \
     make; \
     make install; \
+    ldconfig; \
     rm -rf /tmp/*;
 
 # enable ffi for phpdbg

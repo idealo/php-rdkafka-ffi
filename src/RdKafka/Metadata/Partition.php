@@ -8,10 +8,10 @@ class Partition
     private int $id;
     private int $err;
     private int $leader;
-    private array $replicas;
-    private array $isrs;
+    private Collection $replicas;
+    private Collection $isrs;
 
-    public function __construct(int $id, int $err, int $leader, array $replicas, array $isrs)
+    public function __construct(int $id, int $err, int $leader, Collection $replicas, Collection $isrs)
     {
         $this->id = $id;
         $this->err = $err;
@@ -35,12 +35,12 @@ class Partition
         return $this->leader;
     }
 
-    public function getReplicas(): array
+    public function getReplicas(): Collection
     {
         return $this->replicas;
     }
 
-    public function getIsrs(): array
+    public function getIsrs(): Collection
     {
         return $this->isrs;
     }

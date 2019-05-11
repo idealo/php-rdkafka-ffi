@@ -28,7 +28,22 @@ class ProducerTopic extends Topic
      * @return void
      * @throws Exception
      */
-    public function produce(int $partition, int $msgflags, string $payload = null, string $key = null, array $headers = [])
+    public function produce(int $partition, int $msgflags, string $payload = null, string $key = null)
+    {
+        return $this->producev($partition, $msgflags, $payload, $key);
+    }
+
+    /**
+     * @param int $partition
+     * @param int $msgflags
+     * @param string|null $payload
+     * @param string|null $key
+     * @param array $headers
+     *
+     * @return void
+     * @throws Exception
+     */
+    public function producev(int $partition, int $msgflags, string $payload = null, string $key = null, array $headers = [])
     {
         if ($partition != RD_KAFKA_PARTITION_UA && ($partition < 0 || $partition > 0x7FFFFFFF)) {
             throw new InvalidArgumentException(sprintf("Out of range value '%d' for partition", $partition));
@@ -74,21 +89,5 @@ class ProducerTopic extends Topic
             $err = self::$ffi->rd_kafka_last_error();
             throw new Exception(self::err2str($err));
         }
-    }
-
-    /**
-     * @param int $partition
-     * @param int $msgflags
-     * @param string|null $payload
-     * @param string|null $key
-     * @param array $headers
-     *
-     * @return void
-     * @throws Exception
-     * @deprecated
-     */
-    public function producev(int $partition, int $msgflags, string $payload = null, string $key = null, array $headers = [])
-    {
-        return $this->produce($partition, $msgflags, $payload, $key, $headers);
     }
 }

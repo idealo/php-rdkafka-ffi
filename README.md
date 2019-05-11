@@ -19,7 +19,7 @@ Playing around with
 
 ## Getting started
 
-Build php7.4 base container with ffi enabled (based on php 7.4.0-dev src)
+Build php7.4 base image with ffi enabled (based on php 7.4.0-dev src)
 
     docker build --no-cache -t php74-cli:latest --build-arg PHP_EXTRA_BUILD_DEPS="libffi-dev" --build-arg PHP_EXTRA_CONFIGURE_ARGS="--with-ffi" ./docker/php74-cli
 
@@ -29,15 +29,15 @@ Test - should show 7.4.0-dev version
 
 Test - should show FFI in modules list
 
-    docker run php-ffi-librdkafka php -m
+    docker run php74-ffi-librdkafka php -m
 
-Build container with librdkafka
+Build image with librdkafka
 
-    docker build --no-cache -t php-ffi-librdkafka ./docker/php-ffi-librdkafka
+    docker build --no-cache -t php74-ffi-librdkafka ./docker/php74-ffi-librdkafka
 
 Test ffi librdkafka binding - should show 1.0.0 version of librdkafka:
 
-    docker run -v `pwd`:/app -w /app php-ffi-librdkafka php examples/version.php
+    docker run -v `pwd`:/app -w /app php74-ffi-librdkafka php examples/version.php
 
 ## Having fun with examples
 
@@ -47,7 +47,7 @@ Startup php & kafka (scripts use topic 'playground')
 
 Updating Dependencies (using the [official composer docker image](https://hub.docker.com/_/composer) )
 
-    docker run --rm -it -v $PWD:/app composer update --ignore-platform-reqs
+    docker run --rm -it -v `pwd`:/app composer update --ignore-platform-reqs
 
 Producing ...
 
@@ -61,24 +61,43 @@ Broker metadata ...
 
     docker-compose run --rm app php examples/metadata.php
 
-## Dev Setup
+## Run tests
 
-Startup php & kafka (tests use topic 'test')
+Startup php & kafka (tests use topics 'test*')
 
     docker-compose up -d
+    
+Updating Dependencies (using the [official composer docker image](https://hub.docker.com/_/composer) )
+
+    docker run --rm -it -v `pwd`:/app composer update --ignore-platform-reqs
 
 Run tests
 
-    docker-compose run --rm app vendor/bin/phpunit
+    docker-compose run --rm php74 vendor/bin/phpunit
 
 Run tests with coverage:
 
-    docker-compose run --rm app vendor/bin/phpunit --coverage-html build/coverage
+    docker-compose run --rm php74 vendor/bin/phpunit --coverage-html build/coverage
+
+### Run tests with rdkafka extension / PHP 7.2
+
+Build image with master-dev rdkafka and PHP 7.2:
+
+     docker build --no-cache -t php72-librdkafka ./docker/php72-librdkafka
+
+Updating Dependencies (using the [official composer docker image](https://hub.docker.com/_/composer) )
+
+    docker run --rm -it -v `pwd`:/app composer update --ignore-platform-reqs -d /app/resources/test-extension
+
+Run tests
+
+     docker-compose run --rm php72 resources/test-extension/vendor/bin/phpunit -c resources/test-extension/phpunit.xml
 
 ## Todos
 
 * [x] Callbacks (
 * [x] High Level KafkaConsumer
+* [ ] compatible to rdkafka extension v3.1.0
 * [ ] sig Handling & destruct (expect seg faults & lost msgs)
 * [ ] Tests, tests, tests, ... and travis
 * [ ] Generate binding class with https://github.com/ircmaxell/FFIMe / use default header file

@@ -8,12 +8,25 @@
           "src/functions.php"
         ]
     },
+    "autoload-dev": {
+        "psr-4": {
+            "": "tests/"
+        }
+    },
     "minimum-stability": "dev",
     "require": {
         "php" : "^7.4",
         "ext-ffi": "*"
     },
     "require-dev": {
-        "phpunit/phpunit": "^8.0"
+        "phpunit/phpunit": "^8.1"
+    },
+    "scripts": {
+        "test-php72": [
+            "cp composer.json composer.json.backup",
+            "vendor/bin/phpunit",
+            "cp composer.json.back‚ composer.json.backup"
+        ],
+        "clearCache": "rm -rf cache/*"
     }
 }

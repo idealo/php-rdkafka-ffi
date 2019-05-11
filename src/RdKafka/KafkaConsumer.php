@@ -124,7 +124,7 @@ class KafkaConsumer extends RdKafka
                 $isAsync ? 'commitAsync' : 'commit',
                 1,
                 "an instance of RdKafka\\Message or an array of RdKafka\\TopicPartition",
-                is_object($message_or_offsets) ? get_class($message_or_offsets) : gettype($message_or_offsets)
+                gettype($message_or_offsets)
             ));
         }
 

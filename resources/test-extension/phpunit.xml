@@ -1,0 +1,26 @@
+<phpunit bootstrap="vendor/autoload.php"
+         colors="true"
+         verbose="true"
+         convertErrorsToExceptions="true"
+         convertNoticesToExceptions="true"
+         convertWarningsToExceptions="true"
+         stopOnFailure="false"
+         failOnWarning="true">
+    <testsuites>
+        <testsuite name="RdKafka Extension">
+            <directory suffix=".php">../../tests/</directory>
+        </testsuite>
+    </testsuites>
+
+    <groups>
+        <exclude>
+            <group>ffiOnly</group>
+        </exclude>
+    </groups>
+
+    <php>
+        <const name="KAFKA_BROKERS" value="kafka:9092" />
+        <const name="KAFKA_TEST_TOPIC" value="test" />
+        <const name="KAFKA_TEST_TIMEOUT_MS" value="5000" />
+    </php>
+</phpunit>
