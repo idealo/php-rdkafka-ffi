@@ -29,7 +29,7 @@ function rd_kafka_errno2err(int $errnox): int
  */
 function rd_kafka_errno(): int
 {
-    Api::errno();
+    return Api::errno();
 }
 
 /**
@@ -48,4 +48,12 @@ function rd_kafka_offset_tail(int $cnt): int
 function rd_kafka_thread_cnt(): int
 {
     return Api::threadCount();
+}
+
+/**
+ * @return string Returns librdkafka version.
+ */
+function rd_kafka_version(): string
+{
+    return Api::version();
 }
