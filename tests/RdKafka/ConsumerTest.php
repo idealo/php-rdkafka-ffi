@@ -137,4 +137,31 @@ class ConsumerTest extends TestCase
         $this->assertEquals(1, $triggeredEvents, 'Expected debug level log event init consumer');
         $this->assertEquals(0, $loggerCallbacks, 'Expected no debug level log callback');
     }
+
+    public function testQueryWatermarkOffsets()
+    {
+        $consumer1 = new Consumer();
+        $consumer1->addBrokers(KAFKA_BROKERS);
+
+        $lowWatermarkOffset1 = 0;
+        $highWatermarkOffset1 = 0;
+
+        $consumer1->queryWatermarkOffsets(KAFKA_TEST_TOPIC, 0, $lowWatermarkOffset1, $highWatermarkOffset1, (int)KAFKA_TEST_TIMEOUT_MS);
+
+        $this->assertEquals(0, $lowWatermarkOffset1);
+
+        $producer = new Producer();
+        $producer->addBrokers(KAFKA_BROKERS);
+        $producerTopic = $producer->newTopic(KAFKA_TEST_TOPIC);
+        $producerTopic->produce(0, 0, __METHOD__);
+        $producer->poll((int)KAFKA_TEST_TIMEOUT_MS);
+
+        $lowWatermarkOffset2 = 0;
+        $highWatermarkOffset2 = 0;
+
+        $consumer1->queryWatermarkOffsets(KAFKA_TEST_TOPIC, 0, $lowWatermarkOffset2, $highWatermarkOffset2, (int)KAFKA_TEST_TIMEOUT_MS);
+
+        $this->assertEquals(0, $lowWatermarkOffset2);
+        $this->assertEquals($highWatermarkOffset1 + 1, $highWatermarkOffset2);
+    }
 }
