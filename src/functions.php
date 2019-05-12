@@ -20,15 +20,16 @@ function rd_kafka_err2str(int $err): string
  */
 function rd_kafka_errno2err(int $errnox): int
 {
-    throw new Exception('Not implemented.');
+    return Api::errno2err($errnox);
 }
 
 /**
  * @return int Returns the system errno as an integer.
+ * @deprecated
  */
 function rd_kafka_errno(): int
 {
-    throw new Exception('Not implemented.');
+    Api::errno();
 }
 
 /**
@@ -39,4 +40,12 @@ function rd_kafka_errno(): int
 function rd_kafka_offset_tail(int $cnt): int
 {
     return RD_KAFKA_OFFSET_TAIL_BASE - $cnt;
+}
+
+/**
+ * @return int Retrieve the current number of threads in use by librdkafka.
+ */
+function rd_kafka_thread_cnt(): int
+{
+    return Api::threadCount();
 }

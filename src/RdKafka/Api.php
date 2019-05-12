@@ -30,6 +30,28 @@ class Api
         return self::$ffi->rd_kafka_err2str($err);
     }
 
+    /**
+     * @return int
+     * @deprecated
+     */
+    public static function errno(): int
+    {
+        self::ensureFFI();
+        return self::$ffi->rd_kafka_errno();
+    }
+
+    public static function errno2err(int $err): int
+    {
+        self::ensureFFI();
+        return self::$ffi->rd_kafka_errno2err($err);
+    }
+
+    public static function threadCount(): int
+    {
+        self::ensureFFI();
+        return self::$ffi->rd_kafka_thread_cnt();
+    }
+
     public static function version(): string
     {
         self::ensureFFI();
