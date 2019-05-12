@@ -43,6 +43,9 @@ class ConsumerTest extends TestCase
         $this->assertInstanceOf(Metadata::class, $metadata);
     }
 
+    /**
+     * @group ffiOnly
+     */
     public function testGetOutQLen()
     {
         $conf = new Conf();
@@ -64,7 +67,6 @@ class ConsumerTest extends TestCase
         $queue = $consumer->newQueue();
 
         $this->assertInstanceOf(Queue::class, $queue);
-        $this->assertInstanceOf(CData::class, $queue->getCData());
     }
 
     public function testNewTopic()
@@ -75,6 +77,9 @@ class ConsumerTest extends TestCase
         $this->assertInstanceOf(ConsumerTopic::class, $topic);
     }
 
+    /**
+     * @group ffiOnly
+     */
     public function testPoll()
     {
         $conf = new Conf();
@@ -89,6 +94,9 @@ class ConsumerTest extends TestCase
         $this->assertEquals(1, $triggeredEvents, 'Expected log event init consumer');
     }
 
+    /**
+     * @group ffiOnly
+     */
     public function testSetLogLevelWithDebug()
     {
         $loggerCallbacks = 0;
@@ -108,6 +116,9 @@ class ConsumerTest extends TestCase
         $this->assertEquals(1, $loggerCallbacks, 'Expected debug level log callback');
     }
 
+    /**
+     * @group ffiOnly
+     */
     public function testSetLogLevelWithInfo()
     {
         $loggerCallbacks = 0;

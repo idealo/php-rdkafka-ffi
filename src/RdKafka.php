@@ -140,4 +140,26 @@ abstract class RdKafka extends Api
     {
         self::$ffi->rd_kafka_set_log_level($this->kafka, $level);
     }
+
+    public function queryWatermarkOffsets(string $topic, int $partition, int &$low, int &$high, int $timeout_ms)
+    {
+        $lowResult = FFI::new('int64_t');
+        $highResult = FFI::new('int64_t');
+
+        $err = self::$ffi->rd_kafka_query_watermark_offsets(
+            $this->kafka,
+            $topic,
+            $partition,
+            FFI::addr($lowResult),
+            FFI::addr($highResult),
+            $timeout_ms
+        );
+
+        if ($err != RD_KAFKA_RESP_ERR_NO_ERROR) {
+            throw new Exception(self::err2str($err));
+        }
+
+        $low = (int)$lowResult;
+        $high = (int)$highResult;
+    }
 }
