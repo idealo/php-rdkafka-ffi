@@ -12,7 +12,7 @@ class Api
      */
     protected static FFI $ffi;
 
-    public function __construct()
+    protected function __construct()
     {
         self::ensureFFI();
     }
