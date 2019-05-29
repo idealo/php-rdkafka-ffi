@@ -21,7 +21,7 @@ Playing around with
 
 Build php7.4 base image with ffi enabled (based on php 7.4.0-dev src)
 
-    docker build --no-cache -t php74-cli:latest --build-arg PHP_EXTRA_BUILD_DEPS="libffi-dev" --build-arg PHP_EXTRA_CONFIGURE_ARGS="--with-ffi" ./docker/php74-cli
+    docker build --no-cache -t php74-cli:latest --build-arg PHP_EXTRA_BUILD_DEPS="libffi-dev" --build-arg PHP_EXTRA_CONFIGURE_ARGS="--with-ffi" ./resources/docker/php74-cli
 
 Test - should show 7.4.0-dev version
 
@@ -29,11 +29,11 @@ Test - should show 7.4.0-dev version
 
 Test - should show FFI in modules list
 
-    docker run php74-ffi-librdkafka php -m
+    docker run php74-cli php -m
 
 Build image with librdkafka
 
-    docker build --no-cache -t php74-ffi-librdkafka ./docker/php74-ffi-librdkafka
+    docker build --no-cache -t php74-ffi-librdkafka ./resources/docker/php74-ffi-librdkafka
 
 Test ffi librdkafka binding - should show 1.0.0 version of librdkafka:
 
@@ -79,11 +79,11 @@ Run tests with coverage:
 
     docker-compose run --rm php74 vendor/bin/phpunit --coverage-html build/coverage
 
-### Run tests with rdkafka extension / PHP 7.2
+### Run tests against rdkafka extension / PHP 7.2
 
 Build image with master-dev rdkafka and PHP 7.2:
 
-     docker build --no-cache -t php72-librdkafka ./docker/php72-librdkafka
+     docker build --no-cache -t php72-librdkafka ./resources/docker/php72-librdkafka
 
 Updating Dependencies (using the [official composer docker image](https://hub.docker.com/_/composer) )
 
