@@ -1,4 +1,4 @@
-# Pure PHP Kafka Client based on php7.4-dev, ffi and librdkafka
+# Pure PHP Kafka Client library based on php7.4-dev, ffi and librdkafka
 
 __EXTREMLY EXPERIMENTAL WIP__
 
