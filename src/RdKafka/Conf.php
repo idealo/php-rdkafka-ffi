@@ -40,12 +40,12 @@ class Conf extends Api
     {
         $count = FFI::new('size_t');
         $dump = self::$ffi->rd_kafka_conf_dump($this->conf, FFI::addr($count));
-        $count = (int) $count->cdata;
+        $count = (int)$count->cdata;
 
         $result = [];
         for ($i = 0; $i < $count; $i += 2) {
-            $key = (string) $dump[$i];
-            $val = (string) $dump[$i + 1];
+            $key = (string)$dump[$i];
+            $val = (string)$dump[$i + 1];
             $result[$key] = $val;
         }
 

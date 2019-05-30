@@ -100,7 +100,7 @@ class Metadata extends Api
         return new Collection($items);
     }
 
-    private function mapReplicas($partition):Collection
+    private function mapReplicas($partition): Collection
     {
         $items = [];
         for ($i = 0; $i < $partition->replica_cnt; $i++) {
@@ -109,7 +109,7 @@ class Metadata extends Api
         return new Collection($items);
     }
 
-    private function mapIsrs($partition):Collection
+    private function mapIsrs($partition): Collection
     {
         $items = [];
         for ($i = 0; $i < $partition->isr_cnt; $i++) {

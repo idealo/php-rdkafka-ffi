@@ -5,7 +5,6 @@ namespace RdKafka;
 
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
-use RdKafka;
 use stdClass;
 
 /**
