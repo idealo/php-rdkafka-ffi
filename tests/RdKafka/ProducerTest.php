@@ -13,8 +13,6 @@ use RdKafka;
  */
 class ProducerTest extends TestCase
 {
-    const MESSAGE_PAYLOAD = 'test payload';
-
     /**
      * @var Producer
      */
@@ -75,11 +73,11 @@ class ProducerTest extends TestCase
     public function testPoll()
     {
         $topic = $this->producer->newTopic(KAFKA_TEST_TOPIC);
-        $topic->produce(RD_KAFKA_PARTITION_UA, 0, self::MESSAGE_PAYLOAD);
+        $topic->produce(RD_KAFKA_PARTITION_UA, 0, __METHOD__);
 
         $this->producer->poll(100);
 
-        self::assertEquals(self::MESSAGE_PAYLOAD, $this->callbackPayload);
+        self::assertEquals(__METHOD__, $this->callbackPayload);
     }
 
     /**

@@ -43,7 +43,7 @@ abstract class RdKafka extends Api
         );
 
         if ($this->kafka === null) {
-            throw new Exception($errstr);
+            throw new Exception(FFI::string($errstr));
         }
 
         $this->initLogQueue($conf);
@@ -159,7 +159,7 @@ abstract class RdKafka extends Api
             throw new Exception(self::err2str($err));
         }
 
-        $low = (int)$lowResult;
-        $high = (int)$highResult;
+        $low = (int)$lowResult->cdata;
+        $high = (int)$highResult->cdata;
     }
 }

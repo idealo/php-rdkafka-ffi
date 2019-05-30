@@ -5,7 +5,8 @@
          convertNoticesToExceptions="true"
          convertWarningsToExceptions="true"
          stopOnFailure="false"
-         failOnWarning="true">
+         failOnWarning="true"
+         cacheResult="false">
     <testsuites>
         <testsuite name="FFI RdKafka Bindings">
             <directory suffix=".php">tests/</directory>

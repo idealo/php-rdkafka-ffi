@@ -40,6 +40,11 @@ class Api
         return self::$ffi->rd_kafka_errno();
     }
 
+    /**
+     * @param int $err
+     * @return int
+     * @deprecated
+     */
     public static function errno2err(int $err): int
     {
         self::ensureFFI();

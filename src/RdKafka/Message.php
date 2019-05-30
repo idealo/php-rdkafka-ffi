@@ -34,9 +34,9 @@ class Message extends Api
 
         $timestampType = self::$ffi->new('rd_kafka_timestamp_type_t');
         $this->timestamp = (int)self::$ffi->rd_kafka_message_timestamp($nativeMessage, FFI::addr($timestampType));
-        $this->timestampType = (int)$timestampType;
+        $this->timestampType = (int)$timestampType->cdata;
 
-        $this->err = $nativeMessage->err;
+        $this->err = (int)$nativeMessage->err;
 
         if ($nativeMessage->rkt !== null) {
             $this->topic_name = (string)self::$ffi->rd_kafka_topic_name($nativeMessage->rkt);
@@ -113,7 +113,7 @@ class Message extends Api
                     break;
                 }
 
-                $headers[FFI::string($header_name)] = FFI::string($header_value, (int)$header_size);
+                $headers[FFI::string($header_name)] = FFI::string($header_value, (int)$header_size->cdata);
             }
         }
 

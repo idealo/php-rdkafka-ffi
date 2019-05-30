@@ -20,7 +20,7 @@ class MessageTest extends TestCase
         $producer = new Producer();
         $producer->addBrokers(KAFKA_BROKERS);
         $producerTopic = $producer->newTopic(KAFKA_TEST_TOPIC);
-        $producerTopic->producev(0, 0, 'payload-msg', 'key-msg', ['header-name' => 'header-value']);
+        $producerTopic->producev(0, 0, __CLASS__, 'key-msg', ['header-name' => 'header-value']);
 
         $consumer = new Consumer();
         $consumer->addBrokers(KAFKA_BROKERS);
@@ -37,7 +37,7 @@ class MessageTest extends TestCase
         $this->assertEquals(0, $this->message->err);
         $this->assertEquals(KAFKA_TEST_TOPIC, $this->message->topic_name);
         $this->assertEquals(0, $this->message->partition);
-        $this->assertEquals('payload-msg', $this->message->payload);
+        $this->assertEquals(__CLASS__, $this->message->payload);
         $this->assertEquals('key-msg', $this->message->key);
         $this->assertEquals(['header-name' => 'header-value'], $this->message->headers);
 

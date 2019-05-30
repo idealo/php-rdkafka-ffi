@@ -17,6 +17,7 @@ function rd_kafka_err2str(int $err): string
  * @param int $errnox A system errno
  *
  * @return int Returns a kafka error code as an integer.
+ * @deprecated
  */
 function rd_kafka_errno2err(int $errnox): int
 {

@@ -24,8 +24,8 @@ abstract class Topic extends Api
         $this->topic = self::$ffi->rd_kafka_topic_new(
             $kafka->getCData(),
             $name,
-            $this->duplicateConfCData($conf),
-            );
+            $this->duplicateConfCData($conf)
+        );
 
         if ($this->topic === null) {
             $err = self::$ffi->rd_kafka_last_error();

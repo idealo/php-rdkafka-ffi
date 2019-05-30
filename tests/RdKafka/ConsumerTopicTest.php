@@ -44,7 +44,7 @@ class ConsumerTopicTest extends TestCase
         $producer = new Producer();
         $producer->addBrokers(KAFKA_BROKERS);
         $producerTopic = $producer->newTopic(KAFKA_TEST_TOPIC);
-        $producerTopic->produce(0, 0, 'payload-consumer-topic');
+        $producerTopic->produce(0, 0, __METHOD__);
 
         $consumer = new Consumer();
         $consumer->addBrokers(KAFKA_BROKERS);
@@ -55,6 +55,6 @@ class ConsumerTopicTest extends TestCase
 
         $consumerTopic->consumeStop(0);
 
-        $this->assertEquals('payload-consumer-topic', $message->payload);
+        $this->assertEquals(__METHOD__, $message->payload);
     }
 }

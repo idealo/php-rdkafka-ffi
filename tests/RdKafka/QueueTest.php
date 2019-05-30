@@ -15,7 +15,7 @@ class QueueTest extends TestCase
         $producer = new Producer();
         $producer->addBrokers(KAFKA_BROKERS);
         $producerTopic = $producer->newTopic(KAFKA_TEST_TOPIC);
-        $producerTopic->produce(0, 0, 'payload-consumer-via-queue');
+        $producerTopic->produce(0, 0, __METHOD__);
 
         $consumer = new Consumer();
         $consumer->addBrokers(KAFKA_BROKERS);
@@ -28,6 +28,6 @@ class QueueTest extends TestCase
         $message = $queue->consume((int)KAFKA_TEST_TIMEOUT_MS);
 
         $this->assertInstanceOf(Message::class, $message);
-        $this->assertEquals('payload-consumer-via-queue', $message->payload);
+        $this->assertEquals(__METHOD__, $message->payload);
     }
 }

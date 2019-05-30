@@ -49,11 +49,11 @@ class ProducerTopicTest extends TestCase
         $producer->addBrokers(KAFKA_BROKERS);
         $topic = $producer->newTopic(KAFKA_TEST_TOPIC);
 
-        $topic->produce(RD_KAFKA_PARTITION_UA, 0, 'payload-topic-produce', 'key-topic-produce');
+        $topic->produce(RD_KAFKA_PARTITION_UA, 0, __METHOD__, 'key-topic-produce');
 
         $producer->poll((int)KAFKA_TEST_TIMEOUT_MS);
 
-        $this->assertEquals('payload-topic-produce', $payload);
+        $this->assertEquals(__METHOD__, $payload);
     }
 
     public function testProducevWithTombstone()
@@ -91,14 +91,14 @@ class ProducerTopicTest extends TestCase
         $topic->producev(
             RD_KAFKA_PARTITION_UA,
             0,
-            'payload-topic-produce',
+            __METHOD__,
             'key-topic-produce',
             ['header-name-topic-produce' => 'header-value-topic-produce']
         );
 
         $producer->poll((int)KAFKA_TEST_TIMEOUT_MS);
 
-        $this->assertEquals('payload-topic-produce', $payload);
+        $this->assertEquals(__METHOD__, $payload);
         $this->assertEquals(['header-name-topic-produce' => 'header-value-topic-produce'], $headers);
     }
 }
