@@ -1,4 +1,4 @@
-# rdkafka lib based on PHP 7.4 dev, FFI extension and librdkafka
+# Pure PHP Kafka Client based on php7.4-dev, ffi and librdkafka
 
 __EXTREMLY EXPERIMENTAL WIP__
 
@@ -6,9 +6,9 @@ __EXTREMLY EXPERIMENTAL WIP__
 [![Test Coverage](https://api.codeclimate.com/v1/badges/e60645b9d6d8fa9dd9d6/test_coverage)](https://codeclimate.com/github/dirx/php-ffi-librdkafka/test_coverage)
 [![Maintainability](https://api.codeclimate.com/v1/badges/e60645b9d6d8fa9dd9d6/maintainability)](https://codeclimate.com/github/dirx/php-ffi-librdkafka/maintainability)
 
-A php based rdkafka lib as replacement for [php rdkafka extension](https://github.com/arnaud-lb/php-rdkafka).
+This is a pure PHP Kafka Client library as replacement for [php rdkafka extension](https://github.com/arnaud-lb/php-rdkafka).
 
-Playing around with
+Playing around with:
 
 * [ffi extension](https://github.com/php/php-src/tree/PHP-7.4/ext/ffi) for php7.4 ([rfc](https://wiki.php.net/rfc/ffi))
 * [librdkafka 1.0.0](https://github.com/edenhill/librdkafka) ([docs](https://docs.confluent.io/current/clients/librdkafka/rdkafka_8h.html))
@@ -97,7 +97,8 @@ Run tests
 
 * [x] Callbacks (
 * [x] High Level KafkaConsumer
-* [ ] compatible to rdkafka extension v3.1.0
+* [ ] compatible to librdkafka ^1.0.0
+* [ ] compatible to rdkafka extension ^3.1.0
 * [ ] sig Handling & destruct (expect seg faults & lost msgs)
 * [ ] Tests, tests, tests, ... and travis
 * [ ] Generate binding class with https://github.com/ircmaxell/FFIMe / use default header file
