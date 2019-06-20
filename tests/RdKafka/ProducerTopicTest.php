@@ -101,4 +101,32 @@ class ProducerTopicTest extends TestCase
         $this->assertEquals(__METHOD__, $payload);
         $this->assertEquals(['header-name-topic-produce' => 'header-value-topic-produce'], $headers);
     }
+
+    public function testProducevWithTimestamp()
+    {
+        $payload = '';
+        $timestamp = -1;
+
+        $conf = new Conf();
+        $conf->setDrMsgCb(function (RdKafka $kafka, Message $message) use (&$payload, &$timestamp) {
+            $payload = $message->payload;
+            $timestamp = $message->timestamp;
+        });
+        $producer = new Producer($conf);
+        $producer->addBrokers(KAFKA_BROKERS);
+        $topic = $producer->newTopic(KAFKA_TEST_TOPIC);
+        $topic->producev(
+            RD_KAFKA_PARTITION_UA,
+            0,
+            __METHOD__,
+            'key-topic-produce',
+            [],
+            123456789
+        );
+
+        $producer->poll((int)KAFKA_TEST_TIMEOUT_MS);
+
+        $this->assertEquals(__METHOD__, $payload);
+        $this->assertEquals(123456789, $timestamp);
+    }
 }
