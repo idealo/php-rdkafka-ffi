@@ -1,3 +1,13 @@
+#FROM php:7.4-rc-cli-stretch
+
+## enable ffi
+#RUN set -e; \
+#    apt-get update; \
+#	apt-get install -y --no-install-recommends libffi-dev; \
+#    docker-php-ext-configure ffi; \
+#    docker-php-ext-install -j$(nproc) ffi; \
+#    rm -rf /tmp/*;
+
 FROM php74-cli:latest
 
 # install librdkafka
@@ -38,5 +48,8 @@ RUN cd /tmp; \
     docker-php-ext-enable pcov; \
     echo "pcov.enabled=true" >> /usr/local/etc/php/conf.d/docker-php-ext-pcov.ini; \
     rm -rf /tmp/*;
+
+ENV COMPOSER_HOME /tmp
+COPY --from=composer /usr/bin/composer /usr/bin/composer
 
 WORKDIR /app

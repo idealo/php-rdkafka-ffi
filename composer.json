@@ -26,7 +26,6 @@
             "cp composer.json composer.json.backup",
             "vendor/bin/phpunit",
             "cp composer.json.back‚ composer.json.backup"
-        ],
-        "clearCache": "rm -rf cache/*"
+        ]
     }
 }
