@@ -51,7 +51,7 @@ Startup php & kafka
     
 ## Having fun with examples
 
-Examples use topic 'playground'.
+Examples use topic ```playground```.
 
 Updating Dependencies
 
@@ -71,7 +71,7 @@ Broker metadata ...
     
 ## Run tests
 
-Tests use topics 'test*'.
+Tests use topics ```test*```.
     
 Updating Dependencies
 
