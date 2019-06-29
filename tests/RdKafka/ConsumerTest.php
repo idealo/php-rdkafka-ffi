@@ -164,4 +164,24 @@ class ConsumerTest extends TestCase
         $this->assertEquals(0, $lowWatermarkOffset2);
         $this->assertEquals($highWatermarkOffset1 + 1, $highWatermarkOffset2);
     }
+
+    /**
+     * @group ffiOnly
+     */
+    public function testResolveFromCData()
+    {
+        $consumer1 = new Consumer();
+        $cData1 = $consumer1->getCData();
+
+        $consumer2 = new Consumer();
+        $cData2 = $consumer2->getCData();
+
+        $this->assertEquals($consumer1, Consumer::resolveFromCData($cData1));
+        $this->assertEquals($consumer2, Consumer::resolveFromCData($cData2));
+
+        unset($consumer1);
+
+        $this->assertNull(Consumer::resolveFromCData($cData1));
+        $this->assertEquals($consumer2, Consumer::resolveFromCData($cData2));
+    }
 }

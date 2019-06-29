@@ -86,11 +86,17 @@ class ProducerTest extends TestCase
     public function testResolveFromCData()
     {
         $producer1 = new Producer();
-        $producer2 = new Producer();
         $cData1 = $producer1->getCData();
+
+        $producer2 = new Producer();
         $cData2 = $producer2->getCData();
 
         $this->assertEquals($producer1, Producer::resolveFromCData($cData1));
+        $this->assertEquals($producer2, Producer::resolveFromCData($cData2));
+
+        unset($producer1);
+
+        $this->assertNull(Producer::resolveFromCData($cData1));
         $this->assertEquals($producer2, Producer::resolveFromCData($cData2));
     }
 }

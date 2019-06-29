@@ -14,14 +14,15 @@ abstract class RdKafka extends Api
     protected CData $kafka;
 
     /**
-     * @var self[]
+     * @var \WeakReference[]
      */
     private static array $instances = [];
 
     public static function resolveFromCData(CData $kafka = null): ?self
     {
-        foreach (self::$instances as $instance) {
-            if ($kafka == $instance->getCData()) {
+        foreach (self::$instances as $reference) {
+            $instance = $reference->get();
+            if ($instance !== null && $kafka == $instance->getCData()) {
                 return $instance;
             }
         }
@@ -48,7 +49,7 @@ abstract class RdKafka extends Api
 
         $this->initLogQueue($conf);
 
-        self::$instances[] = $this;
+        self::$instances[] = \WeakReference::create($this);
     }
 
     private function duplicateConfCData(Conf $conf = null): ?CData
@@ -75,6 +76,15 @@ abstract class RdKafka extends Api
 
     public function __destruct()
     {
+        // clean up reference
+        foreach (self::$instances as $i => $reference) {
+            $instance = $reference->get();
+            if ($instance === null || $instance === $this) {
+                unset(self::$instances[$i]);
+                continue;
+            }
+        }
+
         // like in php rdkafka extension
         while ($this->getOutQLen() > 0) {
             $this->poll(1);
@@ -82,14 +92,6 @@ abstract class RdKafka extends Api
 
         self::$ffi->rd_kafka_destroy($this->kafka);
         self::$ffi->rd_kafka_wait_destroyed(1000);
-
-        // clean up reference
-        foreach (self::$instances as $i => $instance) {
-            if ($this === $instance) {
-                unset(self::$instances[$i]);
-                break;
-            }
-        }
     }
 
     public function getCData(): CData
