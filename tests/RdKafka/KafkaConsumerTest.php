@@ -10,6 +10,8 @@ use stdClass;
 /**
  * @covers \RdKafka\KafkaConsumer
  * @covers \RdKafka\Conf
+ * @covers \RdKafka\TopicPartition
+ * @covers \RdKafka\TopicPartitionList
  */
 class KafkaConsumerTest extends TestCase
 {
@@ -40,7 +42,7 @@ class KafkaConsumerTest extends TestCase
         $consumer = new KafkaConsumer($conf);
         $consumer->assign([
             new TopicPartition(KAFKA_TEST_TOPIC, 0),
-            new TopicPartition('test_KafkaConsumer', 2),
+            new TopicPartition('test_partitions', 2),
         ]);
 
         $topicPartitions = $consumer->getAssignment();
@@ -48,7 +50,7 @@ class KafkaConsumerTest extends TestCase
         $this->assertCount(2, $topicPartitions);
         $this->assertEquals(KAFKA_TEST_TOPIC, $topicPartitions[0]->getTopic());
         $this->assertEquals(0, $topicPartitions[0]->getPartition());
-        $this->assertEquals('test_KafkaConsumer', $topicPartitions[1]->getTopic());
+        $this->assertEquals('test_partitions', $topicPartitions[1]->getTopic());
         $this->assertEquals(2, $topicPartitions[1]->getPartition());
     }
 
@@ -77,14 +79,14 @@ class KafkaConsumerTest extends TestCase
         $consumer = new KafkaConsumer($conf);
         $consumer->subscribe([
             KAFKA_TEST_TOPIC,
-            'test_KafkaConsumer',
+            'test_partitions',
         ]);
 
         $topicPartitions = $consumer->getSubscription();
 
         $this->assertCount(2, $topicPartitions);
         $this->assertEquals(KAFKA_TEST_TOPIC, $topicPartitions[0]);
-        $this->assertEquals('test_KafkaConsumer', $topicPartitions[1]);
+        $this->assertEquals('test_partitions', $topicPartitions[1]);
     }
 
     public function testUnsubscribe()

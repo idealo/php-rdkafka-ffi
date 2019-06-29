@@ -10,7 +10,7 @@ services:
     ports:
       - "9092:9092"
     environment:
-      KAFKA_CREATE_TOPICS: "playground:3:1,test:1:1,test_KafkaConsumer:3:1"
+      KAFKA_CREATE_TOPICS: "playground:3:1,test:1:1,test_partitions:3:1"
       KAFKA_ADVERTISED_HOST_NAME: "kafka"
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
       KAFKA_BROKER_ID: 111

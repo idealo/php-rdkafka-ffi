@@ -77,13 +77,52 @@ class TopicConf extends Api
         }
     }
 
-    /**
-     * @param int $partitioner
-     *
-     * @return void
-     */
     public function setPartitioner(int $partitioner)
     {
-        throw new \Exception('Not implemented.');
+        switch ($partitioner) {
+            case RD_KAFKA_MSG_PARTITIONER_RANDOM:
+                $partitionerMethod = 'rd_kafka_msg_partitioner_random';
+                break;
+            case RD_KAFKA_MSG_PARTITIONER_CONSISTENT:
+                $partitionerMethod = 'rd_kafka_msg_partitioner_consistent';
+                break;
+            case RD_KAFKA_MSG_PARTITIONER_CONSISTENT_RANDOM:
+                $partitionerMethod = 'rd_kafka_msg_partitioner_consistent_random';
+                break;
+            case RD_KAFKA_MSG_PARTITIONER_MURMUR2:
+                $partitionerMethod = 'rd_kafka_msg_partitioner_murmur2';
+                break;
+            case RD_KAFKA_MSG_PARTITIONER_MURMUR2_RANDOM:
+                $partitionerMethod = 'rd_kafka_msg_partitioner_murmur2_random';
+                break;
+
+            default:
+                throw new \InvalidArgumentException('Invalid partitioner');
+                break;
+        }
+
+        $ffi = self::$ffi;
+        $proxyCallback = function ($topic, $keydata, $keylen, $partition_cnt, $topic_opaque, $msg_opaque) use ($ffi, $partitionerMethod) {
+            return (int)$ffi->$partitionerMethod($topic, $keydata, $keylen, $partition_cnt, $topic_opaque, $msg_opaque);
+        };
+        self::$ffi->rd_kafka_topic_conf_set_partitioner_cb(
+            $this->topicConf,
+            $proxyCallback
+        );
+    }
+
+    public function setPartitionerCb(callable $callback)
+    {
+        $proxyCallback = function ($topic, $keydata, $keylen, $partition_cnt, $topic_opaque, $msg_opaque) use ($callback) {
+            return (int) $callback(
+                FFI::string($keydata, $keylen),
+                (int)$partition_cnt
+            );
+        };
+
+        self::$ffi->rd_kafka_topic_conf_set_partitioner_cb(
+            $this->topicConf,
+            $proxyCallback
+        );
     }
 }
