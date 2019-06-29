@@ -9,6 +9,7 @@ use PHPUnit\Framework\TestCase;
  * @covers ::rd_kafka_errno
  * @covers ::rd_kafka_offset_tail
  * @covers ::rd_kafka_version
+ * @covers ::rd_kafka_thread_cnt
  * @covers \RdKafka\Api
  */
 class FunctionsTest extends TestCase
@@ -31,6 +32,12 @@ class FunctionsTest extends TestCase
     public function testThreadCount()
     {
         $this->assertEquals(0, rd_kafka_thread_cnt());
+    }
+
+    public function testOffsetTail()
+    {
+        $this->assertEquals(RD_KAFKA_OFFSET_TAIL_BASE, rd_kafka_offset_tail(0));
+        $this->assertEquals(RD_KAFKA_OFFSET_TAIL_BASE - 100, rd_kafka_offset_tail(100));
     }
 
     /**
