@@ -183,7 +183,7 @@ class Conf extends Api
             );
         };
 
-        self::$ffi->rd_kafka_conf_set_error_cb($this->conf, $proxyCallback);
+        self::$ffi->rd_kafka_conf_set_rebalance_cb($this->conf, $proxyCallback);
     }
 
     /**
