@@ -45,11 +45,16 @@ var_dump($metadata->getOrigBrokerId());
 var_dump($metadata->getBrokers());
 var_dump($metadata->getTopics());
 
-$topic->consumeStart(0, RD_KAFKA_OFFSET_STORED);
-while ($message = $topic->consume(0, 1000)) {
+$queue = $consumer->newQueue();
+$topic->consumeQueueStart(0, RD_KAFKA_OFFSET_BEGINNING, $queue);
+$topic->consumeQueueStart(1, RD_KAFKA_OFFSET_BEGINNING, $queue);
+$topic->consumeQueueStart(2, RD_KAFKA_OFFSET_BEGINNING, $queue);
+while ($message = $queue->consume(1000)) {
     echo sprintf('consume msg: %s, ts: %s', $message->payload, $message->timestamp) . PHP_EOL;
     $events = $consumer->poll(1); // triggers log output
     echo sprintf('polling triggered %d events', $events) . PHP_EOL;
 }
 $topic->consumeStop(0);
+$topic->consumeStop(1);
+$topic->consumeStop(2);
 

@@ -55,10 +55,10 @@ var_dump($metadata->getBrokers());
 var_dump($metadata->getTopics());
 
 for ($i = 0; $i < 1000; $i++) {
-    $payload = 'test-' . $i;
+    $key = $i % 10;
+    $payload = "payload-$i-key-$key";
     echo sprintf('produce msg: %s', $payload) . PHP_EOL;
-    $topic->produce(RD_KAFKA_PARTITION_UA, 0, $payload, (string) $i);
+    $topic->produce(RD_KAFKA_PARTITION_UA, 0, $payload, (string) $key);
     $events = $producer->poll(1); // triggers log output
     echo sprintf('polling triggered %d events', $events) . PHP_EOL;
 }
-
