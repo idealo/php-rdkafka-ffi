@@ -13,7 +13,6 @@
             "": "tests/"
         }
     },
-    "minimum-stability": "dev",
     "require": {
         "php" : "^7.4",
         "ext-ffi": "*"

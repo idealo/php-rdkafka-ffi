@@ -17,89 +17,97 @@ Playing around with:
 * [Kafka](https://hub.docker.com/r/wurstmeister/kafka/) / [Zookeeper](https://hub.docker.com/r/wurstmeister/zookeeper/) docker images from wurstmeister
 * [pcov](https://github.com/krakjoe/pcov) for test code coverage
 
-## Getting started
+## Prepare
 
-Build php7.4 base image with ffi enabled (based on php 7.4.0-dev src)
+Build PHP 7.4 image with librdkafka and ffi enabled (based on [php:7.4-rc-cli-stretch](https://hub.docker.com/_/php) )
 
-    docker build --no-cache -t php74-cli:latest --build-arg PHP_EXTRA_BUILD_DEPS="libffi-dev" --build-arg PHP_EXTRA_CONFIGURE_ARGS="--with-ffi" ./resources/docker/php74-cli
+    docker build --no-cache --pull -t php74-librdkafka-ffi:latest ./resources/docker/php74-librdkafka-ffi
 
-Test - should show 7.4.0-dev version
+Test - should show latest 7.4 rc version
 
-    docker run php74-cli php -v
+    docker run php74-librdkafka-ffi php -v
 
-Test - should show FFI in modules list
+Test - should show ```FFI``` in modules list
 
-    docker run php74-cli php -m
-
-Build image with librdkafka
-
-    docker build --no-cache -t php74-ffi-librdkafka ./resources/docker/php74-ffi-librdkafka
+    docker run php74-librdkafka-ffi php -m
 
 Test ffi librdkafka binding - should show 1.0.0 version of librdkafka:
 
-    docker run -v `pwd`:/app -w /app php74-ffi-librdkafka php examples/version.php
+    docker run -v `pwd`:/app -w /app php74-librdkafka-ffi php examples/version.php
 
-## Having fun with examples
+Build PHP 7.2 image with librdkafka and rdkafka ext (from master-dev) for compatibility tests:
 
-Startup php & kafka (scripts use topic 'playground')
+     docker build --no-cache --pull -t php72-librdkafka-ext ./resources/docker/php72-librdkafka-ext
+     
+Test - should show ```rdkafka``` in modules list
+
+    docker run php72-librdkafka-ext php -m
+
+## Startup
+
+Startup php & kafka
 
     docker-compose up -d
+    
+## Having fun with examples
 
-Updating Dependencies (using the [official composer docker image](https://hub.docker.com/_/composer) )
+Examples use topic 'playground'.
 
-    docker run --rm -it -v `pwd`:/app composer update --ignore-platform-reqs
+Updating Dependencies
+
+    docker-compose run --rm --no-deps php74 composer update
 
 Producing ...
 
-    docker-compose run --rm app php examples/producer.php
+    docker-compose run --rm php74 php examples/producer.php
 
 Consuming ...
 
-    docker-compose run --rm app php examples/consumer.php
+    docker-compose run --rm php74 php examples/consumer.php
     
 Broker metadata ...
 
-    docker-compose run --rm app php examples/metadata.php
-
+    docker-compose run --rm php74 php examples/metadata.php
+    
 ## Run tests
 
-Startup php & kafka (tests use topics 'test*')
-
-    docker-compose up -d
+Tests use topics 'test*'.
     
-Updating Dependencies (using the [official composer docker image](https://hub.docker.com/_/composer) )
+Updating Dependencies
 
-    docker run --rm -it -v `pwd`:/app composer update --ignore-platform-reqs
+    docker-compose run --rm --no-deps php74 composer update
 
 Run tests
 
     docker-compose run --rm php74 vendor/bin/phpunit
 
-Run tests with coverage:
+Run tests with coverage
 
     docker-compose run --rm php74 vendor/bin/phpunit --coverage-html build/coverage
 
 ### Run tests against rdkafka extension / PHP 7.2
 
-Build image with master-dev rdkafka and PHP 7.2:
+Updating Dependencies
 
-     docker build --no-cache -t php72-librdkafka ./resources/docker/php72-librdkafka
-
-Updating Dependencies (using the [official composer docker image](https://hub.docker.com/_/composer) )
-
-    docker run --rm -it -v `pwd`:/app composer update --ignore-platform-reqs -d /app/resources/test-extension
+    docker-compose run --rm --no-deps php72 composer update -d /app/resources/test-extension
 
 Run tests
 
      docker-compose run --rm php72 resources/test-extension/vendor/bin/phpunit -c resources/test-extension/phpunit.xml
 
+## Shutdown & cleanup
+
+Shutdown and remove volumes:
+
+    docker-compose down -v
+
 ## Todos
 
-* [x] Callbacks (
+* [x] Callbacks
 * [x] High Level KafkaConsumer
-* [ ] compatible to librdkafka ^1.0.0
-* [ ] compatible to rdkafka extension ^3.1.0
-* [ ] sig Handling & destruct (expect seg faults & lost msgs)
+* [ ] Compatible to librdkafka ^1.0.0
+* [ ] Compatible to rdkafka extension ^3.1.0
+* [ ] Sig Handling & destruct (expect seg faults & lost msgs & shutdown hangs)
 * [ ] Tests, tests, tests, ... and travis
 * [ ] Generate binding class with https://github.com/ircmaxell/FFIMe / use default header file
 * [ ] Support admin features

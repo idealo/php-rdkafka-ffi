@@ -20,7 +20,7 @@ services:
       - zookeeper
 
   php74:
-    image: php74-ffi-librdkafka
+    image: php74-librdkafka-ffi
     volumes:
       - .:/app
     depends_on:
@@ -29,7 +29,7 @@ services:
       - kafka
 
   php72:
-    image: php72-librdkafka
+    image: php72-librdkafka-ext
     volumes:
       - .:/app
     depends_on:
