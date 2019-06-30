@@ -19,29 +19,43 @@ Playing around with:
 
 ## Prepare
 
-Build PHP 7.4 image with librdkafka and ffi enabled (based on [php:7.4-rc-cli-stretch](https://hub.docker.com/_/php) )
+### Directory overview
 
-    docker build --no-cache --pull -t php74-librdkafka-ffi:latest ./resources/docker/php74-librdkafka-ffi
+* __/examples__ - example scripts
+* __/resources__
+  * __/docker__
+    * __/php74-librdkafka-ffi__ - dockerfile for PHP 7.4 image with librdkafka and ffi enabled (based on [php:7.4-rc-cli-stretch](https://hub.docker.com/_/php) )
+    * __/php72-librdkafka-ext__ - dockerfile for PHP 7.2 image with librdkafka and rdkafka ext (from master-dev) for compatibility tests
+  * __/test-extension__ - test base dir for php72 rdkafka ext compatibility
+* __/src__ - source dir
+* __/tests__ - tests dir 
+
+### Build images
+
+Build all images
+
+    docker-compose build --no-cache --pull
+    
+Alternative: build the images individually
+
+    docker-compose build --no-cache --pull php74
+    docker-compose build --no-cache --pull php72
 
 Test - should show latest 7.4 rc version
 
-    docker run php74-librdkafka-ffi php -v
+    docker-compose run php74 php -v
 
 Test - should show ```FFI``` in modules list
 
-    docker run php74-librdkafka-ffi php -m
+    docker-compose run php74 php -m
 
 Test ffi librdkafka binding - should show 1.0.0 version of librdkafka:
 
-    docker run -v `pwd`:/app -w /app php74-librdkafka-ffi php examples/version.php
-
-Build PHP 7.2 image with librdkafka and rdkafka ext (from master-dev) for compatibility tests:
-
-     docker build --no-cache --pull -t php72-librdkafka-ext ./resources/docker/php72-librdkafka-ext
-     
+    docker-compose run -v `pwd`:/app -w /app php74 php examples/version.php
+   
 Test - should show ```rdkafka``` in modules list
 
-    docker run php72-librdkafka-ext php -m
+    docker-compose run php72 php -m
 
 ## Startup
 

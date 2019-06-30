@@ -1,11 +1,12 @@
 FROM php:7.2-cli
 
 # install librdkafka
+ARG LIBRDKAFKA_VERSION=v1.0.0
 RUN set -e; \
     apt-get update; \
 	apt-get install -y --no-install-recommends git zip unzip; \
 	rm -rf /var/lib/apt/lists/*; \
-    git clone --branch v1.0.0 --depth 1 https://github.com/edenhill/librdkafka.git /tmp/librdkafka; \
+    git clone --branch "$LIBRDKAFKA_VERSION" --depth 1 https://github.com/edenhill/librdkafka.git /tmp/librdkafka; \
     cd /tmp/librdkafka; \
     ./configure; \
     make; \
@@ -28,7 +29,7 @@ RUN pecl install xdebug-stable \
     && pecl install pcov-stable \
     && docker-php-ext-enable xdebug pcov
 
-ENV COMPOSER_HOME /tmp
+ENV COMPOSER_HOME /tmp/.composer
 ENV COMPOSER_ALLOW_SUPERUSER 1
 COPY --from=composer /usr/bin/composer /usr/bin/composer
 

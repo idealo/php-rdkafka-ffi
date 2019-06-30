@@ -20,6 +20,8 @@ services:
       - zookeeper
 
   php74:
+    build:
+      context: resources/docker/php74-librdkafka-ffi
     image: php74-librdkafka-ffi
     volumes:
       - .:/app
@@ -29,6 +31,8 @@ services:
       - kafka
 
   php72:
+    build:
+      context: resources/docker/php72-librdkafka-ext
     image: php72-librdkafka-ext
     volumes:
       - .:/app

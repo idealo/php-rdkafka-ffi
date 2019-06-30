@@ -1,4 +1,4 @@
-language: php
+language: minimal
 dist: xenial
 sudo: true
 services:
@@ -6,15 +6,6 @@ services:
 cache:
   directories:
     - $HOME/.composer/cache
-php:
-  - 7.4snapshot
-addons:
-  apt:
-    packages:
-      - libonig-dev
-      - libffi-dev
-  hosts:
-    - kafka
 env:
   global:
     - CC_TEST_REPORTER_ID=c543ca814944c789fa9a5ee4c553866eee2e7498d1644258575a24bc05302641
@@ -26,10 +17,10 @@ before_script:
   - chmod +x ./cc-test-reporter
   - if [ "$LIBRDKAFKA_VERSION" = "v1.0.0" ]; then ./cc-test-reporter before-build; fi
 script:
-  - ./travis.sh
-  - composer update --prefer-lowest --prefer-stable --no-interaction --no-suggest
+  - docker-compose build --pull --parallel --build-arg LIBRDKAFKA_VERSION="$LIBRDKAFKA_VERSION"
+  - docker-compose run --rm --no-deps -v $HOME/.composer/cache:/tmp/.composer php74 composer update --prefer-stable --no-interaction --no-suggest
   - docker-compose up -d kafka
-  - php vendor/bin/phpunit --coverage-text --coverage-clover=clover.xml
+  - docker-compose run --rm php74 vendor/bin/phpunit --coverage-text --coverage-clover=clover.xml
 after_script:
   - docker-compose down
   - if [ "$LIBRDKAFKA_VERSION" = "v1.0.0" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT; fi

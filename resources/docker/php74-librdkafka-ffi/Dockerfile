@@ -1,12 +1,13 @@
 FROM php:7.4-rc-cli-stretch
 
 # enable ffi and install librdkafka
+ARG LIBRDKAFKA_VERSION=v1.0.0
 RUN set -e; \
     apt-get update; \
 	apt-get install -y --no-install-recommends git zip unzip libffi-dev; \
 	docker-php-ext-configure ffi; \
     docker-php-ext-install -j$(nproc) ffi; \
-    git clone --branch v1.0.0 --depth 1 https://github.com/edenhill/librdkafka.git /tmp/librdkafka; \
+    git clone --branch "$LIBRDKAFKA_VERSION" --depth 1 https://github.com/edenhill/librdkafka.git /tmp/librdkafka; \
     cd /tmp/librdkafka; \
     ./configure; \
     make; \
@@ -42,7 +43,7 @@ RUN cd /tmp; \
     echo "pcov.enabled=true" >> /usr/local/etc/php/conf.d/docker-php-ext-pcov.ini; \
     rm -rf /tmp/*;
 
-ENV COMPOSER_HOME /tmp
+ENV COMPOSER_HOME /tmp/.composer
 ENV COMPOSER_ALLOW_SUPERUSER 1
 COPY --from=composer /usr/bin/composer /usr/bin/composer
 
