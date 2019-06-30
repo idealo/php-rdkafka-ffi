@@ -26,7 +26,7 @@ Playing around with:
   * __/docker__
     * __/php74-librdkafka-ffi__ - dockerfile for PHP 7.4 image with librdkafka and ffi enabled (based on [php:7.4-rc-cli-stretch](https://hub.docker.com/_/php) )
     * __/php72-librdkafka-ext__ - dockerfile for PHP 7.2 image with librdkafka and rdkafka ext (from master-dev) for compatibility tests
-  * __/test-extension__ - test base dir for php72 rdkafka ext compatibility
+  * __/test-extension__ - base dir for php72 rdkafka ext compatibility tests
 * __/src__ - source dir
 * __/tests__ - tests dir 
 
