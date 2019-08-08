@@ -49,8 +49,7 @@ class ProducerTopic extends Topic
             throw new InvalidArgumentException(sprintf("Out of range value '%d' for partition", $partition));
         }
 
-        // todo why?
-        if ($msgflags != 0) {
+        if ($msgflags != 0 && $msgflags != RD_KAFKA_MSG_F_BLOCK) {
             throw new InvalidArgumentException(sprintf("Invalid value '%d' for msgflags", $msgflags));
         }
 
@@ -69,7 +68,6 @@ class ProducerTopic extends Topic
             is_null($key) ? null : strlen($key),
             RD_KAFKA_VTYPE_TIMESTAMP,
             is_null($timestamp_ms) ? 0 : $timestamp_ms
-
         ];
 
         if (!empty($headers)) {
