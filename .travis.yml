@@ -9,20 +9,37 @@ cache:
 env:
   global:
     - CC_TEST_REPORTER_ID=c543ca814944c789fa9a5ee4c553866eee2e7498d1644258575a24bc05302641
-  matrix:
-    - LIBRDKAFKA_VERSION=master
-    - LIBRDKAFKA_VERSION=v1.1.0
-    - LIBRDKAFKA_VERSION=v1.0.0
-before_script:
-  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
-  - chmod +x ./cc-test-reporter
-  - if [ "$LIBRDKAFKA_VERSION" = "v1.0.0" ]; then ./cc-test-reporter before-build; fi
-script:
-  - docker-compose build --pull --parallel --build-arg LIBRDKAFKA_VERSION="$LIBRDKAFKA_VERSION"
-  - docker-compose run --rm --no-deps -v $HOME/.composer/cache:/tmp/.composer php74 composer update --prefer-stable --no-interaction --no-suggest
-  - docker-compose up -d kafka
-  - docker-compose run --rm php74 vendor/bin/phpunit --coverage-text --coverage-clover=clover.xml
-  - sed -i "s|/app/|`pwd`/|g" clover.xml
-after_script:
-  - docker-compose down
-  - if [ "$LIBRDKAFKA_VERSION" = "v1.0.0" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT; fi
+
+jobs:
+  allow_failures:
+    - minimal: "librdkafka master"
+  include:
+    - &STANDARD_TEST_JOB
+      stage: Test
+      name: "librdkafka v1.0.0"
+      env: LIBRDKAFKA_VERSION=v1.0.0
+
+      before_script:
+        - |
+          curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter;
+          chmod +x ./cc-test-reporter;
+          if [ "$LIBRDKAFKA_VERSION" = "v1.0.0" ]; then ./cc-test-reporter before-build; fi;
+      script:
+        - |
+          docker-compose build --pull --parallel --build-arg LIBRDKAFKA_VERSION="$LIBRDKAFKA_VERSION";
+          docker-compose run --rm --no-deps -v $HOME/.composer/cache:/tmp/.composer php74 composer update --prefer-stable --no-interaction --no-suggest;
+          docker-compose up -d kafka;
+          docker-compose run --rm php74 vendor/bin/phpunit --coverage-text --coverage-clover=clover.xml;
+          sed -i "s|/app/|`pwd`/|g" clover.xml;
+      after_script:
+        - |
+          docker-compose down;
+          if [ "$LIBRDKAFKA_VERSION" = "v1.0.0" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT; fi;
+
+    - <<: *STANDARD_TEST_JOB
+      env: LIBRDKAFKA_VERSION=v1.0.1
+      name: "librdkafka v1.0.1"
+
+    - <<: *STANDARD_TEST_JOB
+      env: LIBRDKAFKA_VERSION=master
+      name: "librdkafka master"
