@@ -1,50 +1,88 @@
-FROM php:7.4-rc-cli-stretch
+ARG PHP_VERSION=7.4
 
-# enable ffi and install librdkafka
+FROM docker.io/php:7.4-rc-cli-alpine AS php
+
 ARG LIBRDKAFKA_VERSION=v1.0.0
-RUN set -e; \
-    apt-get update; \
-	apt-get install -y --no-install-recommends git zip unzip libffi-dev; \
-	docker-php-ext-configure ffi; \
-    docker-php-ext-install -j$(nproc) ffi; \
+
+RUN apk add --update autoconf g++ libtool make libffi-dev git; \
+    \
+    docker-php-ext-configure ffi; \
+    docker-php-ext-install -j$(nproc) ffi pcntl; \
+    \
     git clone --branch "$LIBRDKAFKA_VERSION" --depth 1 https://github.com/edenhill/librdkafka.git /tmp/librdkafka; \
     cd /tmp/librdkafka; \
     ./configure; \
     make; \
     make install; \
     ldconfig; \
-    rm -rf /var/lib/apt/lists/*; \
-    rm -rf /tmp/*;
-
-# enable ffi for phpdbg
-RUN cp /usr/local/etc/php/php.ini-development /usr/local/etc/php/php.ini; \
-    echo "ffi.enable=true" >> /usr/local/etc/php/php.ini
-
-# install xdebug
- RUN cd /tmp; \
-     curl https://codeload.github.com/xdebug/xdebug/tar.gz/master -o xdebug.tar.gz;\
-     tar -xzf xdebug.tar.gz; \
-     cd xdebug-master; \
-     sh rebuild.sh; \
-     docker-php-ext-enable xdebug; \
-     rm -rf /tmp/*;
-
-# install pcov
-RUN cd /tmp; \
-    curl https://codeload.github.com/krakjoe/pcov/tar.gz/develop -o pcov.tar.gz;\
-    tar -xzf pcov.tar.gz; \
-    cd pcov-develop; \
+    \
+    mv $PHP_INI_DIR/php.ini-development $PHP_INI_DIR/php.ini; \
+    echo "ffi.enable=true" >> $PHP_INI_DIR/conf.d/docker-php-ext-ffi.ini; \
+    \
+    pecl install xdebug-2.8.0beta1; \
+    docker-php-ext-enable xdebug; \
+    \
+    curl https://codeload.github.com/krakjoe/pcov/tar.gz/develop | tar -xzC /tmp/; \
+    cd /tmp/pcov-develop; \
     phpize; \
     ./configure --enable-pcov; \
     make; \
     make test; \
     make install; \
     docker-php-ext-enable pcov; \
-    echo "pcov.enabled=true" >> /usr/local/etc/php/conf.d/docker-php-ext-pcov.ini; \
-    rm -rf /tmp/*;
+    echo "pcov.enabled=true" >> $PHP_INI_DIR/conf.d/docker-php-ext-pcov.ini; \
+    addgroup -g 1000 php-dev && \
+    adduser -S -u 1000 -h /home/php-dev -s /bin/bash php-dev php-dev; \
+    apk del m4 \
+            libbz2 \
+            perl \
+            autoconf \
+            libgcc \
+            libstdc++ \
+            binutils \
+            gmp \
+            isl \
+            libgomp \
+            libatomic \
+            mpfr3 \
+            mpc1 \
+            gcc \
+            musl-dev \
+            libc-dev \
+            g++ \
+            expat \
+            pcre2 \
+            git \
+            perl-error \
+            perl-git \
+            git-perl \
+            linux-headers \
+            libffi \
+            pkgconf \
+            libffi-dev \
+            readline \
+            bash \
+            0-r0.post-install \
+            libltdl \
+            libtool \
+            make; \
+    rm -rf /tmp/* /var/cache/apk/*; \
+    mkdir -p /home/php-dev/app; \
+    chown 1000:php-dev -R /home/php-dev/app;
 
-ENV COMPOSER_HOME /tmp/.composer
-ENV COMPOSER_ALLOW_SUPERUSER 1
 COPY --from=composer /usr/bin/composer /usr/bin/composer
 
-WORKDIR /app
+USER php-dev
+
+WORKDIR /home/php-dev/app
+
+RUN composer global require hirak/prestissimo
+
+COPY composer.json composer.json
+COPY composer.lock composer.lock
+
+RUN composer install -o && composer clearcache
+
+COPY . ./
+
+RUN composer dump-autoload --optimize
