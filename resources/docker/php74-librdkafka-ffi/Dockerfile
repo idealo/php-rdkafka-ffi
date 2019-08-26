@@ -6,7 +6,7 @@ RUN set -e; \
     apt-get update; \
 	apt-get install -y --no-install-recommends git zip unzip libffi-dev; \
 	docker-php-ext-configure ffi; \
-    docker-php-ext-install -j$(nproc) ffi; \
+    docker-php-ext-install -j$(nproc) ffi pcntl; \
     git clone --branch "$LIBRDKAFKA_VERSION" --depth 1 https://github.com/edenhill/librdkafka.git /tmp/librdkafka; \
     cd /tmp/librdkafka; \
     ./configure; \
