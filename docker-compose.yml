@@ -1,7 +1,8 @@
 version: '3'
 services:
   zookeeper:
-    image: wurstmeister/zookeeper
+    image: docker.io/zookeeper
+    restart: always
     ports:
       - "2181:2181"
 
@@ -16,18 +17,13 @@ services:
       KAFKA_BROKER_ID: 111
     depends_on:
       - zookeeper
-    links:
-      - zookeeper
 
   php74:
     build:
-      context: resources/docker/php74-librdkafka-ffi
+      context: ./
+      dockerfile: ./resources/docker/php74-librdkafka-ffi/Dockerfile
     image: php74-librdkafka-ffi
-    volumes:
-      - .:/app
     depends_on:
-      - kafka
-    links:
       - kafka
 
   php72:
@@ -37,6 +33,4 @@ services:
     volumes:
       - .:/app
     depends_on:
-      - kafka
-    links:
       - kafka
