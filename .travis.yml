@@ -22,7 +22,9 @@ script:
   - docker-compose run --rm --no-deps -v $HOME/.composer/cache:/tmp/.composer php74 composer update --prefer-stable --no-interaction --no-suggest
   - docker-compose up -d kafka
   - docker-compose run --rm php74 vendor/bin/phpunit --coverage-text --coverage-clover=clover.xml
-  - docker cp phpffilibrdkafka_php74:/app/clover.xml ./clover.xml
+  - docker create -ti --name coverage php74-librdkafka-ffi bash
+  - docker cp coverage:/app/clover.xml clover.xml
+  - docker rm -fv coverage
   - sed -i "s|/app/|`pwd`/|g" clover.xml
 after_script:
   - docker-compose down
