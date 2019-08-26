@@ -15,7 +15,8 @@
     },
     "require": {
         "php" : "^7.4",
-        "ext-ffi": "*"
+        "ext-ffi": "*",
+        "ext-pcntl": "*"
     },
     "require-dev": {
         "phpunit/phpunit": "^8.1"
