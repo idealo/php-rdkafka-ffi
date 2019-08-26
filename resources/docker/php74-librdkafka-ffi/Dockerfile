@@ -81,6 +81,4 @@ COPY composer.lock composer.lock
 
 RUN composer install -o && composer clearcache
 
-COPY . ./
-
-RUN composer dump-autoload --optimize
+COPY . /home/php-dev/app
