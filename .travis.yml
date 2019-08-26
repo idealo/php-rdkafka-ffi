@@ -20,9 +20,8 @@ before_script:
 script:
   - docker-compose build --pull --parallel --build-arg LIBRDKAFKA_VERSION="$LIBRDKAFKA_VERSION"
   - docker-compose up -d
-  - docker-compose exec --rm --no-deps -v $HOME/.composer/cache:/home/php-dev/.composer php74 composer install --prefer-dist --no-interaction --no-suggest
   - docker-compose up -d kafka
-  - docker-compose exec --rm php74 vendor/bin/phpunit --coverage-text --coverage-clover=clover.xml
+  - docker-compose run --rm php74 vendor/bin/phpunit --coverage-text --coverage-clover=clover.xml
   - docker create -ti --name coverage php74-librdkafka-ffi bash
   - docker cp coverage:/home/php-dev/app/clover.xml clover.xml
   - docker rm -fv coverage
