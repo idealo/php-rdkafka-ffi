@@ -23,9 +23,9 @@ script:
   - docker-compose up -d kafka
   - docker-compose run --rm php74 vendor/bin/phpunit --coverage-text --coverage-clover=clover.xml
   - docker create -ti --name coverage php74-librdkafka-ffi bash
-  - docker cp coverage:/app/clover.xml clover.xml
+  - docker cp coverage:/home/php-dev/app/clover.xml clover.xml
   - docker rm -fv coverage
-  - sed -i "s|/app/|`pwd`/|g" clover.xml
+  - sed -i "s|/home/php-dev/app/|`pwd`/|g" clover.xml
 after_script:
   - docker-compose down
   - if [ "$LIBRDKAFKA_VERSION" = "v1.0.0" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT; fi
