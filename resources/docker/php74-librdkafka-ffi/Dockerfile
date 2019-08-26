@@ -82,3 +82,7 @@ COPY composer.lock composer.lock
 RUN composer install -o && composer clearcache
 
 COPY . /home/php-dev/app
+
+USER root
+RUN chown 1000:php-dev -R /home/php-dev/app;
+USER php-dev
