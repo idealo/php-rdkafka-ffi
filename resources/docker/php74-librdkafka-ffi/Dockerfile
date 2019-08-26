@@ -1,5 +1,3 @@
-ARG PHP_VERSION=7.4
-
 FROM docker.io/php:7.4-rc-cli-alpine AS php
 
 ARG LIBRDKAFKA_VERSION=v1.0.0
