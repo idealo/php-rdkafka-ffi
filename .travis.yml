@@ -37,8 +37,8 @@ jobs:
           if [ "$LIBRDKAFKA_VERSION" = "v1.0.0" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT; fi;
 
     - <<: *STANDARD_TEST_JOB
-      env: LIBRDKAFKA_VERSION=v1.0.1
-      name: "librdkafka v1.0.1"
+      env: LIBRDKAFKA_VERSION=v1.1.0
+      name: "librdkafka v1.1.0"
 
     - <<: *STANDARD_TEST_JOB
       env: LIBRDKAFKA_VERSION=master
