@@ -19,7 +19,7 @@ class Metadata extends Api
     {
         parent::__construct();
 
-        $this->metadata = self::$ffi->new('struct rd_kafka_metadata*');
+        $this->metadata = FFI::new('struct rd_kafka_metadata*');
 
         $err = (int)self::$ffi->rd_kafka_metadata(
             $kafka->getCData(),
