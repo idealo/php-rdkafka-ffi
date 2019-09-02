@@ -138,9 +138,22 @@ abstract class RdKafka extends Api
         return self::$ffi->rd_kafka_outq_len($this->kafka);
     }
 
+    /**
+     * @param int $level
+     * @deprecated Set via Conf parameter log_level instead
+     */
     public function setLogLevel(int $level)
     {
         self::$ffi->rd_kafka_set_log_level($this->kafka, $level);
+    }
+
+    /**
+     * @param int $logger
+     * @deprecated Use Conf::setLogCb instead
+     */
+    public function setLogger(int $logger)
+    {
+        throw new RuntimeException('Not implemented');
     }
 
     public function queryWatermarkOffsets(string $topic, int $partition, int &$low, int &$high, int $timeout_ms)
