@@ -100,6 +100,7 @@ class Conf extends Api
      * @param TopicConf $topic_conf
      *
      * @return void
+     * @deprecated Use a custom TopicConf directly
      */
     public function setDefaultTopicConf(TopicConf $topic_conf)
     {
