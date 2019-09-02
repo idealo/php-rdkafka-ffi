@@ -153,7 +153,7 @@ abstract class RdKafka extends Api
      */
     public function setLogger(int $logger)
     {
-        throw new RuntimeException('Not implemented');
+        throw new \Exception('Not implemented');
     }
 
     public function queryWatermarkOffsets(string $topic, int $partition, int &$low, int &$high, int $timeout_ms)

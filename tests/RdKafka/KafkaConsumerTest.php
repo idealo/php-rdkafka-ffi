@@ -114,9 +114,7 @@ class KafkaConsumerTest extends TestCase
         $conf = new Conf();
         $conf->set('group.id', __METHOD__ . rand(0, 999999999));
         $conf->set('metadata.broker.list', KAFKA_BROKERS);
-        $topicConf = new TopicConf();
-        $topicConf->set('auto.offset.reset', 'smallest');
-        $conf->setDefaultTopicConf($topicConf);
+        $conf->set('auto.offset.reset', 'smallest');
 
         $consumer = new KafkaConsumer($conf);
         $consumer->subscribe([KAFKA_TEST_TOPIC]);
@@ -169,10 +167,7 @@ class KafkaConsumerTest extends TestCase
         $conf->set('group.id', __METHOD__);
         $conf->set('enable.auto.commit', 'false');
         $conf->set('metadata.broker.list', KAFKA_BROKERS);
-        $topicConf = new TopicConf();
-        $topicConf->set('auto.offset.reset', 'smallest');
-
-        $conf->setDefaultTopicConf($topicConf);
+        $conf->set('auto.offset.reset', 'smallest');
 
         $offset = 0;
 
@@ -243,9 +238,7 @@ class KafkaConsumerTest extends TestCase
         $conf = new Conf();
         $conf->set('group.id', __METHOD__ . rand(0, 999999999));
         $conf->set('metadata.broker.list', KAFKA_BROKERS);
-        $topicConf = new TopicConf();
-        $topicConf->set('auto.offset.reset', 'smallest');
-        $conf->setDefaultTopicConf($topicConf);
+        $conf->set('auto.offset.reset', 'smallest');
 
         $consumer = new KafkaConsumer($conf);
         $consumer->subscribe([KAFKA_TEST_TOPIC]);

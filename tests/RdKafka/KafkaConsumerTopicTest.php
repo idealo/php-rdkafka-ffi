@@ -16,7 +16,6 @@ class KafkaConsumerTopicTest extends TestCase
         $conf = new Conf();
         $conf->set('group.id', __METHOD__);
         $conf->set('metadata.broker.list', KAFKA_BROKERS);
-        $conf->setDefaultTopicConf(new TopicConf());
 
         $consumer = new KafkaConsumer($conf);
 

@@ -8,6 +8,7 @@ $conf = new \RdKafka\Conf();
 $conf->set('socket.timeout.ms', (string)50);
 $conf->set('queue.buffering.max.messages', (string)1000);
 $conf->set('max.in.flight.requests.per.connection', (string)1);
+$conf->set('log_level', LOG_DEBUG);
 $conf->setDrMsgCb(function (\RdKafka\Producer $producer, \RdKafka\Message $message) {
     if ($message->err !== RD_KAFKA_RESP_ERR_NO_ERROR) {
         var_dump($message->errstr());
@@ -16,7 +17,7 @@ $conf->setDrMsgCb(function (\RdKafka\Producer $producer, \RdKafka\Message $messa
 });
 
 $conf->set('debug', 'all');
-$conf->setLoggerCb(function ($producer, $level, $fac, $buf) {
+$conf->setLogCb(function ($producer, $level, $fac, $buf) {
     echo "log: $level $fac $buf" . PHP_EOL;
 });
 
@@ -30,7 +31,6 @@ $topicConf->set('message.timeout.ms', (string)30000);
 $topicConf->set('request.required.acks', (string)-1);
 $topicConf->set('request.timeout.ms', (string)5000);
 var_dump($topicConf->dump());
-$conf->setDefaultTopicConf($topicConf);
 
 if (function_exists('pcntl_sigprocmask')) {
     pcntl_sigprocmask(SIG_BLOCK, [SIGIO]);
@@ -41,11 +41,10 @@ if (function_exists('pcntl_sigprocmask')) {
 var_dump($conf->dump());
 
 $producer = new \RdKafka\Producer($conf);
-$producer->setLogLevel(LOG_DEBUG);
 $added = $producer->addBrokers('kafka:9092');
 var_dump($added);
 
-$topic = $producer->newTopic('playground'); //, $topicConf);
+$topic = $producer->newTopic('playground', $topicConf);
 var_dump($topic);
 
 $metadata = $producer->getMetadata(false, $topic, 1000);
