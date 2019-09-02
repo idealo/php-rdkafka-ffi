@@ -269,4 +269,31 @@ class KafkaConsumer extends RdKafka
 
         return $topicPartitionList->asArray();
     }
+
+    /**
+     * @param TopicPartition[] $topicPartitions
+     * @param int $timeout_ms
+     * @return TopicPartition[]
+     * @throws Exception
+     */
+    public function offsetsForTimes(array $topicPartitions, int $timeout_ms): array
+    {
+        $topicPartitionList = new TopicPartitionList(...$topicPartitions);
+        $nativeTopicPartitionList = $topicPartitionList->getCData();
+
+        $err = self::$ffi->rd_kafka_offsets_for_times($this->kafka, $nativeTopicPartitionList, $timeout_ms);
+
+        if ($err !== RD_KAFKA_RESP_ERR_NO_ERROR) {
+            self::$ffi->rd_kafka_topic_partition_list_destroy($nativeTopicPartitionList);
+            throw new Exception(self::err2str($err));
+        }
+
+        $topicPartitionList = TopicPartitionList::fromCData($nativeTopicPartitionList);
+
+        if ($nativeTopicPartitionList !== null) {
+            self::$ffi->rd_kafka_topic_partition_list_destroy($nativeTopicPartitionList);
+        }
+
+        return $topicPartitionList->asArray();
+    }
 }

@@ -269,6 +269,40 @@ class KafkaConsumerTest extends TestCase
         $this->assertEquals(2, $topicPartitions[0]->getOffset());
     }
 
+    public function testOffsetsForTimes()
+    {
+        $conf = new Conf();
+        $conf->set('group.id', __METHOD__ . rand(0, 999999999));
+        $conf->set('metadata.broker.list', KAFKA_BROKERS);
+        $conf->set('auto.offset.reset', 'smallest');
+
+        $consumer = new KafkaConsumer($conf);
+        $consumer->subscribe([KAFKA_TEST_TOPIC]);
+
+        $now = (int)(microtime(true) * 1000);
+        $oneMinuteAgo = (int)(microtime(true) * 1000) - (60 * 1000);
+
+        $topicPartitions = $consumer->offsetsForTimes(
+            [
+                new TopicPartition(KAFKA_TEST_TOPIC, 0, $now),
+            ],
+            (int)KAFKA_TEST_TIMEOUT_MS
+        );
+
+        $this->assertCount(1, $topicPartitions);
+        $this->assertEquals(-1 /* no messages since now */, $topicPartitions[0]->getOffset());
+
+        $topicPartitions = $consumer->offsetsForTimes(
+            [
+                new TopicPartition(KAFKA_TEST_TOPIC, 0, $oneMinuteAgo),
+            ],
+            (int)KAFKA_TEST_TIMEOUT_MS
+        );
+
+        $this->assertCount(1, $topicPartitions);
+        $this->assertGreaterThan(1, $topicPartitions[0]->getOffset());
+    }
+
     public function testGetMetadata()
     {
         $conf = new Conf();
