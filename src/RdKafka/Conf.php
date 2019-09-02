@@ -132,7 +132,7 @@ class Conf extends Api
      * @return void
      * @throws Exception
      */
-    public function setLoggerCb(callable $callback)
+    public function setLogCb(callable $callback)
     {
         $this->set('log.queue', 'true');
 

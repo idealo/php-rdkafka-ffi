@@ -50,7 +50,7 @@ class ConsumerTest extends TestCase
     {
         $conf = new Conf();
         $conf->set('debug', 'consumer');
-        $conf->setLoggerCb(function ($consumer, $level, $fac, $buf) {
+        $conf->setLogCb(function ($consumer, $level, $fac, $buf) {
 //            echo "log: $level $fac $buf" . PHP_EOL;
         });
 
@@ -84,7 +84,7 @@ class ConsumerTest extends TestCase
     {
         $conf = new Conf();
         $conf->set('debug', 'consumer');
-        $conf->setLoggerCb(function (Consumer $consumer, int $level, string $fac, string $buf) {
+        $conf->setLogCb(function (Consumer $consumer, int $level, string $fac, string $buf) {
 //            echo "log: $level $fac $buf" . PHP_EOL;
         });
 
@@ -103,7 +103,7 @@ class ConsumerTest extends TestCase
 
         $conf = new Conf();
         $conf->set('debug', 'consumer');
-        $conf->setLoggerCb(function (Consumer $consumer, int $level, string $fac, string $buf) use (&$loggerCallbacks) {
+        $conf->setLogCb(function (Consumer $consumer, int $level, string $fac, string $buf) use (&$loggerCallbacks) {
 //            echo "log: $level $fac $buf" . PHP_EOL;
             $loggerCallbacks++;
         });
@@ -125,7 +125,7 @@ class ConsumerTest extends TestCase
 
         $conf = new Conf();
         $conf->set('debug', 'consumer');
-        $conf->setLoggerCb(function (Consumer $consumer, int $level, string $fac, string $buf) use (&$loggerCallbacks) {
+        $conf->setLogCb(function (Consumer $consumer, int $level, string $fac, string $buf) use (&$loggerCallbacks) {
 //            echo "log: $level $fac $buf" . PHP_EOL;
             $loggerCallbacks++;
         });
