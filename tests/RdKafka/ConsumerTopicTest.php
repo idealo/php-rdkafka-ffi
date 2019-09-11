@@ -58,6 +58,17 @@ class ConsumerTopicTest extends TestCase
         $this->assertEquals(__METHOD__, $message->payload);
     }
 
+    public function testConsumeWithInvalidPartitionShouldFail()
+    {
+        $consumer = new Consumer();
+        $consumer->addBrokers(KAFKA_BROKERS);
+        $consumerTopic = $consumer->newTopic(KAFKA_TEST_TOPIC);
+
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessageRegExp('/partition/');
+        $consumerTopic->consume(-2, (int)KAFKA_TEST_TIMEOUT_MS);
+    }
+
     public function testConsumeBatch()
     {
         $batchSize = 100;
@@ -82,5 +93,27 @@ class ConsumerTopicTest extends TestCase
         for ($i = 0; $i < $batchSize; $i++) {
             $this->assertEquals(__METHOD__ . $i, $messages[$i]->payload);
         }
+    }
+
+    public function testConsumeBatchWithInvalidPartitionShouldFail()
+    {
+        $consumer = new Consumer();
+        $consumer->addBrokers(KAFKA_BROKERS);
+        $consumerTopic = $consumer->newTopic(KAFKA_TEST_TOPIC);
+
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessageRegExp('/partition/');
+        $consumerTopic->consumeBatch(-2, (int)KAFKA_TEST_TIMEOUT_MS, 1);
+    }
+
+    public function testConsumeBatchWithInvalidBatchSizeShouldFail()
+    {
+        $consumer = new Consumer();
+        $consumer->addBrokers(KAFKA_BROKERS);
+        $consumerTopic = $consumer->newTopic(KAFKA_TEST_TOPIC);
+
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessageRegExp('/batch_size/');
+        $consumerTopic->consumeBatch(0, (int)KAFKA_TEST_TIMEOUT_MS, 0);
     }
 }

@@ -56,6 +56,28 @@ class ProducerTopicTest extends TestCase
         $this->assertEquals(__METHOD__, $payload);
     }
 
+    public function testProduceWithInvalidPartitionShouldFail()
+    {
+        $producer = new Producer();
+        $producer->addBrokers(KAFKA_BROKERS);
+        $topic = $producer->newTopic(KAFKA_TEST_TOPIC);
+
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessageRegExp('/partition/');
+        $topic->produce(-2, 0);
+    }
+
+    public function testProduceWithInvalidMsgFlagsShouldFail()
+    {
+        $producer = new Producer();
+        $producer->addBrokers(KAFKA_BROKERS);
+        $topic = $producer->newTopic(KAFKA_TEST_TOPIC);
+
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessageRegExp('/msgflags/');
+        $topic->produce(0, -1);
+    }
+
     public function testProducevWithTombstone()
     {
         $payload = '';
@@ -128,5 +150,27 @@ class ProducerTopicTest extends TestCase
 
         $this->assertEquals(__METHOD__, $payload);
         $this->assertEquals(123456789, $timestamp);
+    }
+
+    public function testProducevWithInvalidPartitionShouldFail()
+    {
+        $producer = new Producer();
+        $producer->addBrokers(KAFKA_BROKERS);
+        $topic = $producer->newTopic(KAFKA_TEST_TOPIC);
+
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessageRegExp('/partition/');
+        $topic->producev(-2, 0);
+    }
+
+    public function testProducevWithInvalidMsgFlagsShouldFail()
+    {
+        $producer = new Producer();
+        $producer->addBrokers(KAFKA_BROKERS);
+        $topic = $producer->newTopic(KAFKA_TEST_TOPIC);
+
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessageRegExp('/msgflags/');
+        $topic->producev(0, -1);
     }
 }
