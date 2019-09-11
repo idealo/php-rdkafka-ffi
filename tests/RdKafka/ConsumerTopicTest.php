@@ -57,4 +57,30 @@ class ConsumerTopicTest extends TestCase
 
         $this->assertEquals(__METHOD__, $message->payload);
     }
+
+    public function testConsumeBatch()
+    {
+        $batchSize = 100;
+
+        $producer = new Producer();
+        $producer->addBrokers(KAFKA_BROKERS);
+        $producerTopic = $producer->newTopic(KAFKA_TEST_TOPIC);
+        for ($i = 0; $i < $batchSize; $i++) {
+            $producerTopic->produce(0, 0, __METHOD__ . $i);
+        }
+
+        $consumer = new Consumer();
+        $consumer->addBrokers(KAFKA_BROKERS);
+        $consumerTopic = $consumer->newTopic(KAFKA_TEST_TOPIC);
+        $consumerTopic->consumeStart(0, rd_kafka_offset_tail($batchSize));
+
+        $messages = $consumerTopic->consumeBatch(0, (int)KAFKA_TEST_TIMEOUT_MS, $batchSize);
+
+        $consumerTopic->consumeStop(0);
+
+        $this->assertCount($batchSize, $messages);
+        for ($i = 0; $i < $batchSize; $i++) {
+            $this->assertEquals(__METHOD__ . $i, $messages[$i]->payload);
+        }
+    }
 }

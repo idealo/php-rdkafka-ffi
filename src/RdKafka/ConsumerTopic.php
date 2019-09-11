@@ -61,6 +61,52 @@ class ConsumerTopic extends Topic
 
     /**
      * @param int $partition
+     * @param int $timeout_ms
+     * @param int $batch_size
+     * @return Message[]
+     * @throws Exception
+     */
+    public function consumeBatch(int $partition, int $timeout_ms, int $batch_size): array
+    {
+        if ($batch_size <= 0) {
+            throw new InvalidArgumentException(sprintf("Out of range value '%d' for batch_size", $batch_size));
+        }
+
+        if ($partition != RD_KAFKA_PARTITION_UA && ($partition < 0 || $partition > 0x7FFFFFFF)) {
+            throw new InvalidArgumentException(sprintf("Out of range value '%d' for partition", $partition));
+        }
+
+        $nativeMessage_ptr = self::$ffi->new('rd_kafka_message_t*');
+        $nativeMessage_ptr_ptr = \FFI::addr($nativeMessage_ptr);
+
+        $result = (int)self::$ffi->rd_kafka_consume_batch(
+            $this->topic,
+            $partition,
+            $timeout_ms,
+            $nativeMessage_ptr_ptr,
+            $batch_size
+        );
+
+        if ($result == -1) {
+            $err = self::$ffi->rd_kafka_last_error();
+            throw new Exception(self::err2str($err));
+        }
+
+        $messages = [];
+        if ($result > 0) {
+            for ($i = 0; $i < $result; $i++) {
+                $messages[] = new Message($nativeMessage_ptr_ptr[$i]);
+            }
+            for ($i = 0; $i < $result; $i++) {
+                self::$ffi->rd_kafka_message_destroy($nativeMessage_ptr_ptr[$i]);
+            }
+        }
+
+        return $messages;
+    }
+
+    /**
+     * @param int $partition
      * @param int $offset
      * @param Queue $queue
      *
@@ -124,7 +170,6 @@ class ConsumerTopic extends Topic
             $partition,
             $offset
         );
-
 
         if ($ret == -1) {
             $err = self::$ffi->rd_kafka_last_error();
