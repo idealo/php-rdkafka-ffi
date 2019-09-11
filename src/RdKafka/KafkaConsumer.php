@@ -24,12 +24,18 @@ class KafkaConsumer extends RdKafka
 
     public function __destruct()
     {
-        $err = self::$ffi->rd_kafka_consumer_close($this->kafka);
-        if ($err) {
-            trigger_error(sprintf("rd_kafka_consumer_close failed: %s", self::err2str($err)), E_WARNING);
-        }
+        $this->close();
 
         parent::__destruct();
+    }
+
+    public function close()
+    {
+        $err = (int)self::$ffi->rd_kafka_consumer_close($this->kafka);
+
+        if ($err != RD_KAFKA_RESP_ERR_NO_ERROR) {
+            throw new Exception(sprintf("rd_kafka_consumer_close failed: %s", self::err2str($err)));
+        }
     }
 
     /**
