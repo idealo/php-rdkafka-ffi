@@ -177,9 +177,4 @@ abstract class RdKafka extends Api
         $low = (int)$lowResult->cdata;
         $high = (int)$highResult->cdata;
     }
-
-    public function purge(int $purge_flags): int
-    {
-        return (int)self::$ffi->rd_kafka_purge($this->kafka, $purge_flags);
-    }
 }

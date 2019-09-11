@@ -53,16 +53,6 @@ class ProducerTest extends TestCase
         self::assertEquals(0, $outQLen);
     }
 
-    /**
-     * todo: seg fault with php7.2 rdkafka extension
-     */
-    public function testNewQueue()
-    {
-        $queue = $this->producer->newQueue();
-
-        self::assertInstanceOf(Queue::class, $queue);
-    }
-
     public function testNewTopic()
     {
         $topic = $this->producer->newTopic(KAFKA_TEST_TOPIC);
@@ -98,5 +88,14 @@ class ProducerTest extends TestCase
 
         $this->assertNull(Producer::resolveFromCData($cData1));
         $this->assertEquals($producer2, Producer::resolveFromCData($cData2));
+    }
+
+    public function testFlush()
+    {
+        $producer = new Producer();
+        $producer->addBrokers(KAFKA_BROKERS);
+        $res = $producer->flush((int)KAFKA_TEST_TIMEOUT_MS);
+
+        $this->assertEquals(0, $res);
     }
 }

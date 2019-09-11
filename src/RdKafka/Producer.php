@@ -52,13 +52,19 @@ class Producer extends RdKafka
         return new ProducerTopic($this, $topic_name, $topic_conf);
     }
 
-    public function newQueue(): Queue
-    {
-        return new Queue($this);
-    }
-
     public function getOutQLen(): int
     {
         return parent::getOutQLen();
+    }
+
+    public function purge(int $purge_flags): int
+    {
+        // todo: handle binding for different librdkafka versions
+        return (int)self::$ffi->rd_kafka_purge($this->kafka, $purge_flags);
+    }
+
+    public function flush(int $timeout_ms): int
+    {
+        return (int)self::$ffi->rd_kafka_flush($this->kafka, $timeout_ms);
     }
 }
