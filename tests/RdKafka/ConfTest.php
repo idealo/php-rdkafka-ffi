@@ -107,6 +107,15 @@ class ConfTest extends TestCase
         $this->assertEquals('abc', $dump['client.id']);
     }
 
+    public function testSetUnknownPropertyShouldFail()
+    {
+        $conf = new Conf();
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessageRegExp('/any.unknown/');
+        $conf->set('any.unknown', 'property');
+    }
+
     /**
      * @group ffiOnly
      */
