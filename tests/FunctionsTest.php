@@ -36,8 +36,8 @@ class FunctionsTest extends TestCase
 
     public function testOffsetTail()
     {
-        $this->assertEquals(RD_KAFKA_OFFSET_TAIL_BASE, rd_kafka_offset_tail(0));
-        $this->assertEquals(RD_KAFKA_OFFSET_TAIL_BASE - 100, rd_kafka_offset_tail(100));
+        $this->assertEquals(-2000 /*RD_KAFKA_OFFSET_TAIL_BASE*/, rd_kafka_offset_tail(0));
+        $this->assertEquals(-2000 - 100, rd_kafka_offset_tail(100));
     }
 
     /**

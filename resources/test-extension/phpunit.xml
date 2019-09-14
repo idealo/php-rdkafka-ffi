@@ -1,11 +1,11 @@
-<phpunit bootstrap="vendor/autoload.php"
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
+         bootstrap="vendor/autoload.php"
          colors="true"
          verbose="true"
-         convertErrorsToExceptions="true"
-         convertNoticesToExceptions="true"
-         convertWarningsToExceptions="true"
-         stopOnFailure="false"
-         failOnWarning="true">
+         failOnWarning="true"
+         cacheResult="false">
     <testsuites>
         <testsuite name="RdKafka Extension">
             <directory suffix=".php">../../tests/</directory>
@@ -21,6 +21,7 @@
     <php>
         <const name="KAFKA_BROKERS" value="kafka:9092" />
         <const name="KAFKA_TEST_TOPIC" value="test" />
+        <const name="KAFKA_TEST_TOPIC_PARTITIONS" value="test_partitions" />
         <const name="KAFKA_TEST_TIMEOUT_MS" value="5000" />
     </php>
 </phpunit>
