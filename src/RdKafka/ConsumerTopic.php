@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace RdKafka;
 
+use FFI\CData;
 use InvalidArgumentException;
 
 class ConsumerTopic extends Topic
@@ -21,6 +22,15 @@ class ConsumerTopic extends Topic
     public function __construct(Consumer $consumer, string $name, TopicConf $conf = null)
     {
         parent::__construct($consumer, $name, $conf);
+    }
+
+    public function __destruct()
+    {
+        foreach ($this->consuming as $partition => $ignore) {
+            $this->consumeStop($partition);
+        }
+
+        parent::__destruct();
     }
 
     /**
@@ -92,16 +102,20 @@ class ConsumerTopic extends Topic
             throw new Exception(self::err2str($err));
         }
 
+        return $this->parseMessages($nativeMessage_ptr_ptr, $result);
+    }
+
+    private function parseMessages(CData $nativeMessages, int $size): array
+    {
         $messages = [];
-        if ($result > 0) {
-            for ($i = 0; $i < $result; $i++) {
-                $messages[] = new Message($nativeMessage_ptr_ptr[$i]);
+        if ($size > 0) {
+            for ($i = 0; $i < $size; $i++) {
+                $messages[] = new Message($nativeMessages[$i]);
             }
-            for ($i = 0; $i < $result; $i++) {
-                self::$ffi->rd_kafka_message_destroy($nativeMessage_ptr_ptr[$i]);
+            for ($i = 0; $i < $size; $i++) {
+                self::$ffi->rd_kafka_message_destroy($nativeMessages[$i]);
             }
         }
-
         return $messages;
     }
 
@@ -119,8 +133,7 @@ class ConsumerTopic extends Topic
             throw new InvalidArgumentException(sprintf("Out of range value '%d' for partition", $partition));
         }
 
-        $key = $this->getName() . ':' . $partition;
-        if (array_key_exists($key, $this->consuming)) {
+        if (array_key_exists($partition, $this->consuming)) {
             throw new Exception(sprintf(
                 "%s:%d is already being consumed by the same Consumer instance",
                 $this->getName(),
@@ -140,7 +153,7 @@ class ConsumerTopic extends Topic
             throw new Exception(self::err2str($err));
         }
 
-        $this->consuming[$key] = true;
+        $this->consuming[$partition] = true;
     }
 
     /**
@@ -156,8 +169,7 @@ class ConsumerTopic extends Topic
             throw new InvalidArgumentException(sprintf("Out of range value '%d' for partition", $partition));
         }
 
-        $key = $this->getName() . ':' . $partition;
-        if (array_key_exists($key, $this->consuming)) {
+        if (array_key_exists($partition, $this->consuming)) {
             throw new Exception(sprintf(
                 "%s:%d is already being consumed by the same Consumer instance",
                 $this->getName(),
@@ -176,7 +188,7 @@ class ConsumerTopic extends Topic
             throw new Exception(self::err2str($err));
         }
 
-        $this->consuming[$key] = true;
+        $this->consuming[$partition] = true;
     }
 
     /**
@@ -197,8 +209,7 @@ class ConsumerTopic extends Topic
             throw new Exception(self::err2str($err));
         }
 
-        $key = $this->getName() . ':' . $partition;
-        unset($this->consuming[$key]);
+        unset($this->consuming[$partition]);
     }
 
     /**

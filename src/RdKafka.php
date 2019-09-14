@@ -76,13 +76,7 @@ abstract class RdKafka extends Api
 
     public function __destruct()
     {
-        // like in php rdkafka extension
-        while ($this->getOutQLen() > 0) {
-            $this->poll(1);
-        }
-
         self::$ffi->rd_kafka_destroy($this->kafka);
-        self::$ffi->rd_kafka_wait_destroyed(1000);
 
         // clean up reference
         foreach (self::$instances as $i => $reference) {

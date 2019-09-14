@@ -16,15 +16,6 @@ class Producer extends RdKafka
         parent::__construct(RD_KAFKA_PRODUCER, $conf);
     }
 
-    public function __destruct()
-    {
-        // todo: why not this way?
-        // like in librdkafka simple producer example > wait for max 10 sec
-//        self::$ffi->rd_kafka_flush($this->kafka, 10000);
-
-        parent::__destruct();
-    }
-
     /**
      * @param string $broker_list
      *
