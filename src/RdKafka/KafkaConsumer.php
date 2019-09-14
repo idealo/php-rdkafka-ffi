@@ -9,6 +9,8 @@ use RdKafka;
 
 class KafkaConsumer extends RdKafka
 {
+    private bool $closed;
+
     public function __construct(Conf $conf)
     {
         try {
@@ -16,6 +18,8 @@ class KafkaConsumer extends RdKafka
         } catch (Exception $exception) {
             throw new Exception('"group.id" must be configured.');
         }
+
+        $this->closed = false;
 
         parent::__construct(RD_KAFKA_CONSUMER, $conf);
 
@@ -31,11 +35,17 @@ class KafkaConsumer extends RdKafka
 
     public function close()
     {
+        if ($this->closed) {
+            return;
+        }
+
         $err = (int)self::$ffi->rd_kafka_consumer_close($this->kafka);
 
         if ($err != RD_KAFKA_RESP_ERR_NO_ERROR) {
-            throw new Exception(sprintf("rd_kafka_consumer_close failed: %s", self::err2str($err)));
+            trigger_error(sprintf("rd_kafka_consumer_close failed: %s", self::err2str($err)), E_USER_WARNING);
         }
+
+        $this->closed = true;
     }
 
     /**
