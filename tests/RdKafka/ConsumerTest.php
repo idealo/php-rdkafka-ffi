@@ -38,6 +38,7 @@ class ConsumerTest extends TestCase
     {
         $consumer = new Consumer();
         $consumer->addBrokers(KAFKA_BROKERS);
+
         $metadata = $consumer->getMetadata(true, null, (int)KAFKA_TEST_TIMEOUT_MS);
 
         $this->assertInstanceOf(Metadata::class, $metadata);
@@ -140,13 +141,13 @@ class ConsumerTest extends TestCase
 
     public function testQueryWatermarkOffsets()
     {
-        $consumer1 = new Consumer();
-        $consumer1->addBrokers(KAFKA_BROKERS);
+        $consumer = new Consumer();
+        $consumer->addBrokers(KAFKA_BROKERS);
 
         $lowWatermarkOffset1 = 0;
         $highWatermarkOffset1 = 0;
 
-        $consumer1->queryWatermarkOffsets(KAFKA_TEST_TOPIC, 0, $lowWatermarkOffset1, $highWatermarkOffset1, (int)KAFKA_TEST_TIMEOUT_MS);
+        $consumer->queryWatermarkOffsets(KAFKA_TEST_TOPIC, 0, $lowWatermarkOffset1, $highWatermarkOffset1, (int)KAFKA_TEST_TIMEOUT_MS);
 
         $this->assertEquals(0, $lowWatermarkOffset1);
 
@@ -159,7 +160,7 @@ class ConsumerTest extends TestCase
         $lowWatermarkOffset2 = 0;
         $highWatermarkOffset2 = 0;
 
-        $consumer1->queryWatermarkOffsets(KAFKA_TEST_TOPIC, 0, $lowWatermarkOffset2, $highWatermarkOffset2, (int)KAFKA_TEST_TIMEOUT_MS);
+        $consumer->queryWatermarkOffsets(KAFKA_TEST_TOPIC, 0, $lowWatermarkOffset2, $highWatermarkOffset2, (int)KAFKA_TEST_TIMEOUT_MS);
 
         $this->assertEquals(0, $lowWatermarkOffset2);
         $this->assertEquals($highWatermarkOffset1 + 1, $highWatermarkOffset2);

@@ -42,7 +42,7 @@ class KafkaConsumerTest extends TestCase
         $consumer = new KafkaConsumer($conf);
         $consumer->assign([
             new TopicPartition(KAFKA_TEST_TOPIC, 0),
-            new TopicPartition('test_partitions', 2),
+            new TopicPartition(KAFKA_TEST_TOPIC_PARTITIONS, 2),
         ]);
 
         $topicPartitions = $consumer->getAssignment();
@@ -50,7 +50,7 @@ class KafkaConsumerTest extends TestCase
         $this->assertCount(2, $topicPartitions);
         $this->assertEquals(KAFKA_TEST_TOPIC, $topicPartitions[0]->getTopic());
         $this->assertEquals(0, $topicPartitions[0]->getPartition());
-        $this->assertEquals('test_partitions', $topicPartitions[1]->getTopic());
+        $this->assertEquals(KAFKA_TEST_TOPIC_PARTITIONS, $topicPartitions[1]->getTopic());
         $this->assertEquals(2, $topicPartitions[1]->getPartition());
     }
 
@@ -79,14 +79,14 @@ class KafkaConsumerTest extends TestCase
         $consumer = new KafkaConsumer($conf);
         $consumer->subscribe([
             KAFKA_TEST_TOPIC,
-            'test_partitions',
+            KAFKA_TEST_TOPIC_PARTITIONS,
         ]);
 
         $topicPartitions = $consumer->getSubscription();
 
         $this->assertCount(2, $topicPartitions);
         $this->assertEquals(KAFKA_TEST_TOPIC, $topicPartitions[0]);
-        $this->assertEquals('test_partitions', $topicPartitions[1]);
+        $this->assertEquals(KAFKA_TEST_TOPIC_PARTITIONS, $topicPartitions[1]);
     }
 
     public function testUnsubscribe()
@@ -119,8 +119,6 @@ class KafkaConsumerTest extends TestCase
         $consumer = new KafkaConsumer($conf);
         $consumer->subscribe([KAFKA_TEST_TOPIC]);
 
-        sleep(2);
-
         $lastMessage = null;
         while (true) {
             $message = $consumer->consume((int)KAFKA_TEST_TIMEOUT_MS);
@@ -133,6 +131,13 @@ class KafkaConsumerTest extends TestCase
 
         $this->assertInstanceOf(Message::class, $message);
         $this->assertEquals('payload-kafka-consumer-2', $message->payload);
+
+        $message = $consumer->consume(0);
+
+        $this->assertInstanceOf(Message::class, $message);
+        $this->assertEquals(RD_KAFKA_RESP_ERR__TIMED_OUT, $message->err);
+
+        $consumer->unsubscribe();
     }
 
     public function testCommitWithInvalidArgumentShouldFail()
