@@ -165,7 +165,7 @@ class ConfTest extends TestCase
         $errorCallbackStack = [];
 
         $conf = new Conf();
-        $conf->setErrorCb(function (Consumer $consumer, $err, $reason, $opaque) use (&$errorCallbackStack) {
+        $conf->setErrorCb(function (Consumer $consumer, $err, $reason, $opaque = null) use (&$errorCallbackStack) {
             $errorCallbackStack[] = $err;
         });
 
@@ -186,7 +186,7 @@ class ConfTest extends TestCase
         $conf = new Conf();
         $conf->set('client.id', 'some_id');
         $conf->set('statistics.interval.ms', (string)1);
-        $conf->setStatsCb(function (Consumer $consumer, $json, $json_len, $opaque) use (&$statsJson) {
+        $conf->setStatsCb(function (Consumer $consumer, $json, $json_len, $opaque = null) use (&$statsJson) {
             $statsJson = $json;
         });
 
@@ -210,7 +210,7 @@ class ConfTest extends TestCase
         $conf->set('group.id', __METHOD__);
         $conf->set('metadata.broker.list', KAFKA_BROKERS);
         $conf->setRebalanceCb(
-            function (KafkaConsumer $consumer, $err, $topicPartitionList, $opaque) use (&$rebalanceCallbackStack) {
+            function (KafkaConsumer $consumer, $err, $topicPartitionList, $opaque = null) use (&$rebalanceCallbackStack) {
                 $rebalanceCallbackStack[] = [
                     'consumer' => $consumer,
                     'err' => $err,
@@ -240,9 +240,9 @@ class ConfTest extends TestCase
         $consumer3->subscribe([KAFKA_TEST_TOPIC_PARTITIONS]);
 
         do {
-            $consumer1->consume(0);
-            $consumer2->consume(0);
-            $consumer3->consume(0);
+            $consumer1->consume((int)KAFKA_TEST_TIMEOUT_MS);
+            $consumer2->consume((int)KAFKA_TEST_TIMEOUT_MS);
+            $consumer3->consume((int)KAFKA_TEST_TIMEOUT_MS);
         } while (count($rebalanceCallbackStack) < 3);
 
         // revoke

@@ -44,9 +44,16 @@ class MessageTest extends TestCase
         $this->assertEquals(RD_KAFKA_RESP_ERR_NO_ERROR, $this->message->err);
 
         $this->assertGreaterThan($this->beforeProducingTimestamp, $this->message->timestamp);
-        $this->assertEquals(1 /*RD_KAFKA_TIMESTAMP_CREATE_TIME*/, $this->message->timestampType);
 
         $this->assertGreaterThan(0, $this->message->offset);
+    }
+
+    /**
+     * @group ffiOnly
+     */
+    public function testPropertyTimestampType()
+    {
+        $this->assertEquals(1 /*RD_KAFKA_TIMESTAMP_CREATE_TIME*/, $this->message->timestampType);
     }
 
     public function testErrstr()

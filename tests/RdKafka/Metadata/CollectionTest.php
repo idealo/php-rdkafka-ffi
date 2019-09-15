@@ -7,6 +7,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \RdKafka\Metadata\Collection
+ * @group ffiOnly
  */
 class CollectionTest extends TestCase
 {
