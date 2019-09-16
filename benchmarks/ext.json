@@ -1,0 +1,12 @@
+{
+  "bootstrap": "../resources/test-extension/vendor/autoload.php",
+  "path": "./",
+  "time_unit": "milliseconds",
+  "php_disable_ini": true,
+  "php_config": {
+    "extension": [
+      "rdkafka.so"
+    ],
+    "ffi.enable": "false"
+  }
+}

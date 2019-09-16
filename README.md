@@ -16,11 +16,13 @@ Playing around with:
 * [php7.4-dev](https://github.com/php/php-src/tree/PHP-7.4)
 * [Kafka](https://hub.docker.com/r/wurstmeister/kafka/) / [Zookeeper](https://hub.docker.com/r/wurstmeister/zookeeper/) docker images from wurstmeister
 * [pcov](https://github.com/krakjoe/pcov) for test code coverage
+* [phpbench](https://github.com/phpbench/phpbench) for benchmarking
 
 ## Prepare
 
 ### Directory overview
 
+* __/benchmarks__ - phpbench based benchmark tests
 * __/examples__ - example scripts
 * __/resources__
   * __/docker__
@@ -99,15 +101,30 @@ Run tests with coverage
 
     docker-compose run --rm php74 vendor/bin/phpunit --coverage-html build/coverage
 
-### Run tests against rdkafka extension / PHP 7.2
+### Run tests against rdkafka extension / PHP 7.4
 
 Updating Dependencies
 
-    docker-compose run --rm --no-deps php72 composer update -d /app/resources/test-extension
+    docker-compose run --rm --no-deps php74-ext php composer update -d /app/resources/test-extension
 
 Run tests
 
-     docker-compose run --rm php72 resources/test-extension/vendor/bin/phpunit -c resources/test-extension/phpunit.xml
+     docker-compose run --rm php74-ext php resources/test-extension/vendor/bin/phpunit -c resources/test-extension/phpunit.xml
+
+### Run benchmarks
+
+Run & store benchmarks for ffi based rdkafka binding:
+
+    docker-compose run --rm php74 phpbench run benchmarks/ProducerBench.php --config=/app/benchmarks/ffi.json --report=default --store --tag=ffi
+
+Run & store benchmarks for extension based rdkafka binding:
+
+    docker-compose run --rm php74 phpbench run benchmarks/ProducerBench.php --config=/app/benchmarks/ext.json --report=default --store --tag=ext    
+
+Show comparison:
+
+    docker-compose run --rm php74 phpbench report --uuid=tag:ffi --uuid=tag:ext --report='{extends: compare, compare: tag}'
+
 
 ## Shutdown & cleanup
 
@@ -123,6 +140,7 @@ Shutdown and remove volumes:
 * [ ] Compatible to rdkafka extension ^3.1.0
 * [ ] Sig Handling & destruct (expect seg faults & lost msgs & shutdown hangs)
 * [ ] Tests, tests, tests, ... and travis
+* [ ] Benchmarking against rdkafka extension
 * [ ] Generate binding class with https://github.com/ircmaxell/FFIMe / use default header file
 * [ ] Support admin features
 * [ ] Documentation

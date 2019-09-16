@@ -4,7 +4,7 @@ FROM php:7.4-rc-cli
 ARG LIBRDKAFKA_VERSION=v1.0.0
 RUN set -e; \
     apt-get update; \
-    apt-get install -y --no-install-recommends git zip unzip libffi-dev; \
+    apt-get install -y --no-install-recommends git zip unzip gdb libffi-dev; \
     docker-php-ext-configure ffi; \
     docker-php-ext-install -j$(nproc) ffi pcntl; \
     git clone --branch "$LIBRDKAFKA_VERSION" --depth 1 https://github.com/edenhill/librdkafka.git /tmp/librdkafka; \
@@ -13,12 +13,9 @@ RUN set -e; \
     make; \
     make install; \
     ldconfig; \
+    apt-get autoremove -y; \
     rm -rf /var/lib/apt/lists/*; \
     rm -rf /tmp/*;
-
-# enable ffi for phpdbg
-RUN cp /usr/local/etc/php/php.ini-development /usr/local/etc/php/php.ini; \
-    echo "ffi.enable=true" >> /usr/local/etc/php/php.ini
 
 # install xdebug
 RUN cd /tmp; \
@@ -42,6 +39,23 @@ RUN cd /tmp; \
     docker-php-ext-enable pcov; \
     echo "pcov.enabled=true" >> /usr/local/etc/php/conf.d/docker-php-ext-pcov.ini; \
     rm -rf /tmp/*;
+
+# install rdkafka master-dev
+ARG RDKAFKA_EXT_VERSION=master
+RUN git clone --branch "$RDKAFKA_EXT_VERSION" --depth 1 https://github.com/arnaud-lb/php-rdkafka.git /tmp/php-rdkafka; \
+    cd /tmp/php-rdkafka; \
+    phpize; \
+    ./configure; \
+    make; \
+    make install; \
+    rm -rf /tmp/*;
+
+# install phpbench
+RUN curl -o phpbench.phar https://phpbench.github.io/phpbench/phpbench.phar; \
+    curl -o phpbench.phar.pubkey https://phpbench.github.io/phpbench/phpbench.phar.pubkey; \
+    chmod 0755 phpbench.phar; \
+    mv phpbench.phar /usr/local/bin/phpbench; \
+    mv phpbench.phar.pubkey /usr/local/bin/phpbench.pubkey;
 
 ENV COMPOSER_HOME /tmp/.composer
 ENV COMPOSER_ALLOW_SUPERUSER 1

@@ -1,0 +1,12 @@
+{
+  "bootstrap": "../vendor/autoload.php",
+  "path": "./",
+  "time_unit": "milliseconds",
+  "php_disable_ini": true,
+  "php_config": {
+    "extension": [
+      "ffi.so"
+    ],
+    "ffi.enable": "true"
+  }
+}
