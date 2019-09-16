@@ -114,7 +114,7 @@ class TopicConf extends Api
     public function setPartitionerCb(callable $callback)
     {
         $proxyCallback = function ($topic, $keydata, $keylen, $partition_cnt, $topic_opaque, $msg_opaque) use ($callback) {
-            return (int) $callback(
+            return (int)$callback(
                 FFI::string($keydata, $keylen),
                 (int)$partition_cnt
             );

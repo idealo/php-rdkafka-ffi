@@ -230,6 +230,16 @@ class Conf extends Api
      *
      * @return void
      */
+    public function setConsumeCb(callable $callback)
+    {
+        throw new \Exception('Not implemented.');
+    }
+
+    /**
+     * @param callable $callback
+     *
+     * @return void
+     */
     public function setThrottleCb(callable $callback)
     {
         throw new \Exception('Not implemented.');
