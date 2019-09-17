@@ -115,11 +115,11 @@ Run tests
 
 Run & store benchmarks for ffi based rdkafka binding
 
-    docker-compose run --rm php74 phpbench run benchmarks/ProducerBench.php --config=/app/benchmarks/ffi.json --report=default --store --tag=ffi
+    docker-compose run --rm php74 phpbench run benchmarks --config=/app/benchmarks/ffi.json --report=default --store --tag=ffi
 
 Run & store benchmarks for extension based rdkafka binding
 
-    docker-compose run --rm php74 phpbench run benchmarks/ProducerBench.php --config=/app/benchmarks/ext.json --report=default --store --tag=ext    
+    docker-compose run --rm php74 phpbench run benchmarks --config=/app/benchmarks/ext.json --report=default --store --tag=ext    
 
 Show comparison
 
@@ -129,42 +129,14 @@ Show comparison
 
 Just some first benchmarks based on PHP74-RC1, librdkafka v1.0.0, ext & ffi latest master
 
-#### FFI Binding
-
-| benchmark     | subject                 | set | revs | iter | mem_peak   | time_rev    | comp_z_value | comp_deviation |
-|---------------|-------------------------|-----|------|------|------------|-------------|--------------|----------------|
-| ProducerBench | benchProduce1Message    | 0   | 1000 | 0    | 1,112,584b | 2,181.850μs | +1.88σ       | +4.31%         |
-| ProducerBench | benchProduce1Message    | 0   | 1000 | 1    | 1,112,584b | 2,095.888μs | +0.09σ       | +0.20%         |
-| ProducerBench | benchProduce1Message    | 0   | 1000 | 2    | 1,112,584b | 2,062.261μs | -0.62σ       | -1.41%         |
-| ProducerBench | benchProduce1Message    | 0   | 1000 | 3    | 1,112,584b | 2,072.470μs | -0.4σ        | -0.92%         |
-| ProducerBench | benchProduce1Message    | 0   | 1000 | 4    | 1,112,584b | 2,046.090μs | -0.95σ       | -2.18%         |
-| ProducerBench | benchProduce100Messages | 0   | 100  | 0    | 1,112,584b | 2,068.870μs | -0.25σ       | -1.36%         |
-| ProducerBench | benchProduce100Messages | 0   | 100  | 1    | 1,112,584b | 1,942.630μs | -1.34σ       | -7.38%         |
-| ProducerBench | benchProduce100Messages | 0   | 100  | 2    | 1,112,584b | 2,024.420μs | -0.63σ       | -3.48%         |
-| ProducerBench | benchProduce100Messages | 0   | 100  | 3    | 1,112,584b | 2,184.520μs | +0.76σ       | +4.15%         |
-| ProducerBench | benchProduce100Messages | 0   | 100  | 4    | 1,112,584b | 2,266.550μs | +1.47σ       | +8.06%         |
-
-#### Extension Binding
-
-| benchmark     | subject                 | set | revs | iter | mem_peak | time_rev    | comp_z_value | comp_deviation |
-|---------------|-------------------------|-----|------|------|----------|-------------|--------------|----------------|
-| ProducerBench | benchProduce1Message    | 0   | 1000 | 0    | 873,248b | 1,945.637μs | -1.17σ       | -4.72%         |
-| ProducerBench | benchProduce1Message    | 0   | 1000 | 1    | 873,248b | 1,942.173μs | -1.21σ       | -4.89%         |
-| ProducerBench | benchProduce1Message    | 0   | 1000 | 2    | 873,248b | 2,098.593μs | +0.69σ       | +2.77%         |
-| ProducerBench | benchProduce1Message    | 0   | 1000 | 3    | 873,248b | 2,142.959μs | +1.22σ       | +4.95%         |
-| ProducerBench | benchProduce1Message    | 0   | 1000 | 4    | 873,248b | 2,080.549μs | +0.47σ       | +1.89%         |
-| ProducerBench | benchProduce100Messages | 0   | 100  | 0    | 873,248b | 1,918.190μs | -1.21σ       | -4.96%         |
-| ProducerBench | benchProduce100Messages | 0   | 100  | 1    | 873,248b | 2,065.260μs | +0.57σ       | +2.32%         |
-| ProducerBench | benchProduce100Messages | 0   | 100  | 2    | 873,248b | 1,947.300μs | -0.86σ       | -3.52%         |
-| ProducerBench | benchProduce100Messages | 0   | 100  | 3    | 873,248b | 2,147.980μs | +1.57σ       | +6.42%         |
-| ProducerBench | benchProduce100Messages | 0   | 100  | 4    | 873,248b | 2,013.150μs | -0.06σ       | -0.26%         |
-
-#### Compared
-
 | benchmark     | subject                 | set | revs | tag:ffi:mean | tag:ext:mean |
 |---------------|-------------------------|-----|------|--------------|--------------|
-| ProducerBench | benchProduce1Message    | 0   | 1000 | 2,091.712μs  | 2,041.982μs  |
-| ProducerBench | benchProduce100Messages | 0   | 100  | 2,097.398μs  | 2,018.376μs  |
+| ConsumerBench | benchConsume1Message    | 0   | 100  | 25,993.650μs | 24,451.894μs |
+| ConsumerBench | benchConsume100Messages | 0   | 100  | 37,050.976μs | 35,604.708μs |
+| ProducerBench | benchProduce1Message    | 0   | 100  | 4,049.920μs  | 3,585.690μs  |
+| ProducerBench | benchProduce100Messages | 0   | 100  | 5,757.756μs  | 5,536.262μs  |
+
+See concrete [benchmarks details](./docs/benchmarks.md) for ffi & extension bindings.
 
 ## Shutdown & cleanup
 

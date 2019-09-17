@@ -9,8 +9,8 @@ use RdKafka\Producer;
 class ProducerBench
 {
     /**
-     * @Warmup(10)
-     * @Revs(1000)
+     * @Warmup(1)
+     * @Revs(100)
      * @Iterations(5)
      */
     public function benchProduce1Message()

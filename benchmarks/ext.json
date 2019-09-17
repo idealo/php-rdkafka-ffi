@@ -2,6 +2,7 @@
   "bootstrap": "../resources/test-extension/vendor/autoload.php",
   "path": "./",
   "time_unit": "milliseconds",
+  "retry_threshold": 5,
   "php_disable_ini": true,
   "php_config": {
     "extension": [
