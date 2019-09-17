@@ -71,7 +71,7 @@ class ConsumerTopicTest extends TestCase
 
     public function testConsumeBatch()
     {
-        $batchSize = 100;
+        $batchSize = 1000;
 
         $producer = new Producer();
         $producer->addBrokers(KAFKA_BROKERS);
