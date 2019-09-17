@@ -23,12 +23,12 @@ Playing around with:
 ### Directory overview
 
 * __/benchmarks__ - phpbench based benchmark tests
+* __/docs__ - docs dir (md prefered)
 * __/examples__ - example scripts
 * __/resources__
   * __/docker__
-    * __/php74-librdkafka-ffi__ - dockerfile for PHP 7.4 image with librdkafka and ffi enabled (based on [php:7.4-rc-cli-stretch](https://hub.docker.com/_/php) )
-    * __/php72-librdkafka-ext__ - dockerfile for PHP 7.2 image with librdkafka and rdkafka ext (from master-dev) for compatibility tests
-  * __/test-extension__ - base dir for php72 rdkafka ext compatibility tests
+    * __/php74-librdkafka-ffi__ - dockerfile for PHP 7.4 image with librdkafka and ffi & rdkafka ext (based on [php:7.4-rc-cli-stretch](https://hub.docker.com/_/php) )
+  * __/test-extension__ - base dir for rdkafka ext compatibility tests
 * __/src__ - source dir
 * __/tests__ - tests dir 
 
@@ -38,10 +38,9 @@ Build all images
 
     docker-compose build --no-cache --pull
     
-Alternative: build the images individually
+Alternative: build the image individually
 
     docker-compose build --no-cache --pull php74
-    docker-compose build --no-cache --pull php72
 
 Test - should show latest 7.4 rc version
 
@@ -57,7 +56,7 @@ Test ffi librdkafka binding - should show 1.0.0 version of librdkafka:
    
 Test - should show ```rdkafka``` in modules list
 
-    docker-compose run php72 php -m
+    docker-compose run php74 php -dextension=rdkafka.so -m
 
 ## Startup
 
@@ -105,11 +104,11 @@ Run tests with coverage
 
 Updating Dependencies
 
-    docker-compose run --rm --no-deps php74-ext php composer update -d /app/resources/test-extension
+    docker-compose run --rm --no-deps php74 composer update -d /app/resources/test-extension --ignore-platform-reqs
 
 Run tests
 
-     docker-compose run --rm php74-ext php resources/test-extension/vendor/bin/phpunit -c resources/test-extension/phpunit.xml
+     docker-compose run --rm php74 php -dextension=rdkafka.so resources/test-extension/vendor/bin/phpunit -c resources/test-extension/phpunit.xml
 
 ## Run benchmarks
 
