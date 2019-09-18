@@ -1,9 +1,15 @@
 version: '3'
+
+networks:
+  php-rdkafka-ffi:
+
 services:
   zookeeper:
     image: zookeeper
     ports:
       - "2181:2181"
+    networks:
+      - php-rdkafka-ffi
 
   kafka:
     image: wurstmeister/kafka
@@ -16,8 +22,8 @@ services:
       KAFKA_BROKER_ID: 111
     depends_on:
       - zookeeper
-    links:
-      - zookeeper
+    networks:
+      - php-rdkafka-ffi
 
   php74:
     build:
@@ -27,5 +33,5 @@ services:
       - .:/app
     depends_on:
       - kafka
-    links:
-      - kafka
+    networks:
+      - php-rdkafka-ffi
