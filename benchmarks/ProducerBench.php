@@ -41,7 +41,6 @@ class ProducerBench
 
         for ($i = 0; $i < 100; $i++) {
             $topic->produce(0, 0, 'bench', 'mark');
-            $producer->poll(0);
         }
 
         while ($producer->getOutQLen() > 0) {

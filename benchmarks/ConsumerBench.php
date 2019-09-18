@@ -19,12 +19,9 @@ class ConsumerBench
 
         for ($i = 0; $i < 10000; $i++) {
             $topic->produce(RD_KAFKA_PARTITION_UA, 0, 'bench', 'mark');
-            $producer->poll(0);
         }
 
-        while ($producer->getOutQLen() > 0) {
-            $producer->poll(0);
-        }
+        $producer->flush(5000);
     }
 
     /**

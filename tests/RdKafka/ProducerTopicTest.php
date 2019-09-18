@@ -51,7 +51,7 @@ class ProducerTopicTest extends TestCase
 
         $topic->produce(RD_KAFKA_PARTITION_UA, 0, __METHOD__, 'key-topic-produce');
 
-        $producer->poll((int)KAFKA_TEST_TIMEOUT_MS);
+        $producer->flush((int)KAFKA_TEST_TIMEOUT_MS);
 
         $this->assertEquals(__METHOD__, $payload);
     }
@@ -92,7 +92,7 @@ class ProducerTopicTest extends TestCase
 
         $topic->producev(RD_KAFKA_PARTITION_UA, 0, null, 'key-topic-produce');
 
-        $producer->poll((int)KAFKA_TEST_TIMEOUT_MS);
+        $producer->flush((int)KAFKA_TEST_TIMEOUT_MS);
 
         $this->assertEquals(null, $payload);
     }
@@ -118,7 +118,7 @@ class ProducerTopicTest extends TestCase
             ['header-name-topic-produce' => 'header-value-topic-produce']
         );
 
-        $producer->poll((int)KAFKA_TEST_TIMEOUT_MS);
+        $producer->flush((int)KAFKA_TEST_TIMEOUT_MS);
 
         $this->assertEquals(__METHOD__, $payload);
         $this->assertEquals(['header-name-topic-produce' => 'header-value-topic-produce'], $headers);
@@ -146,7 +146,7 @@ class ProducerTopicTest extends TestCase
             123456789
         );
 
-        $producer->poll((int)KAFKA_TEST_TIMEOUT_MS);
+        $producer->flush((int)KAFKA_TEST_TIMEOUT_MS);
 
         $this->assertEquals(__METHOD__, $payload);
         $this->assertEquals(123456789, $timestamp);

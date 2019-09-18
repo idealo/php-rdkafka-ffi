@@ -45,6 +45,7 @@ class ConsumerTopicTest extends TestCase
         $producer->addBrokers(KAFKA_BROKERS);
         $producerTopic = $producer->newTopic(KAFKA_TEST_TOPIC);
         $producerTopic->produce(0, 0, __METHOD__);
+        $producer->flush((int)KAFKA_TEST_TIMEOUT_MS);
 
         $consumer = new Consumer();
         $consumer->addBrokers(KAFKA_BROKERS);
@@ -79,6 +80,7 @@ class ConsumerTopicTest extends TestCase
         for ($i = 0; $i < $batchSize; $i++) {
             $producerTopic->produce(0, 0, __METHOD__ . $i);
         }
+        $producer->flush((int)KAFKA_TEST_TIMEOUT_MS);
 
         $consumer = new Consumer();
         $consumer->addBrokers(KAFKA_BROKERS);
@@ -123,6 +125,7 @@ class ConsumerTopicTest extends TestCase
         $producer->addBrokers(KAFKA_BROKERS);
         $producerTopic = $producer->newTopic(KAFKA_TEST_TOPIC);
         $producerTopic->produce(0, 0, __METHOD__);
+        $producer->flush((int)KAFKA_TEST_TIMEOUT_MS);
 
         $consumer = new Consumer();
         $consumer->addBrokers(KAFKA_BROKERS);

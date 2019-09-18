@@ -155,7 +155,7 @@ class ConsumerTest extends TestCase
         $producer->addBrokers(KAFKA_BROKERS);
         $producerTopic = $producer->newTopic(KAFKA_TEST_TOPIC);
         $producerTopic->produce(0, 0, __METHOD__);
-        $producer->poll((int)KAFKA_TEST_TIMEOUT_MS);
+        $producer->flush((int)KAFKA_TEST_TIMEOUT_MS);
 
         $lowWatermarkOffset2 = 0;
         $highWatermarkOffset2 = 0;

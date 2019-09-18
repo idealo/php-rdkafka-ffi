@@ -61,3 +61,5 @@ for ($i = 0; $i < 1000; $i++) {
     $events = $producer->poll(1); // triggers log output
     echo sprintf('polling triggered %d events', $events) . PHP_EOL;
 }
+
+$producer->flush(5000);

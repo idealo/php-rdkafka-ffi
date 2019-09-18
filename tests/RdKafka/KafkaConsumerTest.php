@@ -23,7 +23,7 @@ class KafkaConsumerTest extends TestCase
         $producerTopic = $producer->newTopic(KAFKA_TEST_TOPIC);
         $producerTopic->produce(RD_KAFKA_PARTITION_UA, 0, 'payload-kafka-consumer-1');
         $producerTopic->produce(RD_KAFKA_PARTITION_UA, 0, 'payload-kafka-consumer-2');
-        $producer->poll((int)KAFKA_TEST_TIMEOUT_MS);
+        $producer->flush((int)KAFKA_TEST_TIMEOUT_MS);
     }
 
     public function testConstructWithMissingGroupIdConfShouldFail()

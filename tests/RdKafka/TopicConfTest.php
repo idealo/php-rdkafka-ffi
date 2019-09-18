@@ -50,7 +50,7 @@ class TopicConfTest extends TestCase
         $topic->produce(RD_KAFKA_PARTITION_UA, 0, 'test2', '2'); // crc32 % 3 = 1
         $topic->produce(RD_KAFKA_PARTITION_UA, 0, 'test3', '3'); // crc32 % 3 = 1
         $topic->produce(RD_KAFKA_PARTITION_UA, 0, 'test4', '1'); // crc32 % 3 = 2
-        $producer->poll((int)KAFKA_TEST_TIMEOUT_MS);
+        $producer->flush((int)KAFKA_TEST_TIMEOUT_MS);
 
         $consumer = new Consumer();
         $consumer->addBrokers(KAFKA_BROKERS);
@@ -98,7 +98,7 @@ class TopicConfTest extends TestCase
         $topic->produce(RD_KAFKA_PARTITION_UA, 0, 'test2', '2');
         $topic->produce(RD_KAFKA_PARTITION_UA, 0, 'test3', '3');
         $topic->produce(RD_KAFKA_PARTITION_UA, 0, 'test4', '1');
-        $producer->poll((int)KAFKA_TEST_TIMEOUT_MS);
+        $producer->flush((int)KAFKA_TEST_TIMEOUT_MS);
 
         $consumer = new Consumer();
         $consumer->addBrokers(KAFKA_BROKERS);
