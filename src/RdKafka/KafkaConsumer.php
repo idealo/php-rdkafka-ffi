@@ -254,7 +254,7 @@ class KafkaConsumer extends RdKafka
      * @return KafkaConsumerTopic
      * @throws \Exception
      */
-    public function newTopic(string $topic_name, TopicConf $topic_conf = null)
+    public function newTopic(string $topic_name, TopicConf $topic_conf = null): KafkaConsumerTopic
     {
         return new KafkaConsumerTopic($this, $topic_name, $topic_conf);
     }

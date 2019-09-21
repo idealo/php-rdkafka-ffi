@@ -11,10 +11,10 @@ This is a pure PHP Kafka Client library as replacement for [php rdkafka extensio
 Playing around with:
 
 * [ffi extension](https://github.com/php/php-src/tree/PHP-7.4/ext/ffi) for php7.4 ([rfc](https://wiki.php.net/rfc/ffi))
-* [librdkafka 1.0.0](https://github.com/edenhill/librdkafka) ([docs](https://docs.confluent.io/current/clients/librdkafka/rdkafka_8h.html))
+* [librdkafka v1.0.0, v1.1.0, master](https://github.com/edenhill/librdkafka) ([docs](https://docs.confluent.io/current/clients/librdkafka/rdkafka_8h.html))
 * [php rdkafka stubs](https://github.com/kwn/php-rdkafka-stubs)
-* [php7.4-dev](https://github.com/php/php-src/tree/PHP-7.4)
-* [Kafka](https://hub.docker.com/r/wurstmeister/kafka/) / [Zookeeper](https://hub.docker.com/r/wurstmeister/zookeeper/) docker images from wurstmeister
+* [php7.4-rc](https://github.com/php/php-src/tree/PHP-7.4)
+* [wurstmeister/kafka](https://hub.docker.com/r/wurstmeister/kafka/) & official [zookeeper](https://hub.docker.com/_/zookeeper) docker images
 * [pcov](https://github.com/krakjoe/pcov) for test code coverage
 * [phpbench](https://github.com/phpbench/phpbench) for benchmarking
 
@@ -111,6 +111,8 @@ Run tests
      docker-compose run --rm php74 php -dextension=rdkafka.so resources/test-extension/vendor/bin/phpunit -c resources/test-extension/phpunit.xml
 
 ## Run benchmarks
+
+Benchmarks use topic ```benchmarks```.
 
 Run & store benchmarks for ffi based rdkafka binding
 

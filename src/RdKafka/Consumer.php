@@ -38,7 +38,7 @@ class Consumer extends RdKafka
      * @return ConsumerTopic
      * @throws Exception
      */
-    public function newTopic(string $topic_name, TopicConf $topic_conf = null)
+    public function newTopic(string $topic_name, TopicConf $topic_conf = null): ConsumerTopic
     {
         return new ConsumerTopic($this, $topic_name, $topic_conf);
     }

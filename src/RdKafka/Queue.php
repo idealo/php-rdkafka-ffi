@@ -9,7 +9,7 @@ class Queue extends Api
 {
     private CData $queue;
 
-    public function __construct(Consumer $kafka)
+    public function __construct(\RdKafka $kafka)
     {
         parent::__construct();
 

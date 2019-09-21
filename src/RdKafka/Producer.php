@@ -38,7 +38,7 @@ class Producer extends RdKafka
      * @return ProducerTopic
      * @throws Exception
      */
-    public function newTopic(string $topic_name, TopicConf $topic_conf = null)
+    public function newTopic(string $topic_name, TopicConf $topic_conf = null): ProducerTopic
     {
         return new ProducerTopic($this, $topic_name, $topic_conf);
     }
