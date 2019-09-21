@@ -7,11 +7,10 @@ use RdKafka\Conf;
 use RdKafka\Exception;
 use RdKafka\Metadata;
 use RdKafka\Topic;
-use RdKafka\TopicConf;
 
 abstract class RdKafka extends Api
 {
-    protected CData $kafka;
+    protected ?CData $kafka;
 
     /**
      * @var \WeakReference[]
@@ -76,6 +75,10 @@ abstract class RdKafka extends Api
 
     public function __destruct()
     {
+        if ($this->kafka === null) {
+            return;
+        }
+
         self::$ffi->rd_kafka_destroy($this->kafka);
 
         // clean up reference
@@ -105,14 +108,6 @@ abstract class RdKafka extends Api
     {
         return new Metadata($this, $all_topics, $only_topic, $timeout_ms);
     }
-
-    /**
-     * @param string $topic_name
-     * @param TopicConf $topic_conf
-     *
-     * @return Topic
-     */
-    abstract public function newTopic(string $topic_name, TopicConf $topic_conf = null);
 
     /**
      * @param int $timeout_ms
