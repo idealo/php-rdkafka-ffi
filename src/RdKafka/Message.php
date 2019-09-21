@@ -28,6 +28,13 @@ class Message extends Api
 
     public array $headers;
 
+    /**
+     * @var int microseconds
+     */
+    public int $latency;
+
+    public int $status;
+
     public function __construct(CData $nativeMessage)
     {
         parent::__construct();
@@ -63,6 +70,10 @@ class Message extends Api
         $this->offset = (int)$nativeMessage->offset;
 
         $this->headers = $this->parseHeaders($nativeMessage);
+
+        $this->latency = (int)self::$ffi->rd_kafka_message_latency($nativeMessage);
+
+        $this->status = (int)self::$ffi->rd_kafka_message_status($nativeMessage);
     }
 
     public function errstr(): string

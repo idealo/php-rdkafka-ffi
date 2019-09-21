@@ -11,16 +11,23 @@ use PHPUnit\Framework\TestCase;
 class MessageTest extends TestCase
 {
     private $message;
+    private $producedMessage;
     private $beforeProducingTimestamp;
 
     protected function setUp(): void
     {
         $this->beforeProducingTimestamp = time();
 
-        $producer = new Producer();
-        $producer->addBrokers(KAFKA_BROKERS);
+        $context = $this;
+        $conf = new Conf();
+        $conf->set('metadata.broker.list', KAFKA_BROKERS);
+        $conf->setDrMsgCb(function ($producer, $message) use ($context) {
+            $context->producedMessage = $message;
+        });
+        $producer = new Producer($conf);
         $producerTopic = $producer->newTopic(KAFKA_TEST_TOPIC);
         $producerTopic->producev(0, 0, __CLASS__, 'key-msg', ['header-name' => 'header-value']);
+        $producer->flush((int)KAFKA_TEST_TIMEOUT_MS);
 
         $consumer = new Consumer();
         $consumer->addBrokers(KAFKA_BROKERS);
@@ -54,6 +61,22 @@ class MessageTest extends TestCase
     public function testPropertyTimestampType()
     {
         $this->assertEquals(1 /*RD_KAFKA_TIMESTAMP_CREATE_TIME*/, $this->message->timestampType);
+    }
+
+    /**
+     * @group ffiOnly
+     */
+    public function testPropertyStatus()
+    {
+        $this->assertEquals(RD_KAFKA_MSG_STATUS_PERSISTED, $this->message->status);
+    }
+
+    /**
+     * @group ffiOnly
+     */
+    public function testPropertyLatency()
+    {
+        $this->assertGreaterThan((int)KAFKA_TEST_TIMEOUT_MS, $this->producedMessage->latency);
     }
 
     public function testErrstr()
