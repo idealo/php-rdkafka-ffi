@@ -86,14 +86,13 @@ class ConsumerTopic extends Topic
             throw new InvalidArgumentException(sprintf("Out of range value '%d' for partition", $partition));
         }
 
-        $nativeMessage_ptr = self::$ffi->new('rd_kafka_message_t*');
-        $nativeMessage_ptr_ptr = \FFI::addr($nativeMessage_ptr);
+        $nativeMessages= self::$ffi->new('rd_kafka_message_t*[' . $batch_size . ']');
 
         $result = (int)self::$ffi->rd_kafka_consume_batch(
             $this->topic,
             $partition,
             $timeout_ms,
-            $nativeMessage_ptr_ptr,
+            $nativeMessages,
             $batch_size
         );
 
@@ -102,7 +101,7 @@ class ConsumerTopic extends Topic
             throw new Exception(self::err2str($err));
         }
 
-        return $this->parseMessages($nativeMessage_ptr_ptr, $result);
+        return $this->parseMessages($nativeMessages, $result);
     }
 
     private function parseMessages(CData $nativeMessages, int $size): array
