@@ -10,8 +10,12 @@ use RdKafka\Producer;
  * @covers \RdKafka\Admin\Client
  * @covers \RdKafka\Admin\CreatePartitionsOptions
  * @covers \RdKafka\Admin\CreateTopicsOptions
+ * @covers \RdKafka\Admin\ConfigEntry
+ * @covers \RdKafka\Admin\ConfigResource
+ * @covers \RdKafka\Admin\ConfigResourceResult
  * @covers \RdKafka\Admin\DeleteTopic
  * @covers \RdKafka\Admin\DeleteTopicsOptions
+ * @covers \RdKafka\Admin\DescribeConfigsOptions
  * @covers \RdKafka\Admin\NewPartitions
  * @covers \RdKafka\Admin\NewTopic
  * @covers \RdKafka\Admin\Options
