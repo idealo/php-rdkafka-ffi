@@ -6,10 +6,7 @@ namespace RdKafka;
 use FFI;
 use FFI\CData;
 use RdKafka;
-use RdKafka\Metadata\Broker;
 use RdKafka\Metadata\Collection;
-use RdKafka\Metadata\Partition;
-use RdKafka\Metadata\Topic as MetadataTopic;
 
 class Metadata extends Api
 {
@@ -40,7 +37,7 @@ class Metadata extends Api
     }
 
     /**
-     * @return Collection|Broker[]
+     * @return Collection|Metadata\Broker[]
      */
     public function getBrokers(): Collection
     {
@@ -52,7 +49,7 @@ class Metadata extends Api
         $items = [];
         for ($i = 0; $i < $metadata->broker_cnt; $i++) {
             $data = $metadata->brokers[$i];
-            $items[] = new Broker(
+            $items[] = new Metadata\Broker(
                 (int)$data->id,
                 FFI::string($data->host),
                 (int)$data->port
@@ -62,7 +59,7 @@ class Metadata extends Api
     }
 
     /**
-     * @return Collection|Topic[]
+     * @return Collection|Metadata\Topic[]
      */
     public function getTopics(): Collection
     {
@@ -74,7 +71,7 @@ class Metadata extends Api
         $items = [];
         for ($i = 0; $i < $metadata->topic_cnt; $i++) {
             $data = $metadata->topics[$i];
-            $items[] = new MetadataTopic(
+            $items[] = new Metadata\Topic(
                 FFI::string($data->topic),
                 $this->mapPartitions($data),
                 (int)$data->err
@@ -89,7 +86,7 @@ class Metadata extends Api
         for ($i = 0; $i < $topic->partition_cnt; $i++) {
             $data = $topic->partitions[$i];
 
-            $items[] = new Partition(
+            $items[] = new Metadata\Partition(
                 (int)$data->id,
                 (int)$data->err,
                 (int)$data->leader,
