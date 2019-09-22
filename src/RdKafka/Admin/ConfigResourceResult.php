@@ -8,7 +8,7 @@ use RdKafka\Api;
 
 class ConfigResourceResult extends Api
 {
-    public function __construct(CData $data)
+    public function __construct(CData $event)
     {
         parent::__construct();
     }

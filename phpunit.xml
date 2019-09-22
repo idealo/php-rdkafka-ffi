@@ -23,5 +23,6 @@
         <const name="KAFKA_TEST_TOPIC" value="test" />
         <const name="KAFKA_TEST_TOPIC_PARTITIONS" value="test_partitions" />
         <const name="KAFKA_TEST_TIMEOUT_MS" value="5000" />
+        <const name="KAFKA_BROKER_ID" value="111" />
     </php>
 </phpunit>

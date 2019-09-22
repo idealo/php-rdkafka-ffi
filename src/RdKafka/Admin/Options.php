@@ -5,43 +5,84 @@ namespace RdKafka\Admin;
 
 use FFI\CData;
 use RdKafka\Api;
+use RdKafka\Exception;
 
 abstract class Options extends Api
 {
-    public function __construct(int $for_api)
+    private CData $options;
+
+    public function __construct(\RdKafka $kafka, int $for_api)
     {
         parent::__construct();
 
-        // rd_kafka_AdminOptions_new
+        $this->options = self::$ffi->rd_kafka_AdminOptions_new($kafka->getCData(), $for_api);
     }
 
     public function __destruct()
     {
-        // rd_kafka_AdminOptions_destroy
+        if (isset($this->options)) {
+            self::$ffi->rd_kafka_AdminOptions_destroy($this->options);
+        }
     }
 
     public function getCData(): CData
     {
-
+        return $this->options;
     }
 
     public function setRequestTimeout(int $timeout_ms)
     {
-        // rd_kafka_AdminOptions_set_request_timeout
+        $errstr = \FFI::new("char[512]");
+        $err = self::$ffi->rd_kafka_AdminOptions_set_request_timeout(
+            $this->options,
+            $timeout_ms,
+            $errstr,
+            \FFI::sizeOf($errstr)
+        );
+        if ($err !== RD_KAFKA_RESP_ERR_NO_ERROR) {
+            throw new Exception(\FFI::string($errstr));
+        }
     }
 
     public function setOperationTimeout(int $timeout_ms)
     {
-        // rd_kafka_AdminOptions_set_request_timeout
+        $errstr = \FFI::new("char[512]");
+        $err = self::$ffi->rd_kafka_AdminOptions_set_operation_timeout(
+            $this->options,
+            $timeout_ms,
+            $errstr,
+            \FFI::sizeOf($errstr)
+        );
+        if ($err !== RD_KAFKA_RESP_ERR_NO_ERROR) {
+            throw new Exception(\FFI::string($errstr));
+        }
     }
 
     public function setValidateOnly(bool $true_or_false)
     {
-        // rd_kafka_AdminOptions_set_validate_only
+        $errstr = \FFI::new("char[512]");
+        $err = self::$ffi->rd_kafka_AdminOptions_set_validate_only(
+            $this->options,
+            (int)$true_or_false,
+            $errstr,
+            \FFI::sizeOf($errstr)
+        );
+        if ($err !== RD_KAFKA_RESP_ERR_NO_ERROR) {
+            throw new Exception(\FFI::string($errstr));
+        }
     }
 
     public function setBrokerId(int $broker_id)
     {
-        // rd_kafka_AdminOptions_set_broker
+        $errstr = \FFI::new("char[512]");
+        $err = self::$ffi->rd_kafka_AdminOptions_set_broker(
+            $this->options,
+            $broker_id,
+            $errstr,
+            \FFI::sizeOf($errstr)
+        );
+        if ($err !== RD_KAFKA_RESP_ERR_NO_ERROR) {
+            throw new Exception(\FFI::string($errstr));
+        }
     }
 }

@@ -95,6 +95,9 @@ class ConsumerTopicTest extends TestCase
         for ($i = 0; $i < $batchSize; $i++) {
             $this->assertEquals(__METHOD__ . $i, $messages[$i]->payload);
         }
+
+        unset($consumerTopic);
+        unset($consumer);
     }
 
     public function testConsumeBatchWithInvalidPartitionShouldFail()

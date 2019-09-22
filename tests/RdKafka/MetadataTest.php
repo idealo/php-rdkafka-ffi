@@ -63,18 +63,18 @@ class MetadataTest extends TestCase
         $partition = $partitions->current();
 
         $this->assertEquals(0, $partition->getId());
-        $this->assertEquals(111, $partition->getIsrs()->current());
-        $this->assertEquals(111, $partition->getLeader());
-        $this->assertEquals(111, $partition->getReplicas()->current());
+        $this->assertEquals((int)KAFKA_BROKER_ID, $partition->getIsrs()->current());
+        $this->assertEquals((int)KAFKA_BROKER_ID, $partition->getLeader());
+        $this->assertEquals((int)KAFKA_BROKER_ID, $partition->getReplicas()->current());
     }
 
     public function testGetOrigBrokerId()
     {
-        $this->assertEquals(111, $this->metadata->getOrigBrokerId());
+        $this->assertEquals((int)KAFKA_BROKER_ID, $this->metadata->getOrigBrokerId());
     }
 
     public function testGetOrigBrokerName()
     {
-        $this->assertEquals(KAFKA_BROKERS . '/111', $this->metadata->getOrigBrokerName());
+        $this->assertEquals(KAFKA_BROKERS . '/' . KAFKA_BROKER_ID, $this->metadata->getOrigBrokerName());
     }
 }

@@ -8,23 +8,18 @@ use RdKafka\Api;
 
 class TopicResult extends Api
 {
-    public function __construct(CData $data)
+    private CData $result;
+
+    public $error;
+    public $errorString;
+    public $name;
+
+    public function __construct(CData $result)
     {
         parent::__construct();
-    }
 
-    public function error(): int
-    {
-        // rd_kafka_topic_result_error
-    }
-
-    public function errstr(): string
-    {
-        // rd_kafka_topic_result_error_string
-    }
-
-    public function name(): string
-    {
-        // rd_kafka_topic_result_name
+        $this->error = (int)self::$ffi->rd_kafka_topic_result_error($result);
+        $this->errorString = (string)self::$ffi->rd_kafka_topic_result_error_string($result);
+        $this->name = (string)self::$ffi->rd_kafka_topic_result_name($result);
     }
 }

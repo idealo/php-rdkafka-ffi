@@ -5,8 +5,8 @@ namespace RdKafka\Admin;
 
 class DescribeConfigsOptions extends Options
 {
-    public function __construct()
+    public function __construct(\RdKafka $kafka)
     {
-        parent::__construct(RD_KAFKA_ADMIN_OP_DESCRIBECONFIGS);
+        parent::__construct($kafka, RD_KAFKA_ADMIN_OP_DESCRIBECONFIGS);
     }
 }

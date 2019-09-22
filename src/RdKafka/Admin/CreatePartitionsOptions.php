@@ -3,10 +3,10 @@ declare(strict_types=1);
 
 namespace RdKafka\Admin;
 
-class CreatePartitionsOptions
+class CreatePartitionsOptions extends Options
 {
-    public function __construct()
+    public function __construct(\RdKafka $kafka)
     {
-        parent::__construct(RD_KAFKA_ADMIN_OP_CREATEPARTITIONS);
+        parent::__construct($kafka, RD_KAFKA_ADMIN_OP_CREATEPARTITIONS);
     }
 }

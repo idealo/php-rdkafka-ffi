@@ -36,7 +36,7 @@ class Queue extends Api
      * @return Message|null
      * @throws Exception
      */
-    public function consume(int $timeout_ms)
+    public function consume(int $timeout_ms): ?Message
     {
         $nativeMessage = self::$ffi->rd_kafka_consume_queue(
             $this->queue,
@@ -58,5 +58,19 @@ class Queue extends Api
         self::$ffi->rd_kafka_message_destroy($nativeMessage);
 
         return $message;
+    }
+
+    public function poll(int $timeout_ms): ?Event
+    {
+        $nativeEvent = self::$ffi->rd_kafka_queue_poll(
+            $this->queue,
+            $timeout_ms
+        );
+
+        if ($nativeEvent === null) {
+            return null;
+        }
+
+        return new Event($nativeEvent);
     }
 }
