@@ -17,6 +17,7 @@ use RdKafka\Topic;
 class Client extends Api
 {
     private RdKafka $kafka;
+    private bool $isDerived;
 
     private function __construct(RdKafka $kafka)
     {
@@ -25,19 +26,32 @@ class Client extends Api
         parent::__construct();
     }
 
+    public function __destruct()
+    {
+//        if ($this->isDerived === false) {
+//            self::$ffi->rd_kafka_flush($this->kafka->getCData(), 5000);
+//        }
+    }
+
     public static function fromConf(Conf $conf)
     {
-        return new self(new Producer($conf));
+        $client = new self(new Producer($conf));
+        $client->isDerived = false;
+        return $client;
     }
 
     public static function fromConsumer(Consumer $consumer): self
     {
-        return new self($consumer);
+        $client = new self($consumer);
+        $client->isDerived = true;
+        return $client;
     }
 
     public static function fromProducer(Producer $producer): self
     {
-        return new self($producer);
+        $client = new self($producer);
+        $client->isDerived = true;
+        return $client;
     }
 
     /**
@@ -53,10 +67,42 @@ class Client extends Api
     /**
      * @param ConfigResource[] $resources
      * @param DescribeConfigsOptions $options
-     * @return ConfigResource[]
+     * @return ConfigResourceResult[]
+     * @throws Exception
      */
     public function describeConfigs(array $resources, DescribeConfigsOptions $options = null): array
     {
+        Assert::that($resources)->notEmpty()->all()->isInstanceOf(ConfigResource::class);
+
+        $queue = new Queue($this->kafka);
+
+        $resourcesCount = count($resources);
+        $resourcesPtr = self::$ffi->new('rd_kafka_ConfigResource_t*[' . $resourcesCount . ']');
+        foreach (array_values($resources) as $i => $resource) {
+            $resourcesPtr[$i] = $resource->getCData();
+        }
+
+        self::$ffi->rd_kafka_DescribeConfigs(
+            $this->kafka->getCData(),
+            $resourcesPtr,
+            $resourcesCount,
+            $options ? $options->getCData() : null,
+            $queue->getCData()
+        );
+
+        $event = $this->waitForResultEvent($queue, RD_KAFKA_EVENT_DESCRIBECONFIGS_RESULT);
+
+        $eventResult = self::$ffi->rd_kafka_event_DescribeConfigs_result($event->getCData());
+
+        $size = \FFI::new('size_t');
+        $result = self::$ffi->rd_kafka_DescribeConfigs_result_resources($eventResult, \FFI::addr($size));
+
+        $topicResult = [];
+        for ($i = 0; $i < (int)$size->cdata; $i++) {
+            $topicResult[] = new ConfigResourceResult($result[$i]);
+        }
+
+        return $topicResult;
         // todo:
         // assert params
         // create queue
@@ -74,13 +120,12 @@ class Client extends Api
      */
     public function createPartitions(array $partitions, CreatePartitionsOptions $options = null): array
     {
-        // rd_kafka_CreatePartitions
         Assert::that($partitions)->notEmpty()->all()->isInstanceOf(NewPartitions::class);
 
         $queue = new Queue($this->kafka);
 
         $partitions_ptr = self::$ffi->new('rd_kafka_NewPartitions_t*[' . count($partitions) . ']');
-        foreach ($partitions as $i => $partition) {
+        foreach (array_values($partitions) as $i => $partition) {
             $partitions_ptr[$i] = $partition->getCData();
         }
 
@@ -120,7 +165,7 @@ class Client extends Api
         $queue = new Queue($this->kafka);
 
         $topics_ptr = self::$ffi->new('rd_kafka_NewTopic_t*[' . count($topics) . ']');
-        foreach ($topics as $i => $topic) {
+        foreach (array_values($topics) as $i => $topic) {
             $topics_ptr[$i] = $topic->getCData();
         }
 
@@ -160,7 +205,7 @@ class Client extends Api
         $queue = new Queue($this->kafka);
 
         $topics_ptr = self::$ffi->new('rd_kafka_DeleteTopic_t*[' . count($topics) . ']');
-        foreach ($topics as $i => $topic) {
+        foreach (array_values($topics) as $i => $topic) {
             $topics_ptr[$i] = $topic->getCData();
         }
 

@@ -8,44 +8,32 @@ use RdKafka\Api;
 
 class ConfigResourceResult extends Api
 {
-    public function __construct(CData $event)
+    public string $name;
+    public int $type;
+    public int $error;
+    public string $errorString;
+
+    /**
+     * @var ConfigEntry[]
+     */
+    public array $configs;
+
+    public function __construct(CData $result)
     {
         parent::__construct();
-    }
 
-    public function __destruct()
-    {
-        // rd_kafka_ConfigResource_destroy
-        // rd_kafka_ConfigResource_destroy_array
-    }
+        $this->name = (string)self::$ffi->rd_kafka_ConfigResource_name($result);
+        $this->type = (int)self::$ffi->rd_kafka_ConfigResource_type($result);
+        $this->error = (int)self::$ffi->rd_kafka_ConfigResource_error($result);
+        $this->errorString = (string)self::$ffi->rd_kafka_ConfigResource_error_string($result);
 
-    public function getCData(): CData
-    {
-
-    }
-
-    public function name(): string
-    {
-        // rd_kafka_ConfigResource_name
-    }
-
-    public function type(): string
-    {
-        // rd_kafka_ConfigResource_type
-    }
-
-    public function error(): int
-    {
-        // rd_kafka_ConfigResource_error
-    }
-
-    public function errorString(): string
-    {
-        // rd_kafka_ConfigResource_error_string
-    }
-
-    public function configs(): array
-    {
-        // rd_kafka_ConfigResource_configs
+        $size = \FFI::new('size_t');
+        $configsPtr = self::$ffi->rd_kafka_ConfigResource_configs($result, \FFI::addr($size));
+        $configs = [];
+        for ($i = 0; $i < (int)$size->cdata; $i++) {
+            $entry = new ConfigEntry($configsPtr[$i]);
+            $configs[$entry->name] = $entry;
+        }
+        $this->configs = $configs;
     }
 }

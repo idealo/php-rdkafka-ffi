@@ -236,4 +236,23 @@ class ClientTest extends TestCase
     {
         usleep(500 * 1000);
     }
+
+    public function testDescribeConfigs()
+    {
+        $conf = new Conf();
+        $conf->set('metadata.broker.list', KAFKA_BROKERS);
+        $client = Client::fromConf($conf);
+
+        $configResource = new ConfigResource(RD_KAFKA_RESOURCE_BROKER, (string)KAFKA_BROKER_ID);
+
+        $options = $client->newDescribeConfigsOptions();
+        $options->setRequestTimeout((int)KAFKA_TEST_TIMEOUT_MS);
+        $options->setBrokerId((int)KAFKA_BROKER_ID);
+
+        $result = $client->describeConfigs([$configResource], $options);
+
+        $this->assertEquals('111', $result[0]->name);
+        $this->assertEquals('111', $result[0]->configs['broker.id']->value);
+        $this->assertTrue($result[0]->configs['broker.id']->isReadOnly);
+    }
 }

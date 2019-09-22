@@ -5,29 +5,47 @@ namespace RdKafka\Admin;
 
 use FFI\CData;
 use RdKafka\Api;
+use RdKafka\Exception;
 
 class ConfigResource extends Api
 {
+    private CData $resource;
+
     public function __construct(int $type, string $name)
     {
         parent::__construct();
 
-        // rd_kafka_ConfigResource_new
+        $this->resource = self::$ffi->rd_kafka_ConfigResource_new(
+            $type,
+            $name
+        );
     }
 
     public function __destruct()
     {
-        // rd_kafka_ConfigResource_destroy
-        // rd_kafka_ConfigResource_destroy_array
+        self::$ffi->rd_kafka_ConfigResource_destroy($this->resource);
     }
 
     public function getCData(): CData
     {
-
+        return $this->resource;
     }
 
-    public function setConfig(string $name, string $value)
+    /**
+     * @param string $name
+     * @param string|null $value
+     * @throws Exception
+     */
+    public function setConfig(string $name, ?string $value)
     {
-        // rd_kafka_ConfigResource_set_config
+        $err = (int)self::$ffi->rd_kafka_ConfigResource_set_config(
+            $this->resource,
+            $name,
+            $value
+        );
+
+        if ($err != RD_KAFKA_RESP_ERR_NO_ERROR) {
+            throw new Exception(self::err2str($err));
+        }
     }
 }
