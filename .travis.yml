@@ -42,5 +42,9 @@ jobs:
       name: "librdkafka v1.1.0"
 
     - <<: *STANDARD_TEST_JOB
+      env: LIBRDKAFKA_VERSION=v1.2.0
+      name: "librdkafka v1.2.0"
+
+    - <<: *STANDARD_TEST_JOB
       env: LIBRDKAFKA_VERSION=master
       name: "librdkafka master"
