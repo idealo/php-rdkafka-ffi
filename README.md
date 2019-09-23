@@ -11,7 +11,7 @@ This is a pure PHP Kafka Client library as replacement for [php rdkafka extensio
 Playing around with:
 
 * [ffi extension](https://github.com/php/php-src/tree/PHP-7.4/ext/ffi) for php7.4 ([rfc](https://wiki.php.net/rfc/ffi))
-* [librdkafka v1.0.0, v1.1.0, master](https://github.com/edenhill/librdkafka) ([docs](https://docs.confluent.io/current/clients/librdkafka/rdkafka_8h.html))
+* [librdkafka v1.0.0, v1.1.0, v1.2.0, master](https://github.com/edenhill/librdkafka) ([docs](https://docs.confluent.io/current/clients/librdkafka/rdkafka_8h.html))
 * [php rdkafka stubs](https://github.com/kwn/php-rdkafka-stubs)
 * [php7.4-rc](https://github.com/php/php-src/tree/PHP-7.4)
 * [wurstmeister/kafka](https://hub.docker.com/r/wurstmeister/kafka/) & official [zookeeper](https://hub.docker.com/_/zookeeper) docker images
@@ -63,7 +63,7 @@ Test - should show ```rdkafka``` in modules list
 Startup php & kafka
 
     docker-compose up -d
-    
+     
 ## Having fun with examples
 
 Examples use topic ```playground```.
@@ -149,11 +149,11 @@ Shutdown and remove volumes:
 
 * [x] Callbacks
 * [x] High Level KafkaConsumer
-* [ ] Compatible to librdkafka ^1.0.0
-* [ ] Compatible to rdkafka extension ^3.1.0
-* [ ] Sig Handling & destruct (expect seg faults & lost msgs & shutdown hangs)
-* [ ] Tests, tests, tests, ... and travis
+* [x] Tests, tests, tests, ... and travis
+* [x] Support admin features
+* [x] Compatible to librdkafka ^1.0.0
 * [ ] Benchmarking against rdkafka extension
-* [ ] Generate binding class with https://github.com/ircmaxell/FFIMe / use default header file
-* [ ] Support admin features
 * [ ] Documentation
+* [ ] Compatible to rdkafka extension ^3.1.0
+* [ ] Generate binding class with https://github.com/ircmaxell/FFIMe / use default header file
+* [ ] Sig Handling & destruct (expect seg faults & lost msgs & shutdown hangs)
