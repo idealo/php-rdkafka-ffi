@@ -255,8 +255,83 @@ class ClientTest extends TestCase
 
         $result = $client->describeConfigs([$configResource], $options);
 
+        $configs = $this->getIndexedConfigEntries($result[0]->configs, ['broker.id', 'queued.max.requests']);
+
         $this->assertEquals('111', $result[0]->name);
-        $this->assertEquals('111', $result[0]->configs['broker.id']->value);
-        $this->assertTrue($result[0]->configs['broker.id']->isReadOnly);
+
+        $this->assertEquals('111', $configs['broker.id']->value);
+        $this->assertTrue($configs['broker.id']->isReadOnly);
+
+        $this->assertEquals('500', $configs['queued.max.requests']->value);
+        $this->assertTrue($configs['queued.max.requests']->isDefault);
+    }
+
+    public function testAlterConfigs()
+    {
+        // prepare
+        $conf = new Conf();
+        $conf->set('metadata.broker.list', KAFKA_BROKERS);
+        $conf->set('broker.version.fallback', '2.0.0');
+        $client = Client::fromConf($conf);
+
+        $configResource = new ConfigResource(RD_KAFKA_RESOURCE_BROKER, (string)KAFKA_BROKER_ID);
+        $configResource->setConfig('max.connections.per.ip', (string)500000);
+
+        $alterConfigOptions = $client->newAlterConfigsOptions();
+        $alterConfigOptions->setRequestTimeout((int)KAFKA_TEST_TIMEOUT_MS);
+        $alterConfigOptions->setBrokerId((int)KAFKA_BROKER_ID);
+
+        $describeConfigsOptions = $client->newDescribeConfigsOptions();
+        $describeConfigsOptions->setRequestTimeout((int)KAFKA_TEST_TIMEOUT_MS);
+        $describeConfigsOptions->setBrokerId((int)KAFKA_BROKER_ID);
+
+        // alter config
+        $result = $client->alterConfigs([$configResource], $alterConfigOptions);
+
+        $this->assertEquals('111', $result[0]->name);
+
+        // check chances
+        usleep(50 * 1000);
+        $result = $client->describeConfigs([$configResource], $describeConfigsOptions);
+
+        $this->assertEquals('111', $result[0]->name);
+
+        $configs = $this->getIndexedConfigEntries($result[0]->configs);
+
+        $this->assertEquals('500000', $configs['max.connections.per.ip']->value);
+        $this->assertFalse($configs['max.connections.per.ip']->isDefault);
+
+        // set config back to old value (deleteConfig not supported yet....)
+        $configResource->setConfig('max.connections.per.ip', '2147483647');
+        $result = $client->alterConfigs([$configResource], $alterConfigOptions);
+
+        $this->assertEquals('111', $result[0]->name);
+
+        // check config changes
+        usleep(50 * 1000);
+        $result = $client->describeConfigs([$configResource], $describeConfigsOptions);
+
+        $this->assertEquals('111', $result[0]->name);
+
+        $configs = $this->getIndexedConfigEntries($result[0]->configs);
+
+        $this->assertEquals('2147483647', $configs['max.connections.per.ip']->value);
+    }
+
+    /**
+     * @param ConfigEntry[] $configs
+     * @param string[] $configNames
+     * @return ConfigEntry[]
+     */
+    private function getIndexedConfigEntries(array $configs): array
+    {
+        $filteredConfigs = [];
+        foreach ($configs as $config) {
+            if (isset($filteredConfigs[$config->name])) {
+                throw new \Exception('unexpected collision found');
+            }
+            $filteredConfigs[$config->name] = $config;
+        }
+        return $filteredConfigs;
     }
 }

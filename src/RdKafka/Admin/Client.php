@@ -61,7 +61,37 @@ class Client extends Api
      */
     public function alterConfigs(array $resources, AlterConfigsOptions $options = null): array
     {
-        // rd_kafka_AlterConfigs
+        Assert::that($resources)->notEmpty()->all()->isInstanceOf(ConfigResource::class);
+
+        $queue = new Queue($this->kafka);
+
+        $resourcesCount = count($resources);
+        $resourcesPtr = self::$ffi->new('rd_kafka_ConfigResource_t*[' . $resourcesCount . ']');
+        foreach (array_values($resources) as $i => $resource) {
+            $resourcesPtr[$i] = $resource->getCData();
+        }
+
+        self::$ffi->rd_kafka_AlterConfigs(
+            $this->kafka->getCData(),
+            $resourcesPtr,
+            $resourcesCount,
+            $options ? $options->getCData() : null,
+            $queue->getCData()
+        );
+
+        $event = $this->waitForResultEvent($queue, RD_KAFKA_EVENT_ALTERCONFIGS_RESULT);
+
+        $eventResult = self::$ffi->rd_kafka_event_AlterConfigs_result($event->getCData());
+
+        $size = \FFI::new('size_t');
+        $result = self::$ffi->rd_kafka_AlterConfigs_result_resources($eventResult, \FFI::addr($size));
+
+        $topicResult = [];
+        for ($i = 0; $i < (int)$size->cdata; $i++) {
+            $topicResult[] = new ConfigResourceResult($result[$i]);
+        }
+
+        return $topicResult;
     }
 
     /**
@@ -103,14 +133,6 @@ class Client extends Api
         }
 
         return $topicResult;
-        // todo:
-        // assert params
-        // create queue
-        // call rd_kafka_DescribeConfigs
-        // wait for result event on queue - blocking!
-        // convert result event to result
-        // clean up
-        // return result
     }
 
     /**

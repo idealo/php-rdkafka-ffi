@@ -33,10 +33,10 @@ class ConfigResource extends Api
 
     /**
      * @param string $name
-     * @param string|null $value
+     * @param string $value
      * @throws Exception
      */
-    public function setConfig(string $name, ?string $value)
+    public function setConfig(string $name, string $value)
     {
         $err = (int)self::$ffi->rd_kafka_ConfigResource_set_config(
             $this->resource,
@@ -47,5 +47,24 @@ class ConfigResource extends Api
         if ($err != RD_KAFKA_RESP_ERR_NO_ERROR) {
             throw new Exception(self::err2str($err));
         }
+    }
+
+    /**
+     * @param string $name
+     * @throws \Exception
+     */
+    public function deleteConfig(string $name)
+    {
+        throw new \Exception('Not implemented.');
+    }
+
+    /**
+     * @param string $name
+     * @param string $value
+     * @throws \Exception
+     */
+    public function addConfig(string $name, string $value)
+    {
+        throw new \Exception('Not implemented.');
     }
 }

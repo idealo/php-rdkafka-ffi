@@ -37,8 +37,7 @@ class ConfigEntry extends Api
         $synonymsPtr = self::$ffi->rd_kafka_ConfigEntry_synonyms($entry, \FFI::addr($size));
         $synonyms = [];
         for ($i = 0; $i < (int)$size->cdata; $i++) {
-            $entry = new ConfigEntry($synonymsPtr[$i]);
-            $synonyms[$entry->name] = $entry;
+            $synonyms[] = new ConfigEntry($synonymsPtr[$i]);
         }
         $this->synonyms = $synonyms;
     }
