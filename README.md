@@ -128,14 +128,15 @@ Show comparison
 
 ### Benchmarks
 
-Just some first benchmarks based on PHP74-RC1, librdkafka v1.0.0, ext & ffi latest master
+Just some first benchmarks based on PHP74-RC1, librdkafka v1.0.0, ext latest master, ffi without preload enabled.
 
-| benchmark     | subject                 | set | revs | tag:ffi:mean | tag:ext:mean |
-|---------------|-------------------------|-----|------|--------------|--------------|
-| ConsumerBench | benchConsume1Message    | 0   | 100  | 25,993.650μs | 24,451.894μs |
-| ConsumerBench | benchConsume100Messages | 0   | 100  | 37,050.976μs | 35,604.708μs |
-| ProducerBench | benchProduce1Message    | 0   | 100  | 4,049.920μs  | 3,585.690μs  |
-| ProducerBench | benchProduce100Messages | 0   | 100  | 5,757.756μs  | 5,536.262μs  |
+| benchmark     | subject                      | set | revs | tag:ffi:mean | tag:ext:mean |
+|---------------|------------------------------|-----|------|--------------|--------------|
+| ConsumerBench | benchConsume1Message         | 0   | 100  | 28,418.128μs | 26,091.144μs |
+| ConsumerBench | benchConsume100Messages      | 0   | 100  | 40,182.836μs | 38,656.394μs |
+| ConsumerBench | benchConsumeBatch100Messages | 0   | 100  | 35,136.240μs | 27,183.174μs |
+| ProducerBench | benchProduce1Message         | 0   | 100  | 4,076.694μs  | 3,563.914μs  |
+| ProducerBench | benchProduce100Messages      | 0   | 100  | 3,663.710μs  | 3,731.920μs  |
 
 See concrete [benchmarks details](./docs/benchmarks.md) for ffi & extension bindings.
 
@@ -152,8 +153,9 @@ Shutdown and remove volumes:
 * [x] Tests, tests, tests, ... and travis
 * [x] Support admin features
 * [x] Compatible to librdkafka ^1.0.0
-* [ ] Benchmarking against rdkafka extension
+* [x] Benchmarking against rdkafka extension
 * [ ] Documentation
 * [ ] Compatible to rdkafka extension ^3.1.0
 * [ ] Generate binding class with https://github.com/ircmaxell/FFIMe / use default header file
 * [ ] Sig Handling & destruct (expect seg faults & lost msgs & shutdown hangs)
+* [ ] Provide ffi preload
