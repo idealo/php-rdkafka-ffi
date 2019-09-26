@@ -5,6 +5,7 @@ require_once dirname(__DIR__) . '/vendor/autoload.php';
 error_reporting(E_ALL);
 
 $conf = new \RdKafka\Conf();
+$conf->set('metadata.broker.list', 'kafka:9092');
 $conf->set('socket.timeout.ms', (string)50);
 $conf->set('queue.buffering.max.messages', (string)1000);
 $conf->set('max.in.flight.requests.per.connection', (string)1);
@@ -41,8 +42,6 @@ if (function_exists('pcntl_sigprocmask')) {
 var_dump($conf->dump());
 
 $producer = new \RdKafka\Producer($conf);
-$added = $producer->addBrokers('kafka:9092');
-var_dump($added);
 
 $topic = $producer->newTopic('playground', $topicConf);
 var_dump($topic);
@@ -57,7 +56,7 @@ for ($i = 0; $i < 1000; $i++) {
     $key = $i % 10;
     $payload = "payload-$i-key-$key";
     echo sprintf('produce msg: %s', $payload) . PHP_EOL;
-    $topic->produce(RD_KAFKA_PARTITION_UA, 0, $payload, (string) $key);
+    $topic->produce(RD_KAFKA_PARTITION_UA, 0, $payload, (string)$key);
     $events = $producer->poll(1); // triggers log output
     echo sprintf('polling triggered %d events', $events) . PHP_EOL;
 }

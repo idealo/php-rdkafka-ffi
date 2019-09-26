@@ -71,6 +71,10 @@ Examples use topic ```playground```.
 Updating Dependencies
 
     docker-compose run --rm --no-deps php74 composer update
+    
+Creating new topic ```playground``` with 3 partitions ...
+
+    docker-compose run --rm php74 php examples/create-topic.php -tplayground -p3 -rf1
 
 Producing ...
 
@@ -83,6 +87,10 @@ Consuming ...
 Broker metadata ...
 
     docker-compose run --rm php74 php examples/metadata.php
+    
+Delete topic ```playground``` ...
+
+    docker-compose run --rm php74 php examples/delete-topic.php -tplayground
     
 ## Run tests
 

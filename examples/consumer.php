@@ -3,6 +3,7 @@
 require_once dirname(__DIR__) . '/vendor/autoload.php';
 
 $conf = new \RdKafka\Conf();
+$conf->set('metadata.broker.list', 'kafka:9092');
 $conf->set('group.id', 'test');
 $conf->set('log_level', LOG_DEBUG);
 $conf->set('debug', 'all');
@@ -30,17 +31,9 @@ if (function_exists('pcntl_sigprocmask')) {
 var_dump($conf->dump());
 
 $consumer = new \RdKafka\Consumer($conf);
-$added = $consumer->addBrokers('kafka:9092');
-var_dump($added);
 
 $topic = $consumer->newTopic('playground', $topicConf);
 var_dump($topic);
-
-$metadata = $consumer->getMetadata(false, $topic, 1000);
-var_dump($metadata->getOrigBrokerName());
-var_dump($metadata->getOrigBrokerId());
-var_dump($metadata->getBrokers());
-var_dump($metadata->getTopics());
 
 $queue = $consumer->newQueue();
 $topic->consumeQueueStart(0, RD_KAFKA_OFFSET_BEGINNING, $queue);
