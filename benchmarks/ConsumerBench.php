@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 use RdKafka\Conf;
 use RdKafka\Consumer;
@@ -51,6 +52,34 @@ class ConsumerBench
 
     /**
      * @Warmup(1)
+     * @Revs(10)
+     * @Iterations(5)
+     */
+    public function benchConsumeCallback1Message()
+    {
+        $conf = new Conf();
+        $conf->set('metadata.broker.list', 'kafka:9092');
+        $conf->set('group.id', __METHOD__);
+        $conf->set('consume.callback.max.messages', (string)1);
+        $consumer = new Consumer($conf);
+        $topic = $consumer->newTopic('benchmarks');
+
+        $topic->consumeStart(0, 0);
+        $messages = 0;
+        $callback = function (\RdKafka\Message $message, $opaque) use (&$messages) {
+            $messages++;
+        };
+        while ($topic->consumeCallback(0, 500, $callback) && $messages < 1) {
+        }
+        $topic->consumeStop(0);
+
+        if ($messages < 1) {
+            throw new Exception('failed to consume 1 messages');
+        }
+    }
+
+    /**
+     * @Warmup(1)
      * @Revs(100)
      * @Iterations(5)
      */
@@ -92,6 +121,34 @@ class ConsumerBench
         $topic->consumeStop(0);
 
         if (count($messages) < 100) {
+            throw new Exception('failed to consume 100 messages');
+        }
+    }
+
+    /**
+     * @Warmup(1)
+     * @Revs(10)
+     * @Iterations(5)
+     */
+    public function benchConsumeCallback100Message()
+    {
+        $conf = new Conf();
+        $conf->set('metadata.broker.list', 'kafka:9092');
+        $conf->set('group.id', __METHOD__);
+        $conf->set('consume.callback.max.messages', (string)100);
+        $consumer = new Consumer($conf);
+        $topic = $consumer->newTopic('benchmarks');
+
+        $topic->consumeStart(0, 0);
+        $messages = 0;
+        $callback = function (\RdKafka\Message $message, $opaque) use (&$messages) {
+            $messages++;
+        };
+        while ($topic->consumeCallback(0, 500, $callback) && $messages < 100) {
+        }
+        $topic->consumeStop(0);
+
+        if ($messages < 100) {
             throw new Exception('failed to consume 100 messages');
         }
     }

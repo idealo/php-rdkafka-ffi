@@ -42,9 +42,7 @@ class ConsumerTopic extends Topic
      */
     public function consume(int $partition, int $timeout_ms)
     {
-        if ($partition != RD_KAFKA_PARTITION_UA && ($partition < 0 || $partition > 0x7FFFFFFF)) {
-            throw new InvalidArgumentException(sprintf("Out of range value '%d' for partition", $partition));
-        }
+        $this->assertPartition($partition);
 
         $nativeMessage = self::$ffi->rd_kafka_consume(
             $this->topic,
@@ -82,11 +80,9 @@ class ConsumerTopic extends Topic
             throw new InvalidArgumentException(sprintf("Out of range value '%d' for batch_size", $batch_size));
         }
 
-        if ($partition != RD_KAFKA_PARTITION_UA && ($partition < 0 || $partition > 0x7FFFFFFF)) {
-            throw new InvalidArgumentException(sprintf("Out of range value '%d' for partition", $partition));
-        }
+        $this->assertPartition($partition);
 
-        $nativeMessages= self::$ffi->new('rd_kafka_message_t*[' . $batch_size . ']');
+        $nativeMessages = self::$ffi->new('rd_kafka_message_t*[' . $batch_size . ']');
 
         $result = (int)self::$ffi->rd_kafka_consume_batch(
             $this->topic,
@@ -128,9 +124,7 @@ class ConsumerTopic extends Topic
      */
     public function consumeQueueStart(int $partition, int $offset, Queue $queue)
     {
-        if ($partition != RD_KAFKA_PARTITION_UA && ($partition < 0 || $partition > 0x7FFFFFFF)) {
-            throw new InvalidArgumentException(sprintf("Out of range value '%d' for partition", $partition));
-        }
+        $this->assertPartition($partition);
 
         if (array_key_exists($partition, $this->consuming)) {
             throw new Exception(sprintf(
@@ -164,9 +158,7 @@ class ConsumerTopic extends Topic
      */
     public function consumeStart(int $partition, int $offset)
     {
-        if ($partition != RD_KAFKA_PARTITION_UA && ($partition < 0 || $partition > 0x7FFFFFFF)) {
-            throw new InvalidArgumentException(sprintf("Out of range value '%d' for partition", $partition));
-        }
+        $this->assertPartition($partition);
 
         if (array_key_exists($partition, $this->consuming)) {
             throw new Exception(sprintf(
@@ -198,6 +190,8 @@ class ConsumerTopic extends Topic
      */
     public function consumeStop(int $partition)
     {
+        $this->assertPartition($partition);
+
         $ret = self::$ffi->rd_kafka_consume_stop(
             $this->topic,
             $partition
@@ -220,6 +214,8 @@ class ConsumerTopic extends Topic
      */
     public function offsetStore(int $partition, int $offset)
     {
+        $this->assertPartition($partition);
+
         $err = self::$ffi->rd_kafka_offset_store(
             $this->topic,
             $partition,
@@ -228,6 +224,41 @@ class ConsumerTopic extends Topic
 
         if ($err != RD_KAFKA_RESP_ERR_NO_ERROR) {
             throw new Exception(self::err2str($err));
+        }
+    }
+
+    public function consumeCallback(int $partition, int $timeout_ms, callable $callback): int
+    {
+        $this->assertPartition($partition);
+
+        $proxyCallback = function ($nativeMessage, $opaque = null) use ($callback) {
+            $callback(
+                new Message($nativeMessage),
+                $opaque
+            );
+        };
+
+        $result = (int)self::$ffi->rd_kafka_consume_callback(
+            $this->topic,
+            $partition,
+            $timeout_ms,
+            $proxyCallback,
+            null // opaque
+        );
+
+        if ($result === -1) {
+            $err = (int)self::$ffi->rd_kafka_last_error();
+
+            throw new Exception(self::err2str($err));
+        }
+
+        return $result;
+    }
+
+    private function assertPartition(int $partition): void
+    {
+        if ($partition != RD_KAFKA_PARTITION_UA && ($partition < 0 || $partition > 0x7FFFFFFF)) {
+            throw new InvalidArgumentException(sprintf("Out of range value '%d' for partition", $partition));
         }
     }
 }

@@ -70,6 +70,34 @@ class ConsumerTopicTest extends TestCase
         $consumerTopic->consume(-2, (int)KAFKA_TEST_TIMEOUT_MS);
     }
 
+    public function testConsumeCallback()
+    {
+        $consumedMessage = null;
+
+        $conf = new Conf();
+        $conf->set('metadata.broker.list', KAFKA_BROKERS);
+        $conf->set('consume.callback.max.messages', (string)1);
+
+        $producer = new Producer($conf);
+        $producerTopic = $producer->newTopic(KAFKA_TEST_TOPIC);
+        $producerTopic->produce(0, 0, __METHOD__);
+        $producer->flush((int)KAFKA_TEST_TIMEOUT_MS);
+
+        $consumer = new Consumer($conf);
+        $consumerTopic = $consumer->newTopic(KAFKA_TEST_TOPIC);
+        $consumerTopic->consumeStart(0, rd_kafka_offset_tail(1));
+
+        $callback = function (Message $message, $opaque) use (&$consumedMessage) {
+            $consumedMessage = $message;
+        };
+        $messagesConsumed = $consumerTopic->consumeCallback(0, (int)KAFKA_TEST_TIMEOUT_MS, $callback);
+
+        $consumerTopic->consumeStop(0);
+
+        $this->assertEquals(1, $messagesConsumed);
+        $this->assertEquals(__METHOD__, $consumedMessage->payload);
+    }
+
     public function testConsumeBatch()
     {
         $batchSize = 1000;

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 use RdKafka\Conf;
 use RdKafka\Producer;
@@ -36,7 +37,7 @@ class ProducerBench
     {
         $conf = new Conf();
         $conf->set('metadata.broker.list', 'kafka:9092');
-        $conf->set('batch.num.messages', (string) 100);
+        $conf->set('batch.num.messages', (string)100);
         $producer = new Producer($conf);
         $topic = $producer->newTopic('benchmarks');
 
