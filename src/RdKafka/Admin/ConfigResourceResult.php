@@ -31,7 +31,7 @@ class ConfigResourceResult extends Api
         $configsPtr = self::$ffi->rd_kafka_ConfigResource_configs($result, \FFI::addr($size));
         $configs = [];
         for ($i = 0; $i < (int)$size->cdata; $i++) {
-            $configs[] = new ConfigEntry($configsPtr[$i]);;
+            $configs[] = new ConfigEntry($configsPtr[$i]);
         }
         $this->configs = $configs;
     }
