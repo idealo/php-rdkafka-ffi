@@ -76,7 +76,7 @@ class MessageTest extends TestCase
      */
     public function testPropertyLatency()
     {
-        $this->assertGreaterThan((int)KAFKA_TEST_TIMEOUT_MS - 1000, $this->producedMessage->latency);
+        $this->assertGreaterThan((int)KAFKA_TEST_TIMEOUT_MS/2, $this->producedMessage->latency);
     }
 
     public function testErrstr()

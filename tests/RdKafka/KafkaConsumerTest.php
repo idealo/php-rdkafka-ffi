@@ -114,12 +114,15 @@ class KafkaConsumerTest extends TestCase
         $conf = new Conf();
         $conf->set('group.id', __METHOD__ . rand(0, 999999999));
         $conf->set('metadata.broker.list', KAFKA_BROKERS);
-        $conf->set('auto.offset.reset', 'smallest');
+        $conf->set('auto.offset.reset', 'earliest');
 
         $consumer = new KafkaConsumer($conf);
         $consumer->subscribe([KAFKA_TEST_TOPIC]);
 
-        $lastMessage = null;
+        // wait for partition assignment
+        sleep(1);
+
+        $lastMessage = $message = null;
         while (true) {
             $message = $consumer->consume((int)KAFKA_TEST_TIMEOUT_MS);
             if ($message->err !== RD_KAFKA_RESP_ERR_NO_ERROR) {
@@ -169,10 +172,10 @@ class KafkaConsumerTest extends TestCase
     public function testCommitWithMessage()
     {
         $conf = new Conf();
-        $conf->set('group.id', __METHOD__);
+        $conf->set('group.id', __METHOD__ . rand(0, 999999999));
         $conf->set('enable.auto.commit', 'false');
         $conf->set('metadata.broker.list', KAFKA_BROKERS);
-        $conf->set('auto.offset.reset', 'smallest');
+        $conf->set('auto.offset.reset', 'earliest');
 
         $offset = 0;
 
@@ -183,24 +186,42 @@ class KafkaConsumerTest extends TestCase
         $consumer = new KafkaConsumer($conf);
         $consumer->subscribe([KAFKA_TEST_TOPIC]);
 
-        $message = $consumer->consume((int)KAFKA_TEST_TIMEOUT_MS);
-        $consumer->commit($message);
+        // wait for partition assignment
+        sleep(1);
+
+        $lastMessage = $message = null;
+        while (true) {
+            $message = $consumer->consume((int)KAFKA_TEST_TIMEOUT_MS);
+            if ($message->err !== RD_KAFKA_RESP_ERR_NO_ERROR) {
+                $message = $lastMessage;
+                break;
+            }
+            $lastMessage = $message;
+        }
+        $consumer->commit($lastMessage);
 
         // just trigger callback
         $consumer->consume((int)KAFKA_TEST_TIMEOUT_MS);
 
         $this->assertEquals($message->offset + 1, $offset);
+
+        $consumer->unsubscribe();
     }
 
     public function testCommitWithOffset()
     {
         $conf = new Conf();
-        $conf->set('group.id', __METHOD__);
-        $conf->set('metadata.broker.list', KAFKA_BROKERS);
+        $conf->set('group.id', __METHOD__ . rand(0, 999999999));
         $conf->set('enable.auto.commit', 'false');
+        $conf->set('metadata.broker.list', KAFKA_BROKERS);
+        $conf->set('auto.offset.reset', 'earliest');
 
         $consumer = new KafkaConsumer($conf);
         $consumer->subscribe([KAFKA_TEST_TOPIC]);
+
+        // wait for partition assignment
+        sleep(1);
+
         $consumer->commit([new TopicPartition(KAFKA_TEST_TOPIC, 0, 1)]);
 
         $topicPartitions = $consumer->getCommittedOffsets(
@@ -212,6 +233,8 @@ class KafkaConsumerTest extends TestCase
 
         $this->assertCount(1, $topicPartitions);
         $this->assertEquals(1, $topicPartitions[0]->getOffset());
+
+        $consumer->unsubscribe();
     }
 
     public function testCommitAsyncWithOffset()
@@ -220,7 +243,6 @@ class KafkaConsumerTest extends TestCase
         $conf->set('group.id', __METHOD__);
         $conf->set('metadata.broker.list', KAFKA_BROKERS);
         $conf->set('enable.auto.commit', 'false');
-        $conf->set('auto.commit.interval.ms', '900');
 
         $consumer = new KafkaConsumer($conf);
         $consumer->commitAsync([new TopicPartition(KAFKA_TEST_TOPIC, 0, 2)]);
@@ -243,7 +265,7 @@ class KafkaConsumerTest extends TestCase
         $conf = new Conf();
         $conf->set('group.id', __METHOD__ . rand(0, 999999999));
         $conf->set('metadata.broker.list', KAFKA_BROKERS);
-        $conf->set('auto.offset.reset', 'smallest');
+        $conf->set('auto.offset.reset', 'earliest');
 
         $consumer = new KafkaConsumer($conf);
         $consumer->subscribe([KAFKA_TEST_TOPIC]);
@@ -279,7 +301,7 @@ class KafkaConsumerTest extends TestCase
         $conf = new Conf();
         $conf->set('group.id', __METHOD__ . rand(0, 999999999));
         $conf->set('metadata.broker.list', KAFKA_BROKERS);
-        $conf->set('auto.offset.reset', 'smallest');
+        $conf->set('auto.offset.reset', 'earliest');
 
         $consumer = new KafkaConsumer($conf);
         $consumer->subscribe([KAFKA_TEST_TOPIC]);

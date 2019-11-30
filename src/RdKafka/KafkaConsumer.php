@@ -156,13 +156,12 @@ class KafkaConsumer extends RdKafka
     }
 
     /**
-     * @param string $timeout_ms
+     * @param int $timeout_ms
      *
      * @return Message
      * @throws InvalidArgumentException
-     * @throws Exception
      */
-    public function consume(int $timeout_ms)
+    public function consume(int $timeout_ms):Message
     {
         $nativeMessage = self::$ffi->rd_kafka_consumer_poll($this->kafka, $timeout_ms);
 

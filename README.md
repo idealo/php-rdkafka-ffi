@@ -52,7 +52,7 @@ Test - should show ```FFI``` in modules list
 
 Test ffi librdkafka binding - should show 1.0.0 version of librdkafka:
 
-    docker-compose run -v `pwd`:/app -w /app php74 php examples/version.php
+    docker-compose run php74 php examples/version.php
    
 Test - should show ```rdkafka``` in modules list
 
@@ -63,6 +63,17 @@ Test - should show ```rdkafka``` in modules list
 Startup php & kafka
 
     docker-compose up -d
+    
+Updating dependencies
+
+    docker-compose run --rm --no-deps php74 composer update
+    
+Create required topics
+
+    docker-compose run --rm php74 php examples/create-topic.php -tplayground -p3 -r1 && \
+    docker-compose run --rm php74 php examples/create-topic.php -ttest -p1 -r1 && \
+    docker-compose run --rm php74 php examples/create-topic.php -ttest_partitions -p3 -r1 && \
+    docker-compose run --rm php74 php examples/create-topic.php -tbenchmarks -p1 -r1 
      
 ## Having fun with examples
 
@@ -71,10 +82,6 @@ Examples use topic ```playground```.
 Updating Dependencies
 
     docker-compose run --rm --no-deps php74 composer update
-    
-Creating new topic ```playground``` with 3 partitions ...
-
-    docker-compose run --rm php74 php examples/create-topic.php -tplayground -p3 -rf1
 
 Producing ...
 
@@ -125,6 +132,9 @@ Benchmarks use topic ```benchmarks```.
 Run & store benchmarks for ffi based rdkafka binding
 
     docker-compose run --rm php74 phpbench run benchmarks --config=/app/benchmarks/ffi.json --report=default --store --tag=ffi
+    docker-compose run --rm php80 phpbench run benchmarks --config=/app/benchmarks/ffi.json --report=default --store --tag=ffi
+
+    docker-compose run --rm php80 phpbench run benchmarks --config=/app/benchmarks/ffi-jit.json --report=default --store --tag=ffijit
 
 Run & store benchmarks for extension based rdkafka binding
 
@@ -133,6 +143,7 @@ Run & store benchmarks for extension based rdkafka binding
 Show comparison
 
     docker-compose run --rm php74 phpbench report --uuid=tag:ffi --uuid=tag:ext --report='{extends: compare, compare: tag}'
+    docker-compose run --rm php80 phpbench report --uuid=tag:ffi --uuid=tag:ffijit --report='{extends: compare, compare: tag}'
 
 ### Benchmarks
 

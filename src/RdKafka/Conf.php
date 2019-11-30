@@ -55,6 +55,10 @@ class Conf extends Api
     }
 
     /**
+     * Setting non string values like callbacks or default_topic_conf TopicConf objects is not supported.
+     * For callbacks use corresponding methods directly. For default_topic_conf use custom Topic in newTopic calls
+     * or set default topic conf properties directly via Conf.
+     *
      * @param string $name
      * @param string $value
      *
@@ -100,7 +104,7 @@ class Conf extends Api
      * @param TopicConf $topic_conf
      *
      * @return void
-     * @deprecated Use a custom TopicConf directly
+     * @deprecated Use a custom TopicConf directly in newTopics calls. You also can set topic config properties directly via Conf as default TopicConf properties.
      */
     public function setDefaultTopicConf(TopicConf $topic_conf)
     {

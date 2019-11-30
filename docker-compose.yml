@@ -5,21 +5,27 @@ networks:
 
 services:
   zookeeper:
-    image: zookeeper
+    image: confluentinc/cp-zookeeper:5.3.1
     ports:
-      - "2181:2181"
+      - 2181:2181
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
     networks:
       - php-rdkafka-ffi
 
   kafka:
-    image: wurstmeister/kafka
+    image: confluentinc/cp-kafka:5.3.1
     ports:
-      - "9092:9092"
+      - 9092:9092
+    hostname: kafka
     environment:
-      KAFKA_CREATE_TOPICS: "playground:3:1,test:1:1,test_partitions:3:1,benchmarks:1:1"
-      KAFKA_ADVERTISED_HOST_NAME: "kafka"
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
       KAFKA_BROKER_ID: 111
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
     depends_on:
       - zookeeper
     networks:
