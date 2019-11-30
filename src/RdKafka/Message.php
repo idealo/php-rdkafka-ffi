@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace RdKafka;
@@ -108,7 +109,6 @@ class Message extends Api
         }
 
         if ($message_headers !== null) {
-
             $header_count = (int)self::$ffi->rd_kafka_header_cnt($message_headers);
 
             for ($i = 0; $i < $header_count; $i++) {

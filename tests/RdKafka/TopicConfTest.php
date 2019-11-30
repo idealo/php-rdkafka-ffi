@@ -1,8 +1,10 @@
 <?php
+
 declare(strict_types=1);
 
 namespace RdKafka;
 
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -76,7 +78,7 @@ class TopicConfTest extends TestCase
     {
         $conf = new TopicConf();
 
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $conf->setPartitioner(9999);
     }
 
@@ -86,9 +88,11 @@ class TopicConfTest extends TestCase
     public function testSetPartitionerCb()
     {
         $conf = new TopicConf();
-        $conf->setPartitionerCb(function ($key, $partitionCount) {
-            return 2; // force partition 2
-        });
+        $conf->setPartitionerCb(
+            function ($key, $partitionCount) {
+                return 2; // force partition 2
+            }
+        );
 
         $producer = new Producer();
         $producer->addBrokers(KAFKA_BROKERS);

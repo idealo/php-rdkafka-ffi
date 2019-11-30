@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace RdKafka;
@@ -148,9 +149,11 @@ class ConfTest extends TestCase
         $conf = new Conf();
         $conf->set('debug', 'consumer');
         $conf->set('log_level', (string)LOG_DEBUG);
-        $conf->setLogCb(function (Consumer $consumer, int $level, string $fac, string $buf) use (&$loggerCallbacks) {
-            $loggerCallbacks++;
-        });
+        $conf->setLogCb(
+            function (Consumer $consumer, int $level, string $fac, string $buf) use (&$loggerCallbacks) {
+                $loggerCallbacks++;
+            }
+        );
 
         $consumer = new Consumer($conf);
         do {
@@ -165,9 +168,11 @@ class ConfTest extends TestCase
         $errorCallbackStack = [];
 
         $conf = new Conf();
-        $conf->setErrorCb(function (Consumer $consumer, $err, $reason, $opaque = null) use (&$errorCallbackStack) {
-            $errorCallbackStack[] = $err;
-        });
+        $conf->setErrorCb(
+            function (Consumer $consumer, $err, $reason, $opaque = null) use (&$errorCallbackStack) {
+                $errorCallbackStack[] = $err;
+            }
+        );
 
         $consumer = new Consumer($conf);
         $consumer->addBrokers('unknown');
@@ -186,9 +191,11 @@ class ConfTest extends TestCase
         $conf = new Conf();
         $conf->set('client.id', 'some_id');
         $conf->set('statistics.interval.ms', (string)1);
-        $conf->setStatsCb(function (Consumer $consumer, $json, $json_len, $opaque = null) use (&$statsJson) {
-            $statsJson = $json;
-        });
+        $conf->setStatsCb(
+            function (Consumer $consumer, $json, $json_len, $opaque = null) use (&$statsJson) {
+                $statsJson = $json;
+            }
+        );
 
         $consumer = new Consumer($conf);
         do {
@@ -211,7 +218,8 @@ class ConfTest extends TestCase
         $conf->set('group.id', __METHOD__);
         $conf->set('metadata.broker.list', KAFKA_BROKERS);
         $conf->setRebalanceCb(
-            function (KafkaConsumer $consumer, $err, $topicPartitionList, $opaque = null) use (&$rebalanceCallbackStack) {
+            function (KafkaConsumer $consumer, $err, $topicPartitionList, $opaque = null) use (&$rebalanceCallbackStack
+            ) {
                 $rebalanceCallbackStack[] = [
                     'consumer' => $consumer,
                     'err' => $err,
@@ -223,7 +231,7 @@ class ConfTest extends TestCase
                         break;
 
                     case RD_KAFKA_RESP_ERR__REVOKE_PARTITIONS:
-                        $consumer->assign(NULL);
+                        $consumer->assign(null);
                         break;
 
                     default:

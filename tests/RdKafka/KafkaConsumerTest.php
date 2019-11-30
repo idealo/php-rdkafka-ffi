@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace RdKafka;
@@ -40,10 +41,12 @@ class KafkaConsumerTest extends TestCase
         $conf->set('group.id', __METHOD__);
 
         $consumer = new KafkaConsumer($conf);
-        $consumer->assign([
-            new TopicPartition(KAFKA_TEST_TOPIC, 0),
-            new TopicPartition(KAFKA_TEST_TOPIC_PARTITIONS, 2),
-        ]);
+        $consumer->assign(
+            [
+                new TopicPartition(KAFKA_TEST_TOPIC, 0),
+                new TopicPartition(KAFKA_TEST_TOPIC_PARTITIONS, 2),
+            ]
+        );
 
         $topicPartitions = $consumer->getAssignment();
 
@@ -60,9 +63,11 @@ class KafkaConsumerTest extends TestCase
         $conf->set('group.id', __METHOD__);
 
         $consumer = new KafkaConsumer($conf);
-        $consumer->assign([
-            new TopicPartition(KAFKA_TEST_TOPIC, 0),
-        ]);
+        $consumer->assign(
+            [
+                new TopicPartition(KAFKA_TEST_TOPIC, 0),
+            ]
+        );
 
         $this->assertCount(1, $consumer->getAssignment());
 
@@ -77,10 +82,12 @@ class KafkaConsumerTest extends TestCase
         $conf->set('group.id', __METHOD__);
 
         $consumer = new KafkaConsumer($conf);
-        $consumer->subscribe([
-            KAFKA_TEST_TOPIC,
-            KAFKA_TEST_TOPIC_PARTITIONS,
-        ]);
+        $consumer->subscribe(
+            [
+                KAFKA_TEST_TOPIC,
+                KAFKA_TEST_TOPIC_PARTITIONS,
+            ]
+        );
 
         $topicPartitions = $consumer->getSubscription();
 
@@ -95,9 +102,11 @@ class KafkaConsumerTest extends TestCase
         $conf->set('group.id', __METHOD__);
 
         $consumer = new KafkaConsumer($conf);
-        $consumer->subscribe([
-            KAFKA_TEST_TOPIC,
-        ]);
+        $consumer->subscribe(
+            [
+                KAFKA_TEST_TOPIC,
+            ]
+        );
 
         $topicPartitions = $consumer->getSubscription();
 
@@ -179,9 +188,11 @@ class KafkaConsumerTest extends TestCase
 
         $offset = 0;
 
-        $conf->setOffsetCommitCb(function (KafkaConsumer $kafka, int $err, array $topicPartitions, $opaque = null) use (&$offset) {
-            $offset = $topicPartitions[0]->getOffset();
-        });
+        $conf->setOffsetCommitCb(
+            function (KafkaConsumer $kafka, int $err, array $topicPartitions, $opaque = null) use (&$offset) {
+                $offset = $topicPartitions[0]->getOffset();
+            }
+        );
 
         $consumer = new KafkaConsumer($conf);
         $consumer->subscribe([KAFKA_TEST_TOPIC]);

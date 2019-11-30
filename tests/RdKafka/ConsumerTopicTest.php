@@ -1,9 +1,11 @@
 <?php
+
 declare(strict_types=1);
 
 namespace RdKafka;
 
 use FFI\CData;
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -65,7 +67,7 @@ class ConsumerTopicTest extends TestCase
         $consumer->addBrokers(KAFKA_BROKERS);
         $consumerTopic = $consumer->newTopic(KAFKA_TEST_TOPIC);
 
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessageRegExp('/partition/');
         $consumerTopic->consume(-2, (int)KAFKA_TEST_TIMEOUT_MS);
     }
@@ -134,7 +136,7 @@ class ConsumerTopicTest extends TestCase
         $consumer->addBrokers(KAFKA_BROKERS);
         $consumerTopic = $consumer->newTopic(KAFKA_TEST_TOPIC);
 
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessageRegExp('/partition/');
         $consumerTopic->consumeBatch(-2, (int)KAFKA_TEST_TIMEOUT_MS, 1);
     }
@@ -145,7 +147,7 @@ class ConsumerTopicTest extends TestCase
         $consumer->addBrokers(KAFKA_BROKERS);
         $consumerTopic = $consumer->newTopic(KAFKA_TEST_TOPIC);
 
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessageRegExp('/batch_size/');
         $consumerTopic->consumeBatch(0, (int)KAFKA_TEST_TIMEOUT_MS, 0);
     }
@@ -177,7 +179,7 @@ class ConsumerTopicTest extends TestCase
         $queue = $consumer->newQueue();
         $consumerTopic = $consumer->newTopic(KAFKA_TEST_TOPIC);
 
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessageRegExp('/partition/');
         $consumerTopic->consumeQueueStart(-2, 0, $queue);
     }

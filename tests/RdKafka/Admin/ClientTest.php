@@ -2,6 +2,7 @@
 
 namespace RdKafka\Admin;
 
+use Exception;
 use PHPUnit\Framework\TestCase;
 use RdKafka\Conf;
 use RdKafka\Producer;
@@ -328,7 +329,7 @@ class ClientTest extends TestCase
         $filteredConfigs = [];
         foreach ($configs as $config) {
             if (isset($filteredConfigs[$config->name])) {
-                throw new \Exception('unexpected collision found');
+                throw new Exception('unexpected collision found');
             }
             $filteredConfigs[$config->name] = $config;
         }

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace RdKafka;
@@ -117,7 +118,6 @@ class KafkaConsumer extends RdKafka
     {
         if ($message_or_offsets === null) {
             $nativeTopicPartitionList = null;
-
         } elseif ($message_or_offsets instanceof Message) {
             // todo assert message properties needed? already typed
 
@@ -128,20 +128,20 @@ class KafkaConsumer extends RdKafka
                 $message_or_offsets->partition
             );
             $nativeTopicPartition->offset = $message_or_offsets->offset + 1;
-
         } elseif (is_array($message_or_offsets)) {
             $topicPartitionList = new TopicPartitionList(...$message_or_offsets);
             $nativeTopicPartitionList = $topicPartitionList->getCData();
-
         } else {
-            throw new InvalidArgumentException(sprintf(
-                "%s::%s expects parameter %d to be %s, %s given",
-                __CLASS__,
-                $isAsync ? 'commitAsync' : 'commit',
-                1,
-                "an instance of RdKafka\\Message or an array of RdKafka\\TopicPartition",
-                gettype($message_or_offsets)
-            ));
+            throw new InvalidArgumentException(
+                sprintf(
+                    "%s::%s expects parameter %d to be %s, %s given",
+                    __CLASS__,
+                    $isAsync ? 'commitAsync' : 'commit',
+                    1,
+                    "an instance of RdKafka\\Message or an array of RdKafka\\TopicPartition",
+                    gettype($message_or_offsets)
+                )
+            );
         }
 
         $err = self::$ffi->rd_kafka_commit($this->kafka, $nativeTopicPartitionList, $isAsync ? 1 : 0);
@@ -161,7 +161,7 @@ class KafkaConsumer extends RdKafka
      * @return Message
      * @throws InvalidArgumentException
      */
-    public function consume(int $timeout_ms):Message
+    public function consume(int $timeout_ms): Message
     {
         $nativeMessage = self::$ffi->rd_kafka_consumer_poll($this->kafka, $timeout_ms);
 

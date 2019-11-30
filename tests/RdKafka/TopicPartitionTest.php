@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace RdKafka;
@@ -17,9 +18,11 @@ class TopicPartitionTest extends TestCase
         $conf->set('group.id', __METHOD__);
 
         $consumer = new KafkaConsumer($conf);
-        $consumer->assign([
-            new TopicPartition(KAFKA_TEST_TOPIC, 0),
-        ]);
+        $consumer->assign(
+            [
+                new TopicPartition(KAFKA_TEST_TOPIC, 0),
+            ]
+        );
 
         $topicPartitions = $consumer->getAssignment();
 
@@ -38,9 +41,11 @@ class TopicPartitionTest extends TestCase
         $conf->set('group.id', __METHOD__);
 
         $consumer = new KafkaConsumer($conf);
-        $consumer->assign([
-            new TopicPartition(KAFKA_TEST_TOPIC, 0),
-        ]);
+        $consumer->assign(
+            [
+                new TopicPartition(KAFKA_TEST_TOPIC, 0),
+            ]
+        );
 
         $topicPartitions = $consumer->getAssignment();
 

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 const RD_KAFKA_ADMIN_OP_ANY = 0;

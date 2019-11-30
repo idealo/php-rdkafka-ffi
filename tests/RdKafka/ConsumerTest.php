@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace RdKafka;
@@ -51,9 +52,11 @@ class ConsumerTest extends TestCase
     {
         $conf = new Conf();
         $conf->set('debug', 'consumer');
-        $conf->setLogCb(function ($consumer, $level, $fac, $buf) {
+        $conf->setLogCb(
+            function ($consumer, $level, $fac, $buf) {
 //            echo "log: $level $fac $buf" . PHP_EOL;
-        });
+            }
+        );
 
         $consumer = new Consumer($conf);
         $outQLen = $consumer->getOutQLen();
@@ -85,9 +88,11 @@ class ConsumerTest extends TestCase
     {
         $conf = new Conf();
         $conf->set('debug', 'consumer');
-        $conf->setLogCb(function (Consumer $consumer, int $level, string $fac, string $buf) {
+        $conf->setLogCb(
+            function (Consumer $consumer, int $level, string $fac, string $buf) {
 //            echo "log: $level $fac $buf" . PHP_EOL;
-        });
+            }
+        );
 
         $consumer = new Consumer($conf);
         $triggeredEvents = $consumer->poll(0);
@@ -104,10 +109,12 @@ class ConsumerTest extends TestCase
 
         $conf = new Conf();
         $conf->set('debug', 'consumer');
-        $conf->setLogCb(function (Consumer $consumer, int $level, string $fac, string $buf) use (&$loggerCallbacks) {
+        $conf->setLogCb(
+            function (Consumer $consumer, int $level, string $fac, string $buf) use (&$loggerCallbacks) {
 //            echo "log: $level $fac $buf" . PHP_EOL;
-            $loggerCallbacks++;
-        });
+                $loggerCallbacks++;
+            }
+        );
 
         $consumer = new Consumer($conf);
         $consumer->setLogLevel(LOG_DEBUG);
@@ -126,10 +133,12 @@ class ConsumerTest extends TestCase
 
         $conf = new Conf();
         $conf->set('debug', 'consumer');
-        $conf->setLogCb(function (Consumer $consumer, int $level, string $fac, string $buf) use (&$loggerCallbacks) {
+        $conf->setLogCb(
+            function (Consumer $consumer, int $level, string $fac, string $buf) use (&$loggerCallbacks) {
 //            echo "log: $level $fac $buf" . PHP_EOL;
-            $loggerCallbacks++;
-        });
+                $loggerCallbacks++;
+            }
+        );
 
         $consumer = new Consumer($conf);
         $consumer->setLogLevel(LOG_INFO);
@@ -147,7 +156,13 @@ class ConsumerTest extends TestCase
         $lowWatermarkOffset1 = 0;
         $highWatermarkOffset1 = 0;
 
-        $consumer->queryWatermarkOffsets(KAFKA_TEST_TOPIC, 0, $lowWatermarkOffset1, $highWatermarkOffset1, (int)KAFKA_TEST_TIMEOUT_MS);
+        $consumer->queryWatermarkOffsets(
+            KAFKA_TEST_TOPIC,
+            0,
+            $lowWatermarkOffset1,
+            $highWatermarkOffset1,
+            (int)KAFKA_TEST_TIMEOUT_MS
+        );
 
         $this->assertEquals(0, $lowWatermarkOffset1);
 
@@ -160,7 +175,13 @@ class ConsumerTest extends TestCase
         $lowWatermarkOffset2 = 0;
         $highWatermarkOffset2 = 0;
 
-        $consumer->queryWatermarkOffsets(KAFKA_TEST_TOPIC, 0, $lowWatermarkOffset2, $highWatermarkOffset2, (int)KAFKA_TEST_TIMEOUT_MS);
+        $consumer->queryWatermarkOffsets(
+            KAFKA_TEST_TOPIC,
+            0,
+            $lowWatermarkOffset2,
+            $highWatermarkOffset2,
+            (int)KAFKA_TEST_TIMEOUT_MS
+        );
 
         $this->assertEquals(0, $lowWatermarkOffset2);
         $this->assertEquals($highWatermarkOffset1 + 1, $highWatermarkOffset2);

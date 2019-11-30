@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace RdKafka;
@@ -127,11 +128,13 @@ class ConsumerTopic extends Topic
         $this->assertPartition($partition);
 
         if (array_key_exists($partition, $this->consuming)) {
-            throw new Exception(sprintf(
-                "%s:%d is already being consumed by the same Consumer instance",
-                $this->getName(),
-                $partition
-            ));
+            throw new Exception(
+                sprintf(
+                    "%s:%d is already being consumed by the same Consumer instance",
+                    $this->getName(),
+                    $partition
+                )
+            );
         }
 
         $ret = self::$ffi->rd_kafka_consume_start_queue(
@@ -161,11 +164,13 @@ class ConsumerTopic extends Topic
         $this->assertPartition($partition);
 
         if (array_key_exists($partition, $this->consuming)) {
-            throw new Exception(sprintf(
-                "%s:%d is already being consumed by the same Consumer instance",
-                $this->getName(),
-                $partition
-            ));
+            throw new Exception(
+                sprintf(
+                    "%s:%d is already being consumed by the same Consumer instance",
+                    $this->getName(),
+                    $partition
+                )
+            );
         }
 
         $ret = self::$ffi->rd_kafka_consume_start(

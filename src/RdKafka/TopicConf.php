@@ -1,10 +1,12 @@
 <?php
+
 declare(strict_types=1);
 
 namespace RdKafka;
 
 use FFI;
 use FFI\CData;
+use InvalidArgumentException;
 
 /**
  * Configuration reference: https://github.com/edenhill/librdkafka/blob/master/CONFIGURATION.md
@@ -97,12 +99,15 @@ class TopicConf extends Api
                 break;
 
             default:
-                throw new \InvalidArgumentException('Invalid partitioner');
+                throw new InvalidArgumentException('Invalid partitioner');
                 break;
         }
 
         $ffi = self::$ffi;
-        $proxyCallback = function ($topic, $keydata, $keylen, $partition_cnt, $topic_opaque, $msg_opaque) use ($ffi, $partitionerMethod) {
+        $proxyCallback = function ($topic, $keydata, $keylen, $partition_cnt, $topic_opaque, $msg_opaque) use (
+            $ffi,
+            $partitionerMethod
+        ) {
             return (int)$ffi->$partitionerMethod($topic, $keydata, $keylen, $partition_cnt, $topic_opaque, $msg_opaque);
         };
         self::$ffi->rd_kafka_topic_conf_set_partitioner_cb(
@@ -113,7 +118,8 @@ class TopicConf extends Api
 
     public function setPartitionerCb(callable $callback)
     {
-        $proxyCallback = function ($topic, $keydata, $keylen, $partition_cnt, $topic_opaque, $msg_opaque) use ($callback) {
+        $proxyCallback = function ($topic, $keydata, $keylen, $partition_cnt, $topic_opaque, $msg_opaque) use ($callback
+        ) {
             return (int)$callback(
                 FFI::string($keydata, $keylen),
                 (int)$partition_cnt

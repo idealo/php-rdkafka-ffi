@@ -1,8 +1,10 @@
 <?php
+
 declare(strict_types=1);
 
 namespace RdKafka\Admin;
 
+use FFI;
 use FFI\CData;
 use RdKafka\Api;
 
@@ -33,8 +35,8 @@ class ConfigEntry extends Api
         $this->isSensitive = (bool)self::$ffi->rd_kafka_ConfigEntry_is_sensitive($entry);
         $this->isSynonym = (bool)self::$ffi->rd_kafka_ConfigEntry_is_synonym($entry);
 
-        $size = \FFI::new('size_t');
-        $synonymsPtr = self::$ffi->rd_kafka_ConfigEntry_synonyms($entry, \FFI::addr($size));
+        $size = FFI::new('size_t');
+        $synonymsPtr = self::$ffi->rd_kafka_ConfigEntry_synonyms($entry, FFI::addr($size));
         $synonyms = [];
         for ($i = 0; $i < (int)$size->cdata; $i++) {
             $synonyms[] = new ConfigEntry($synonymsPtr[$i]);

@@ -1,9 +1,11 @@
 <?php
+
 declare(strict_types=1);
 
 namespace RdKafka\Admin;
 
 use Assert\Assert;
+use FFI;
 use RdKafka;
 use RdKafka\Api;
 use RdKafka\Conf;
@@ -83,8 +85,8 @@ class Client extends Api
 
         $eventResult = self::$ffi->rd_kafka_event_AlterConfigs_result($event->getCData());
 
-        $size = \FFI::new('size_t');
-        $result = self::$ffi->rd_kafka_AlterConfigs_result_resources($eventResult, \FFI::addr($size));
+        $size = FFI::new('size_t');
+        $result = self::$ffi->rd_kafka_AlterConfigs_result_resources($eventResult, FFI::addr($size));
 
         $topicResult = [];
         for ($i = 0; $i < (int)$size->cdata; $i++) {
@@ -124,8 +126,8 @@ class Client extends Api
 
         $eventResult = self::$ffi->rd_kafka_event_DescribeConfigs_result($event->getCData());
 
-        $size = \FFI::new('size_t');
-        $result = self::$ffi->rd_kafka_DescribeConfigs_result_resources($eventResult, \FFI::addr($size));
+        $size = FFI::new('size_t');
+        $result = self::$ffi->rd_kafka_DescribeConfigs_result_resources($eventResult, FFI::addr($size));
 
         $topicResult = [];
         for ($i = 0; $i < (int)$size->cdata; $i++) {
@@ -163,8 +165,8 @@ class Client extends Api
 
         $eventResult = self::$ffi->rd_kafka_event_CreatePartitions_result($event->getCData());
 
-        $size = \FFI::new('size_t');
-        $result = self::$ffi->rd_kafka_CreatePartitions_result_topics($eventResult, \FFI::addr($size));
+        $size = FFI::new('size_t');
+        $result = self::$ffi->rd_kafka_CreatePartitions_result_topics($eventResult, FFI::addr($size));
 
         $topicResult = [];
         for ($i = 0; $i < (int)$size->cdata; $i++) {
@@ -203,8 +205,8 @@ class Client extends Api
 
         $eventResult = self::$ffi->rd_kafka_event_CreateTopics_result($event->getCData());
 
-        $size = \FFI::new('size_t');
-        $result = self::$ffi->rd_kafka_CreateTopics_result_topics($eventResult, \FFI::addr($size));
+        $size = FFI::new('size_t');
+        $result = self::$ffi->rd_kafka_CreateTopics_result_topics($eventResult, FFI::addr($size));
 
         $topicResult = [];
         for ($i = 0; $i < (int)$size->cdata; $i++) {
@@ -243,8 +245,8 @@ class Client extends Api
 
         $eventResult = self::$ffi->rd_kafka_event_DeleteTopics_result($event->getCData());
 
-        $size = \FFI::new('size_t');
-        $result = self::$ffi->rd_kafka_DeleteTopics_result_topics($eventResult, \FFI::addr($size));
+        $size = FFI::new('size_t');
+        $result = self::$ffi->rd_kafka_DeleteTopics_result_topics($eventResult, FFI::addr($size));
 
         $topicResult = [];
         for ($i = 0; $i < (int)$size->cdata; $i++) {
@@ -303,11 +305,13 @@ class Client extends Api
         }
 
         if ($event->type() !== $eventType) {
-            throw new Exception(sprintf(
-                'Expected %d result event, not %d.',
-                $eventType,
-                $event->type()
-            ));
+            throw new Exception(
+                sprintf(
+                    'Expected %d result event, not %d.',
+                    $eventType,
+                    $event->type()
+                )
+            );
         }
 
         return $event;

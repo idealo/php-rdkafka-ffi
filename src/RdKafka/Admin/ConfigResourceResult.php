@@ -1,8 +1,10 @@
 <?php
+
 declare(strict_types=1);
 
 namespace RdKafka\Admin;
 
+use FFI;
 use FFI\CData;
 use RdKafka\Api;
 
@@ -27,8 +29,8 @@ class ConfigResourceResult extends Api
         $this->error = (int)self::$ffi->rd_kafka_ConfigResource_error($result);
         $this->errorString = (string)self::$ffi->rd_kafka_ConfigResource_error_string($result);
 
-        $size = \FFI::new('size_t');
-        $configsPtr = self::$ffi->rd_kafka_ConfigResource_configs($result, \FFI::addr($size));
+        $size = FFI::new('size_t');
+        $configsPtr = self::$ffi->rd_kafka_ConfigResource_configs($result, FFI::addr($size));
         $configs = [];
         for ($i = 0; $i < (int)$size->cdata; $i++) {
             $configs[] = new ConfigEntry($configsPtr[$i]);

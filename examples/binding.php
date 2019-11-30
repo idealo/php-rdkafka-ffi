@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 $librdkafka = \FFI::load(dirname(__DIR__) . '/resources/rdkafka.h');
 
 echo "conf:" . PHP_EOL;

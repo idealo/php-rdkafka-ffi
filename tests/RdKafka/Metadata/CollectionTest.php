@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace RdKafka\Metadata;
@@ -68,7 +69,6 @@ class CollectionTest extends TestCase
 
         $this->assertTrue($third);
         $this->assertFalse($forth);
-
     }
 
     public function testCount()

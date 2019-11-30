@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace RdKafka;
@@ -24,9 +25,11 @@ class ProducerTest extends TestCase
     {
         $this->callbackPayload = '';
         $conf = new Conf();
-        $conf->setDrMsgCb(function (RdKafka $kafka, Message $message, $opaque = null) {
-            $this->callbackPayload = $message->payload;
-        });
+        $conf->setDrMsgCb(
+            function (RdKafka $kafka, Message $message, $opaque = null) {
+                $this->callbackPayload = $message->payload;
+            }
+        );
 
         $this->producer = new Producer($conf);
         $this->producer->addBrokers(KAFKA_BROKERS);

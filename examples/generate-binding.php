@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * Generate FFIMe based bindings for all librdkafka versions ^1.0
  *
@@ -6,6 +9,8 @@
  *
  * (Windows is not supported)
  */
+
+use PHPCParser\Context;
 use PHPCParser\CParser;
 
 require_once dirname(__DIR__) . '/vendor/autoload.php';
@@ -15,6 +20,7 @@ $supported = [
     '1.0.1' => 'https://raw.githubusercontent.com/edenhill/librdkafka/v1.0.1/src/rdkafka.h',
     '1.1.0' => 'https://raw.githubusercontent.com/edenhill/librdkafka/v1.1.0/src/rdkafka.h',
     '1.2.0' => 'https://raw.githubusercontent.com/edenhill/librdkafka/v1.2.0/src/rdkafka.h',
+    '1.2.1' => 'https://raw.githubusercontent.com/edenhill/librdkafka/v1.2.1/src/rdkafka.h',
 ];
 
 $ffiDefines = <<<FFI
@@ -51,13 +57,15 @@ foreach ($supported as $version => $hFileUrl) {
 
     echo "Filter $hFileOrig" . PHP_EOL;
 
+    $hFileContentFiltered = $hFileContent;
+
     // clean up: comment out unused inline function rd_kafka_message_errstr (not supported by cparser)
     $hFileContentFiltered = preg_replace_callback(
         '/static RD_INLINE.+?rd_kafka_message_errstr[^}]+?}/si',
         function ($matches) {
             return "//" . str_replace("\n", "\n//", $matches[0]);
         },
-        $hFileContent,
+        $hFileContentFiltered,
         1
     );
 
@@ -85,7 +93,7 @@ foreach ($supported as $version => $hFileUrl) {
 
     echo "Parse $hFileFiltered" . PHP_EOL;
 
-    $context = new \PHPCParser\Context();
+    $context = new Context();
     // ignore includes
     $context->defineInt('_STDIO_H', 0);
     $context->defineInt('_INTTYPES_H', 0);
@@ -104,7 +112,7 @@ foreach ($supported as $version => $hFileUrl) {
     (new FFIMe\FFIMe("librdkafka.so"))
         ->include($hFileParsed)
         ->codeGen(
-            'RdKafka\\Binding\\LibRdKafkaV' . $versionName,
+            'RdKafka\\Binding\\LibRdKafka',
             dirname(__DIR__) . '/src/RdKafka/Binding/LibRdKafkaV' . $versionName . '.php'
         );
 

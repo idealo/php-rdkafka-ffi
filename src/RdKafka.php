@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 use FFI\CData;
@@ -13,7 +14,7 @@ abstract class RdKafka extends Api
     protected ?CData $kafka;
 
     /**
-     * @var \WeakReference[]
+     * @var WeakReference[]
      */
     private static array $instances = [];
 
@@ -48,7 +49,7 @@ abstract class RdKafka extends Api
 
         $this->initLogQueue($conf);
 
-        self::$instances[] = \WeakReference::create($this);
+        self::$instances[] = WeakReference::create($this);
     }
 
     private function duplicateConfCData(Conf $conf = null): ?CData

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace RdKafka;
@@ -43,8 +44,14 @@ class ProducerTopic extends Topic
      * @return void
      * @throws Exception
      */
-    public function producev(int $partition, int $msgflags, string $payload = null, string $key = null, array $headers = [], int $timestamp_ms = null)
-    {
+    public function producev(
+        int $partition,
+        int $msgflags,
+        string $payload = null,
+        string $key = null,
+        array $headers = [],
+        int $timestamp_ms = null
+    ) {
         if ($partition != RD_KAFKA_PARTITION_UA && ($partition < 0 || $partition > 0x7FFFFFFF)) {
             throw new InvalidArgumentException(sprintf("Out of range value '%d' for partition", $partition));
         }
@@ -67,7 +74,7 @@ class ProducerTopic extends Topic
             $key,
             is_null($key) ? null : strlen($key),
             RD_KAFKA_VTYPE_TIMESTAMP,
-            is_null($timestamp_ms) ? 0 : $timestamp_ms
+            is_null($timestamp_ms) ? 0 : $timestamp_ms,
         ];
 
         if (!empty($headers)) {

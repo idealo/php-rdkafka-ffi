@@ -1,5 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
+use RdKafka\Admin\Client;
+use RdKafka\Admin\NewTopic;
+use RdKafka\Conf;
+
 require_once dirname(__DIR__) . '/vendor/autoload.php';
 
 $options = getopt('t:p::r::');
@@ -11,17 +17,19 @@ if (empty($options)) {
     exit();
 }
 
-$conf = new \RdKafka\Conf();
+$conf = new Conf();
 $conf->set('metadata.broker.list', 'kafka:9092');
-$client = \RdKafka\Admin\Client::fromConf($conf);
+$client = Client::fromConf($conf);
 
-$result = $client->createTopics([
-    new \RdKafka\Admin\NewTopic(
-        (string)$options['t'],
-        ((int)$options['p']) ?: 1,
-        ((int)$options['r']) ?: 1
-    ),
-]);
+$result = $client->createTopics(
+    [
+        new NewTopic(
+            (string)$options['t'],
+            ((int)$options['p']) ?: 1,
+            ((int)$options['r']) ?: 1
+        ),
+    ]
+);
 
 var_dump($result);
 

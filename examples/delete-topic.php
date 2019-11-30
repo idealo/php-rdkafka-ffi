@@ -1,5 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
+use RdKafka\Admin\Client;
+use RdKafka\Admin\DeleteTopic;
+use RdKafka\Conf;
+
 require_once dirname(__DIR__) . '/vendor/autoload.php';
 
 $options = getopt('t:');
@@ -11,15 +17,17 @@ if (empty($options)) {
     exit();
 }
 
-$conf = new \RdKafka\Conf();
+$conf = new Conf();
 $conf->set('metadata.broker.list', 'kafka:9092');
-$client = \RdKafka\Admin\Client::fromConf($conf);
+$client = Client::fromConf($conf);
 
-$result = $client->deleteTopics([
-    new \RdKafka\Admin\DeleteTopic(
-        (string) $options['t']
-    ),
-]);
+$result = $client->deleteTopics(
+    [
+        new DeleteTopic(
+            (string)$options['t']
+        ),
+    ]
+);
 
 var_dump($result);
 

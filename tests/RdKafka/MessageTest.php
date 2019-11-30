@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace RdKafka;
@@ -21,9 +22,11 @@ class MessageTest extends TestCase
         $context = $this;
         $conf = new Conf();
         $conf->set('metadata.broker.list', KAFKA_BROKERS);
-        $conf->setDrMsgCb(function ($producer, $message) use ($context) {
-            $context->producedMessage = $message;
-        });
+        $conf->setDrMsgCb(
+            function ($producer, $message) use ($context) {
+                $context->producedMessage = $message;
+            }
+        );
         $producer = new Producer($conf);
         $producerTopic = $producer->newTopic(KAFKA_TEST_TOPIC);
         $producerTopic->producev(0, 0, __CLASS__, 'key-msg', ['header-name' => 'header-value']);
@@ -76,7 +79,7 @@ class MessageTest extends TestCase
      */
     public function testPropertyLatency()
     {
-        $this->assertGreaterThan((int)KAFKA_TEST_TIMEOUT_MS/2, $this->producedMessage->latency);
+        $this->assertGreaterThan((int)KAFKA_TEST_TIMEOUT_MS / 2, $this->producedMessage->latency);
     }
 
     public function testErrstr()

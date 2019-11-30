@@ -1,9 +1,11 @@
 <?php
+
 declare(strict_types=1);
 
 namespace RdKafka;
 
 use FFI\CData;
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use RdKafka;
 
@@ -42,9 +44,11 @@ class ProducerTopicTest extends TestCase
         $payload = '';
 
         $conf = new Conf();
-        $conf->setDrMsgCb(function (RdKafka $kafka, Message $message) use (&$payload) {
-            $payload = $message->payload;
-        });
+        $conf->setDrMsgCb(
+            function (RdKafka $kafka, Message $message) use (&$payload) {
+                $payload = $message->payload;
+            }
+        );
         $producer = new Producer($conf);
         $producer->addBrokers(KAFKA_BROKERS);
         $topic = $producer->newTopic(KAFKA_TEST_TOPIC);
@@ -62,7 +66,7 @@ class ProducerTopicTest extends TestCase
         $producer->addBrokers(KAFKA_BROKERS);
         $topic = $producer->newTopic(KAFKA_TEST_TOPIC);
 
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessageRegExp('/partition/');
         $topic->produce(-2, 0);
     }
@@ -73,7 +77,7 @@ class ProducerTopicTest extends TestCase
         $producer->addBrokers(KAFKA_BROKERS);
         $topic = $producer->newTopic(KAFKA_TEST_TOPIC);
 
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessageRegExp('/msgflags/');
         $topic->produce(0, -1);
     }
@@ -83,9 +87,11 @@ class ProducerTopicTest extends TestCase
         $payload = '';
 
         $conf = new Conf();
-        $conf->setDrMsgCb(function (RdKafka $kafka, Message $message) use (&$payload) {
-            $payload = $message->payload;
-        });
+        $conf->setDrMsgCb(
+            function (RdKafka $kafka, Message $message) use (&$payload) {
+                $payload = $message->payload;
+            }
+        );
         $producer = new Producer($conf);
         $producer->addBrokers(KAFKA_BROKERS);
         $topic = $producer->newTopic(KAFKA_TEST_TOPIC);
@@ -103,10 +109,12 @@ class ProducerTopicTest extends TestCase
         $headers = [];
 
         $conf = new Conf();
-        $conf->setDrMsgCb(function (RdKafka $kafka, Message $message) use (&$payload, &$headers) {
-            $payload = $message->payload;
-            $headers = $message->headers;
-        });
+        $conf->setDrMsgCb(
+            function (RdKafka $kafka, Message $message) use (&$payload, &$headers) {
+                $payload = $message->payload;
+                $headers = $message->headers;
+            }
+        );
         $producer = new Producer($conf);
         $producer->addBrokers(KAFKA_BROKERS);
         $topic = $producer->newTopic(KAFKA_TEST_TOPIC);
@@ -130,10 +138,12 @@ class ProducerTopicTest extends TestCase
         $timestamp = -1;
 
         $conf = new Conf();
-        $conf->setDrMsgCb(function (RdKafka $kafka, Message $message) use (&$payload, &$timestamp) {
-            $payload = $message->payload;
-            $timestamp = $message->timestamp;
-        });
+        $conf->setDrMsgCb(
+            function (RdKafka $kafka, Message $message) use (&$payload, &$timestamp) {
+                $payload = $message->payload;
+                $timestamp = $message->timestamp;
+            }
+        );
         $producer = new Producer($conf);
         $producer->addBrokers(KAFKA_BROKERS);
         $topic = $producer->newTopic(KAFKA_TEST_TOPIC);
@@ -158,7 +168,7 @@ class ProducerTopicTest extends TestCase
         $producer->addBrokers(KAFKA_BROKERS);
         $topic = $producer->newTopic(KAFKA_TEST_TOPIC);
 
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessageRegExp('/partition/');
         $topic->producev(-2, 0);
     }
@@ -169,7 +179,7 @@ class ProducerTopicTest extends TestCase
         $producer->addBrokers(KAFKA_BROKERS);
         $topic = $producer->newTopic(KAFKA_TEST_TOPIC);
 
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessageRegExp('/msgflags/');
         $topic->producev(0, -1);
     }
