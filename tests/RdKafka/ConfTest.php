@@ -93,9 +93,11 @@ class ConfTest extends TestCase
         ];
 
         $conf = new Conf();
-        $properties = array_keys($conf->dump());
+        $properties = $conf->dump();
 
-        $this->assertEquals($expectedProperties, $properties);
+        foreach ($expectedProperties as $expectedProperty) {
+            $this->assertArrayHasKey($expectedProperty, $properties);
+        }
     }
 
     public function testSet()
