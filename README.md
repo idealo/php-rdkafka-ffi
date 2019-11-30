@@ -82,6 +82,10 @@ Examples use topic ```playground```.
 Updating Dependencies
 
     docker-compose run --rm --no-deps php74 composer update
+    
+Create topic ```playground``` ...
+
+    docker-compose run --rm php74 php examples/create-topic.php -tplayground -p3 -r1
 
 Producing ...
 
