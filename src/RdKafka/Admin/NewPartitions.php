@@ -1,9 +1,11 @@
 <?php
+
 declare(strict_types=1);
 
 namespace RdKafka\Admin;
 
 use Assert\Assert;
+use FFI;
 use FFI\CData;
 use RdKafka\Api;
 use RdKafka\Exception;
@@ -16,16 +18,16 @@ class NewPartitions extends Api
     {
         parent::__construct();
 
-        $errstr = \FFI::new("char[512]");
+        $errstr = FFI::new("char[512]");
         $this->partitions = self::$ffi->rd_kafka_NewPartitions_new(
             $topicName,
             $new_total_cnt,
             $errstr,
-            \FFI::sizeOf($errstr)
+            FFI::sizeOf($errstr)
         );
 
         if ($this->partitions === null) {
-            throw new Exception(\FFI::string($errstr));
+            throw new Exception(FFI::string($errstr));
         }
     }
 
@@ -53,25 +55,25 @@ class NewPartitions extends Api
         Assert::that($broker_ids)->notEmpty()->all()->integer();
 
         $brokerIdsCount = count($broker_ids);
-        $brokerIds = \FFI::new('int*[' . $brokerIdsCount . ']');
+        $brokerIds = FFI::new('int*[' . $brokerIdsCount . ']');
         foreach (array_values($broker_ids) as $i => $broker_id) {
-            $int = \FFI::new("int");
+            $int = FFI::new("int");
             $int->cdata = $broker_id;
-            $brokerIds[$i] = \FFI::addr($int);
+            $brokerIds[$i] = FFI::addr($int);
         }
 
-        $errstr = \FFI::new("char[512]");
+        $errstr = FFI::new("char[512]");
         $err = (int)self::$ffi->rd_kafka_NewPartitions_set_replica_assignment(
             $this->partitions,
             $new_partition_id,
             $brokerIds[0],
             $brokerIdsCount,
             $errstr,
-            \FFI::sizeOf($errstr)
+            FFI::sizeOf($errstr)
         );
 
         if ($err != RD_KAFKA_RESP_ERR_NO_ERROR) {
-            throw new Exception(\FFI::string($errstr));
+            throw new Exception(FFI::string($errstr));
         }
     }
 }

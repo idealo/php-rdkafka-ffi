@@ -21,6 +21,8 @@ class Api
     private static function ensureFFI()
     {
         if (!isset(self::$ffi)) {
+//            self::$ffi = FFI::scope('RDKAFKA');
+//            self::$ffi = (new Binding())->getFFI();
             self::$ffi = FFI::load(dirname(__DIR__, 2) . '/resources/rdkafka.h');
         }
     }
