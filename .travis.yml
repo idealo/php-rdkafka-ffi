@@ -26,6 +26,7 @@ jobs:
           if [ "$LIBRDKAFKA_VERSION" = "v1.0.0" ]; then ./cc-test-reporter before-build; fi;
       script:
         - |
+          set -e;
           docker-compose build --pull --parallel --build-arg LIBRDKAFKA_VERSION="$LIBRDKAFKA_VERSION";
           docker-compose up -d kafka;
           sleep 10s;
@@ -33,10 +34,10 @@ jobs:
           docker-compose run --rm php74 php examples/create-topic.php -ttest -p1 -r1;
           docker-compose run --rm php74 php examples/create-topic.php -ttest_partitions -p3 -r1;
           docker-compose run --rm php74 vendor/bin/phpunit --coverage-text --coverage-clover=clover.xml;
-          sed -i "s|/app/|`pwd`/|g" clover.xml;
       after_script:
         - |
           docker-compose down;
+          sed -i "s|/app/|`pwd`/|g" clover.xml;
           if [ "$LIBRDKAFKA_VERSION" = "v1.0.0" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT; fi;
 
     - <<: *STANDARD_TEST_JOB
