@@ -20,7 +20,7 @@
         "beberlei/assert": "^3.2"
     },
     "require-dev": {
-        "phpunit/phpunit": "^8.4",
+        "phpunit/phpunit": "^8",
         "ircmaxell/ffime": "master-dev",
         "ircmaxell/php-c-parser": "master-dev"
     }
