@@ -1,4 +1,4 @@
-# Pure PHP Kafka Client library based on php7.4-dev, ffi and librdkafka
+# Pure PHP Kafka Client library based on PHP 7.4, FFI and librdkafka
 
 __EXTREMLY EXPERIMENTAL WIP__
 
@@ -6,17 +6,17 @@ __EXTREMLY EXPERIMENTAL WIP__
 [![Test Coverage](https://api.codeclimate.com/v1/badges/e60645b9d6d8fa9dd9d6/test_coverage)](https://codeclimate.com/github/dirx/php-ffi-librdkafka/test_coverage)
 [![Maintainability](https://api.codeclimate.com/v1/badges/e60645b9d6d8fa9dd9d6/maintainability)](https://codeclimate.com/github/dirx/php-ffi-librdkafka/maintainability)
 
-This is a pure PHP Kafka Client library as replacement for [php rdkafka extension](https://github.com/arnaud-lb/php-rdkafka).
+This is a Kafka client library written in pure PHP.
+It is intended as a replacement for the [PHP RdKafka extension](https://github.com/arnaud-lb/php-rdkafka).
 
 Playing around with:
 
-* [ffi extension](https://github.com/php/php-src/tree/PHP-7.4/ext/ffi) for php7.4 ([rfc](https://wiki.php.net/rfc/ffi))
-* [librdkafka v1.0.0, v1.1.0, v1.2.0, master](https://github.com/edenhill/librdkafka) ([docs](https://docs.confluent.io/current/clients/librdkafka/rdkafka_8h.html))
-* [php rdkafka stubs](https://github.com/kwn/php-rdkafka-stubs)
-* [php7.4-rc](https://github.com/php/php-src/tree/PHP-7.4)
-* [wurstmeister/kafka](https://hub.docker.com/r/wurstmeister/kafka/) & official [zookeeper](https://hub.docker.com/_/zookeeper) docker images
-* [pcov](https://github.com/krakjoe/pcov) for test code coverage
-* [phpbench](https://github.com/phpbench/phpbench) for benchmarking
+* [FFI extension](https://www.php.net/manual/en/book.ffi.php)
+* [librdkafka v1.0.*, v1.1.*, v1.2.*, master](https://github.com/edenhill/librdkafka) ([docs](https://docs.confluent.io/current/clients/librdkafka/rdkafka_8h.html))
+* [PHP 7.4](https://www.php.net/archive/2019.php#2019-11-28-1)
+* [Confluent Kafka](https://hub.docker.com/r/confluentinc/cp-kafka) & [Zookeeper](hhttps://hub.docker.com/r/confluentinc/cp-zookeeper) docker images
+* [pcov extension](https://github.com/krakjoe/pcov) for test code coverage
+* [phpbench lib](https://github.com/phpbench/phpbench) for benchmarking
 
 ## Prepare
 
@@ -42,7 +42,7 @@ Alternative: build the image individually
 
     docker-compose build --no-cache --pull php74
 
-Test - should show latest 7.4 rc version
+Test - should show latest 7.4 version
 
     docker-compose run php74 php -v
 
@@ -115,7 +115,7 @@ Run tests with coverage
 
     docker-compose run --rm php74 vendor/bin/phpunit --coverage-html build/coverage
 
-### Run tests against rdkafka extension / PHP 7.4
+### Run tests against RdKafka extension / PHP 7.4
 
 Updating Dependencies
 
@@ -132,9 +132,6 @@ Benchmarks use topic ```benchmarks```.
 Run & store benchmarks for ffi based rdkafka binding
 
     docker-compose run --rm php74 phpbench run benchmarks --config=/app/benchmarks/ffi.json --report=default --store --tag=ffi
-    docker-compose run --rm php80 phpbench run benchmarks --config=/app/benchmarks/ffi.json --report=default --store --tag=ffi
-
-    docker-compose run --rm php80 phpbench run benchmarks --config=/app/benchmarks/ffi-jit.json --report=default --store --tag=ffijit
 
 Run & store benchmarks for extension based rdkafka binding
 
@@ -143,11 +140,10 @@ Run & store benchmarks for extension based rdkafka binding
 Show comparison
 
     docker-compose run --rm php74 phpbench report --uuid=tag:ffi --uuid=tag:ext --report='{extends: compare, compare: tag}'
-    docker-compose run --rm php80 phpbench report --uuid=tag:ffi --uuid=tag:ffijit --report='{extends: compare, compare: tag}'
 
 ### Benchmarks
 
-Just some first benchmarks based on PHP74-RC1, librdkafka v1.0.0, ext latest master, ffi without preload enabled.
+Just some first benchmarks based on PHP74-RC1, librdkafka v1.0.0, ext latest master, FFI without preload enabled.
 
 | benchmark     | subject                      | set | revs | tag:ffi:mean | tag:ext:mean |
 |---------------|------------------------------|-----|------|--------------|--------------|
