@@ -12,7 +12,7 @@ env:
 
 jobs:
   allow_failures:
-    - minimal: "librdkafka master"
+    - name: "librdkafka master"
   include:
     - &STANDARD_TEST_JOB
       stage: Test
