@@ -317,6 +317,9 @@ class KafkaConsumerTest extends TestCase
         $consumer = new KafkaConsumer($conf);
         $consumer->subscribe([KAFKA_TEST_TOPIC]);
 
+        // wait for partition assignment
+        sleep(1);
+
         $now = (int)(microtime(true) * 1000);
         $oneMinuteAgo = (int)(microtime(true) * 1000) - (60 * 1000);
 
