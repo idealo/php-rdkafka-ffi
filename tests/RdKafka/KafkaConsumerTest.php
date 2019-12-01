@@ -310,7 +310,7 @@ class KafkaConsumerTest extends TestCase
     public function testOffsetsForTimes()
     {
         $conf = new Conf();
-        $conf->set('group.id', __METHOD__ . rand(0, 999999999));
+        $conf->set('group.id', __METHOD__);
         $conf->set('metadata.broker.list', KAFKA_BROKERS);
         $conf->set('auto.offset.reset', 'earliest');
 
@@ -321,7 +321,7 @@ class KafkaConsumerTest extends TestCase
         sleep(1);
 
         $now = (int)(time() * 1000);
-        $oneMinuteAgo = (int)(time() - 60) * 1000;
+        $ago = (int)(time() - 30) * 1000;
 
         $topicPartitions = $consumer->offsetsForTimes(
             [
@@ -335,7 +335,7 @@ class KafkaConsumerTest extends TestCase
 
         $topicPartitions = $consumer->offsetsForTimes(
             [
-                new TopicPartition(KAFKA_TEST_TOPIC, 0, $oneMinuteAgo),
+                new TopicPartition(KAFKA_TEST_TOPIC, 0, $ago),
             ],
             (int)KAFKA_TEST_TIMEOUT_MS
         );
