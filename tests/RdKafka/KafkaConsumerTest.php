@@ -320,8 +320,8 @@ class KafkaConsumerTest extends TestCase
         // wait for partition assignment
         sleep(1);
 
-        $now = (int)(microtime(true) * 1000);
-        $oneMinuteAgo = (int)(microtime(true) * 1000) - (60 * 1000);
+        $now = (int)(time() * 1000);
+        $oneMinuteAgo = (int)(time() -60) * 1000;
 
         $topicPartitions = $consumer->offsetsForTimes(
             [
