@@ -45,8 +45,8 @@ class TopicConf extends Api
 
         $result = [];
         for ($i = 0; $i < $count; $i += 2) {
-            $key = (string)$dump[$i];
-            $val = (string)$dump[$i + 1];
+            $key = FFI::string($dump[$i]);
+            $val = FFI::string($dump[$i + 1]);
             $result[$key] = $val;
         }
 

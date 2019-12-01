@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace RdKafka;
 
+use FFI;
 use FFI\CData;
 
 class Event extends Api
@@ -44,7 +45,7 @@ class Event extends Api
 
     public function errorString()
     {
-        return (string)self::$ffi->rd_kafka_event_error_string($this->event);
+        return FFI::string(self::$ffi->rd_kafka_event_error_string($this->event));
     }
 
     public function errorIsFatal()

@@ -45,8 +45,8 @@ class Conf extends Api
 
         $result = [];
         for ($i = 0; $i < $count; $i += 2) {
-            $key = (string)$dump[$i];
-            $val = (string)$dump[$i + 1];
+            $key = FFI::string($dump[$i]);
+            $val = FFI::string($dump[$i + 1]);
             $result[$key] = $val;
         }
 
@@ -146,8 +146,8 @@ class Conf extends Api
             $callback(
                 RdKafka::resolveFromCData($consumerOrProducer),
                 (int)$level,
-                (string)$fac,
-                (string)$buf
+                FFI::string($fac),
+                FFI::string($buf)
             );
         };
 
@@ -165,7 +165,7 @@ class Conf extends Api
             $callback(
                 RdKafka::resolveFromCData($consumerOrProducer),
                 (int)$err,
-                (string)$reason,
+                FFI::string($reason),
                 $opaque
             );
         };

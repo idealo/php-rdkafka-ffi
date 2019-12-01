@@ -13,7 +13,7 @@ class ConfigResourceResult extends Api
     public string $name;
     public int $type;
     public int $error;
-    public string $errorString;
+    public ?string $errorString;
 
     /**
      * @var ConfigEntry[]
@@ -24,10 +24,11 @@ class ConfigResourceResult extends Api
     {
         parent::__construct();
 
-        $this->name = (string)self::$ffi->rd_kafka_ConfigResource_name($result);
+        $this->name = FFI::string(self::$ffi->rd_kafka_ConfigResource_name($result));
         $this->type = (int)self::$ffi->rd_kafka_ConfigResource_type($result);
         $this->error = (int)self::$ffi->rd_kafka_ConfigResource_error($result);
-        $this->errorString = (string)self::$ffi->rd_kafka_ConfigResource_error_string($result);
+        $errorStringCdata = self::$ffi->rd_kafka_ConfigResource_error_string($result);
+        $this->errorString = is_null($errorStringCdata) ? null : FFI::string($errorStringCdata);
 
         $size = FFI::new('size_t');
         $configsPtr = self::$ffi->rd_kafka_ConfigResource_configs($result, FFI::addr($size));

@@ -47,7 +47,7 @@ class Message extends Api
         $this->err = (int)$nativeMessage->err;
 
         if ($nativeMessage->rkt !== null) {
-            $this->topic_name = (string)self::$ffi->rd_kafka_topic_name($nativeMessage->rkt);
+            $this->topic_name = FFI::string(self::$ffi->rd_kafka_topic_name($nativeMessage->rkt));
         } else {
             $this->topic_name = null;
         }
