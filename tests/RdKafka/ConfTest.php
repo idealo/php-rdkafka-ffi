@@ -216,8 +216,7 @@ class ConfTest extends TestCase
         $rebalanceCallbackStack = [];
 
         $conf = new Conf();
-//        $conf->set('debug', 'broker');
-        $conf->set('group.id', __METHOD__);
+        $conf->set('group.id', __METHOD__ . rand(0, 99999999));
         $conf->set('metadata.broker.list', KAFKA_BROKERS);
         $conf->setRebalanceCb(
             function (KafkaConsumer $consumer, $err, $topicPartitionList, $opaque = null) use (&$rebalanceCallbackStack

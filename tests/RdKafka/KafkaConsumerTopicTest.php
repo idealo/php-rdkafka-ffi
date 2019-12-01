@@ -19,9 +19,6 @@ class KafkaConsumerTopicTest extends TestCase
         $conf->set('metadata.broker.list', KAFKA_BROKERS);
 
         $consumer = new KafkaConsumer($conf);
-
-        sleep(1);
-
         $topic = $consumer->newTopic(KAFKA_TEST_TOPIC, new TopicConf());
 
         $name = $topic->getName();
