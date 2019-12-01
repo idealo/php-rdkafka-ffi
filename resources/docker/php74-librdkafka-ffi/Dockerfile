@@ -7,7 +7,7 @@ RUN set -e; \
     apt-get install -y --no-install-recommends git zip unzip gdb libffi-dev; \
     docker-php-ext-configure ffi; \
     docker-php-ext-install -j$(nproc) ffi pcntl; \
-    git clone --branch "$LIBRDKAFKA_VERSION" --depth 1 https://github.com/edenhill/librdkafka.git /tmp/librdkafka; \
+    git clone --branch "${LIBRDKAFKA_VERSION}" --depth 1 https://github.com/edenhill/librdkafka.git /tmp/librdkafka; \
     cd /tmp/librdkafka; \
     ./configure; \
     make; \
@@ -18,27 +18,9 @@ RUN set -e; \
     rm -rf /tmp/*;
 
 # install xdebug
-RUN cd /tmp; \
-    curl https://codeload.github.com/xdebug/xdebug/tar.gz/master -o xdebug.tar.gz;\
-    tar -xzf xdebug.tar.gz; \
-    cd xdebug-master; \
-    sh rebuild.sh; \
-    docker-php-ext-enable xdebug; \
-    rm -rf /tmp/*;
-
-# install pcov
-RUN cd /tmp; \
-    curl https://codeload.github.com/krakjoe/pcov/tar.gz/develop -o pcov.tar.gz;\
-    tar -xzf pcov.tar.gz; \
-    cd pcov-develop; \
-    phpize; \
-    ./configure --enable-pcov; \
-    make; \
-    make test; \
-    make install; \
-    docker-php-ext-enable pcov; \
-    echo "pcov.enabled=true" >> /usr/local/etc/php/conf.d/docker-php-ext-pcov.ini; \
-    rm -rf /tmp/*;
+ARG XDEBUG_VERSION=stable
+RUN pecl install xdebug-${XDEBUG_VERSION}; \
+    docker-php-ext-enable xdebug;
 
 # install rdkafka master-dev
 ARG RDKAFKA_EXT_VERSION=master

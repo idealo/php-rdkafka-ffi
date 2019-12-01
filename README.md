@@ -15,7 +15,6 @@ Playing around with:
 * [librdkafka v1.0, v1.1, v1.2, master](https://github.com/edenhill/librdkafka) ([docs](https://docs.confluent.io/current/clients/librdkafka/rdkafka_8h.html))
 * [PHP 7.4](https://www.php.net/archive/2019.php#2019-11-28-1)
 * Confluent [Kafka](https://hub.docker.com/r/confluentinc/cp-kafka) / [Zookeeper](https://hub.docker.com/r/confluentinc/cp-zookeeper) docker images
-* [pcov extension](https://github.com/krakjoe/pcov) for test code coverage
 * [phpbench lib](https://github.com/phpbench/phpbench) for benchmarking
 
 ## Prepare
