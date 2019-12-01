@@ -22,9 +22,9 @@ class MetadataTest extends TestCase
 
     protected function setUp(): void
     {
-        $producer = new Producer();
-        $producer->addBrokers(KAFKA_BROKERS);
-        usleep(10000);
+        $conf = new Conf();
+        $conf->set('metadata.broker.list', KAFKA_BROKERS);
+        $producer = new Producer($conf);
 
         $this->metadata = $producer->getMetadata(true, null, (int)KAFKA_TEST_TIMEOUT_MS);
     }

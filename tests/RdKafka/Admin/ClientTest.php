@@ -291,7 +291,7 @@ class ClientTest extends TestCase
 
         $this->assertEquals('111', $result[0]->name);
 
-        // check chances
+        // check changes
         usleep(50 * 1000);
         $result = $client->describeConfigs([$configResource], $describeConfigsOptions);
 

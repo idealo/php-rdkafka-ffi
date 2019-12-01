@@ -30,7 +30,7 @@ class KafkaConsumerTest extends TestCase
     public function testConstructWithMissingGroupIdConfShouldFail()
     {
         $this->expectException(Exception::class);
-        $this->expectExceptionMessageRegExp('/group\.id/');
+        $this->expectDeprecationMessageMatches('/group\.id/');
 
         new KafkaConsumer(new Conf());
     }
@@ -160,8 +160,8 @@ class KafkaConsumerTest extends TestCase
         $consumer = new KafkaConsumer($conf);
 
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessageRegExp('/\bcommit\b/');
-        $this->expectExceptionMessageRegExp('/object/');
+        $this->expectDeprecationMessageMatches('/\bcommit\b/');
+        $this->expectDeprecationMessageMatches('/object/');
         $consumer->commit(new stdClass());
     }
 
@@ -173,8 +173,8 @@ class KafkaConsumerTest extends TestCase
         $consumer = new KafkaConsumer($conf);
 
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessageRegExp('/commitAsync\b/');
-        $this->expectExceptionMessageRegExp('/bool/');
+        $this->expectDeprecationMessageMatches('/commitAsync\b/');
+        $this->expectDeprecationMessageMatches('/bool/');
         $consumer->commitAsync(false);
     }
 
@@ -341,7 +341,7 @@ class KafkaConsumerTest extends TestCase
         );
 
         $this->assertCount(1, $topicPartitions);
-        $this->assertGreaterThan(1, $topicPartitions[0]->getOffset());
+        $this->assertGreaterThan(0, $topicPartitions[0]->getOffset());
     }
 
     public function testGetMetadata()

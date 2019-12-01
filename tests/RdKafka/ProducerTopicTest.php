@@ -67,7 +67,7 @@ class ProducerTopicTest extends TestCase
         $topic = $producer->newTopic(KAFKA_TEST_TOPIC);
 
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessageRegExp('/partition/');
+        $this->expectDeprecationMessageMatches('/partition/');
         $topic->produce(-2, 0);
     }
 
@@ -78,7 +78,7 @@ class ProducerTopicTest extends TestCase
         $topic = $producer->newTopic(KAFKA_TEST_TOPIC);
 
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessageRegExp('/msgflags/');
+        $this->expectDeprecationMessageMatches('/msgflags/');
         $topic->produce(0, -1);
     }
 
@@ -169,7 +169,7 @@ class ProducerTopicTest extends TestCase
         $topic = $producer->newTopic(KAFKA_TEST_TOPIC);
 
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessageRegExp('/partition/');
+        $this->expectDeprecationMessageMatches('/partition/');
         $topic->producev(-2, 0);
     }
 
@@ -180,7 +180,7 @@ class ProducerTopicTest extends TestCase
         $topic = $producer->newTopic(KAFKA_TEST_TOPIC);
 
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessageRegExp('/msgflags/');
+        $this->expectDeprecationMessageMatches('/msgflags/');
         $topic->producev(0, -1);
     }
 }
