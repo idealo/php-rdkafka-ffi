@@ -12,7 +12,7 @@ class ConsumerTopic extends Topic
     /**
      * @var array
      */
-    private $consuming = [];
+    private array $consuming = [];
 
     /**
      * @param Consumer $consumer

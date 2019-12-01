@@ -14,12 +14,9 @@ use RdKafka;
  */
 class ProducerTest extends TestCase
 {
-    /**
-     * @var Producer
-     */
-    private $producer;
+    private Producer $producer;
 
-    private $callbackPayload;
+    private string $callbackPayload;
 
     protected function setUp(): void
     {

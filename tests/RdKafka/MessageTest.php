@@ -11,9 +11,9 @@ use PHPUnit\Framework\TestCase;
  */
 class MessageTest extends TestCase
 {
-    private $message;
-    private $producedMessage;
-    private $beforeProducingTimestamp;
+    private Message $message;
+    private Message $producedMessage;
+    private int $beforeProducingTimestamp;
 
     protected function setUp(): void
     {

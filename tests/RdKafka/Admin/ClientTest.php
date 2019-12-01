@@ -256,7 +256,7 @@ class ClientTest extends TestCase
 
         $result = $client->describeConfigs([$configResource], $options);
 
-        $configs = $this->getIndexedConfigEntries($result[0]->configs, ['broker.id', 'queued.max.requests']);
+        $configs = $this->getIndexedConfigEntries($result[0]->configs);
 
         $this->assertEquals('111', $result[0]->name);
 
@@ -321,8 +321,8 @@ class ClientTest extends TestCase
 
     /**
      * @param ConfigEntry[] $configs
-     * @param string[] $configNames
      * @return ConfigEntry[]
+     * @throws Exception
      */
     private function getIndexedConfigEntries(array $configs): array
     {

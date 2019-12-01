@@ -77,7 +77,6 @@ class KafkaConsumer extends RdKafka
 
     /**
      * @return TopicPartition[]
-     * @throws Exception
      */
     public function getAssignment(): array
     {

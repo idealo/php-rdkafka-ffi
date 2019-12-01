@@ -16,7 +16,7 @@ $conf->set('metadata.broker.list', 'kafka:9092');
 $conf->set('socket.timeout.ms', (string)50);
 $conf->set('queue.buffering.max.messages', (string)1000);
 $conf->set('max.in.flight.requests.per.connection', (string)1);
-$conf->set('log_level', LOG_DEBUG);
+$conf->set('log_level', (string)LOG_DEBUG);
 $conf->setDrMsgCb(
     function (Producer $producer, Message $message) {
         if ($message->err !== RD_KAFKA_RESP_ERR_NO_ERROR) {
@@ -33,7 +33,7 @@ $conf->setLogCb(
     }
 );
 
-$conf->set('statistics.interval.ms', 10);
+$conf->set('statistics.interval.ms', (string)10);
 $conf->setStatsCb(
     function ($consumer, $json, $json_len, $opaque) {
         echo "stats: $json" . PHP_EOL;
@@ -48,9 +48,9 @@ var_dump($topicConf->dump());
 
 if (function_exists('pcntl_sigprocmask')) {
     pcntl_sigprocmask(SIG_BLOCK, [SIGIO]);
-    $conf->set('internal.termination.signal', SIGIO);
+    $conf->set('internal.termination.signal', (string)SIGIO);
 } else {
-    $conf->set('queue.buffering.max.ms', 1);
+    $conf->set('queue.buffering.max.ms', (string)1);
 }
 var_dump($conf->dump());
 

@@ -13,7 +13,7 @@ class Metadata extends Api
 {
     private CData $metadata;
 
-    public function __construct(RdKafka $kafka, bool $all_topics, Topic $only_topic = null, int $timeout_ms)
+    public function __construct(RdKafka $kafka, bool $all_topics, ?Topic $only_topic, int $timeout_ms)
     {
         parent::__construct();
 

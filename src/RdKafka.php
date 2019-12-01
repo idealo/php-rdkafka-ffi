@@ -21,6 +21,7 @@ abstract class RdKafka extends Api
     public static function resolveFromCData(CData $kafka = null): ?self
     {
         foreach (self::$instances as $reference) {
+            /** @var self $instance */
             $instance = $reference->get();
             if ($instance !== null && $kafka == $instance->getCData()) {
                 return $instance;
@@ -99,7 +100,7 @@ abstract class RdKafka extends Api
 
     /**
      * @param bool $all_topics
-     * @param Topic $only_topic
+     * @param Topic|null $only_topic
      * @param int $timeout_ms
      *
      * @return Metadata
@@ -139,6 +140,7 @@ abstract class RdKafka extends Api
 
     /**
      * @param int $logger
+     * @throws \Exception
      * @deprecated Use Conf::setLogCb instead
      */
     public function setLogger(int $logger)

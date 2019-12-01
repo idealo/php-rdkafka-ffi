@@ -24,14 +24,13 @@ class ProducerTopic extends Topic
      * @param int $msgflags
      * @param string $payload
      * @param string $key
-     * @param array $headers
      *
      * @return void
      * @throws Exception
      */
     public function produce(int $partition, int $msgflags, string $payload = null, string $key = null)
     {
-        return $this->producev($partition, $msgflags, $payload, $key);
+        $this->producev($partition, $msgflags, $payload, $key);
     }
 
     /**

@@ -9,6 +9,7 @@ use FFI;
 use RdKafka;
 use RdKafka\Api;
 use RdKafka\Conf;
+use RdKafka\Consumer;
 use RdKafka\Event;
 use RdKafka\Exception;
 use RdKafka\Metadata;
@@ -35,6 +36,11 @@ class Client extends Api
 //        }
     }
 
+    /**
+     * @param Conf $conf
+     * @return Client
+     * @throws Exception
+     */
     public static function fromConf(Conf $conf)
     {
         $client = new self(new Producer($conf));
@@ -60,6 +66,7 @@ class Client extends Api
      * @param ConfigResource[] $resources
      * @param AlterConfigsOptions $options
      * @return ConfigResource[]
+     * @throws Exception
      */
     public function alterConfigs(array $resources, AlterConfigsOptions $options = null): array
     {
@@ -141,6 +148,7 @@ class Client extends Api
      * @param NewPartitions[] $partitions
      * @param CreatePartitionsOptions $options
      * @return TopicResult[]
+     * @throws Exception
      */
     public function createPartitions(array $partitions, CreatePartitionsOptions $options = null): array
     {

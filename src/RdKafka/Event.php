@@ -9,7 +9,7 @@ use FFI\CData;
 
 class Event extends Api
 {
-    private $event;
+    private CData $event;
 
     public function __construct(CData $event)
     {

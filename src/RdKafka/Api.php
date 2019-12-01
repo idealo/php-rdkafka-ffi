@@ -13,8 +13,8 @@ class Api
      */
     protected static FFI $ffi;
 
-    public static $libraryFile = 'librdkafka.so';
-    public static $cdef = <<<CDEF
+    public static string $libraryFile = 'librdkafka.so';
+    public static string $cdef = <<<CDEF
 #define FFI_SCOPE "RDKAFKA"
 #define FFI_LIB "librdkafka.so"
 typedef long int ssize_t;

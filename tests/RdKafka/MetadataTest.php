@@ -18,13 +18,17 @@ use RdKafka\Metadata\Topic;
  */
 class MetadataTest extends TestCase
 {
-    private $metadata;
+    private Metadata $metadata;
 
     protected function setUp(): void
     {
         $conf = new Conf();
         $conf->set('metadata.broker.list', KAFKA_BROKERS);
+        $conf->set('topic.metadata.refresh.interval.ms', (string) KAFKA_TEST_TIMEOUT_MS);
         $producer = new Producer($conf);
+
+        // wait for metadata refresh
+        sleep(1);
 
         $this->metadata = $producer->getMetadata(true, null, (int)KAFKA_TEST_TIMEOUT_MS);
     }

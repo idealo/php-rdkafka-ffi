@@ -21,6 +21,7 @@ $supported = [
     '1.1.0' => 'https://raw.githubusercontent.com/edenhill/librdkafka/v1.1.0/src/rdkafka.h',
     '1.2.0' => 'https://raw.githubusercontent.com/edenhill/librdkafka/v1.2.0/src/rdkafka.h',
     '1.2.1' => 'https://raw.githubusercontent.com/edenhill/librdkafka/v1.2.1/src/rdkafka.h',
+    '1.2.2' => 'https://raw.githubusercontent.com/edenhill/librdkafka/v1.2.2/src/rdkafka.h',
 ];
 
 $ffiDefines = <<<FFI

@@ -321,7 +321,7 @@ class KafkaConsumerTest extends TestCase
         sleep(1);
 
         $now = (int)(time() * 1000);
-        $oneMinuteAgo = (int)(time() -60) * 1000;
+        $oneMinuteAgo = (int)(time() - 60) * 1000;
 
         $topicPartitions = $consumer->offsetsForTimes(
             [
