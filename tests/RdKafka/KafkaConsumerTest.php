@@ -134,7 +134,10 @@ class KafkaConsumerTest extends TestCase
         $lastMessage = $message = null;
         while (true) {
             $message = $consumer->consume((int)KAFKA_TEST_TIMEOUT_MS);
-            if ($message->err !== RD_KAFKA_RESP_ERR_NO_ERROR) {
+            if ($message->err === RD_KAFKA_RESP_ERR__TIMED_OUT) {
+                if ($lastMessage === null) {
+                    continue;
+                }
                 $message = $lastMessage;
                 break;
             }
@@ -203,7 +206,10 @@ class KafkaConsumerTest extends TestCase
         $lastMessage = $message = null;
         while (true) {
             $message = $consumer->consume((int)KAFKA_TEST_TIMEOUT_MS);
-            if ($message->err !== RD_KAFKA_RESP_ERR_NO_ERROR) {
+            if ($message->err === RD_KAFKA_RESP_ERR__TIMED_OUT) {
+                if ($lastMessage === null) {
+                    continue;
+                }
                 $message = $lastMessage;
                 break;
             }
@@ -307,41 +313,72 @@ class KafkaConsumerTest extends TestCase
         $this->assertEquals(2, $topicPartitions[0]->getOffset());
     }
 
-    public function testOffsetsForTimes()
+    public function testOffsetsForTimesWithFutureTimestamp()
     {
         $conf = new Conf();
-        $conf->set('group.id', __METHOD__);
+        $conf->set('group.id', __METHOD__ . rand(0, 999999999));
         $conf->set('metadata.broker.list', KAFKA_BROKERS);
-        $conf->set('auto.offset.reset', 'earliest');
+
+        $future = (int)(time() + 3600) * 1000;
 
         $consumer = new KafkaConsumer($conf);
-        $consumer->subscribe([KAFKA_TEST_TOPIC]);
-
-        // wait for partition assignment
-        sleep(1);
-
-        $now = (int)(time() * 1000);
-        $ago = (int)(time() - 30) * 1000;
-
         $topicPartitions = $consumer->offsetsForTimes(
             [
-                new TopicPartition(KAFKA_TEST_TOPIC, 0, $now),
+                new TopicPartition(KAFKA_TEST_TOPIC, 0, $future),
             ],
             (int)KAFKA_TEST_TIMEOUT_MS
         );
 
         $this->assertCount(1, $topicPartitions);
-        $this->assertEquals(-1 /* no messages since now */, $topicPartitions[0]->getOffset());
+        $this->assertEquals(-1 /* no offsets in the future */, $topicPartitions[0]->getOffset());
+    }
 
+    public function testOffsetsForTimesWithNearNowTimestamp()
+    {
+        $conf = new Conf();
+        $conf->set('group.id', __METHOD__ . rand(0, 999999999));
+        $conf->set('metadata.broker.list', KAFKA_BROKERS);
+
+        $nearNow = (int)(time()) * 1000;
+
+        // produce two messages
+        $producer = new Producer();
+        $producer->addBrokers(KAFKA_BROKERS);
+        $producerTopic = $producer->newTopic(KAFKA_TEST_TOPIC);
+        $producerTopic->produce(RD_KAFKA_PARTITION_UA, 0, 'offsetsForTimes1');
+        $producerTopic->produce(RD_KAFKA_PARTITION_UA, 0, 'offsetsForTimes2');
+        $producer->flush((int)KAFKA_TEST_TIMEOUT_MS);
+
+        $consumer = new KafkaConsumer($conf);
         $topicPartitions = $consumer->offsetsForTimes(
             [
-                new TopicPartition(KAFKA_TEST_TOPIC, 0, $ago),
+                new TopicPartition(KAFKA_TEST_TOPIC, 0, $nearNow),
             ],
             (int)KAFKA_TEST_TIMEOUT_MS
         );
 
         $this->assertCount(1, $topicPartitions);
-        $this->assertGreaterThan(0, $topicPartitions[0]->getOffset());
+        $this->assertGreaterThan(1, $topicPartitions[0]->getOffset());
+    }
+
+    public function testOffsetsForTimesWithAncientTimestamp()
+    {
+        $conf = new Conf();
+        $conf->set('group.id', __METHOD__ . rand(0, 999999999));
+        $conf->set('metadata.broker.list', KAFKA_BROKERS);
+
+        $past = 0;
+
+        $consumer = new KafkaConsumer($conf);
+        $topicPartitions = $consumer->offsetsForTimes(
+            [
+                new TopicPartition(KAFKA_TEST_TOPIC, 0, $past),
+            ],
+            (int)KAFKA_TEST_TIMEOUT_MS
+        );
+
+        $this->assertCount(1, $topicPartitions);
+        $this->assertEquals(0, $topicPartitions[0]->getOffset());
     }
 
     public function testGetMetadata()
