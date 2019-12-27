@@ -66,7 +66,7 @@ class ConsumerBench
 
         $topic->consumeStart(0, 0);
         $messages = 0;
-        $callback = function (\RdKafka\Message $message, $opaque) use (&$messages) {
+        $callback = function (\RdKafka\Message $message, $opaque = null) use (&$messages) {
             $messages++;
         };
         while ($topic->consumeCallback(0, 500, $callback) && $messages < 1) {
@@ -141,7 +141,7 @@ class ConsumerBench
 
         $topic->consumeStart(0, 0);
         $messages = 0;
-        $callback = function (\RdKafka\Message $message, $opaque) use (&$messages) {
+        $callback = function (\RdKafka\Message $message, $opaque = null) use (&$messages) {
             $messages++;
         };
         while ($topic->consumeCallback(0, 500, $callback) && $messages < 100) {
