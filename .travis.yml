@@ -30,10 +30,10 @@ jobs:
           docker-compose build --pull --parallel --build-arg LIBRDKAFKA_VERSION="$LIBRDKAFKA_VERSION";
           docker-compose up -d kafka;
           sleep 10s;
-          docker-compose run --rm --no-deps -v $HOME/.composer/cache:/tmp/.composer php74 composer update --prefer-stable --no-interaction --no-suggest;
-          docker-compose run --rm php74 php examples/create-topic.php -ttest -p1 -r1;
-          docker-compose run --rm php74 php examples/create-topic.php -ttest_partitions -p3 -r1;
-          docker-compose run --rm php74 vendor/bin/phpunit --coverage-text --coverage-clover=clover.xml;
+          docker-compose run --user $(id -u):$(id -g) --rm --no-deps -v $HOME/.composer/cache:/tmp/.composer php74 composer update --prefer-stable --no-interaction --no-suggest;
+          docker-compose run --user $(id -u):$(id -g) --rm php74 php examples/create-topic.php -ttest -p1 -r1;
+          docker-compose run --user $(id -u):$(id -g) --rm php74 php examples/create-topic.php -ttest_partitions -p3 -r1;
+          docker-compose run --user $(id -u):$(id -g) --rm php74 vendor/bin/phpunit --coverage-text --coverage-clover=clover.xml;
       after_script:
         - |
           docker-compose down;

@@ -43,12 +43,12 @@ ENV COMPOSER_HOME /tmp/.composer
 ENV COMPOSER_ALLOW_SUPERUSER 1
 COPY --from=composer /usr/bin/composer /usr/bin/composer
 
-RUN useradd -ms /bin/bash php-dev; \
+RUN useradd -Ms /bin/bash --user-group --uid 2000 phpdev; \
     mkdir /app; \
-    chown 1000:php-dev -R /app; \
+    chown phpdev -R /app; \
     mkdir /tmp/.composer; \
-    chown 1000:php-dev -R /tmp/.composer;
+    chown phpdev -R /tmp/.composer;
 
-USER php-dev
+USER phpdev
 
 WORKDIR /app
