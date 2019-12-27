@@ -34,7 +34,7 @@ class TopicConfTest extends TestCase
             'consume.callback.max.messages',
         ];
 
-        $keys = array_keys($conf->dump());
+        $keys = \array_keys($conf->dump());
 
         $this->assertEquals($expectedKeys, $keys);
     }

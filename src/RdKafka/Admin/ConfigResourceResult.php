@@ -28,7 +28,7 @@ class ConfigResourceResult extends Api
         $this->type = (int)self::$ffi->rd_kafka_ConfigResource_type($result);
         $this->error = (int)self::$ffi->rd_kafka_ConfigResource_error($result);
         $errorStringCdata = self::$ffi->rd_kafka_ConfigResource_error_string($result);
-        $this->errorString = is_null($errorStringCdata) ? null : FFI::string($errorStringCdata);
+        $this->errorString = \is_null($errorStringCdata) ? null : FFI::string($errorStringCdata);
 
         $size = FFI::new('size_t');
         $configsPtr = self::$ffi->rd_kafka_ConfigResource_configs($result, FFI::addr($size));

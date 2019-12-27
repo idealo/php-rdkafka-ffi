@@ -18,12 +18,4 @@ class ApiTest extends TestCase
         $this->assertInstanceOf(\FFI::class, $ffi);
         $this->assertRegExp('/^\d+\.\d+\./', \FFI::string($ffi->rd_kafka_version_str()));
     }
-
-    public function testPreload()
-    {
-        Api::preload();
-        Api::preload();
-
-        $this->assertInstanceOf(\FFI::class, new \stdClass);
-    }
 }

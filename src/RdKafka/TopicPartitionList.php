@@ -50,32 +50,32 @@ class TopicPartitionList extends Api implements Iterator, Countable
 
     public function current(): TopicPartition
     {
-        return current($this->items);
+        return \current($this->items);
     }
 
     public function next(): void
     {
-        next($this->items);
+        \next($this->items);
     }
 
     public function key(): int
     {
-        return key($this->items);
+        return \key($this->items);
     }
 
     public function valid(): bool
     {
-        return array_key_exists(key($this->items), $this->items);
+        return \array_key_exists(key($this->items), $this->items);
     }
 
     public function rewind(): void
     {
-        reset($this->items);
+        \reset($this->items);
     }
 
     public function count(): int
     {
-        return count($this->items);
+        return \count($this->items);
     }
 
     /**

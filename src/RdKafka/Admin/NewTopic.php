@@ -50,9 +50,9 @@ class NewTopic extends Api
     {
         Assert::that($broker_ids)->notEmpty()->all()->integer();
 
-        $brokerIdsCount = count($broker_ids);
+        $brokerIdsCount = \count($broker_ids);
         $brokerIds = FFI::new('int*[' . $brokerIdsCount . ']');
-        foreach (array_values($broker_ids) as $i => $broker_id) {
+        foreach (\array_values($broker_ids) as $i => $broker_id) {
             $int = FFI::new("int");
             $int->cdata = $broker_id;
             $brokerIds[$i] = FFI::addr($int);

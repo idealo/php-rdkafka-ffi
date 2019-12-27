@@ -74,9 +74,9 @@ class Client extends Api
 
         $queue = new Queue($this->kafka);
 
-        $resourcesCount = count($resources);
+        $resourcesCount = \count($resources);
         $resourcesPtr = self::$ffi->new('rd_kafka_ConfigResource_t*[' . $resourcesCount . ']');
-        foreach (array_values($resources) as $i => $resource) {
+        foreach (\array_values($resources) as $i => $resource) {
             $resourcesPtr[$i] = $resource->getCData();
         }
 
@@ -115,9 +115,9 @@ class Client extends Api
 
         $queue = new Queue($this->kafka);
 
-        $resourcesCount = count($resources);
+        $resourcesCount = \count($resources);
         $resourcesPtr = self::$ffi->new('rd_kafka_ConfigResource_t*[' . $resourcesCount . ']');
-        foreach (array_values($resources) as $i => $resource) {
+        foreach (\array_values($resources) as $i => $resource) {
             $resourcesPtr[$i] = $resource->getCData();
         }
 
@@ -156,15 +156,15 @@ class Client extends Api
 
         $queue = new Queue($this->kafka);
 
-        $partitions_ptr = self::$ffi->new('rd_kafka_NewPartitions_t*[' . count($partitions) . ']');
-        foreach (array_values($partitions) as $i => $partition) {
+        $partitions_ptr = self::$ffi->new('rd_kafka_NewPartitions_t*[' . \count($partitions) . ']');
+        foreach (\array_values($partitions) as $i => $partition) {
             $partitions_ptr[$i] = $partition->getCData();
         }
 
         self::$ffi->rd_kafka_CreatePartitions(
             $this->kafka->getCData(),
             $partitions_ptr,
-            count($partitions),
+            \count($partitions),
             $options ? $options->getCData() : null,
             $queue->getCData()
         );
@@ -196,15 +196,15 @@ class Client extends Api
 
         $queue = new Queue($this->kafka);
 
-        $topics_ptr = self::$ffi->new('rd_kafka_NewTopic_t*[' . count($topics) . ']');
-        foreach (array_values($topics) as $i => $topic) {
+        $topics_ptr = self::$ffi->new('rd_kafka_NewTopic_t*[' . \count($topics) . ']');
+        foreach (\array_values($topics) as $i => $topic) {
             $topics_ptr[$i] = $topic->getCData();
         }
 
         self::$ffi->rd_kafka_CreateTopics(
             $this->kafka->getCData(),
             $topics_ptr,
-            count($topics),
+            \count($topics),
             $options ? $options->getCData() : null,
             $queue->getCData()
         );
@@ -236,15 +236,15 @@ class Client extends Api
 
         $queue = new Queue($this->kafka);
 
-        $topics_ptr = self::$ffi->new('rd_kafka_DeleteTopic_t*[' . count($topics) . ']');
-        foreach (array_values($topics) as $i => $topic) {
+        $topics_ptr = self::$ffi->new('rd_kafka_DeleteTopic_t*[' . \count($topics) . ']');
+        foreach (\array_values($topics) as $i => $topic) {
             $topics_ptr[$i] = $topic->getCData();
         }
 
         self::$ffi->rd_kafka_DeleteTopics(
             $this->kafka->getCData(),
             $topics_ptr,
-            count($topics),
+            \count($topics),
             $options ? $options->getCData() : null,
             $queue->getCData()
         );

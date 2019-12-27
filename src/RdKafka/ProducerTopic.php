@@ -68,20 +68,20 @@ class ProducerTopic extends Topic
             $msgflags | RD_KAFKA_MSG_F_COPY,
             RD_KAFKA_VTYPE_VALUE,
             $payload,
-            is_null($payload) ? null : strlen($payload),
+            \is_null($payload) ? null : \strlen($payload),
             RD_KAFKA_VTYPE_KEY,
             $key,
-            is_null($key) ? null : strlen($key),
+            \is_null($key) ? null : \strlen($key),
             RD_KAFKA_VTYPE_TIMESTAMP,
-            is_null($timestamp_ms) ? 0 : $timestamp_ms,
+            \is_null($timestamp_ms) ? 0 : $timestamp_ms,
         ];
 
-        if (!empty($headers)) {
+        if (empty($headers) === false) {
             foreach ($headers as $headerName => $headerValue) {
                 $args[] = RD_KAFKA_VTYPE_HEADER;
                 $args[] = $headerName;
                 $args[] = $headerValue;
-                $args[] = strlen($headerValue);
+                $args[] = \strlen($headerValue);
             }
         }
 

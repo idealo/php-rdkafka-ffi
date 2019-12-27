@@ -166,7 +166,7 @@ class KafkaConsumer extends RdKafka
         if ($message_or_offsets instanceof Message) {
             return $this->createTopicPartitionListFromMessage($message_or_offsets);
         }
-        if (is_array($message_or_offsets) === true) {
+        if (\is_array($message_or_offsets) === true) {
             return new TopicPartitionList(...$message_or_offsets);
         }
 
@@ -183,13 +183,13 @@ class KafkaConsumer extends RdKafka
         if ($message->err !== RD_KAFKA_RESP_ERR_NO_ERROR) {
             throw new Exception('Invalid argument: Specified Message has an error');
         }
-        if (is_string($message->topic_name) === false) {
+        if (\is_string($message->topic_name) === false) {
             throw new Exception('Invalid argument: Specified Message\'s topic_name is not a string');
         }
-        if (is_int($message->partition) === false) {
+        if (\is_int($message->partition) === false) {
             throw new Exception('Invalid argument: Specified Message\'s partition is not an int');
         }
-        if (is_int($message->offset) === false) {
+        if (\is_int($message->offset) === false) {
             throw new Exception('Invalid argument: Specified Message\'s offset is not an int');
         }
 
@@ -230,7 +230,7 @@ class KafkaConsumer extends RdKafka
      */
     public function subscribe(array $topics)
     {
-        $nativeTopicPartitionList = self::$ffi->rd_kafka_topic_partition_list_new(count($topics));
+        $nativeTopicPartitionList = self::$ffi->rd_kafka_topic_partition_list_new(\count($topics));
 
         foreach ($topics as $topic) {
             self::$ffi->rd_kafka_topic_partition_list_add(

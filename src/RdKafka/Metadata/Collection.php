@@ -21,12 +21,12 @@ class Collection implements Iterator, Countable
      */
     public function current()
     {
-        return current($this->items);
+        return \current($this->items);
     }
 
     public function next(): void
     {
-        next($this->items);
+        \next($this->items);
     }
 
     /**
@@ -34,21 +34,21 @@ class Collection implements Iterator, Countable
      */
     public function key()
     {
-        return key($this->items);
+        return \key($this->items);
     }
 
     public function valid(): bool
     {
-        return array_key_exists(key($this->items), $this->items);
+        return \array_key_exists(key($this->items), $this->items);
     }
 
     public function rewind(): void
     {
-        reset($this->items);
+        \reset($this->items);
     }
 
     public function count(): int
     {
-        return count($this->items);
+        return \count($this->items);
     }
 }

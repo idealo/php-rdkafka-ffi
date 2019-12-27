@@ -127,7 +127,7 @@ class ConsumerTopic extends Topic
     {
         $this->assertPartition($partition);
 
-        if (array_key_exists($partition, $this->consuming)) {
+        if (\array_key_exists($partition, $this->consuming)) {
             throw new Exception(
                 sprintf(
                     "%s:%d is already being consumed by the same Consumer instance",
@@ -163,7 +163,7 @@ class ConsumerTopic extends Topic
     {
         $this->assertPartition($partition);
 
-        if (array_key_exists($partition, $this->consuming)) {
+        if (\array_key_exists($partition, $this->consuming)) {
             throw new Exception(
                 sprintf(
                     "%s:%d is already being consumed by the same Consumer instance",
