@@ -26,17 +26,17 @@ Playing around with:
 * __/examples__ - example scripts
 * __/resources__
   * __/docker__
-    * __/php74-librdkafka-ffi__ - dockerfile for PHP 7.4 image with librdkafka and ffi & rdkafka ext (based on [php:7.4-rc-cli](https://hub.docker.com/_/php) )
+    * __/php74-librdkafka-ffi__ - dockerfile for PHP 7.4 image with librdkafka and ffi & rdkafka ext (based on [php:7.4-cli](https://hub.docker.com/_/php) )
   * __/test-extension__ - base dir for rdkafka ext compatibility tests
 * __/src__ - source dir
-* __/tests__ - tests dir 
+* __/tests__ - tests dir
 
 ### Build images
 
 Build all images
 
     docker-compose build --no-cache --pull
-    
+
 Alternative: build the image individually
 
     docker-compose build --no-cache --pull php74
@@ -52,7 +52,7 @@ Test - should show ```FFI``` in modules list
 Test ffi librdkafka binding - should show 1.0.0 version of librdkafka:
 
     docker-compose run php74 php examples/version.php
-   
+
 Test - should show ```rdkafka``` in modules list
 
     docker-compose run php74 php -dextension=rdkafka.so -m
@@ -62,18 +62,18 @@ Test - should show ```rdkafka``` in modules list
 Startup php & kafka
 
     docker-compose up -d
-    
+
 Updating dependencies
 
     docker-compose run --rm --no-deps php74 composer update
-    
+
 Create required topics
 
     docker-compose run --rm php74 php examples/create-topic.php -tplayground -p3 -r1 && \
     docker-compose run --rm php74 php examples/create-topic.php -ttest -p1 -r1 && \
     docker-compose run --rm php74 php examples/create-topic.php -ttest_partitions -p3 -r1 && \
     docker-compose run --rm php74 php examples/create-topic.php -tbenchmarks -p1 -r1 
-     
+
 ## Having fun with examples
 
 Examples use topic ```playground```.
@@ -81,7 +81,7 @@ Examples use topic ```playground```.
 Updating Dependencies
 
     docker-compose run --rm --no-deps php74 composer update
-    
+
 Create topic ```playground``` ...
 
     docker-compose run --rm php74 php examples/create-topic.php -tplayground -p3 -r1
@@ -93,19 +93,19 @@ Producing ...
 Consuming ...
 
     docker-compose run --rm php74 php examples/consumer.php
-    
+
 Broker metadata ...
 
     docker-compose run --rm php74 php examples/metadata.php
-    
+
 Delete topic ```playground``` ...
 
     docker-compose run --rm php74 php examples/delete-topic.php -tplayground
-    
+
 ## Run tests
 
 Tests use topics ```test*```.
-    
+
 Updating Dependencies
 
     docker-compose run --rm --no-deps php74 composer update
@@ -172,8 +172,7 @@ Shutdown and remove volumes:
 * [x] Support admin features
 * [x] Compatible to librdkafka ^1.0.0
 * [x] Benchmarking against rdkafka extension
+* [x] Provide ffi preload
 * [ ] Documentation
 * [ ] Compatible to rdkafka extension ^3.1.0
-* [ ] Generate binding class with https://github.com/ircmaxell/FFIMe / use default header file
 * [ ] Sig Handling & destruct (expect seg faults & lost msgs & shutdown hangs)
-* [ ] Provide ffi preload
