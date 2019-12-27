@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace RdKafka;
 
 use FFI;
+use FFI\Exception;
 
 class Api
 {
@@ -558,14 +559,31 @@ CDEF;
         if (isset(self::$ffi) === false) {
             try {
                 self::$ffi = FFI::scope('RdKafka');
-            } catch (FFI\Exception $e) {
-                if (ini_get('ffi.enable') === 'preload' && PHP_SAPI !== 'cli') {
+            } catch (Exception $e) {
+                if (\ini_get('ffi.enable') === 'preload' && PHP_SAPI !== 'cli') {
                     throw new \RuntimeException(
                         'FFI_SCOPE "RdKafka" not found (ffi.enable=preload requires you to call \RdKafka\Api::preload in )'
                     );
                 }
                 self::$ffi = FFI::cdef(self::$cdef, self::$libraryFile);
             }
+        }
+    }
+
+    public static function getFFI(): FFI
+    {
+        self::ensureFFI();
+        return self::$ffi;
+    }
+
+    public static function preload()
+    {
+        try {
+            $file = \tempnam(\sys_get_temp_dir(), 'php-rdkafka-ffi');
+            \file_put_contents($file, self::$cdef);
+            FFI::load($file);
+        } finally {
+            \unlink($file);
         }
     }
 
@@ -606,18 +624,5 @@ CDEF;
     {
         self::ensureFFI();
         return FFI::string(self::$ffi->rd_kafka_version_str());
-    }
-
-    public static function preload()
-    {
-        try {
-            $file = tempnam(sys_get_temp_dir(), 'php-rdkafka-ffi');
-            file_put_contents($file, self::$cdef);
-            FFI::load($file);
-        } finally {
-            unlink($file);
-        }
-
-        self::ensureFFI();
     }
 }
