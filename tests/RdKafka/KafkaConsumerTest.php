@@ -164,8 +164,8 @@ class KafkaConsumerTest extends TestCase
 
         $this->expectException(InvalidArgumentException::class);
         $this->expectDeprecationMessageMatches('/\bcommit\b/');
-        $this->expectDeprecationMessageMatches('/object/');
-        $consumer->commit(new stdClass());
+        $this->expectDeprecationMessageMatches('/array/');
+        $consumer->commit([new stdClass()]);
     }
 
     public function testCommitAsyncWithInvalidArgumentShouldFail()
@@ -177,8 +177,8 @@ class KafkaConsumerTest extends TestCase
 
         $this->expectException(InvalidArgumentException::class);
         $this->expectDeprecationMessageMatches('/commitAsync\b/');
-        $this->expectDeprecationMessageMatches('/bool/');
-        $consumer->commitAsync(false);
+        $this->expectDeprecationMessageMatches('/object/');
+        $consumer->commitAsync(new stdClass());
     }
 
     public function testCommitWithMessage()
@@ -297,10 +297,15 @@ class KafkaConsumerTest extends TestCase
         $this->assertCount(1, $topicPartitions);
         $this->assertEquals(-1001 /*RD_KAFKA_OFFSET_INVALID*/, $topicPartitions[0]->getOffset());
 
-        $message = $consumer->consume((int)KAFKA_TEST_TIMEOUT_MS);
-        $consumer->commit($message);
-        $message = $consumer->consume((int)KAFKA_TEST_TIMEOUT_MS);
-        $consumer->commit($message);
+        $consumed = 0;
+        while ($consumed < 2) {
+            $message = $consumer->consume((int)KAFKA_TEST_TIMEOUT_MS);
+            if ($message->err === RD_KAFKA_RESP_ERR__TIMED_OUT) {
+                continue;
+            }
+            $consumer->commit($message);
+            $consumed++;
+        }
 
         $topicPartitions = $consumer->getCommittedOffsets(
             [

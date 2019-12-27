@@ -7,6 +7,7 @@ namespace RdKafka;
 use FFI;
 use InvalidArgumentException;
 use RdKafka;
+use TypeError;
 
 class KafkaConsumer extends RdKafka
 {
@@ -99,7 +100,20 @@ class KafkaConsumer extends RdKafka
      */
     public function commit($message_or_offsets = null)
     {
-        $this->commitInternal($message_or_offsets, false);
+        try {
+            $topicPartitionList = $this->createTopicPartitionList($message_or_offsets);
+        } catch (TypeError $exception) {
+            throw new InvalidArgumentException(
+                sprintf(
+                    "%s expects parameter %d to be %s, %s given",
+                    __METHOD__,
+                    1,
+                    "an instance of RdKafka\\Message, an array of RdKafka\\TopicPartition or null",
+                    gettype($message_or_offsets)
+                )
+            );
+        }
+        $this->commitInternal($topicPartitionList, false);
     }
 
     /**
@@ -110,37 +124,27 @@ class KafkaConsumer extends RdKafka
      */
     public function commitAsync($message_or_offsets = null)
     {
-        $this->commitInternal($message_or_offsets, true);
-    }
-
-    private function commitInternal($message_or_offsets, bool $isAsync)
-    {
-        if ($message_or_offsets === null) {
-            $nativeTopicPartitionList = null;
-        } elseif ($message_or_offsets instanceof Message) {
-            // todo assert message properties needed? already typed
-
-            $nativeTopicPartitionList = self::$ffi->rd_kafka_topic_partition_list_new(1);
-            $nativeTopicPartition = self::$ffi->rd_kafka_topic_partition_list_add(
-                $nativeTopicPartitionList,
-                $message_or_offsets->topic_name,
-                $message_or_offsets->partition
-            );
-            $nativeTopicPartition->offset = $message_or_offsets->offset + 1;
-        } elseif (is_array($message_or_offsets)) {
-            $topicPartitionList = new TopicPartitionList(...$message_or_offsets);
-            $nativeTopicPartitionList = $topicPartitionList->getCData();
-        } else {
+        try {
+            $topicPartitionList = $this->createTopicPartitionList($message_or_offsets);
+        } catch (TypeError $exception) {
             throw new InvalidArgumentException(
                 sprintf(
-                    "%s::%s expects parameter %d to be %s, %s given",
-                    __CLASS__,
-                    $isAsync ? 'commitAsync' : 'commit',
+                    "%s expects parameter %d to be %s, %s given",
+                    __METHOD__,
                     1,
-                    "an instance of RdKafka\\Message or an array of RdKafka\\TopicPartition",
+                    "an instance of RdKafka\\Message, an array of RdKafka\\TopicPartition or null",
                     gettype($message_or_offsets)
                 )
             );
+        }
+        $this->commitInternal($topicPartitionList, true);
+    }
+
+    private function commitInternal(?TopicPartitionList $topicPartitionList, bool $isAsync)
+    {
+        $nativeTopicPartitionList = null;
+        if ($topicPartitionList !== null) {
+            $nativeTopicPartitionList = $topicPartitionList->getCData();
         }
 
         $err = self::$ffi->rd_kafka_commit($this->kafka, $nativeTopicPartitionList, $isAsync ? 1 : 0);
@@ -152,6 +156,46 @@ class KafkaConsumer extends RdKafka
         if ($err !== RD_KAFKA_RESP_ERR_NO_ERROR) {
             throw new Exception(self::err2str($err));
         }
+    }
+
+    private function createTopicPartitionList($message_or_offsets): ?TopicPartitionList
+    {
+        if ($message_or_offsets === null) {
+            return null;
+        }
+        if ($message_or_offsets instanceof Message) {
+            return $this->createTopicPartitionListFromMessage($message_or_offsets);
+        }
+        if (is_array($message_or_offsets) === true) {
+            return new TopicPartitionList(...$message_or_offsets);
+        }
+
+        throw new TypeError(
+            sprintf(
+                'Argument 1 passed to %s must be an instance of RdKafka\\Message, an array of RdKafka\\TopicPartition or null',
+                __METHOD__
+            )
+        );
+    }
+
+    private function createTopicPartitionListFromMessage(Message $message): TopicPartitionList
+    {
+        if ($message->err !== RD_KAFKA_RESP_ERR_NO_ERROR) {
+            throw new Exception('Invalid argument: Specified Message has an error');
+        }
+        if (is_string($message->topic_name) === false) {
+            throw new Exception('Invalid argument: Specified Message\'s topic_name is not a string');
+        }
+        if (is_int($message->partition) === false) {
+            throw new Exception('Invalid argument: Specified Message\'s partition is not an int');
+        }
+        if (is_int($message->offset) === false) {
+            throw new Exception('Invalid argument: Specified Message\'s offset is not an int');
+        }
+
+        return new TopicPartitionList(
+            new TopicPartition($message->topic_name, $message->partition, $message->offset + 1)
+        );
     }
 
     /**
