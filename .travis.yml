@@ -16,14 +16,14 @@ jobs:
   include:
     - &STANDARD_TEST_JOB
       stage: Test
-      name: "librdkafka v1.0.0"
-      env: LIBRDKAFKA_VERSION=v1.0.0
+      name: "librdkafka v1.0.1"
+      env: LIBRDKAFKA_VERSION=v1.0.1
 
       before_script:
         - |
           curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter;
           chmod +x ./cc-test-reporter;
-          if [ "$LIBRDKAFKA_VERSION" = "v1.0.0" ]; then ./cc-test-reporter before-build; fi;
+          if [ "$LIBRDKAFKA_VERSION" = "v1.0.1" ]; then ./cc-test-reporter before-build; fi;
       script:
         - |
           set -e;
@@ -38,15 +38,19 @@ jobs:
         - |
           docker-compose down;
           sed -i "s|/app/|`pwd`/|g" clover.xml;
-          if [ "$LIBRDKAFKA_VERSION" = "v1.0.0" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT; fi;
+          if [ "$LIBRDKAFKA_VERSION" = "v1.0.1" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT; fi;
 
     - <<: *STANDARD_TEST_JOB
       env: LIBRDKAFKA_VERSION=v1.1.0
       name: "librdkafka v1.1.0"
 
     - <<: *STANDARD_TEST_JOB
-      env: LIBRDKAFKA_VERSION=v1.2.0
-      name: "librdkafka v1.2.0"
+      env: LIBRDKAFKA_VERSION=v1.2.2
+      name: "librdkafka v1.2.2"
+
+    - <<: *STANDARD_TEST_JOB
+      env: LIBRDKAFKA_VERSION=v1.3.0
+      name: "librdkafka v1.3.0"
 
     - <<: *STANDARD_TEST_JOB
       env: LIBRDKAFKA_VERSION=master
