@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 use PHPCParser\Context;
 use PHPCParser\CParser;
+use PHPCParser\PreProcessor\Token;
 
 require_once dirname(__DIR__) . '/vendor/autoload.php';
 
@@ -22,6 +23,7 @@ $supported = [
     '1.2.0' => 'https://raw.githubusercontent.com/edenhill/librdkafka/v1.2.0/src/rdkafka.h',
     '1.2.1' => 'https://raw.githubusercontent.com/edenhill/librdkafka/v1.2.1/src/rdkafka.h',
     '1.2.2' => 'https://raw.githubusercontent.com/edenhill/librdkafka/v1.2.2/src/rdkafka.h',
+    '1.3.0' => 'https://raw.githubusercontent.com/edenhill/librdkafka/v1.3.0/src/rdkafka.h',
 ];
 
 $ffiDefines = <<<FFI
@@ -40,6 +42,8 @@ $types = <<<TYPES
         typedef signed int int32_t;
         typedef signed long int int64_t;
         TYPES;
+
+$overAllConsts = [];
 
 // download raw header files
 foreach ($supported as $version => $hFileUrl) {
@@ -108,6 +112,62 @@ foreach ($supported as $version => $hFileUrl) {
 
     file_put_contents($hFileParsed, $ffiDefines . $printer->print($ast));
 
+    // extract const
+    $consts = [];
+    // add defines as const
+    foreach ($context->getDefines() as $identifier => $token) {
+        if (strpos($identifier, 'RD_KAFKA_') !== 0 || $identifier === 'RD_KAFKA_VERSION') {
+            continue;
+        }
+        $value = '';
+        $next = $token;
+        $skip = false;
+        do {
+            if ($next instanceof Token && in_array($next->type, [Token::IDENTIFIER, Token::LITERAL])) {
+                $skip = true;
+                break;
+            }
+            if ($next instanceof Token && $next->type !== Token::WHITESPACE) {
+                $value .= $next->value;
+            }
+        } while (($next = $next->next) !== null);
+        if ($skip) {
+            continue;
+        }
+        $consts[] = "    const $identifier = $value;";
+    }
+    // add enums
+    $compiler = new \FFIMe\Compiler();
+    foreach ($ast->declarations as $declaration) {
+        if ($declaration instanceof \PHPCParser\Node\Decl\NamedDecl\TypeDecl\TagDecl\EnumDecl ||
+            ($declaration instanceof \PHPCParser\Node\Decl\NamedDecl\TypeDecl\TypedefNameDecl
+                && $declaration->type instanceof \PHPCParser\Node\Type\TagType\EnumType)) {
+            $consts = array_merge($consts, $compiler->compileDecl($declaration));
+        }
+    }
+    // compact values and add lib version
+    foreach ($consts as $i => $const) {
+        $consts[$i] = preg_replace_callback(
+            '/(.+?= )([0-9\-\+\(\)\s]+)(;)/',
+            function ($matches) {
+                $value = eval('return ' . $matches[2] . ';');
+                return $matches[1] . $value . $matches[3];
+            },
+            $const
+        );
+    }
+    file_put_contents(
+        dirname(__DIR__) . '/resources/rdkafka.' . $version . '.const.php',
+        '<?php' . "\n\n" . implode("\n", $consts)
+    );
+    // add to overall consts
+    $overAllConsts[] = '// since librdkafka v' . $version;
+    foreach ($consts as $const) {
+        if (array_key_exists($const, $overAllConsts) === false) {
+            $overAllConsts[$const] = $const;
+        }
+    }
+
     echo "Generate bindings RdKafka\\Binding\\LibRdKafkaV$versionName" . PHP_EOL;
 
     (new FFIMe\FFIMe("librdkafka.so"))
@@ -119,3 +179,9 @@ foreach ($supported as $version => $hFileUrl) {
 
     echo "Generate bindings done." . PHP_EOL;
 }
+
+file_put_contents(
+    dirname(__DIR__) . '/resources/constants.php',
+    '<?php' . "\n\n" . implode("\n", $overAllConsts)
+);
+echo "Generate overall const done." . PHP_EOL;
