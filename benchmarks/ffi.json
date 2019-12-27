@@ -8,6 +8,11 @@
     "extension": [
       "ffi.so"
     ],
-    "ffi.enable": "true"
+    "ffi.enable": "preload",
+    "zend_extension": "opcache",
+    "opcache.enable": "true",
+    "opcache.enable_cli": "true",
+    "opcache.preload_user": "php-dev",
+    "opcache.preload": "/app/examples/preload.php"
   }
 }

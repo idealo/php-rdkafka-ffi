@@ -43,4 +43,7 @@ ENV COMPOSER_HOME /tmp/.composer
 ENV COMPOSER_ALLOW_SUPERUSER 1
 COPY --from=composer /usr/bin/composer /usr/bin/composer
 
+RUN useradd -ms /bin/bash php-dev
+USER php-dev
+
 WORKDIR /app

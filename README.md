@@ -146,15 +146,17 @@ Show comparison
 
 ### Benchmarks
 
-Just some first benchmarks based on PHP74-RC1, librdkafka v1.0.0, ext latest master, FFI without preload enabled.
+Some benchmarks based on PHP 7.4.1, librdkafka v1.3.0, ext latest master (^4.0.2), ffi with preload enabled.
 
-| benchmark     | subject                      | set | revs | tag:ffi:mean | tag:ext:mean |
-|---------------|------------------------------|-----|------|--------------|--------------|
-| ConsumerBench | benchConsume1Message         | 0   | 100  | 28,418.128μs | 26,091.144μs |
-| ConsumerBench | benchConsume100Messages      | 0   | 100  | 40,182.836μs | 38,656.394μs |
-| ConsumerBench | benchConsumeBatch100Messages | 0   | 100  | 35,136.240μs | 27,183.174μs |
-| ProducerBench | benchProduce1Message         | 0   | 100  | 4,076.694μs  | 3,563.914μs  |
-| ProducerBench | benchProduce100Messages      | 0   | 100  | 3,663.710μs  | 3,731.920μs  |
+| benchmark     | subject                        | set | revs | tag:ffi:mean  | tag:ext:mean |
+|---------------|--------------------------------|-----|------|---------------|--------------|
+| ConsumerBench | benchConsume1Message           | 0   | 100  | 30,279.714μs  | 30,324.692μs |
+| ConsumerBench | benchConsumeCallback1Message   | 0   | 10   | 250,108.440μs | 30,098.120μs |
+| ConsumerBench | benchConsume100Messages        | 0   | 100  | 42,785.350μs  | 43,279.156μs |
+| ConsumerBench | benchConsumeBatch100Messages   | 0   | 100  | 38,984.180μs  | 28,632.604μs |
+| ConsumerBench | benchConsumeCallback100Message | 0   | 10   | 240,364.040μs | 28,801.480μs |
+| ProducerBench | benchProduce1Message           | 0   | 100  | 3,697.300μs   | 3,917.404μs  |
+| ProducerBench | benchProduce100Messages        | 0   | 100  | 3,947.314μs   | 3,987.014μs  |
 
 See concrete [benchmarks details](./docs/benchmarks.md) for ffi & extension bindings.
 

@@ -8,6 +8,9 @@
     "extension": [
       "rdkafka.so"
     ],
-    "ffi.enable": "false"
+    "ffi.enable": "false",
+    "zend_extension": "opcache",
+    "opcache.enable": "true",
+    "opcache.enable_cli": "true"
   }
 }
