@@ -13,22 +13,22 @@ class MessageTest extends TestCase
 {
     private Message $message;
     private Message $producedMessage;
-    private int $beforeProducingTimestamp;
+    private float $expectedLatencyInSeconds;
 
     protected function setUp(): void
     {
-        $this->beforeProducingTimestamp = time();
-
         $context = $this;
         $conf = new Conf();
         $conf->set('metadata.broker.list', KAFKA_BROKERS);
         $conf->setDrMsgCb(
             function ($producer, $message) use ($context) {
                 $context->producedMessage = $message;
+                $context->expectedLatencyInSeconds = microtime(true) - $context->expectedLatencyInSeconds;
             }
         );
         $producer = new Producer($conf);
         $producerTopic = $producer->newTopic(KAFKA_TEST_TOPIC);
+        $this->expectedLatencyInSeconds = microtime(true);
         $producerTopic->producev(0, 0, __CLASS__, 'key-msg', ['header-name' => 'header-value']);
         $producer->flush((int)KAFKA_TEST_TIMEOUT_MS);
 
@@ -79,7 +79,10 @@ class MessageTest extends TestCase
      */
     public function testPropertyLatency()
     {
-        $this->assertGreaterThan((int)KAFKA_TEST_TIMEOUT_MS / 2, $this->producedMessage->latency);
+        $expectedLatencyInMicroseconds = $this->expectedLatencyInSeconds * 1000 * 1000;
+
+        $this->assertGreaterThan($expectedLatencyInMicroseconds - 500, $this->producedMessage->latency);
+        $this->assertLessThan($expectedLatencyInMicroseconds + 500, $this->producedMessage->latency);
     }
 
     public function testErrstr()
