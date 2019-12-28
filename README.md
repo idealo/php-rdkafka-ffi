@@ -102,6 +102,17 @@ Delete topic ```playground``` ...
 
     docker-compose run --rm php74 php examples/delete-topic.php -tplayground
 
+Test preload (should show current librdkafka version)
+
+    docker-compose run --rm php74 php \
+        -dffi.enable=preload \
+        -dzend_extension=opcache \
+        -dopcache.enable=true \
+        -dopcache.enable_cli=true \
+        -dopcache.preload_user=phpdev \
+        -dopcache.preload=/app/examples/preload.php \
+        examples/test-preload.php
+
 ## Run tests
 
 Tests use topics ```test*```.
