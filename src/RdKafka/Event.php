@@ -28,28 +28,32 @@ class Event extends Api
         return $this->event;
     }
 
-    public function type()
+    public function type(): int
     {
         return (int)self::$ffi->rd_kafka_event_type($this->event);
     }
 
-    public function name()
+    public function name(): string
     {
-        return (int)self::$ffi->rd_kafka_event_name($this->event);
+        return FFI::string(self::$ffi->rd_kafka_event_name($this->event));
     }
 
-    public function error()
+    public function error(): int
     {
         return (int)self::$ffi->rd_kafka_event_error($this->event);
     }
 
-    public function errorString()
+    public function errorString(): string
     {
         return FFI::string(self::$ffi->rd_kafka_event_error_string($this->event));
     }
 
-    public function errorIsFatal()
+    public function errorIsFatal(): bool
     {
+        if ($this->type() !== RD_KAFKA_EVENT_ERROR) {
+            return false;
+        }
+
         return (bool)self::$ffi->rd_kafka_event_error_is_fatal($this->event);
     }
 

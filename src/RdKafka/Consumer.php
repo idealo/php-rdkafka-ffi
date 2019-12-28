@@ -44,9 +44,12 @@ class Consumer extends RdKafka
         return new ConsumerTopic($this, $topic_name, $topic_conf);
     }
 
+    /**
+     * @throws Exception
+     */
     public function newQueue(): Queue
     {
-        return new Queue($this);
+        return Queue::fromRdKafka($this);
     }
 
     public function getOutQLen(): int

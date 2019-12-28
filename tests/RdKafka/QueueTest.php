@@ -8,6 +8,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \RdKafka\Queue
+ * @covers \RdKafka\Event
  */
 class QueueTest extends TestCase
 {
@@ -31,5 +32,29 @@ class QueueTest extends TestCase
 
         $this->assertInstanceOf(Message::class, $message);
         $this->assertEquals(__METHOD__, $message->payload);
+    }
+
+    /**
+     * @group ffiOnly
+     */
+    public function testPoll()
+    {
+        $conf = new Conf();
+        $conf->set('log.queue', 'true');  // route log events to main queue
+        $conf->set('debug', 'consumer');
+        $conf->set('log_level', (string)LOG_DEBUG);
+
+        $consumer = new Consumer($conf);
+
+        $mainQueue = new Queue(Api::getFFI()->rd_kafka_queue_get_main($consumer->getCData()));
+
+        $event = $mainQueue->poll((int)KAFKA_TEST_TIMEOUT_MS);
+
+        $this->assertInstanceOf(Event::class, $event);
+        $this->assertEquals(0 /* RD_KAFKA_RESP_ERR_NO_ERROR */, $event->error());
+        $this->assertEquals(4 /* RD_KAFKA_EVENT_LOG */, $event->type());
+        $this->assertEquals('Log', $event->name());
+        $this->assertEquals('Success', $event->errorString());
+        $this->assertFalse($event->errorIsFatal());
     }
 }

@@ -22,6 +22,7 @@ use RdKafka\Producer;
  * @covers \RdKafka\Admin\NewTopic
  * @covers \RdKafka\Admin\Options
  * @covers \RdKafka\Admin\TopicResult
+ * @covers \RdKafka\Event
  *
  * @group ffiOnly
  */

@@ -62,7 +62,7 @@ abstract class RdKafka extends Api
         return self::$ffi->rd_kafka_conf_dup($conf->getCData());
     }
 
-    private function initLogQueue(Conf $conf = null)
+    private function initLogQueue(?Conf $conf)
     {
         if ($conf === null || $conf->get('log.queue') !== 'true') {
             return;

@@ -72,7 +72,7 @@ class Client extends Api
     {
         Assert::that($resources)->notEmpty()->all()->isInstanceOf(ConfigResource::class);
 
-        $queue = new Queue($this->kafka);
+        $queue = Queue::fromRdKafka($this->kafka);
 
         $resourcesCount = \count($resources);
         $resourcesPtr = self::$ffi->new('rd_kafka_ConfigResource_t*[' . $resourcesCount . ']');
@@ -113,7 +113,7 @@ class Client extends Api
     {
         Assert::that($resources)->notEmpty()->all()->isInstanceOf(ConfigResource::class);
 
-        $queue = new Queue($this->kafka);
+        $queue = Queue::fromRdKafka($this->kafka);
 
         $resourcesCount = \count($resources);
         $resourcesPtr = self::$ffi->new('rd_kafka_ConfigResource_t*[' . $resourcesCount . ']');
@@ -154,7 +154,7 @@ class Client extends Api
     {
         Assert::that($partitions)->notEmpty()->all()->isInstanceOf(NewPartitions::class);
 
-        $queue = new Queue($this->kafka);
+        $queue = Queue::fromRdKafka($this->kafka);
 
         $partitions_ptr = self::$ffi->new('rd_kafka_NewPartitions_t*[' . \count($partitions) . ']');
         foreach (\array_values($partitions) as $i => $partition) {
@@ -194,7 +194,7 @@ class Client extends Api
     {
         Assert::that($topics)->notEmpty()->all()->isInstanceOf(NewTopic::class);
 
-        $queue = new Queue($this->kafka);
+        $queue = Queue::fromRdKafka($this->kafka);
 
         $topics_ptr = self::$ffi->new('rd_kafka_NewTopic_t*[' . \count($topics) . ']');
         foreach (\array_values($topics) as $i => $topic) {
@@ -234,7 +234,7 @@ class Client extends Api
     {
         Assert::that($topics)->notEmpty()->all()->isInstanceOf(DeleteTopic::class);
 
-        $queue = new Queue($this->kafka);
+        $queue = Queue::fromRdKafka($this->kafka);
 
         $topics_ptr = self::$ffi->new('rd_kafka_DeleteTopic_t*[' . \count($topics) . ']');
         foreach (\array_values($topics) as $i => $topic) {

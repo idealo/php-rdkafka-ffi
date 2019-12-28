@@ -11,15 +11,25 @@ class Queue extends Api
 {
     private CData $queue;
 
-    public function __construct(RdKafka $kafka)
+    public function __construct(CData $queue)
     {
         parent::__construct();
 
-        $this->queue = self::$ffi->rd_kafka_queue_new($kafka->getCData());
+        $this->queue = $queue;
+    }
 
-        if ($this->queue === null) {
+    /**
+     * @throws Exception
+     */
+    public static function fromRdKafka(RdKafka $kafka): self
+    {
+        $queue = self::$ffi->rd_kafka_queue_new($kafka->getCData());
+
+        if ($queue === null) {
             throw new Exception('Failed to create new queue.');
         }
+
+        return new Queue($queue);
     }
 
     public function __destruct()
