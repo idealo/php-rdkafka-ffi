@@ -51,9 +51,9 @@ class QueueTest extends TestCase
         $event = $mainQueue->poll((int)KAFKA_TEST_TIMEOUT_MS);
 
         $this->assertInstanceOf(Event::class, $event);
-        $this->assertEquals(0 /* RD_KAFKA_RESP_ERR_NO_ERROR */, $event->error());
         $this->assertEquals(4 /* RD_KAFKA_EVENT_LOG */, $event->type());
         $this->assertEquals('Log', $event->name());
+        $this->assertEquals(0 /* RD_KAFKA_RESP_ERR_NO_ERROR */, $event->error());
         $this->assertEquals('Success', $event->errorString());
         $this->assertFalse($event->errorIsFatal());
     }
