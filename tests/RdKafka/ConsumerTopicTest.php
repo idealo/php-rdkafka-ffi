@@ -183,4 +183,50 @@ class ConsumerTopicTest extends TestCase
         $this->expectExceptionMessageMatches('/partition/');
         $consumerTopic->consumeQueueStart(-2, 0, $queue);
     }
+
+    public function testOffsetStore()
+    {
+        $conf = new Conf();
+        $conf->set('group.id', __METHOD__ . rand(0, 99999999));
+        $conf->set('metadata.broker.list', KAFKA_BROKERS);
+        $conf->set('enable.auto.offset.store', 'false');
+        $conf->set('enable.auto.commit', 'true');
+        $conf->set('auto.commit.interval.ms', '50');
+
+        $highLevelConsumer = new KafkaConsumer($conf);
+
+        $topicPartitions = $highLevelConsumer->getCommittedOffsets(
+            [new TopicPartition(KAFKA_TEST_TOPIC, 0)],
+            (int)KAFKA_TEST_TIMEOUT_MS
+        );
+        $this->assertEquals(-1001, $topicPartitions[0]->getOffset());
+
+        $consumer = new Consumer($conf);
+
+        $topic = $consumer->newTopic(KAFKA_TEST_TOPIC);
+        $topic->consumeStart(0, RD_KAFKA_OFFSET_STORED);
+        $topic->consume(0, 50);
+
+        $topic->offsetStore(0, 4);
+
+        $topic->consumeStop(0);
+
+        $topicPartitions = $highLevelConsumer->getCommittedOffsets(
+            [new TopicPartition(KAFKA_TEST_TOPIC, 0)],
+            (int)KAFKA_TEST_TIMEOUT_MS
+        );
+        $this->assertEquals(5, $topicPartitions[0]->getOffset());
+    }
+
+    public function testOffsetStoreWithInvalidPartitionShouldFail()
+    {
+        $conf = new Conf();
+        $conf->set('group.id', __METHOD__ . rand(0, 99999999));
+        $consumer = new Consumer($conf);
+        $topic = $consumer->newTopic(KAFKA_TEST_TOPIC);
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessageMatches('/partition/');
+        $topic->offsetStore(-111, 0);
+    }
 }

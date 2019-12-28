@@ -219,8 +219,8 @@ class ConfTest extends TestCase
         $conf->set('group.id', __METHOD__ . rand(0, 99999999));
         $conf->set('metadata.broker.list', KAFKA_BROKERS);
         $conf->setRebalanceCb(
-            function (KafkaConsumer $consumer, $err, $topicPartitionList, $opaque = null) use (&$rebalanceCallbackStack
-            ) {
+            function (KafkaConsumer $consumer, $err, $topicPartitionList, $opaque = null)
+            use (&$rebalanceCallbackStack) {
                 $rebalanceCallbackStack[] = [
                     'consumer' => $consumer,
                     'err' => $err,
@@ -287,5 +287,35 @@ class ConfTest extends TestCase
         $this->assertEquals(RD_KAFKA_RESP_ERR__REVOKE_PARTITIONS, $rebalanceCallbackStack[5]['err']);
         $this->assertEquals($consumer3, $rebalanceCallbackStack[5]['consumer']);
         $this->assertEquals(1, \count($rebalanceCallbackStack[5]['partitions']));
+    }
+
+    public function testSetOffsetCommitCb()
+    {
+        $offsetCommitCallbackStack = [];
+
+        $conf = new Conf();
+        $conf->set('group.id', __METHOD__ . rand(0, 99999999));
+        $conf->set('metadata.broker.list', KAFKA_BROKERS);
+        $conf->setOffsetCommitCb(
+            function (KafkaConsumer $consumer, int $err, array $topicPartitions, $opaque = null)
+            use (&$offsetCommitCallbackStack) {
+                $offsetCommitCallbackStack[] = [
+                    'consumer' => $consumer,
+                    'err' => $err,
+                    'topicPartitions' => $topicPartitions,
+                ];
+            }
+        );
+        $consumer = new KafkaConsumer($conf);
+        $consumer->assign([new TopicPartition(KAFKA_TEST_TOPIC, 0)]);
+
+        $consumer->commit([new TopicPartition(KAFKA_TEST_TOPIC, 0, 20)]);
+
+        // trigger callback
+        $consumer->consume(0);
+
+        $this->assertEquals($consumer, $offsetCommitCallbackStack[0]['consumer']);
+        $this->assertEquals(0, $offsetCommitCallbackStack[0]['err'][0]);
+        $this->assertEquals(20, $offsetCommitCallbackStack[0]['topicPartitions'][0]->getOffset());
     }
 }

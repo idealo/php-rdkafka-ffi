@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace RdKafka;
 
+use InvalidArgumentException;
+
 class KafkaConsumerTopic extends Topic
 {
     public function __construct(KafkaConsumer $consumer, string $name, TopicConf $conf = null)
@@ -20,6 +22,10 @@ class KafkaConsumerTopic extends Topic
      */
     public function offsetStore(int $partition, int $offset)
     {
+        if ($partition != RD_KAFKA_PARTITION_UA && ($partition < 0 || $partition > 0x7FFFFFFF)) {
+            throw new InvalidArgumentException(sprintf("Out of range value '%d' for partition", $partition));
+        }
+
         $err = self::$ffi->rd_kafka_offset_store(
             $this->topic,
             $partition,

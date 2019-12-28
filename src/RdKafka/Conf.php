@@ -212,7 +212,7 @@ class Conf extends Api
     }
 
     /**
-     * @param callable $callback function(Consumer $consumer, int $err, TopicPartition[], mixed $opaque = null)
+     * @param callable $callback function(KafkaConsumer $consumer, int $err, TopicPartition[], mixed $opaque = null)
      *
      * @return void
      */
