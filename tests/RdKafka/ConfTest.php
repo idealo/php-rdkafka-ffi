@@ -115,7 +115,7 @@ class ConfTest extends TestCase
         $conf = new Conf();
 
         $this->expectException(Exception::class);
-        $this->expectDeprecationMessageMatches('/any.unknown/');
+        $this->expectExceptionMessageMatches('/any.unknown/');
         $conf->set('any.unknown', 'property');
     }
 

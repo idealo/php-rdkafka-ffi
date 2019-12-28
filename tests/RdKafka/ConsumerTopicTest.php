@@ -68,7 +68,7 @@ class ConsumerTopicTest extends TestCase
         $consumerTopic = $consumer->newTopic(KAFKA_TEST_TOPIC);
 
         $this->expectException(InvalidArgumentException::class);
-        $this->expectDeprecationMessageMatches('/partition/');
+        $this->expectExceptionMessageMatches('/partition/');
         $consumerTopic->consume(-2, (int)KAFKA_TEST_TIMEOUT_MS);
     }
 
@@ -137,7 +137,7 @@ class ConsumerTopicTest extends TestCase
         $consumerTopic = $consumer->newTopic(KAFKA_TEST_TOPIC);
 
         $this->expectException(InvalidArgumentException::class);
-        $this->expectDeprecationMessageMatches('/partition/');
+        $this->expectExceptionMessageMatches('/partition/');
         $consumerTopic->consumeBatch(-2, (int)KAFKA_TEST_TIMEOUT_MS, 1);
     }
 
@@ -148,7 +148,7 @@ class ConsumerTopicTest extends TestCase
         $consumerTopic = $consumer->newTopic(KAFKA_TEST_TOPIC);
 
         $this->expectException(InvalidArgumentException::class);
-        $this->expectDeprecationMessageMatches('/batch_size/');
+        $this->expectExceptionMessageMatches('/batch_size/');
         $consumerTopic->consumeBatch(0, (int)KAFKA_TEST_TIMEOUT_MS, 0);
     }
 
@@ -180,7 +180,7 @@ class ConsumerTopicTest extends TestCase
         $consumerTopic = $consumer->newTopic(KAFKA_TEST_TOPIC);
 
         $this->expectException(InvalidArgumentException::class);
-        $this->expectDeprecationMessageMatches('/partition/');
+        $this->expectExceptionMessageMatches('/partition/');
         $consumerTopic->consumeQueueStart(-2, 0, $queue);
     }
 }

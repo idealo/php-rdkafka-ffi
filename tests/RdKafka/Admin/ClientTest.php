@@ -8,12 +8,13 @@ use RdKafka\Conf;
 use RdKafka\Producer;
 
 /**
+ * @covers \RdKafka\Admin\AlterConfigsOptions
  * @covers \RdKafka\Admin\Client
- * @covers \RdKafka\Admin\CreatePartitionsOptions
- * @covers \RdKafka\Admin\CreateTopicsOptions
  * @covers \RdKafka\Admin\ConfigEntry
  * @covers \RdKafka\Admin\ConfigResource
  * @covers \RdKafka\Admin\ConfigResourceResult
+ * @covers \RdKafka\Admin\CreatePartitionsOptions
+ * @covers \RdKafka\Admin\CreateTopicsOptions
  * @covers \RdKafka\Admin\DeleteTopic
  * @covers \RdKafka\Admin\DeleteTopicsOptions
  * @covers \RdKafka\Admin\DescribeConfigsOptions
