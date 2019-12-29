@@ -576,15 +576,17 @@ CDEF;
         return self::$ffi;
     }
 
-    public static function preload()
+    public static function preload(): FFI
     {
         try {
             $file = \tempnam(\sys_get_temp_dir(), 'php-rdkafka-ffi');
             \file_put_contents($file, self::$cdef);
-            FFI::load($file);
+            $ffi = FFI::load($file);
         } finally {
             \unlink($file);
         }
+
+        return $ffi;
     }
 
     public static function err2str(int $err): string
