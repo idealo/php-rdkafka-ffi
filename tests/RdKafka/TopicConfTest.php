@@ -39,6 +39,34 @@ class TopicConfTest extends TestCase
         $this->assertEquals($expectedKeys, $keys);
     }
 
+    function testSet()
+    {
+        $conf = new TopicConf();
+        $conf->set('partitioner', 'consistent');
+
+        $dump = $conf->dump();
+
+        $this->assertEquals('consistent', $dump['partitioner']);
+    }
+
+    public function testSetWithUnknownPropertyShouldFail()
+    {
+        $conf = new TopicConf();
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessageMatches('/configuration property.+any.unknown/');
+        $conf->set('any.unknown', 'property');
+    }
+
+    function testSetWithInvalidValueShouldFail()
+    {
+        $conf = new TopicConf();
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessageMatches('/Invalid value.+partitioner/');
+        $conf->set('partitioner', 'any.unknown');
+    }
+
     public function testSetPartitioner()
     {
         $conf = new TopicConf();
