@@ -91,12 +91,6 @@ class Message extends Api
         }
 
         $message_headers = self::$ffi->rd_kafka_headers_new(0);
-        $header_name = FFI::new('char*');
-        $header_name_ptr = FFI::addr($header_name);
-        $header_value = FFI::new('char*');
-        $header_value_ptr = FFI::addr($header_value);
-        $header_size = FFI::new('size_t');
-        $header_size_ptr = FFI::addr($header_size);
 
         $resp = (int)self::$ffi->rd_kafka_message_headers($nativeMessage, FFI::addr($message_headers));
         if ($resp === RD_KAFKA_RESP_ERR__NOENT) {
@@ -110,6 +104,12 @@ class Message extends Api
 
         if ($message_headers !== null) {
             $header_count = (int)self::$ffi->rd_kafka_header_cnt($message_headers);
+            $header_name = FFI::new('char*');
+            $header_name_ptr = FFI::addr($header_name);
+            $header_value = FFI::new('char*');
+            $header_value_ptr = FFI::addr($header_value);
+            $header_size = FFI::new('size_t');
+            $header_size_ptr = FFI::addr($header_size);
 
             for ($i = 0; $i < $header_count; $i++) {
                 $header_response = (int)self::$ffi->rd_kafka_header_get_all(
