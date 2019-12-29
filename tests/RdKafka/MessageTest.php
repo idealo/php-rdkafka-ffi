@@ -14,9 +14,12 @@ class MessageTest extends TestCase
     private Message $message;
     private Message $producedMessage;
     private float $expectedLatencyInSeconds;
+    private int $beforeProducingTimestamp;
 
-    protected function setUp(): void
+    protected function prepareMessage(...$params)
     {
+        $this->beforeProducingTimestamp = time();
+
         $context = $this;
         $conf = new Conf();
         $conf->set('metadata.broker.list', KAFKA_BROKERS);
@@ -29,7 +32,7 @@ class MessageTest extends TestCase
         $producer = new Producer($conf);
         $producerTopic = $producer->newTopic(KAFKA_TEST_TOPIC);
         $this->expectedLatencyInSeconds = microtime(true);
-        $producerTopic->producev(0, 0, __CLASS__, 'key-msg', ['header-name' => 'header-value']);
+        $producerTopic->producev(...$params);
         $producer->flush((int)KAFKA_TEST_TIMEOUT_MS);
 
         $consumer = new Consumer();
@@ -44,25 +47,32 @@ class MessageTest extends TestCase
 
     public function testProperties()
     {
-        $this->assertEquals(0, $this->message->err);
-        $this->assertEquals(KAFKA_TEST_TOPIC, $this->message->topic_name);
-        $this->assertEquals(0, $this->message->partition);
-        $this->assertEquals(__CLASS__, $this->message->payload);
-        $this->assertEquals('key-msg', $this->message->key);
-        $this->assertEquals(['header-name' => 'header-value'], $this->message->headers);
+        $this->prepareMessage(0, 0, __METHOD__ . '1', 'key-msg', ['header-name' => 'header-value']);
 
         $this->assertEquals(RD_KAFKA_RESP_ERR_NO_ERROR, $this->message->err);
-
-        $this->assertGreaterThan($this->beforeProducingTimestamp, $this->message->timestamp);
-
+        $this->assertEquals(KAFKA_TEST_TOPIC, $this->message->topic_name);
+        $this->assertEquals(0, $this->message->partition);
+        $this->assertEquals(__METHOD__ . '1', $this->message->payload);
+        $this->assertEquals('key-msg', $this->message->key);
+        $this->assertEquals(['header-name' => 'header-value'], $this->message->headers);
         $this->assertGreaterThan(0, $this->message->offset);
+
+        $this->prepareMessage(0, 0, __METHOD__ . '2');
+
+        $this->assertEquals(__METHOD__ . '2', $this->message->payload);
+        $this->assertEquals(null, $this->message->key);
+        $this->assertEquals([], $this->message->headers);
     }
 
     /**
      * @group ffiOnly
      */
-    public function testPropertyTimestampType()
+    public function testPropertyTimestamp()
     {
+        $this->prepareMessage(0, 0, __METHOD__);
+
+        $this->assertEquals(__METHOD__, $this->message->payload);
+        $this->assertGreaterThan($this->beforeProducingTimestamp, $this->message->timestamp);
         $this->assertEquals(1 /*RD_KAFKA_TIMESTAMP_CREATE_TIME*/, $this->message->timestampType);
     }
 
@@ -71,6 +81,9 @@ class MessageTest extends TestCase
      */
     public function testPropertyStatus()
     {
+        $this->prepareMessage(0, 0, __METHOD__);
+
+        $this->assertEquals(__METHOD__, $this->message->payload);
         $this->assertEquals(RD_KAFKA_MSG_STATUS_PERSISTED, $this->message->status);
     }
 
@@ -79,14 +92,20 @@ class MessageTest extends TestCase
      */
     public function testPropertyLatency()
     {
+        $this->prepareMessage(0, 0, __METHOD__);
+
         $expectedLatencyInMicroseconds = $this->expectedLatencyInSeconds * 1000 * 1000;
 
+        $this->assertEquals(__METHOD__, $this->message->payload);
         $this->assertGreaterThan($expectedLatencyInMicroseconds - 500, $this->producedMessage->latency);
         $this->assertLessThan($expectedLatencyInMicroseconds + 500, $this->producedMessage->latency);
     }
 
     public function testErrstr()
     {
+        $this->prepareMessage(0, 0, __METHOD__);
+
+        $this->assertEquals(__METHOD__, $this->message->payload);
         $this->assertEquals('Success', $this->message->errstr());
     }
 }
