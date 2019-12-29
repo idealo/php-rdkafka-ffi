@@ -49,23 +49,4 @@ class ConfigResource extends Api
             throw new Exception(self::err2str($err));
         }
     }
-
-    /**
-     * @param string $name
-     * @throws \Exception
-     */
-    public function deleteConfig(string $name)
-    {
-        throw new \Exception('Not implemented.');
-    }
-
-    /**
-     * @param string $name
-     * @param string $value
-     * @throws \Exception
-     */
-    public function addConfig(string $name, string $value)
-    {
-        throw new \Exception('Not implemented.');
-    }
 }

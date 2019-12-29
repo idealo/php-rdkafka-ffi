@@ -11,6 +11,7 @@ use stdClass;
 /**
  * @covers \RdKafka\KafkaConsumer
  * @covers \RdKafka\Conf
+ * @covers \RdKafka\Exception
  * @covers \RdKafka\TopicPartition
  * @covers \RdKafka\TopicPartitionList
  */

@@ -8,6 +8,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \RdKafka\Conf
+ * @covers \RdKafka\Exception
  */
 class ConfTest extends TestCase
 {
@@ -270,7 +271,7 @@ class ConfTest extends TestCase
         $consumer3->close();
 
         do {
-            usleep((int)KAFKA_TEST_TIMEOUT_MS * 1000);
+            usleep(50 * 1000);
         } while (\count($rebalanceCallbackStack) < 6);
 
         $this->assertEquals(RD_KAFKA_RESP_ERR__ASSIGN_PARTITIONS, $rebalanceCallbackStack[0]['err']);

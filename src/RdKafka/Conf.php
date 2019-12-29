@@ -229,24 +229,4 @@ class Conf extends Api
 
         self::$ffi->rd_kafka_conf_set_offset_commit_cb($this->conf, $proxyCallback);
     }
-
-    /**
-     * @param callable $callback
-     *
-     * @return void
-     */
-    public function setConsumeCb(callable $callback)
-    {
-        throw new \Exception('Not implemented.');
-    }
-
-    /**
-     * @param callable $callback
-     *
-     * @return void
-     */
-    public function setThrottleCb(callable $callback)
-    {
-        throw new \Exception('Not implemented.');
-    }
 }

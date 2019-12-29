@@ -9,6 +9,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \RdKafka\TopicConf
+ * @covers \RdKafka\Exception
  */
 class TopicConfTest extends TestCase
 {
