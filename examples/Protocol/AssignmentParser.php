@@ -9,6 +9,9 @@ namespace RdKafka\Examples\Protocol;
  */
 class AssignmentParser extends Parser
 {
+    const V0 = 0;
+    const V1 = 1;
+
     private int $version;
     private array $parsed;
 
@@ -25,8 +28,8 @@ class AssignmentParser extends Parser
         $this->version = $this->parseInt16();
 
         switch ($this->version) {
-            case 0:
-            case 1:
+            case self::V0:
+            case self::V1:
                 $this->parsed = [
                     'topic_partitions' => $this->parseArray([$this, 'parseTopicPartitionsV0']),
                     'user_data' => $this->parseBytes(),
