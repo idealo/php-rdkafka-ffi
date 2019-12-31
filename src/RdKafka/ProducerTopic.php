@@ -30,7 +30,24 @@ class ProducerTopic extends Topic
      */
     public function produce(int $partition, int $msgflags, string $payload = null, string $key = null)
     {
-        $this->producev($partition, $msgflags, $payload, $key);
+        $this->assertPartition($partition);
+        $this->assertMsgflags($msgflags);
+
+        $ret = self::$ffi->rd_kafka_produce(
+            $this->topic,
+            $partition,
+            $msgflags | RD_KAFKA_MSG_F_COPY,
+            $payload,
+            \is_null($payload) ? null : \strlen($payload),
+            $key,
+            \is_null($key) ? null : \strlen($key),
+            null
+        );
+
+        if ($ret == -1) {
+            $err = self::$ffi->rd_kafka_last_error();
+            throw new Exception(self::err2str($err));
+        }
     }
 
     /**
@@ -51,13 +68,8 @@ class ProducerTopic extends Topic
         array $headers = [],
         int $timestamp_ms = null
     ) {
-        if ($partition != RD_KAFKA_PARTITION_UA && ($partition < 0 || $partition > 0x7FFFFFFF)) {
-            throw new InvalidArgumentException(sprintf("Out of range value '%d' for partition", $partition));
-        }
-
-        if ($msgflags != 0 && $msgflags != RD_KAFKA_MSG_F_BLOCK) {
-            throw new InvalidArgumentException(sprintf("Invalid value '%d' for msgflags", $msgflags));
-        }
+        $this->assertPartition($partition);
+        $this->assertMsgflags($msgflags);
 
         $args = [
             RD_KAFKA_VTYPE_RKT,
@@ -95,6 +107,20 @@ class ProducerTopic extends Topic
         if ($ret == -1) {
             $err = self::$ffi->rd_kafka_last_error();
             throw new Exception(self::err2str($err));
+        }
+    }
+
+    private function assertPartition(int $partition): void
+    {
+        if ($partition != RD_KAFKA_PARTITION_UA && ($partition < 0 || $partition > 0x7FFFFFFF)) {
+            throw new InvalidArgumentException(sprintf("Out of range value '%d' for partition", $partition));
+        }
+    }
+
+    private function assertMsgflags(int $msgflags): void
+    {
+        if ($msgflags != 0 && $msgflags != RD_KAFKA_MSG_F_BLOCK) {
+            throw new InvalidArgumentException(sprintf("Invalid value '%d' for msgflags", $msgflags));
         }
     }
 }
