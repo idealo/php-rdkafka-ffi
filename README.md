@@ -98,10 +98,6 @@ Broker metadata ...
 
     docker-compose run --rm php74 php examples/metadata.php
 
-Delete topic ```playground``` ...
-
-    docker-compose run --rm php74 php examples/delete-topic.php -tplayground
-
 Test preload (should show current librdkafka version)
 
     docker-compose run --rm php74 php \
@@ -112,6 +108,18 @@ Test preload (should show current librdkafka version)
         -dopcache.preload_user=phpdev \
         -dopcache.preload=/app/examples/preload.php \
         examples/test-preload.php
+
+__Experimental__! Test mock cluster (producing and consuming) - requires librdkafka ^1.3.0
+
+     docker-compose run --rm php74 php examples/mock-cluster.php
+
+__Experimental__! Read consumer offset lags
+
+     docker-compose run --rm php74 php examples/offset-lags.php
+
+Delete topic ```playground``` ...
+
+    docker-compose run --rm php74 php examples/delete-topic.php -tplayground
 
 ## Run tests
 
@@ -145,10 +153,18 @@ Benchmarks use topic ```benchmarks```.
 
 Run & store benchmarks for ffi based rdkafka binding
 
+    docker-compose down -v; \
+    docker-compose up -d kafka; \
+    sleep 10s; \
+    docker-compose run --rm php74 php examples/create-topic.php -tbenchmarks -p1 -r1; \
     docker-compose run --rm php74 phpbench run benchmarks --config=/app/benchmarks/ffi.json --report=default --store --tag=ffi
 
 Run & store benchmarks for extension based rdkafka binding
 
+    docker-compose down -v; \
+    docker-compose up -d kafka; \
+    sleep 10s; \
+    docker-compose run --rm php74 php examples/create-topic.php -tbenchmarks -p1 -r1; \
     docker-compose run --rm php74 phpbench run benchmarks --config=/app/benchmarks/ext.json --report=default --store --tag=ext    
 
 Show comparison
