@@ -7,7 +7,7 @@
          failOnWarning="true"
          cacheResult="false">
     <testsuites>
-        <testsuite name="FFI RdKafka Bindings">
+        <testsuite name="RdKafka FFI Bindings">
             <directory suffix=".php">tests/</directory>
         </testsuite>
     </testsuites>

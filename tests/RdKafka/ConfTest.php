@@ -229,16 +229,16 @@ class ConfTest extends TestCase
         $conf->set('group.id', __METHOD__ . rand(0, 99999999));
         $conf->set('metadata.broker.list', KAFKA_BROKERS);
         $conf->setRebalanceCb(
-            function (KafkaConsumer $consumer, $err, $topicPartitionList, $opaque = null)
+            function (KafkaConsumer $consumer, $err, $topicPartitions, $opaque = null)
             use (&$rebalanceCallbackStack) {
                 $rebalanceCallbackStack[] = [
                     'consumer' => $consumer,
                     'err' => $err,
-                    'partitions' => $topicPartitionList,
+                    'partitions' => $topicPartitions,
                 ];
                 switch ($err) {
                     case RD_KAFKA_RESP_ERR__ASSIGN_PARTITIONS:
-                        $consumer->assign($topicPartitionList);
+                        $consumer->assign($topicPartitions);
                         break;
 
                     case RD_KAFKA_RESP_ERR__REVOKE_PARTITIONS:

@@ -8,6 +8,8 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \RdKafka\Api
+ *
+ * @group ffiOnly
  */
 class ApiTest extends TestCase
 {

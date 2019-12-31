@@ -61,7 +61,7 @@ class MessageTest extends TestCase
 
         $this->assertEquals(__METHOD__ . '2', $this->message->payload);
         $this->assertEquals(null, $this->message->key);
-        $this->assertEquals([], $this->message->headers);
+        $this->assertEquals(null, $this->message->headers);
     }
 
     /**

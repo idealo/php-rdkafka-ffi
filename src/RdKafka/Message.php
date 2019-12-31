@@ -27,7 +27,7 @@ class Message extends Api
 
     public int $timestampType;
 
-    public array $headers;
+    public ?array $headers;
 
     /**
      * @var int microseconds
@@ -82,24 +82,24 @@ class Message extends Api
         return self::err2str($this->err);
     }
 
-    private function parseHeaders(CData $nativeMessage): array
+    private function parseHeaders(CData $nativeMessage): ?array
     {
         $headers = [];
 
         if ($nativeMessage->err !== RD_KAFKA_RESP_ERR_NO_ERROR) {
-            return $headers;
+            return null;
         }
 
         $message_headers = self::$ffi->rd_kafka_headers_new(0);
 
         $resp = (int)self::$ffi->rd_kafka_message_headers($nativeMessage, FFI::addr($message_headers));
         if ($resp === RD_KAFKA_RESP_ERR__NOENT) {
-            return $headers;
+            return null;
         }
 
         if ($resp !== RD_KAFKA_RESP_ERR_NO_ERROR) {
             $this->err = $resp;
-            return $headers;
+            return null;
         }
 
         if ($message_headers !== null) {

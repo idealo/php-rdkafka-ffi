@@ -89,7 +89,7 @@ class ConsumerTopicTest extends TestCase
         $consumerTopic = $consumer->newTopic(KAFKA_TEST_TOPIC);
         $consumerTopic->consumeStart(0, rd_kafka_offset_tail(1));
 
-        $callback = function (Message $message, $opaque) use (&$consumedMessage) {
+        $callback = function (Message $message, $opaque = null) use (&$consumedMessage) {
             $consumedMessage = $message;
         };
         $messagesConsumed = $consumerTopic->consumeCallback(0, (int)KAFKA_TEST_TIMEOUT_MS, $callback);
