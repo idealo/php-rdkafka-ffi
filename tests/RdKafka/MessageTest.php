@@ -47,14 +47,14 @@ class MessageTest extends TestCase
 
     public function testProperties(): void
     {
-        $this->prepareMessage(0, 0, __METHOD__ . '1', 'key-msg', ['header-name' => 'header-value']);
+        $this->prepareMessage(0, 0, __METHOD__ . '1', 'key-msg-üöäß-👻', ['header-name-üöäß-👻' => 'header-value-üöäß-👻']);
 
         $this->assertSame(RD_KAFKA_RESP_ERR_NO_ERROR, $this->message->err);
         $this->assertSame(KAFKA_TEST_TOPIC, $this->message->topic_name);
         $this->assertSame(0, $this->message->partition);
         $this->assertSame(__METHOD__ . '1', $this->message->payload);
-        $this->assertSame('key-msg', $this->message->key);
-        $this->assertSame(['header-name' => 'header-value'], $this->message->headers);
+        $this->assertSame('key-msg-üöäß-👻', $this->message->key);
+        $this->assertSame(['header-name-üöäß-👻' => 'header-value-üöäß-👻'], $this->message->headers);
         $this->assertGreaterThan(0, $this->message->offset);
 
         $this->prepareMessage(0, 0, __METHOD__ . '2');
