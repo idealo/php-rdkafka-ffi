@@ -11,7 +11,7 @@ require_once dirname(__DIR__) . '/vendor/autoload.php';
 $options = getopt('t:');
 if (empty($options)) {
     echo sprintf(
-        "Usage: %s -t{topicname}" . PHP_EOL,
+        'Usage: %s -t{topicname}' . PHP_EOL,
         basename(__FILE__)
     );
     exit();
@@ -24,10 +24,9 @@ $client = Client::fromConf($conf);
 $result = $client->deleteTopics(
     [
         new DeleteTopic(
-            (string)$options['t']
+            (string) $options['t']
         ),
     ]
 );
 
 var_dump($result);
-

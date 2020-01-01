@@ -13,7 +13,7 @@ use PHPUnit\Framework\TestCase;
  */
 class KafkaConsumerTopicTest extends TestCase
 {
-    public function testGetName()
+    public function testGetName(): void
     {
         $conf = new Conf();
         $conf->set('group.id', __METHOD__);
@@ -24,13 +24,13 @@ class KafkaConsumerTopicTest extends TestCase
 
         $name = $topic->getName();
 
-        $this->assertEquals(KAFKA_TEST_TOPIC, $name);
+        $this->assertSame(KAFKA_TEST_TOPIC, $name);
     }
 
-    public function testOffsetStore()
+    public function testOffsetStore(): void
     {
         $conf = new Conf();
-        $conf->set('group.id', __METHOD__ . rand(0, 99999999));
+        $conf->set('group.id', __METHOD__ . random_int(0, 99999999));
         $conf->set('metadata.broker.list', KAFKA_BROKERS);
         $conf->set('enable.auto.offset.store', 'false');
         $consumer = new KafkaConsumer($conf);
@@ -39,24 +39,24 @@ class KafkaConsumerTopicTest extends TestCase
 
         $topicPartitions = $consumer->getCommittedOffsets(
             [new TopicPartition(KAFKA_TEST_TOPIC, 0)],
-            (int)KAFKA_TEST_TIMEOUT_MS
+            (int) KAFKA_TEST_TIMEOUT_MS
         );
-        $this->assertEquals(-1001, $topicPartitions[0]->getOffset());
+        $this->assertSame(-1001, $topicPartitions[0]->getOffset());
 
         $topic->offsetStore(0, 1);
         $consumer->commit();
 
         $topicPartitions = $consumer->getCommittedOffsets(
             [new TopicPartition(KAFKA_TEST_TOPIC, 0)],
-            (int)KAFKA_TEST_TIMEOUT_MS
+            (int) KAFKA_TEST_TIMEOUT_MS
         );
-        $this->assertEquals(2, $topicPartitions[0]->getOffset());
+        $this->assertSame(2, $topicPartitions[0]->getOffset());
     }
 
-    public function testOffsetStoreWithInvalidPartitionShouldFail()
+    public function testOffsetStoreWithInvalidPartitionShouldFail(): void
     {
         $conf = new Conf();
-        $conf->set('group.id', __METHOD__ . rand(0, 99999999));
+        $conf->set('group.id', __METHOD__ . random_int(0, 99999999));
         $consumer = new KafkaConsumer($conf);
         $topic = $consumer->newTopic(KAFKA_TEST_TOPIC);
 

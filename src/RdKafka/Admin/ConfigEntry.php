@@ -29,18 +29,18 @@ class ConfigEntry extends Api
 
         $this->name = FFI::string(self::$ffi->rd_kafka_ConfigEntry_name($entry));
         $valueCdata = self::$ffi->rd_kafka_ConfigEntry_value($entry);
-        $this->value = \is_null($valueCdata) ? null : FFI::string($valueCdata);
-        $this->source = (int)self::$ffi->rd_kafka_ConfigEntry_source($entry);
-        $this->isReadOnly = (bool)self::$ffi->rd_kafka_ConfigEntry_is_read_only($entry);
-        $this->isDefault = (bool)self::$ffi->rd_kafka_ConfigEntry_is_default($entry);
-        $this->isSensitive = (bool)self::$ffi->rd_kafka_ConfigEntry_is_sensitive($entry);
-        $this->isSynonym = (bool)self::$ffi->rd_kafka_ConfigEntry_is_synonym($entry);
+        $this->value = $valueCdata === null ? null : FFI::string($valueCdata);
+        $this->source = (int) self::$ffi->rd_kafka_ConfigEntry_source($entry);
+        $this->isReadOnly = (bool) self::$ffi->rd_kafka_ConfigEntry_is_read_only($entry);
+        $this->isDefault = (bool) self::$ffi->rd_kafka_ConfigEntry_is_default($entry);
+        $this->isSensitive = (bool) self::$ffi->rd_kafka_ConfigEntry_is_sensitive($entry);
+        $this->isSynonym = (bool) self::$ffi->rd_kafka_ConfigEntry_is_synonym($entry);
 
         $size = FFI::new('size_t');
         $synonymsPtr = self::$ffi->rd_kafka_ConfigEntry_synonyms($entry, FFI::addr($size));
         $synonyms = [];
-        for ($i = 0; $i < (int)$size->cdata; $i++) {
-            $synonyms[] = new ConfigEntry($synonymsPtr[$i]);
+        for ($i = 0; $i < (int) $size->cdata; $i++) {
+            $synonyms[] = new self($synonymsPtr[$i]);
         }
         $this->synonyms = $synonyms;
     }

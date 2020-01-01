@@ -18,7 +18,7 @@ class NewPartitions extends Api
     {
         parent::__construct();
 
-        $errstr = FFI::new("char[512]");
+        $errstr = FFI::new('char[512]');
         $this->partitions = self::$ffi->rd_kafka_NewPartitions_new(
             $topicName,
             $new_total_cnt,
@@ -46,24 +46,23 @@ class NewPartitions extends Api
     }
 
     /**
-     * @param int $new_partition_id
      * @param int[] $broker_ids
      * @throws Exception
      */
-    public function setReplicaAssignment(int $new_partition_id, array $broker_ids)
+    public function setReplicaAssignment(int $new_partition_id, array $broker_ids): void
     {
         Assert::that($broker_ids)->notEmpty()->all()->integer();
 
         $brokerIdsCount = \count($broker_ids);
         $brokerIds = FFI::new('int*[' . $brokerIdsCount . ']');
         foreach (\array_values($broker_ids) as $i => $broker_id) {
-            $int = FFI::new("int");
+            $int = FFI::new('int');
             $int->cdata = $broker_id;
             $brokerIds[$i] = FFI::addr($int);
         }
 
-        $errstr = FFI::new("char[512]");
-        $err = (int)self::$ffi->rd_kafka_NewPartitions_set_replica_assignment(
+        $errstr = FFI::new('char[512]');
+        $err = (int) self::$ffi->rd_kafka_NewPartitions_set_replica_assignment(
             $this->partitions,
             $new_partition_id,
             $brokerIds[0],
@@ -72,7 +71,7 @@ class NewPartitions extends Api
             FFI::sizeOf($errstr)
         );
 
-        if ($err != RD_KAFKA_RESP_ERR_NO_ERROR) {
+        if ($err !== RD_KAFKA_RESP_ERR_NO_ERROR) {
             throw new Exception(FFI::string($errstr));
         }
     }

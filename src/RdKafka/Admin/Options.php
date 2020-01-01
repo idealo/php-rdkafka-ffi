@@ -33,9 +33,9 @@ abstract class Options extends Api
         return $this->options;
     }
 
-    public function setRequestTimeout(int $timeout_ms)
+    public function setRequestTimeout(int $timeout_ms): void
     {
-        $errstr = FFI::new("char[512]");
+        $errstr = FFI::new('char[512]');
         $err = self::$ffi->rd_kafka_AdminOptions_set_request_timeout(
             $this->options,
             $timeout_ms,
@@ -47,9 +47,9 @@ abstract class Options extends Api
         }
     }
 
-    public function setOperationTimeout(int $timeout_ms)
+    public function setOperationTimeout(int $timeout_ms): void
     {
-        $errstr = FFI::new("char[512]");
+        $errstr = FFI::new('char[512]');
         $err = self::$ffi->rd_kafka_AdminOptions_set_operation_timeout(
             $this->options,
             $timeout_ms,
@@ -61,12 +61,12 @@ abstract class Options extends Api
         }
     }
 
-    public function setValidateOnly(bool $true_or_false)
+    public function setValidateOnly(bool $true_or_false): void
     {
-        $errstr = FFI::new("char[512]");
+        $errstr = FFI::new('char[512]');
         $err = self::$ffi->rd_kafka_AdminOptions_set_validate_only(
             $this->options,
-            (int)$true_or_false,
+            (int) $true_or_false,
             $errstr,
             FFI::sizeOf($errstr)
         );
@@ -75,9 +75,9 @@ abstract class Options extends Api
         }
     }
 
-    public function setBrokerId(int $broker_id)
+    public function setBrokerId(int $broker_id): void
     {
-        $errstr = FFI::new("char[512]");
+        $errstr = FFI::new('char[512]');
         $err = self::$ffi->rd_kafka_AdminOptions_set_broker(
             $this->options,
             $broker_id,

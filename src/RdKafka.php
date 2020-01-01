@@ -18,8 +18,12 @@ abstract class RdKafka extends Api
      */
     private static array $instances = [];
 
-    public static function resolveFromCData(CData $kafka = null): ?self
+    public static function resolveFromCData(?CData $kafka = null): ?self
     {
+        if ($kafka === null) {
+            return null;
+        }
+
         foreach (self::$instances as $reference) {
             /** @var self $instance */
             $instance = $reference->get();
@@ -31,11 +35,11 @@ abstract class RdKafka extends Api
         return null;
     }
 
-    public function __construct(int $type, Conf $conf = null)
+    public function __construct(int $type, ?Conf $conf = null)
     {
         parent::__construct();
 
-        $errstr = FFI::new("char[512]");
+        $errstr = FFI::new('char[512]');
 
         $this->kafka = self::$ffi->rd_kafka_new(
             $type,
@@ -53,7 +57,7 @@ abstract class RdKafka extends Api
         self::$instances[] = WeakReference::create($this);
     }
 
-    private function duplicateConfCData(Conf $conf = null): ?CData
+    private function duplicateConfCData(?Conf $conf = null): ?CData
     {
         if ($conf === null) {
             return null;
@@ -62,7 +66,7 @@ abstract class RdKafka extends Api
         return self::$ffi->rd_kafka_conf_dup($conf->getCData());
     }
 
-    private function initLogQueue(?Conf $conf)
+    private function initLogQueue(?Conf $conf): void
     {
         if ($conf === null || $conf->get('log.queue') !== 'true') {
             return;
@@ -70,7 +74,7 @@ abstract class RdKafka extends Api
 
         $err = self::$ffi->rd_kafka_set_log_queue($this->kafka, null);
 
-        if ($err != RD_KAFKA_RESP_ERR_NO_ERROR) {
+        if ($err !== RD_KAFKA_RESP_ERR_NO_ERROR) {
             throw new Exception(self::err2str($err));
         }
     }
@@ -99,11 +103,6 @@ abstract class RdKafka extends Api
     }
 
     /**
-     * @param bool $all_topics
-     * @param Topic|null $only_topic
-     * @param int $timeout_ms
-     *
-     * @return Metadata
      * @throws Exception
      */
     public function getMetadata(bool $all_topics, ?Topic $only_topic, int $timeout_ms): Metadata
@@ -112,8 +111,6 @@ abstract class RdKafka extends Api
     }
 
     /**
-     * @param int $timeout_ms
-     *
      * @return int Number of triggered events
      */
     protected function poll(int $timeout_ms): int
@@ -121,34 +118,29 @@ abstract class RdKafka extends Api
         return self::$ffi->rd_kafka_poll($this->kafka, $timeout_ms);
     }
 
-    /**
-     * @return int
-     */
     protected function getOutQLen(): int
     {
         return self::$ffi->rd_kafka_outq_len($this->kafka);
     }
 
     /**
-     * @param int $level
      * @deprecated Set via Conf parameter log_level instead
      */
-    public function setLogLevel(int $level)
+    public function setLogLevel(int $level): void
     {
         self::$ffi->rd_kafka_set_log_level($this->kafka, $level);
     }
 
     /**
-     * @param int $logger
      * @throws \Exception
      * @deprecated Use Conf::setLogCb instead
      */
-    public function setLogger(int $logger)
+    public function setLogger(int $logger): void
     {
         throw new \Exception('Not implemented');
     }
 
-    public function queryWatermarkOffsets(string $topic, int $partition, int &$low, int &$high, int $timeout_ms)
+    public function queryWatermarkOffsets(string $topic, int $partition, int &$low, int &$high, int $timeout_ms): void
     {
         $lowResult = FFI::new('int64_t');
         $highResult = FFI::new('int64_t');
@@ -162,11 +154,11 @@ abstract class RdKafka extends Api
             $timeout_ms
         );
 
-        if ($err != RD_KAFKA_RESP_ERR_NO_ERROR) {
+        if ($err !== RD_KAFKA_RESP_ERR_NO_ERROR) {
             throw new Exception(self::err2str($err));
         }
 
-        $low = (int)$lowResult->cdata;
-        $high = (int)$highResult->cdata;
+        $low = (int) $lowResult->cdata;
+        $high = (int) $highResult->cdata;
     }
 }

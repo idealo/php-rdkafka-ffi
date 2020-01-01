@@ -22,6 +22,7 @@
     "require-dev": {
         "phpunit/phpunit": "^8",
         "ircmaxell/ffime": "master-dev",
-        "ircmaxell/php-c-parser": "master-dev"
+        "ircmaxell/php-c-parser": "master-dev",
+        "symplify/easy-coding-standard": "^7.1"
     }
 }

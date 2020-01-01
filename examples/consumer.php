@@ -11,32 +11,32 @@ require_once dirname(__DIR__) . '/vendor/autoload.php';
 $conf = new Conf();
 $conf->set('metadata.broker.list', 'kafka:9092');
 $conf->set('group.id', 'test');
-$conf->set('log_level', (string)LOG_DEBUG);
+$conf->set('log_level', (string) LOG_DEBUG);
 $conf->set('debug', 'all');
 $conf->setLogCb(
-    function ($consumer, $level, $fac, $buf) {
-        echo "log: $level $fac $buf" . PHP_EOL;
+    function ($consumer, $level, $fac, $buf): void {
+        echo "log: ${level} ${fac} ${buf}" . PHP_EOL;
     }
 );
 
-$conf->set('statistics.interval.ms', (string)500);
+$conf->set('statistics.interval.ms', (string) 500);
 $conf->setStatsCb(
-    function ($consumer, $json, $json_len, $opaque) {
-        echo "stats: $json" . PHP_EOL;
+    function ($consumer, $json, $json_len, $opaque): void {
+        echo "stats: ${json}" . PHP_EOL;
     }
 );
 
 $topicConf = new TopicConf();
 $topicConf->set('enable.auto.commit', 'true');
-$topicConf->set('auto.commit.interval.ms', (string)100);
+$topicConf->set('auto.commit.interval.ms', (string) 100);
 $topicConf->set('auto.offset.reset', 'earliest');
 var_dump($topicConf->dump());
 
 if (function_exists('pcntl_sigprocmask')) {
     pcntl_sigprocmask(SIG_BLOCK, [SIGIO]);
-    $conf->set('internal.termination.signal', (string)SIGIO);
+    $conf->set('internal.termination.signal', (string) SIGIO);
 } else {
-    $conf->set('queue.buffering.max.ms', (string)1);
+    $conf->set('queue.buffering.max.ms', (string) 1);
 }
 var_dump($conf->dump());
 
@@ -57,4 +57,3 @@ while ($message = $queue->consume(1000)) {
 $topic->consumeStop(0);
 $topic->consumeStop(1);
 $topic->consumeStop(2);
-

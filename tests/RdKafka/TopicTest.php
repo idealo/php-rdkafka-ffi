@@ -12,7 +12,7 @@ use ReflectionClass;
  */
 class TopicTest extends TestCase
 {
-    public function testClassIsAbstract()
+    public function testClassIsAbstract(): void
     {
         $reflector = new ReflectionClass(Topic::class);
 

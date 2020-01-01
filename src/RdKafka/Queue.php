@@ -29,7 +29,7 @@ class Queue extends Api
             throw new Exception('Failed to create new queue.');
         }
 
-        return new Queue($queue);
+        return new self($queue);
     }
 
     public function __destruct()
@@ -43,9 +43,6 @@ class Queue extends Api
     }
 
     /**
-     * @param int $timeout_ms
-     *
-     * @return Message|null
      * @throws Exception
      */
     public function consume(int $timeout_ms): ?Message
@@ -58,7 +55,7 @@ class Queue extends Api
         if ($nativeMessage === null) {
             $err = self::$ffi->rd_kafka_last_error();
 
-            if ($err == RD_KAFKA_RESP_ERR__TIMED_OUT) {
+            if ($err === RD_KAFKA_RESP_ERR__TIMED_OUT) {
                 return null;
             }
 

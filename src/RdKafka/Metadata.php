@@ -19,9 +19,9 @@ class Metadata extends Api
 
         $this->metadata = self::$ffi->new('struct rd_kafka_metadata*');
 
-        $err = (int)self::$ffi->rd_kafka_metadata(
+        $err = (int) self::$ffi->rd_kafka_metadata(
             $kafka->getCData(),
-            (int)$all_topics,
+            (int) $all_topics,
             $only_topic ? $only_topic->getCData() : null,
             FFI::addr($this->metadata),
             $timeout_ms
@@ -51,9 +51,9 @@ class Metadata extends Api
         for ($i = 0; $i < $metadata->broker_cnt; $i++) {
             $data = $metadata->brokers[$i];
             $items[] = new Metadata\Broker(
-                (int)$data->id,
+                (int) $data->id,
                 FFI::string($data->host),
-                (int)$data->port
+                (int) $data->port
             );
         }
         return new Collection($items);
@@ -75,7 +75,7 @@ class Metadata extends Api
             $items[] = new Metadata\Topic(
                 FFI::string($data->topic),
                 $this->mapPartitions($data),
-                (int)$data->err
+                (int) $data->err
             );
         }
         return new Collection($items);
@@ -88,9 +88,9 @@ class Metadata extends Api
             $data = $topic->partitions[$i];
 
             $items[] = new Metadata\Partition(
-                (int)$data->id,
-                (int)$data->err,
-                (int)$data->leader,
+                (int) $data->id,
+                (int) $data->err,
+                (int) $data->leader,
                 $this->mapReplicas($data),
                 $this->mapIsrs($data)
             );
@@ -102,7 +102,7 @@ class Metadata extends Api
     {
         $items = [];
         for ($i = 0; $i < $partition->replica_cnt; $i++) {
-            $items[] = (int)$partition->replicas[$i];
+            $items[] = (int) $partition->replicas[$i];
         }
         return new Collection($items);
     }
@@ -111,7 +111,7 @@ class Metadata extends Api
     {
         $items = [];
         for ($i = 0; $i < $partition->isr_cnt; $i++) {
-            $items[] = (int)$partition->isrs[$i];
+            $items[] = (int) $partition->isrs[$i];
         }
         return new Collection($items);
     }

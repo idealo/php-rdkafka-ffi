@@ -33,19 +33,17 @@ class ConfigResource extends Api
     }
 
     /**
-     * @param string $name
-     * @param string $value
      * @throws Exception
      */
-    public function setConfig(string $name, string $value)
+    public function setConfig(string $name, string $value): void
     {
-        $err = (int)self::$ffi->rd_kafka_ConfigResource_set_config(
+        $err = (int) self::$ffi->rd_kafka_ConfigResource_set_config(
             $this->resource,
             $name,
             $value
         );
 
-        if ($err != RD_KAFKA_RESP_ERR_NO_ERROR) {
+        if ($err !== RD_KAFKA_RESP_ERR_NO_ERROR) {
             throw new Exception(self::err2str($err));
         }
     }

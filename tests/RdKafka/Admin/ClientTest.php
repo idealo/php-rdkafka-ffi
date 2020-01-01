@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace RdKafka\Admin;
 
 use Exception;
@@ -44,7 +46,7 @@ class ClientTest extends TestCase
         self::waitAfterTopicDeletion();
     }
 
-    public function testCreateTopics()
+    public function testCreateTopics(): void
     {
         $conf = new Conf();
         $conf->set('metadata.broker.list', KAFKA_BROKERS);
@@ -56,20 +58,20 @@ class ClientTest extends TestCase
         ];
 
         $options = $client->newCreateTopicsOptions();
-        $options->setOperationTimeout((int)KAFKA_TEST_TIMEOUT_MS);
-        $options->setRequestTimeout((int)KAFKA_TEST_TIMEOUT_MS);
-        $options->setBrokerId((int)KAFKA_BROKER_ID);
+        $options->setOperationTimeout((int) KAFKA_TEST_TIMEOUT_MS);
+        $options->setRequestTimeout((int) KAFKA_TEST_TIMEOUT_MS);
+        $options->setBrokerId((int) KAFKA_BROKER_ID);
 
         $result = $client->createTopics($topics, $options);
 
-        $this->assertEquals('test_admin_1', $result[0]->name);
-        $this->assertEquals('test_admin_2', $result[1]->name);
+        $this->assertSame('test_admin_1', $result[0]->name);
+        $this->assertSame('test_admin_2', $result[1]->name);
 
         $options->setValidateOnly(true);
         $result = $client->createTopics($topics, $options);
 
-        $this->assertEquals(RD_KAFKA_RESP_ERR_TOPIC_ALREADY_EXISTS, $result[0]->error);
-        $this->assertEquals(RD_KAFKA_RESP_ERR_TOPIC_ALREADY_EXISTS, $result[1]->error);
+        $this->assertSame(RD_KAFKA_RESP_ERR_TOPIC_ALREADY_EXISTS, $result[0]->error);
+        $this->assertSame(RD_KAFKA_RESP_ERR_TOPIC_ALREADY_EXISTS, $result[1]->error);
 
         $metaTopics = $this->getFilteredMetaTopics(['test_admin_1', 'test_admin_2']);
 
@@ -81,7 +83,7 @@ class ClientTest extends TestCase
     /**
      * @depends testCreateTopics
      */
-    public function testCreatePartitions()
+    public function testCreatePartitions(): void
     {
         $conf = new Conf();
         $conf->set('metadata.broker.list', KAFKA_BROKERS);
@@ -93,20 +95,20 @@ class ClientTest extends TestCase
         ];
 
         $options = $client->newCreatePartitionsOptions();
-        $options->setOperationTimeout((int)KAFKA_TEST_TIMEOUT_MS);
-        $options->setRequestTimeout((int)KAFKA_TEST_TIMEOUT_MS);
-        $options->setBrokerId((int)KAFKA_BROKER_ID);
+        $options->setOperationTimeout((int) KAFKA_TEST_TIMEOUT_MS);
+        $options->setRequestTimeout((int) KAFKA_TEST_TIMEOUT_MS);
+        $options->setBrokerId((int) KAFKA_BROKER_ID);
 
         $result = $client->createPartitions($partitions, $options);
 
-        $this->assertEquals('test_admin_1', $result[0]->name);
-        $this->assertEquals('test_admin_2', $result[1]->name);
+        $this->assertSame('test_admin_1', $result[0]->name);
+        $this->assertSame('test_admin_2', $result[1]->name);
 
         $options->setValidateOnly(true);
         $result = $client->createPartitions($partitions, $options);
 
-        $this->assertEquals(RD_KAFKA_RESP_ERR_INVALID_PARTITIONS, $result[0]->error);
-        $this->assertEquals(RD_KAFKA_RESP_ERR_INVALID_PARTITIONS, $result[1]->error);
+        $this->assertSame(RD_KAFKA_RESP_ERR_INVALID_PARTITIONS, $result[0]->error);
+        $this->assertSame(RD_KAFKA_RESP_ERR_INVALID_PARTITIONS, $result[1]->error);
 
         $metaTopics = $this->getFilteredMetaTopics(['test_admin_1', 'test_admin_2']);
 
@@ -118,7 +120,7 @@ class ClientTest extends TestCase
     /**
      * @depends testCreatePartitions
      */
-    public function testDeleteTopics()
+    public function testDeleteTopics(): void
     {
         $conf = new Conf();
         $conf->set('metadata.broker.list', KAFKA_BROKERS);
@@ -130,19 +132,19 @@ class ClientTest extends TestCase
         ];
 
         $options = $client->newDeleteTopicsOptions();
-        $options->setOperationTimeout((int)KAFKA_TEST_TIMEOUT_MS);
-        $options->setRequestTimeout((int)KAFKA_TEST_TIMEOUT_MS);
-        $options->setBrokerId((int)KAFKA_BROKER_ID);
+        $options->setOperationTimeout((int) KAFKA_TEST_TIMEOUT_MS);
+        $options->setRequestTimeout((int) KAFKA_TEST_TIMEOUT_MS);
+        $options->setBrokerId((int) KAFKA_BROKER_ID);
 
         $result = $client->deleteTopics($topics, $options);
 
-        $this->assertEquals('test_admin_1', $result[0]->name);
-        $this->assertEquals('test_admin_2', $result[1]->name);
+        $this->assertSame('test_admin_1', $result[0]->name);
+        $this->assertSame('test_admin_2', $result[1]->name);
 
         $result = $client->deleteTopics($topics, $options);
 
-        $this->assertEquals(RD_KAFKA_RESP_ERR_UNKNOWN_TOPIC_OR_PART, $result[0]->error);
-        $this->assertEquals(RD_KAFKA_RESP_ERR_UNKNOWN_TOPIC_OR_PART, $result[1]->error);
+        $this->assertSame(RD_KAFKA_RESP_ERR_UNKNOWN_TOPIC_OR_PART, $result[0]->error);
+        $this->assertSame(RD_KAFKA_RESP_ERR_UNKNOWN_TOPIC_OR_PART, $result[1]->error);
 
         $metaTopics = $this->getFilteredMetaTopics(['test_admin_1', 'test_admin_2']);
 
@@ -155,72 +157,72 @@ class ClientTest extends TestCase
     /**
      * @depends testDeleteTopics
      */
-    public function testCreateTopicsWithReplicaAssignment()
+    public function testCreateTopicsWithReplicaAssignment(): void
     {
         $conf = new Conf();
         $conf->set('metadata.broker.list', KAFKA_BROKERS);
         $client = Client::fromConf($conf);
 
         $topic = new NewTopic('test_admin_3', 2, -1);
-        $topic->setReplicaAssignment(0, [(int)KAFKA_BROKER_ID]);
-        $topic->setReplicaAssignment(1, [(int)KAFKA_BROKER_ID]);
+        $topic->setReplicaAssignment(0, [(int) KAFKA_BROKER_ID]);
+        $topic->setReplicaAssignment(1, [(int) KAFKA_BROKER_ID]);
 
         $options = $client->newCreateTopicsOptions();
-        $options->setOperationTimeout((int)KAFKA_TEST_TIMEOUT_MS);
-        $options->setRequestTimeout((int)KAFKA_TEST_TIMEOUT_MS);
-        $options->setBrokerId((int)KAFKA_BROKER_ID);
+        $options->setOperationTimeout((int) KAFKA_TEST_TIMEOUT_MS);
+        $options->setRequestTimeout((int) KAFKA_TEST_TIMEOUT_MS);
+        $options->setBrokerId((int) KAFKA_BROKER_ID);
 
         $result = $client->createTopics([$topic], $options);
 
-        $this->assertEquals('test_admin_3', $result[0]->name);
+        $this->assertSame('test_admin_3', $result[0]->name);
 
         $options->setValidateOnly(true);
         $result = $client->createTopics([$topic], $options);
 
-        $this->assertEquals(RD_KAFKA_RESP_ERR_TOPIC_ALREADY_EXISTS, $result[0]->error);
+        $this->assertSame(RD_KAFKA_RESP_ERR_TOPIC_ALREADY_EXISTS, $result[0]->error);
 
         $metaTopics = $this->getFilteredMetaTopics(['test_admin_3']);
 
         $this->assertNotNull($metaTopics['test_admin_3']);
         $this->assertCount(2, $metaTopics['test_admin_3']->getPartitions());
         foreach ($metaTopics['test_admin_3']->getPartitions() as $metaPartition) {
-            $this->assertEquals((int)KAFKA_BROKER_ID, $metaPartition->getReplicas()->current());
+            $this->assertSame((int) KAFKA_BROKER_ID, $metaPartition->getReplicas()->current());
         }
     }
 
     /**
      * @depends testCreateTopicsWithReplicaAssignment
      */
-    public function testCreatePartitionsWithReplicaAssignment()
+    public function testCreatePartitionsWithReplicaAssignment(): void
     {
         $conf = new Conf();
         $conf->set('metadata.broker.list', KAFKA_BROKERS);
         $client = Client::fromConf($conf);
 
         $partition = new NewPartitions('test_admin_3', 4);
-        $partition->setReplicaAssignment(0, [(int)KAFKA_BROKER_ID]);
-        $partition->setReplicaAssignment(1, [(int)KAFKA_BROKER_ID]);
+        $partition->setReplicaAssignment(0, [(int) KAFKA_BROKER_ID]);
+        $partition->setReplicaAssignment(1, [(int) KAFKA_BROKER_ID]);
 
         $options = $client->newCreatePartitionsOptions();
-        $options->setOperationTimeout((int)KAFKA_TEST_TIMEOUT_MS);
-        $options->setRequestTimeout((int)KAFKA_TEST_TIMEOUT_MS);
-        $options->setBrokerId((int)KAFKA_BROKER_ID);
+        $options->setOperationTimeout((int) KAFKA_TEST_TIMEOUT_MS);
+        $options->setRequestTimeout((int) KAFKA_TEST_TIMEOUT_MS);
+        $options->setBrokerId((int) KAFKA_BROKER_ID);
 
         $result = $client->createPartitions([$partition], $options);
 
-        $this->assertEquals('test_admin_3', $result[0]->name);
+        $this->assertSame('test_admin_3', $result[0]->name);
 
         $options->setValidateOnly(true);
         $result = $client->createPartitions([$partition], $options);
 
-        $this->assertEquals(RD_KAFKA_RESP_ERR_INVALID_PARTITIONS, $result[0]->error);
+        $this->assertSame(RD_KAFKA_RESP_ERR_INVALID_PARTITIONS, $result[0]->error);
 
         $metaTopics = $this->getFilteredMetaTopics(['test_admin_3']);
 
         $this->assertCount(1, $metaTopics);
         $this->assertCount(4, $metaTopics['test_admin_3']->getPartitions());
         foreach ($metaTopics['test_admin_3']->getPartitions() as $metaPartition) {
-            $this->assertEquals((int)KAFKA_BROKER_ID, $metaPartition->getReplicas()->current());
+            $this->assertSame((int) KAFKA_BROKER_ID, $metaPartition->getReplicas()->current());
         }
     }
 
@@ -230,46 +232,46 @@ class ClientTest extends TestCase
         $conf->set('metadata.broker.list', KAFKA_BROKERS);
         $producer = new Producer($conf);
         $metaTopics = [];
-        $metadata = $producer->getMetadata(true, null, (int)KAFKA_TEST_TIMEOUT_MS);
+        $metadata = $producer->getMetadata(true, null, (int) KAFKA_TEST_TIMEOUT_MS);
         foreach ($metadata->getTopics() as $topic) {
-            if (in_array($topic->getTopic(), $topicNames)) {
+            if (in_array($topic->getTopic(), $topicNames, true)) {
                 $metaTopics[$topic->getTopic()] = $topic;
             }
         }
         return $metaTopics;
     }
 
-    private static function waitAfterTopicDeletion()
+    private static function waitAfterTopicDeletion(): void
     {
         usleep(500 * 1000);
     }
 
-    public function testDescribeConfigs()
+    public function testDescribeConfigs(): void
     {
         $conf = new Conf();
         $conf->set('metadata.broker.list', KAFKA_BROKERS);
         $client = Client::fromConf($conf);
 
-        $configResource = new ConfigResource(RD_KAFKA_RESOURCE_BROKER, (string)KAFKA_BROKER_ID);
+        $configResource = new ConfigResource(RD_KAFKA_RESOURCE_BROKER, (string) KAFKA_BROKER_ID);
 
         $options = $client->newDescribeConfigsOptions();
-        $options->setRequestTimeout((int)KAFKA_TEST_TIMEOUT_MS);
-        $options->setBrokerId((int)KAFKA_BROKER_ID);
+        $options->setRequestTimeout((int) KAFKA_TEST_TIMEOUT_MS);
+        $options->setBrokerId((int) KAFKA_BROKER_ID);
 
         $result = $client->describeConfigs([$configResource], $options);
 
         $configs = $this->getIndexedConfigEntries($result[0]->configs);
 
-        $this->assertEquals('111', $result[0]->name);
+        $this->assertSame('111', $result[0]->name);
 
-        $this->assertEquals('111', $configs['broker.id']->value);
+        $this->assertSame('111', $configs['broker.id']->value);
         $this->assertTrue($configs['broker.id']->isReadOnly);
 
-        $this->assertEquals('500', $configs['queued.max.requests']->value);
+        $this->assertSame('500', $configs['queued.max.requests']->value);
         $this->assertTrue($configs['queued.max.requests']->isDefault);
     }
 
-    public function testAlterConfigs()
+    public function testAlterConfigs(): void
     {
         // prepare
         $conf = new Conf();
@@ -277,48 +279,48 @@ class ClientTest extends TestCase
         $conf->set('broker.version.fallback', '2.0.0');
         $client = Client::fromConf($conf);
 
-        $configResource = new ConfigResource(RD_KAFKA_RESOURCE_BROKER, (string)KAFKA_BROKER_ID);
-        $configResource->setConfig('max.connections.per.ip', (string)500000);
+        $configResource = new ConfigResource(RD_KAFKA_RESOURCE_BROKER, (string) KAFKA_BROKER_ID);
+        $configResource->setConfig('max.connections.per.ip', (string) 500000);
 
         $alterConfigOptions = $client->newAlterConfigsOptions();
-        $alterConfigOptions->setRequestTimeout((int)KAFKA_TEST_TIMEOUT_MS);
-        $alterConfigOptions->setBrokerId((int)KAFKA_BROKER_ID);
+        $alterConfigOptions->setRequestTimeout((int) KAFKA_TEST_TIMEOUT_MS);
+        $alterConfigOptions->setBrokerId((int) KAFKA_BROKER_ID);
 
         $describeConfigsOptions = $client->newDescribeConfigsOptions();
-        $describeConfigsOptions->setRequestTimeout((int)KAFKA_TEST_TIMEOUT_MS);
-        $describeConfigsOptions->setBrokerId((int)KAFKA_BROKER_ID);
+        $describeConfigsOptions->setRequestTimeout((int) KAFKA_TEST_TIMEOUT_MS);
+        $describeConfigsOptions->setBrokerId((int) KAFKA_BROKER_ID);
 
         // alter config
         $result = $client->alterConfigs([$configResource], $alterConfigOptions);
 
-        $this->assertEquals('111', $result[0]->name);
+        $this->assertSame('111', $result[0]->name);
 
         // check changes
         usleep(50 * 1000);
         $result = $client->describeConfigs([$configResource], $describeConfigsOptions);
 
-        $this->assertEquals('111', $result[0]->name);
+        $this->assertSame('111', $result[0]->name);
 
         $configs = $this->getIndexedConfigEntries($result[0]->configs);
 
-        $this->assertEquals('500000', $configs['max.connections.per.ip']->value);
+        $this->assertSame('500000', $configs['max.connections.per.ip']->value);
         $this->assertFalse($configs['max.connections.per.ip']->isDefault);
 
         // set config back to old value (deleteConfig not supported yet....)
         $configResource->setConfig('max.connections.per.ip', '2147483647');
         $result = $client->alterConfigs([$configResource], $alterConfigOptions);
 
-        $this->assertEquals('111', $result[0]->name);
+        $this->assertSame('111', $result[0]->name);
 
         // check config changes
         usleep(50 * 1000);
         $result = $client->describeConfigs([$configResource], $describeConfigsOptions);
 
-        $this->assertEquals('111', $result[0]->name);
+        $this->assertSame('111', $result[0]->name);
 
         $configs = $this->getIndexedConfigEntries($result[0]->configs);
 
-        $this->assertEquals('2147483647', $configs['max.connections.per.ip']->value);
+        $this->assertSame('2147483647', $configs['max.connections.per.ip']->value);
     }
 
     /**

@@ -12,8 +12,7 @@ use PHPUnit\Framework\TestCase;
  */
 class CollectionTest extends TestCase
 {
-
-    public function testRewind()
+    public function testRewind(): void
     {
         $collection = new Collection([1 => 1, 2 => 2, 3 => 3]);
 
@@ -24,39 +23,39 @@ class CollectionTest extends TestCase
         $collection->rewind();
         $first = $collection->current();
 
-        $this->assertEquals(3, $third);
-        $this->assertEquals(1, $first);
+        $this->assertSame(3, $third);
+        $this->assertSame(1, $first);
     }
 
-    public function testKey()
+    public function testKey(): void
     {
         $collection = new Collection(['abc' => 1, 2 => 2, 3 => 3]);
 
         $first = $collection->key();
 
-        $this->assertEquals('abc', $first);
+        $this->assertSame('abc', $first);
     }
 
-    public function testCurrent()
+    public function testCurrent(): void
     {
         $collection = new Collection([1 => 'abc', 2 => 2, 3 => 3]);
 
         $first = $collection->current();
 
-        $this->assertEquals('abc', $first);
+        $this->assertSame('abc', $first);
     }
 
-    public function testNext()
+    public function testNext(): void
     {
         $collection = new Collection([1 => 1, 2 => 'abc', 3 => 3]);
 
         $collection->next();
         $next = $collection->current();
 
-        $this->assertEquals('abc', $next);
+        $this->assertSame('abc', $next);
     }
 
-    public function testValid()
+    public function testValid(): void
     {
         $collection = new Collection([1 => 1, 2 => 2, 3 => 3]);
 
@@ -71,10 +70,10 @@ class CollectionTest extends TestCase
         $this->assertFalse($forth);
     }
 
-    public function testCount()
+    public function testCount(): void
     {
         $collection = new Collection([1 => 1, 2 => 2, 3 => 3]);
 
-        $this->assertEquals(3, $collection->count());
+        $this->assertSame(3, $collection->count());
     }
 }

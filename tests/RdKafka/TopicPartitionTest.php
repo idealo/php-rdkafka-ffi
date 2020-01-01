@@ -12,7 +12,7 @@ use PHPUnit\Framework\TestCase;
  */
 class TopicPartitionTest extends TestCase
 {
-    public function testFromCData()
+    public function testFromCData(): void
     {
         $conf = new Conf();
         $conf->set('group.id', __METHOD__);
@@ -27,15 +27,15 @@ class TopicPartitionTest extends TestCase
         $topicPartitions = $consumer->getAssignment();
 
         $this->assertCount(1, $topicPartitions);
-        $this->assertEquals(KAFKA_TEST_TOPIC, $topicPartitions[0]->getTopic());
-        $this->assertEquals(0, $topicPartitions[0]->getPartition());
-        $this->assertEquals(0, $topicPartitions[0]->getOffset());
+        $this->assertSame(KAFKA_TEST_TOPIC, $topicPartitions[0]->getTopic());
+        $this->assertSame(0, $topicPartitions[0]->getPartition());
+        $this->assertSame(0, $topicPartitions[0]->getOffset());
     }
 
     /**
      * @group ffiOnly
      */
-    public function testFromCDataWithExtraGetters()
+    public function testFromCDataWithExtraGetters(): void
     {
         $conf = new Conf();
         $conf->set('group.id', __METHOD__);
@@ -50,26 +50,26 @@ class TopicPartitionTest extends TestCase
         $topicPartitions = $consumer->getAssignment();
 
         $this->assertCount(1, $topicPartitions);
-        $this->assertEquals(KAFKA_TEST_TOPIC, $topicPartitions[0]->getTopic());
-        $this->assertEquals(0, $topicPartitions[0]->getErr());
-        $this->assertEquals(null, $topicPartitions[0]->getOpqaque());
-        $this->assertEquals('', $topicPartitions[0]->getMetadata());
+        $this->assertSame(KAFKA_TEST_TOPIC, $topicPartitions[0]->getTopic());
+        $this->assertSame(0, $topicPartitions[0]->getErr());
+        $this->assertSame(null, $topicPartitions[0]->getOpqaque());
+        $this->assertSame('', $topicPartitions[0]->getMetadata());
     }
 
-    public function testGetterAndSetter()
+    public function testGetterAndSetter(): void
     {
         $topicPartition = new TopicPartition(KAFKA_TEST_TOPIC, 0);
 
-        $this->assertEquals(KAFKA_TEST_TOPIC, $topicPartition->getTopic());
-        $this->assertEquals(0, $topicPartition->getPartition());
-        $this->assertEquals(null, $topicPartition->getOffset());
+        $this->assertSame(KAFKA_TEST_TOPIC, $topicPartition->getTopic());
+        $this->assertSame(0, $topicPartition->getPartition());
+        $this->assertSame(null, $topicPartition->getOffset());
 
         $topicPartition->setTopic('other');
         $topicPartition->setPartition(1);
         $topicPartition->setOffset(2);
 
-        $this->assertEquals('other', $topicPartition->getTopic());
-        $this->assertEquals(1, $topicPartition->getPartition());
-        $this->assertEquals(2, $topicPartition->getOffset());
+        $this->assertSame('other', $topicPartition->getTopic());
+        $this->assertSame(1, $topicPartition->getPartition());
+        $this->assertSame(2, $topicPartition->getOffset());
     }
 }

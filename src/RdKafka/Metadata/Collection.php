@@ -16,9 +16,6 @@ class Collection implements Iterator, Countable
         $this->items = $items;
     }
 
-    /**
-     * @return mixed
-     */
     public function current()
     {
         return \current($this->items);
@@ -39,7 +36,7 @@ class Collection implements Iterator, Countable
 
     public function valid(): bool
     {
-        return \array_key_exists(key($this->items), $this->items);
+        return \array_key_exists(\key($this->items), $this->items);
     }
 
     public function rewind(): void

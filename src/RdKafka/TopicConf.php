@@ -26,22 +26,16 @@ class TopicConf extends Api
         self::$ffi->rd_kafka_topic_conf_destroy($this->topicConf);
     }
 
-    /**
-     * @return CData
-     */
     public function getCData(): CData
     {
         return $this->topicConf;
     }
 
-    /**
-     * @return array
-     */
     public function dump(): array
     {
         $count = FFI::new('size_t');
         $dump = self::$ffi->rd_kafka_topic_conf_dump($this->topicConf, FFI::addr($count));
-        $count = (int)$count->cdata;
+        $count = (int) $count->cdata;
 
         $result = [];
         for ($i = 0; $i < $count; $i += 2) {
@@ -56,15 +50,11 @@ class TopicConf extends Api
     }
 
     /**
-     * @param string $name
-     * @param string $value
-     *
-     * @return void
      * @throws Exception
      */
-    public function set(string $name, string $value)
+    public function set(string $name, string $value): void
     {
-        $errstr = FFI::new("char[512]");
+        $errstr = FFI::new('char[512]');
 
         $result = self::$ffi->rd_kafka_topic_conf_set($this->topicConf, $name, $value, $errstr, FFI::sizeOf($errstr));
 
@@ -79,7 +69,7 @@ class TopicConf extends Api
         }
     }
 
-    public function setPartitioner(int $partitioner)
+    public function setPartitioner(int $partitioner): void
     {
         switch ($partitioner) {
             case RD_KAFKA_MSG_PARTITIONER_RANDOM:
@@ -108,7 +98,7 @@ class TopicConf extends Api
             $ffi,
             $partitionerMethod
         ) {
-            return (int)$ffi->$partitionerMethod($topic, $keydata, $keylen, $partition_cnt, $topic_opaque, $msg_opaque);
+            return (int) $ffi->{$partitionerMethod}($topic, $keydata, $keylen, $partition_cnt, $topic_opaque, $msg_opaque);
         };
         self::$ffi->rd_kafka_topic_conf_set_partitioner_cb(
             $this->topicConf,
@@ -116,13 +106,13 @@ class TopicConf extends Api
         );
     }
 
-    public function setPartitionerCb(callable $callback)
+    public function setPartitionerCb(callable $callback): void
     {
         $proxyCallback = function ($topic, $keydata, $keylen, $partition_cnt, $topic_opaque, $msg_opaque) use ($callback
         ) {
-            return (int)$callback(
+            return (int) $callback(
                 FFI::string($keydata, $keylen),
-                (int)$partition_cnt
+                (int) $partition_cnt
             );
         };
 

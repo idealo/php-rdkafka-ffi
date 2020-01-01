@@ -14,18 +14,18 @@ use PHPUnit\Framework\TestCase;
  */
 class ConsumerTest extends TestCase
 {
-    public function testAddBrokers()
+    public function testAddBrokers(): void
     {
         $consumer = new Consumer();
         $addedBrokersNumber = $consumer->addBrokers(KAFKA_BROKERS);
 
-        $this->assertEquals(1, $addedBrokersNumber);
+        $this->assertSame(1, $addedBrokersNumber);
     }
 
     /**
      * @group ffiOnly
      */
-    public function testGetCData()
+    public function testGetCData(): void
     {
         $consumer = new Consumer();
         $consumer->addBrokers(KAFKA_BROKERS);
@@ -35,12 +35,12 @@ class ConsumerTest extends TestCase
         $this->assertInstanceOf(CData::class, $cData);
     }
 
-    public function testGetMetadata()
+    public function testGetMetadata(): void
     {
         $consumer = new Consumer();
         $consumer->addBrokers(KAFKA_BROKERS);
 
-        $metadata = $consumer->getMetadata(true, null, (int)KAFKA_TEST_TIMEOUT_MS);
+        $metadata = $consumer->getMetadata(true, null, (int) KAFKA_TEST_TIMEOUT_MS);
 
         $this->assertInstanceOf(Metadata::class, $metadata);
     }
@@ -48,12 +48,12 @@ class ConsumerTest extends TestCase
     /**
      * @group ffiOnly
      */
-    public function testGetOutQLen()
+    public function testGetOutQLen(): void
     {
         $conf = new Conf();
         $conf->set('debug', 'consumer');
         $conf->setLogCb(
-            function ($consumer, $level, $fac, $buf) {
+            function ($consumer, $level, $fac, $buf): void {
 //            echo "log: $level $fac $buf" . PHP_EOL;
             }
         );
@@ -62,10 +62,10 @@ class ConsumerTest extends TestCase
         $outQLen = $consumer->getOutQLen();
 
         // expect init log msg
-        $this->assertEquals(1, $outQLen, 'Expected log event init consumer');
+        $this->assertSame(1, $outQLen, 'Expected log event init consumer');
     }
 
-    public function testNewQueue()
+    public function testNewQueue(): void
     {
         $consumer = new Consumer();
         $queue = $consumer->newQueue();
@@ -73,7 +73,7 @@ class ConsumerTest extends TestCase
         $this->assertInstanceOf(Queue::class, $queue);
     }
 
-    public function testNewTopic()
+    public function testNewTopic(): void
     {
         $consumer = new Consumer();
         $topic = $consumer->newTopic(KAFKA_TEST_TOPIC);
@@ -84,12 +84,12 @@ class ConsumerTest extends TestCase
     /**
      * @group ffiOnly
      */
-    public function testPoll()
+    public function testPoll(): void
     {
         $conf = new Conf();
         $conf->set('debug', 'consumer');
         $conf->setLogCb(
-            function (Consumer $consumer, int $level, string $fac, string $buf) {
+            function (Consumer $consumer, int $level, string $fac, string $buf): void {
 //            echo "log: $level $fac $buf" . PHP_EOL;
             }
         );
@@ -97,20 +97,20 @@ class ConsumerTest extends TestCase
         $consumer = new Consumer($conf);
         $triggeredEvents = $consumer->poll(0);
 
-        $this->assertEquals(1, $triggeredEvents, 'Expected log event init consumer');
+        $this->assertSame(1, $triggeredEvents, 'Expected log event init consumer');
     }
 
     /**
      * @group ffiOnly
      */
-    public function testSetLogLevelWithDebug()
+    public function testSetLogLevelWithDebug(): void
     {
         $loggerCallbacks = 0;
 
         $conf = new Conf();
         $conf->set('debug', 'consumer');
         $conf->setLogCb(
-            function (Consumer $consumer, int $level, string $fac, string $buf) use (&$loggerCallbacks) {
+            function (Consumer $consumer, int $level, string $fac, string $buf) use (&$loggerCallbacks): void {
 //            echo "log: $level $fac $buf" . PHP_EOL;
                 $loggerCallbacks++;
             }
@@ -120,21 +120,21 @@ class ConsumerTest extends TestCase
         $consumer->setLogLevel(LOG_DEBUG);
 
         $triggeredEvents = $consumer->poll(0);
-        $this->assertEquals(1, $triggeredEvents, 'Expected debug level log event init consumer');
-        $this->assertEquals(1, $loggerCallbacks, 'Expected debug level log callback');
+        $this->assertSame(1, $triggeredEvents, 'Expected debug level log event init consumer');
+        $this->assertSame(1, $loggerCallbacks, 'Expected debug level log callback');
     }
 
     /**
      * @group ffiOnly
      */
-    public function testSetLogLevelWithInfo()
+    public function testSetLogLevelWithInfo(): void
     {
         $loggerCallbacks = 0;
 
         $conf = new Conf();
         $conf->set('debug', 'consumer');
         $conf->setLogCb(
-            function (Consumer $consumer, int $level, string $fac, string $buf) use (&$loggerCallbacks) {
+            function (Consumer $consumer, int $level, string $fac, string $buf) use (&$loggerCallbacks): void {
 //            echo "log: $level $fac $buf" . PHP_EOL;
                 $loggerCallbacks++;
             }
@@ -144,11 +144,11 @@ class ConsumerTest extends TestCase
         $consumer->setLogLevel(LOG_INFO);
         $triggeredEvents = $consumer->poll(0);
 
-        $this->assertEquals(1, $triggeredEvents, 'Expected debug level log event init consumer');
-        $this->assertEquals(0, $loggerCallbacks, 'Expected no debug level log callback');
+        $this->assertSame(1, $triggeredEvents, 'Expected debug level log event init consumer');
+        $this->assertSame(0, $loggerCallbacks, 'Expected no debug level log callback');
     }
 
-    public function testQueryWatermarkOffsets()
+    public function testQueryWatermarkOffsets(): void
     {
         $consumer = new Consumer();
         $consumer->addBrokers(KAFKA_BROKERS);
@@ -161,16 +161,16 @@ class ConsumerTest extends TestCase
             0,
             $lowWatermarkOffset1,
             $highWatermarkOffset1,
-            (int)KAFKA_TEST_TIMEOUT_MS
+            (int) KAFKA_TEST_TIMEOUT_MS
         );
 
-        $this->assertEquals(0, $lowWatermarkOffset1);
+        $this->assertSame(0, $lowWatermarkOffset1);
 
         $producer = new Producer();
         $producer->addBrokers(KAFKA_BROKERS);
         $producerTopic = $producer->newTopic(KAFKA_TEST_TOPIC);
         $producerTopic->produce(0, 0, __METHOD__);
-        $producer->flush((int)KAFKA_TEST_TIMEOUT_MS);
+        $producer->flush((int) KAFKA_TEST_TIMEOUT_MS);
 
         $lowWatermarkOffset2 = 0;
         $highWatermarkOffset2 = 0;
@@ -180,17 +180,17 @@ class ConsumerTest extends TestCase
             0,
             $lowWatermarkOffset2,
             $highWatermarkOffset2,
-            (int)KAFKA_TEST_TIMEOUT_MS
+            (int) KAFKA_TEST_TIMEOUT_MS
         );
 
-        $this->assertEquals(0, $lowWatermarkOffset2);
-        $this->assertEquals($highWatermarkOffset1 + 1, $highWatermarkOffset2);
+        $this->assertSame(0, $lowWatermarkOffset2);
+        $this->assertSame($highWatermarkOffset1 + 1, $highWatermarkOffset2);
     }
 
     /**
      * @group ffiOnly
      */
-    public function testResolveFromCData()
+    public function testResolveFromCData(): void
     {
         $consumer1 = new Consumer();
         $cData1 = $consumer1->getCData();
@@ -198,12 +198,12 @@ class ConsumerTest extends TestCase
         $consumer2 = new Consumer();
         $cData2 = $consumer2->getCData();
 
-        $this->assertEquals($consumer1, Consumer::resolveFromCData($cData1));
-        $this->assertEquals($consumer2, Consumer::resolveFromCData($cData2));
+        $this->assertSame($consumer1, Consumer::resolveFromCData($cData1));
+        $this->assertSame($consumer2, Consumer::resolveFromCData($cData2));
 
         unset($consumer1);
 
         $this->assertNull(Consumer::resolveFromCData($cData1));
-        $this->assertEquals($consumer2, Consumer::resolveFromCData($cData2));
+        $this->assertSame($consumer2, Consumer::resolveFromCData($cData2));
     }
 }

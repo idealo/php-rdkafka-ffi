@@ -45,7 +45,7 @@ $conf->set('enable.auto.commit', 'false'); // do not commit when reading from __
 $conf->set('auto.offset.reset', 'earliest');
 $conf->set('enable.partition.eof', 'true');
 $conf->setLogCb(
-    function ($consumer, $level, $fac, $buf) {
+    function ($consumer, $level, $fac, $buf): void {
         //echo "log: $level $fac $buf" . PHP_EOL;
     }
 );
@@ -158,5 +158,3 @@ foreach ($compactedOffsetCommitValues as $group => $topics) {
 }
 
 var_export($offsetLagValues);
-
-

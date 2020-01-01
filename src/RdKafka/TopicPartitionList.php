@@ -15,11 +15,21 @@ class TopicPartitionList extends Api implements Iterator, Countable
     public static function fromCData(CData $topicPartitionList): self
     {
         $items = [];
-        for ($i = 0; $i < (int)$topicPartitionList->cnt; $i++) {
+        for ($i = 0; $i < (int) $topicPartitionList->cnt; $i++) {
             $items[] = TopicPartition::fromCData($topicPartitionList->elems[$i]);
         }
 
         return new self(...$items);
+    }
+
+    /**
+     * @param TopicPartition[] $items
+     */
+    public function __construct(TopicPartition ...$items)
+    {
+        parent::__construct();
+
+        $this->items = $items;
     }
 
     public function getCData(): CData
@@ -36,16 +46,6 @@ class TopicPartitionList extends Api implements Iterator, Countable
         }
 
         return $nativeTopicPartitionList;
-    }
-
-    /**
-     * @param TopicPartition[] $items
-     */
-    public function __construct(TopicPartition ...$items)
-    {
-        parent::__construct();
-
-        $this->items = $items;
     }
 
     public function current(): TopicPartition
@@ -65,7 +65,7 @@ class TopicPartitionList extends Api implements Iterator, Countable
 
     public function valid(): bool
     {
-        return \array_key_exists(key($this->items), $this->items);
+        return \array_key_exists(\key($this->items), $this->items);
     }
 
     public function rewind(): void

@@ -19,11 +19,11 @@ if (version_compare(rd_kafka_version(), '1.3.0', '<')) {
 // produce messages
 $producerConf = new Conf();
 $producerConf->set('test.mock.num.brokers', '3');
-$producerConf->set('log_level', (string)LOG_DEBUG);
+$producerConf->set('log_level', (string) LOG_DEBUG);
 $producerConf->set('debug', 'all');
 $producerConf->setLogCb(
-    function ($rdkafka, $level, $fac, $buf) {
-        echo "log: $level $fac $buf" . PHP_EOL;
+    function ($rdkafka, $level, $fac, $buf): void {
+        echo "log: ${level} ${fac} ${buf}" . PHP_EOL;
     }
 );
 
@@ -33,9 +33,9 @@ $topic->produce(RD_KAFKA_PARTITION_UA, 0, '');
 
 for ($i = 0; $i < 1000; $i++) {
     $key = $i % 10;
-    $payload = "payload-$i-key-$key";
+    $payload = "payload-${i}-key-${key}";
     echo sprintf('produce msg: %s', $payload) . PHP_EOL;
-    $topic->produce(RD_KAFKA_PARTITION_UA, 0, $payload, (string)$key);
+    $topic->produce(RD_KAFKA_PARTITION_UA, 0, $payload, (string) $key);
     $events = $producer->poll(1); // triggers log output
     echo sprintf('polling triggered %d events', $events) . PHP_EOL;
 }
@@ -53,13 +53,13 @@ $partitions = $metadata->getTopics()->current()->getPartitions();
 // consume messages
 $consumerConf = new Conf();
 $consumerConf->set('metadata.broker.list', implode(',', $brokerList));
-$consumerConf->set('log_level', (string)LOG_DEBUG);
+$consumerConf->set('log_level', (string) LOG_DEBUG);
 $consumerConf->set('debug', 'all');
 $consumerConf->set('enable.partition.eof', 'true');
 $consumerConf->set('auto.offset.reset', 'earliest');
 $consumerConf->setLogCb(
-    function ($rdkafka, $level, $fac, $buf) {
-        echo "log: $level $fac $buf" . PHP_EOL;
+    function ($rdkafka, $level, $fac, $buf): void {
+        echo "log: ${level} ${fac} ${buf}" . PHP_EOL;
     }
 );
 

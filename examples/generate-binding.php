@@ -53,14 +53,14 @@ foreach ($supported as $version => $hFileUrl) {
     $hFileFiltered = dirname(__DIR__) . '/resources/rdkafka.' . $version . '.h';
     $hFileParsed = dirname(__DIR__) . '/resources/rdkafka.' . $version . '.parsed.h';
 
-    echo "Download $hFileUrl" . PHP_EOL;
+    echo "Download ${hFileUrl}" . PHP_EOL;
 
     $hFileContent = file_get_contents($hFileUrl);
     file_put_contents($hFileOrig, $hFileContent);
 
-    echo "Save as $hFileOrig" . PHP_EOL;
+    echo "Save as ${hFileOrig}" . PHP_EOL;
 
-    echo "Filter $hFileOrig" . PHP_EOL;
+    echo "Filter ${hFileOrig}" . PHP_EOL;
 
     $hFileContentFiltered = $hFileContent;
 
@@ -68,7 +68,7 @@ foreach ($supported as $version => $hFileUrl) {
     $hFileContentFiltered = preg_replace_callback(
         '/static RD_INLINE.+?rd_kafka_message_errstr[^}]+?}/si',
         function ($matches) {
-            return "//" . str_replace("\n", "\n//", $matches[0]);
+            return '//' . str_replace("\n", "\n//", $matches[0]);
         },
         $hFileContentFiltered,
         1
@@ -78,7 +78,7 @@ foreach ($supported as $version => $hFileUrl) {
     $hFileContentFiltered = preg_replace_callback(
         '/(#define.+RD_.[\w_]+)\s+__attribute__.+/i',
         function ($matches) {
-            return "" . $matches[1];
+            return '' . $matches[1];
         },
         $hFileContentFiltered
     );
@@ -87,16 +87,16 @@ foreach ($supported as $version => $hFileUrl) {
     $hFileContentFiltered = preg_replace_callback(
         '/(typedef|RD_EXPORT)[^;]+?_(plugin|interceptor)_[^;]+?;/si',
         function ($matches) {
-            return "//" . str_replace("\n", "\n//", $matches[0]);
+            return '//' . str_replace("\n", "\n//", $matches[0]);
         },
         $hFileContentFiltered
     );
 
-    echo "Save as $hFileFiltered" . PHP_EOL;
+    echo "Save as ${hFileFiltered}" . PHP_EOL;
 
     file_put_contents($hFileFiltered, $types . $hFileContentFiltered);
 
-    echo "Parse $hFileFiltered" . PHP_EOL;
+    echo "Parse ${hFileFiltered}" . PHP_EOL;
 
     $context = new Context();
     // ignore includes
@@ -108,7 +108,7 @@ foreach ($supported as $version => $hFileUrl) {
     $ast = $parser->parse($hFileFiltered, $context);
     $printer = new PHPCParser\Printer\C();
 
-    echo "Save as $hFileParsed" . PHP_EOL;
+    echo "Save as ${hFileParsed}" . PHP_EOL;
 
     file_put_contents($hFileParsed, $ffiDefines . $printer->print($ast));
 
@@ -123,7 +123,7 @@ foreach ($supported as $version => $hFileUrl) {
         $next = $token;
         $skip = false;
         do {
-            if ($next instanceof Token && in_array($next->type, [Token::IDENTIFIER, Token::LITERAL])) {
+            if ($next instanceof Token && in_array($next->type, [Token::IDENTIFIER, Token::LITERAL], true)) {
                 $skip = true;
                 break;
             }
@@ -134,7 +134,7 @@ foreach ($supported as $version => $hFileUrl) {
         if ($skip) {
             continue;
         }
-        $consts[] = "    const $identifier = $value;";
+        $consts[] = "    const ${identifier} = ${value};";
     }
     // add enums
     $compiler = new \FFIMe\Compiler();
@@ -168,20 +168,20 @@ foreach ($supported as $version => $hFileUrl) {
         }
     }
 
-    echo "Generate bindings RdKafka\\Binding\\LibRdKafkaV$versionName" . PHP_EOL;
+    echo "Generate bindings RdKafka\\Binding\\LibRdKafkaV${versionName}" . PHP_EOL;
 
-    (new FFIMe\FFIMe("librdkafka.so"))
+    (new FFIMe\FFIMe('librdkafka.so'))
         ->include($hFileParsed)
         ->codeGen(
             'RdKafka\\Binding\\LibRdKafka',
             dirname(__DIR__) . '/src/RdKafka/Binding/LibRdKafkaV' . $versionName . '.php'
         );
 
-    echo "Generate bindings done." . PHP_EOL;
+    echo 'Generate bindings done.' . PHP_EOL;
 }
 
 file_put_contents(
     dirname(__DIR__) . '/resources/constants.php',
     '<?php' . "\n\n" . implode("\n", $overAllConsts)
 );
-echo "Generate overall const done." . PHP_EOL;
+echo 'Generate overall const done.' . PHP_EOL;

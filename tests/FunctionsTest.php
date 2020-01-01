@@ -15,36 +15,36 @@ use PHPUnit\Framework\TestCase;
  */
 class FunctionsTest extends TestCase
 {
-    public function testErr2str()
+    public function testErr2str(): void
     {
-        $this->assertEquals('Success', rd_kafka_err2str(RD_KAFKA_RESP_ERR_NO_ERROR));
+        $this->assertSame('Success', rd_kafka_err2str(RD_KAFKA_RESP_ERR_NO_ERROR));
     }
 
-    public function testErrno2err()
+    public function testErrno2err(): void
     {
-        $this->assertEquals(RD_KAFKA_RESP_ERR__FAIL, rd_kafka_errno2err(999));
+        $this->assertSame(RD_KAFKA_RESP_ERR__FAIL, rd_kafka_errno2err(999));
     }
 
-    public function testErrno()
+    public function testErrno(): void
     {
-        $this->assertEquals(0, rd_kafka_errno());
+        $this->assertSame(0, rd_kafka_errno());
     }
 
-    public function testThreadCount()
+    public function testThreadCount(): void
     {
-        $this->assertEquals(0, rd_kafka_thread_cnt());
+        $this->assertSame(0, rd_kafka_thread_cnt());
     }
 
-    public function testOffsetTail()
+    public function testOffsetTail(): void
     {
-        $this->assertEquals(-2000 /*RD_KAFKA_OFFSET_TAIL_BASE*/, rd_kafka_offset_tail(0));
-        $this->assertEquals(-2000 - 100, rd_kafka_offset_tail(100));
+        $this->assertSame(-2000 /*RD_KAFKA_OFFSET_TAIL_BASE*/, rd_kafka_offset_tail(0));
+        $this->assertSame(-2000 - 100, rd_kafka_offset_tail(100));
     }
 
     /**
      * @group ffiOnly
      */
-    public function testVersion()
+    public function testVersion(): void
     {
         $this->assertRegExp('/^\d+\.\d+\./', rd_kafka_version());
     }

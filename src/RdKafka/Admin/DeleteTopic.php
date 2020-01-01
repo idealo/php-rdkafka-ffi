@@ -38,4 +38,3 @@ class DeleteTopic extends Api
         return $this->topic;
     }
 }
-

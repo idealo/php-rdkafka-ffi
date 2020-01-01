@@ -30,7 +30,7 @@ class Event extends Api
 
     public function type(): int
     {
-        return (int)self::$ffi->rd_kafka_event_type($this->event);
+        return (int) self::$ffi->rd_kafka_event_type($this->event);
     }
 
     public function name(): string
@@ -40,7 +40,7 @@ class Event extends Api
 
     public function error(): int
     {
-        return (int)self::$ffi->rd_kafka_event_error($this->event);
+        return (int) self::$ffi->rd_kafka_event_error($this->event);
     }
 
     public function errorString(): string
@@ -54,7 +54,6 @@ class Event extends Api
             return false;
         }
 
-        return (bool)self::$ffi->rd_kafka_event_error_is_fatal($this->event);
+        return (bool) self::$ffi->rd_kafka_event_error_is_fatal($this->event);
     }
-
 }

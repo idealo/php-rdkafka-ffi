@@ -35,16 +35,16 @@ class KafkaConsumer extends RdKafka
         parent::__destruct();
     }
 
-    public function close()
+    public function close(): void
     {
         if ($this->closed) {
             return;
         }
 
-        $err = (int)self::$ffi->rd_kafka_consumer_close($this->kafka);
+        $err = (int) self::$ffi->rd_kafka_consumer_close($this->kafka);
 
-        if ($err != RD_KAFKA_RESP_ERR_NO_ERROR) {
-            trigger_error(sprintf("rd_kafka_consumer_close failed: %s", self::err2str($err)), E_USER_WARNING);
+        if ($err !== RD_KAFKA_RESP_ERR_NO_ERROR) {
+            trigger_error(sprintf('rd_kafka_consumer_close failed: %s', self::err2str($err)), E_USER_WARNING);
         }
 
         $this->closed = true;
@@ -53,10 +53,9 @@ class KafkaConsumer extends RdKafka
     /**
      * @param TopicPartition[] $topic_partitions
      *
-     * @return void
      * @throws Exception
      */
-    public function assign(array $topic_partitions = null)
+    public function assign(?array $topic_partitions = null): void
     {
         $nativeTopicPartitionList = null;
 
@@ -93,22 +92,21 @@ class KafkaConsumer extends RdKafka
     }
 
     /**
-     * @param null|Message|TopicPartition[] $message_or_offsets
+     * @param Message|TopicPartition[]|null $message_or_offsets
      *
-     * @return void
      * @throws Exception
      */
-    public function commit($message_or_offsets = null)
+    public function commit($message_or_offsets = null): void
     {
         try {
             $topicPartitionList = $this->createTopicPartitionList($message_or_offsets);
         } catch (TypeError $exception) {
             throw new InvalidArgumentException(
                 sprintf(
-                    "%s expects parameter %d to be %s, %s given",
+                    '%s expects parameter %d to be %s, %s given',
                     __METHOD__,
                     1,
-                    "an instance of RdKafka\\Message, an array of RdKafka\\TopicPartition or null",
+                    'an instance of RdKafka\\Message, an array of RdKafka\\TopicPartition or null',
                     gettype($message_or_offsets)
                 )
             );
@@ -117,22 +115,21 @@ class KafkaConsumer extends RdKafka
     }
 
     /**
-     * @param null|Message|TopicPartition[] $message_or_offsets
+     * @param Message|TopicPartition[]|null $message_or_offsets
      *
-     * @return void
      * @throws Exception
      */
-    public function commitAsync($message_or_offsets = null)
+    public function commitAsync($message_or_offsets = null): void
     {
         try {
             $topicPartitionList = $this->createTopicPartitionList($message_or_offsets);
         } catch (TypeError $exception) {
             throw new InvalidArgumentException(
                 sprintf(
-                    "%s expects parameter %d to be %s, %s given",
+                    '%s expects parameter %d to be %s, %s given',
                     __METHOD__,
                     1,
-                    "an instance of RdKafka\\Message, an array of RdKafka\\TopicPartition or null",
+                    'an instance of RdKafka\\Message, an array of RdKafka\\TopicPartition or null',
                     gettype($message_or_offsets)
                 )
             );
@@ -140,7 +137,7 @@ class KafkaConsumer extends RdKafka
         $this->commitInternal($topicPartitionList, true);
     }
 
-    private function commitInternal(?TopicPartitionList $topicPartitionList, bool $isAsync)
+    private function commitInternal(?TopicPartitionList $topicPartitionList, bool $isAsync): void
     {
         $nativeTopicPartitionList = null;
         if ($topicPartitionList !== null) {
@@ -199,9 +196,6 @@ class KafkaConsumer extends RdKafka
     }
 
     /**
-     * @param int $timeout_ms
-     *
-     * @return Message
      * @throws InvalidArgumentException
      */
     public function consume(int $timeout_ms): Message
@@ -223,19 +217,16 @@ class KafkaConsumer extends RdKafka
     }
 
     /**
-     * @param array $topics
-     *
-     * @return void
      * @throws Exception
      */
-    public function subscribe(array $topics)
+    public function subscribe(array $topics): void
     {
         $nativeTopicPartitionList = self::$ffi->rd_kafka_topic_partition_list_new(\count($topics));
 
         foreach ($topics as $topic) {
             self::$ffi->rd_kafka_topic_partition_list_add(
                 $nativeTopicPartitionList,
-                (string)$topic,
+                (string) $topic,
                 RD_KAFKA_PARTITION_UA
             );
         }
@@ -250,10 +241,9 @@ class KafkaConsumer extends RdKafka
     }
 
     /**
-     * @return void
      * @throws Exception
      */
-    public function unsubscribe()
+    public function unsubscribe(): void
     {
         $err = self::$ffi->rd_kafka_unsubscribe($this->kafka);
 
@@ -263,7 +253,6 @@ class KafkaConsumer extends RdKafka
     }
 
     /**
-     * @return array
      * @throws Exception
      */
     public function getSubscription(): array
@@ -290,20 +279,15 @@ class KafkaConsumer extends RdKafka
     }
 
     /**
-     * @param string $topic_name
-     * @param TopicConf|null $topic_conf
-     *
-     * @return KafkaConsumerTopic
      * @throws \Exception
      */
-    public function newTopic(string $topic_name, TopicConf $topic_conf = null): KafkaConsumerTopic
+    public function newTopic(string $topic_name, ?TopicConf $topic_conf = null): KafkaConsumerTopic
     {
         return new KafkaConsumerTopic($this, $topic_name, $topic_conf);
     }
 
     /**
      * @param TopicPartition[] $topics
-     * @param int $timeout_ms
      * @return TopicPartition[]
      * @throws Exception
      */
@@ -330,7 +314,6 @@ class KafkaConsumer extends RdKafka
 
     /**
      * @param TopicPartition[] $topicPartitions
-     * @param int $timeout_ms
      * @return TopicPartition[]
      * @throws Exception
      */

@@ -11,7 +11,7 @@ require_once dirname(__DIR__) . '/vendor/autoload.php';
 $options = getopt('t:p::r::');
 if (empty($options)) {
     echo sprintf(
-        "Usage: %s -t{topicname} [-p{numberOfPartitions:1}] [-r{replicationFactor:1}]" . PHP_EOL,
+        'Usage: %s -t{topicname} [-p{numberOfPartitions:1}] [-r{replicationFactor:1}]' . PHP_EOL,
         basename(__FILE__)
     );
     exit();
@@ -24,12 +24,11 @@ $client = Client::fromConf($conf);
 $result = $client->createTopics(
     [
         new NewTopic(
-            (string)$options['t'],
-            ((int)$options['p']) ?: 1,
-            ((int)$options['r']) ?: 1
+            (string) $options['t'],
+            (int) $options['p'] ?: 1,
+            (int) $options['r'] ?: 1
         ),
     ]
 );
 
 var_dump($result);
-

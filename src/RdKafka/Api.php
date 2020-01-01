@@ -554,7 +554,7 @@ CDEF;
         self::ensureFFI();
     }
 
-    private static function ensureFFI()
+    private static function ensureFFI(): void
     {
         if (isset(self::$ffi) === false) {
             try {
@@ -596,30 +596,27 @@ CDEF;
     }
 
     /**
-     * @return int
      * @deprecated
      */
     public static function errno(): int
     {
         self::ensureFFI();
-        return (int)self::$ffi->rd_kafka_errno();
+        return (int) self::$ffi->rd_kafka_errno();
     }
 
     /**
-     * @param int $err
-     * @return int
      * @deprecated
      */
     public static function errno2err(int $err): int
     {
         self::ensureFFI();
-        return (int)self::$ffi->rd_kafka_errno2err($err);
+        return (int) self::$ffi->rd_kafka_errno2err($err);
     }
 
     public static function threadCount(): int
     {
         self::ensureFFI();
-        return (int)self::$ffi->rd_kafka_thread_cnt();
+        return (int) self::$ffi->rd_kafka_thread_cnt();
     }
 
     public static function version(): string

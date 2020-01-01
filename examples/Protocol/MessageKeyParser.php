@@ -11,9 +11,9 @@ use Exception;
  */
 class MessageKeyParser extends Parser
 {
-    const V0_OFFSET_COMMIT_KEY = 0;
-    const V1_OFFSET_COMMIT_KEY = 1;
-    const V2_GROUP_METADATA_KEY = 2;
+    public const V0_OFFSET_COMMIT_KEY = 0;
+    public const V1_OFFSET_COMMIT_KEY = 1;
+    public const V2_GROUP_METADATA_KEY = 2;
 
     private int $version;
     private array $parsed;
@@ -26,7 +26,7 @@ class MessageKeyParser extends Parser
         $this->parse();
     }
 
-    protected function parse()
+    protected function parse(): void
     {
         $this->version = $this->parseInt16();
 

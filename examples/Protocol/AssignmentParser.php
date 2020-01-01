@@ -9,8 +9,8 @@ namespace RdKafka\Examples\Protocol;
  */
 class AssignmentParser extends Parser
 {
-    const V0 = 0;
-    const V1 = 1;
+    public const V0 = 0;
+    public const V1 = 1;
 
     private int $version;
     private array $parsed;
@@ -23,7 +23,7 @@ class AssignmentParser extends Parser
         $this->parse();
     }
 
-    protected function parse()
+    protected function parse(): void
     {
         $this->version = $this->parseInt16();
 

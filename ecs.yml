@@ -1,0 +1,13 @@
+parameters:
+  sets:
+    - 'psr12'
+    - 'php70'
+    - 'php71'
+    - 'common'
+    - 'clean-code'
+    - 'dead-code'
+  skip:
+    PhpCsFixer\Fixer\ClassNotation\ClassAttributesSeparationFixer: ~
+    PhpCsFixer\Fixer\ClassNotation\OrderedClassElementsFixer: ~
+    PhpCsFixer\Fixer\Strict\StrictComparisonFixer: ~
+      - 'src/RdKafka.php'

@@ -15,13 +15,13 @@ $conf->set('group.id', 'consumer-highlevel');
 $conf->set('enable.partition.eof', 'true');
 if (function_exists('pcntl_sigprocmask')) {
     pcntl_sigprocmask(SIG_BLOCK, [SIGIO]);
-    $conf->set('internal.termination.signal', (string)SIGIO);
+    $conf->set('internal.termination.signal', (string) SIGIO);
 } else {
-    $conf->set('queue.buffering.max.ms', (string)1);
+    $conf->set('queue.buffering.max.ms', (string) 1);
 }
 $conf->setLogCb(
-    function ($consumer, $level, $fac, $buf) {
-        echo "log: $level $fac $buf" . PHP_EOL;
+    function ($consumer, $level, $fac, $buf): void {
+        echo "log: ${level} ${fac} ${buf}" . PHP_EOL;
     }
 );
 

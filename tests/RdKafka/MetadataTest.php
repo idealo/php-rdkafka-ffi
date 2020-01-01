@@ -30,10 +30,10 @@ class MetadataTest extends TestCase
         // wait for metadata refresh
         sleep(1);
 
-        $this->metadata = $producer->getMetadata(true, null, (int)KAFKA_TEST_TIMEOUT_MS);
+        $this->metadata = $producer->getMetadata(true, null, (int) KAFKA_TEST_TIMEOUT_MS);
     }
 
-    public function testGetBrokers()
+    public function testGetBrokers(): void
     {
         $brokers = $this->metadata->getBrokers();
 
@@ -44,11 +44,11 @@ class MetadataTest extends TestCase
         $broker = $brokers->current();
 
         $this->assertGreaterThan(0, $broker->getId());
-        $this->assertEquals('kafka', $broker->getHost());
-        $this->assertEquals(9092, $broker->getPort());
+        $this->assertSame('kafka', $broker->getHost());
+        $this->assertSame(9092, $broker->getPort());
     }
 
-    public function testGetTopics()
+    public function testGetTopics(): void
     {
         $topics = $this->metadata->getTopics();
 
@@ -59,7 +59,7 @@ class MetadataTest extends TestCase
         $topic = $topics->current();
 
         $this->assertGreaterThan('__consumer_offsets', $topic->getTopic());
-        $this->assertEquals(RD_KAFKA_RESP_ERR_NO_ERROR, $topic->getErr());
+        $this->assertSame(RD_KAFKA_RESP_ERR_NO_ERROR, $topic->getErr());
 
         $partitions = $topic->getPartitions();
         $this->assertInstanceOf(Collection::class, $partitions);
@@ -67,19 +67,19 @@ class MetadataTest extends TestCase
         /** @var Partition $partition */
         $partition = $partitions->current();
 
-        $this->assertEquals(0, $partition->getId());
-        $this->assertEquals((int)KAFKA_BROKER_ID, $partition->getIsrs()->current());
-        $this->assertEquals((int)KAFKA_BROKER_ID, $partition->getLeader());
-        $this->assertEquals((int)KAFKA_BROKER_ID, $partition->getReplicas()->current());
+        $this->assertSame(0, $partition->getId());
+        $this->assertSame((int) KAFKA_BROKER_ID, $partition->getIsrs()->current());
+        $this->assertSame((int) KAFKA_BROKER_ID, $partition->getLeader());
+        $this->assertSame((int) KAFKA_BROKER_ID, $partition->getReplicas()->current());
     }
 
-    public function testGetOrigBrokerId()
+    public function testGetOrigBrokerId(): void
     {
-        $this->assertEquals((int)KAFKA_BROKER_ID, $this->metadata->getOrigBrokerId());
+        $this->assertSame((int) KAFKA_BROKER_ID, $this->metadata->getOrigBrokerId());
     }
 
-    public function testGetOrigBrokerName()
+    public function testGetOrigBrokerName(): void
     {
-        $this->assertEquals(KAFKA_BROKERS . '/' . KAFKA_BROKER_ID, $this->metadata->getOrigBrokerName());
+        $this->assertSame(KAFKA_BROKERS . '/' . KAFKA_BROKER_ID, $this->metadata->getOrigBrokerName());
     }
 }

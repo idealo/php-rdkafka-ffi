@@ -8,21 +8,17 @@ use InvalidArgumentException;
 
 class KafkaConsumerTopic extends Topic
 {
-    public function __construct(KafkaConsumer $consumer, string $name, TopicConf $conf = null)
+    public function __construct(KafkaConsumer $consumer, string $name, ?TopicConf $conf = null)
     {
         parent::__construct($consumer, $name, $conf);
     }
 
     /**
-     * @param int $partition
-     * @param int $offset
-     *
-     * @return void
      * @throws Exception
      */
-    public function offsetStore(int $partition, int $offset)
+    public function offsetStore(int $partition, int $offset): void
     {
-        if ($partition != RD_KAFKA_PARTITION_UA && ($partition < 0 || $partition > 0x7FFFFFFF)) {
+        if ($partition !== RD_KAFKA_PARTITION_UA && ($partition < 0 || $partition > 0x7FFFFFFF)) {
             throw new InvalidArgumentException(sprintf("Out of range value '%d' for partition", $partition));
         }
 
@@ -32,7 +28,7 @@ class KafkaConsumerTopic extends Topic
             $offset
         );
 
-        if ($err != RD_KAFKA_RESP_ERR_NO_ERROR) {
+        if ($err !== RD_KAFKA_RESP_ERR_NO_ERROR) {
             throw new Exception(self::err2str($err));
         }
     }

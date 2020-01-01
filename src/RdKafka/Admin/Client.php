@@ -37,11 +37,9 @@ class Client extends Api
     }
 
     /**
-     * @param Conf $conf
-     * @return Client
      * @throws Exception
      */
-    public static function fromConf(Conf $conf)
+    public static function fromConf(Conf $conf): self
     {
         $client = new self(new Producer($conf));
         $client->isDerived = false;
@@ -68,7 +66,7 @@ class Client extends Api
      * @return ConfigResource[]
      * @throws Exception
      */
-    public function alterConfigs(array $resources, AlterConfigsOptions $options = null): array
+    public function alterConfigs(array $resources, ?AlterConfigsOptions $options = null): array
     {
         Assert::that($resources)->notEmpty()->all()->isInstanceOf(ConfigResource::class);
 
@@ -96,7 +94,7 @@ class Client extends Api
         $result = self::$ffi->rd_kafka_AlterConfigs_result_resources($eventResult, FFI::addr($size));
 
         $topicResult = [];
-        for ($i = 0; $i < (int)$size->cdata; $i++) {
+        for ($i = 0; $i < (int) $size->cdata; $i++) {
             $topicResult[] = new ConfigResourceResult($result[$i]);
         }
 
@@ -109,7 +107,7 @@ class Client extends Api
      * @return ConfigResourceResult[]
      * @throws Exception
      */
-    public function describeConfigs(array $resources, DescribeConfigsOptions $options = null): array
+    public function describeConfigs(array $resources, ?DescribeConfigsOptions $options = null): array
     {
         Assert::that($resources)->notEmpty()->all()->isInstanceOf(ConfigResource::class);
 
@@ -137,7 +135,7 @@ class Client extends Api
         $result = self::$ffi->rd_kafka_DescribeConfigs_result_resources($eventResult, FFI::addr($size));
 
         $topicResult = [];
-        for ($i = 0; $i < (int)$size->cdata; $i++) {
+        for ($i = 0; $i < (int) $size->cdata; $i++) {
             $topicResult[] = new ConfigResourceResult($result[$i]);
         }
 
@@ -150,7 +148,7 @@ class Client extends Api
      * @return TopicResult[]
      * @throws Exception
      */
-    public function createPartitions(array $partitions, CreatePartitionsOptions $options = null): array
+    public function createPartitions(array $partitions, ?CreatePartitionsOptions $options = null): array
     {
         Assert::that($partitions)->notEmpty()->all()->isInstanceOf(NewPartitions::class);
 
@@ -177,7 +175,7 @@ class Client extends Api
         $result = self::$ffi->rd_kafka_CreatePartitions_result_topics($eventResult, FFI::addr($size));
 
         $topicResult = [];
-        for ($i = 0; $i < (int)$size->cdata; $i++) {
+        for ($i = 0; $i < (int) $size->cdata; $i++) {
             $topicResult[] = new TopicResult($result[$i]);
         }
 
@@ -190,7 +188,7 @@ class Client extends Api
      * @return TopicResult[]
      * @throws Exception
      */
-    public function createTopics(array $topics, CreateTopicsOptions $options = null): array
+    public function createTopics(array $topics, ?CreateTopicsOptions $options = null): array
     {
         Assert::that($topics)->notEmpty()->all()->isInstanceOf(NewTopic::class);
 
@@ -217,7 +215,7 @@ class Client extends Api
         $result = self::$ffi->rd_kafka_CreateTopics_result_topics($eventResult, FFI::addr($size));
 
         $topicResult = [];
-        for ($i = 0; $i < (int)$size->cdata; $i++) {
+        for ($i = 0; $i < (int) $size->cdata; $i++) {
             $topicResult[] = new TopicResult($result[$i]);
         }
 
@@ -230,7 +228,7 @@ class Client extends Api
      * @return TopicResult[]
      * @throws Exception
      */
-    public function deleteTopics(array $topics, DeleteTopicsOptions $options = null): array
+    public function deleteTopics(array $topics, ?DeleteTopicsOptions $options = null): array
     {
         Assert::that($topics)->notEmpty()->all()->isInstanceOf(DeleteTopic::class);
 
@@ -257,7 +255,7 @@ class Client extends Api
         $result = self::$ffi->rd_kafka_DeleteTopics_result_topics($eventResult, FFI::addr($size));
 
         $topicResult = [];
-        for ($i = 0; $i < (int)$size->cdata; $i++) {
+        for ($i = 0; $i < (int) $size->cdata; $i++) {
             $topicResult[] = new TopicResult($result[$i]);
         }
 
@@ -265,11 +263,8 @@ class Client extends Api
     }
 
     /**
-     * @param bool $all_topics
      * @param Topic $only_topic
-     * @param int $timeout_ms
      *
-     * @return Metadata
      * @throws Exception
      */
     public function getMetadata(bool $all_topics, ?Topic $only_topic, int $timeout_ms): Metadata
@@ -306,7 +301,7 @@ class Client extends Api
     {
         do {
             $event = $queue->poll(50);
-        } while ($event == null);
+        } while ($event === null);
 
         if ($event->error() !== RD_KAFKA_RESP_ERR_NO_ERROR) {
             throw new Exception($event->errorString());

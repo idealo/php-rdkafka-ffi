@@ -18,9 +18,9 @@ class TopicResult extends Api
     {
         parent::__construct();
 
-        $this->error = (int)self::$ffi->rd_kafka_topic_result_error($result);
+        $this->error = (int) self::$ffi->rd_kafka_topic_result_error($result);
         $errorStringCdata = self::$ffi->rd_kafka_topic_result_error_string($result);
-        $this->errorString = \is_null($errorStringCdata) ? null : FFI::string($errorStringCdata);
+        $this->errorString = $errorStringCdata === null ? null : FFI::string($errorStringCdata);
         $this->name = FFI::string(self::$ffi->rd_kafka_topic_result_name($result));
     }
 }

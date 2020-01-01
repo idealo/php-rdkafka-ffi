@@ -15,7 +15,7 @@ use RdKafka;
  */
 class ProducerTopicTest extends TestCase
 {
-    public function testGetName()
+    public function testGetName(): void
     {
         $producer = new Producer();
         $producer->addBrokers(KAFKA_BROKERS);
@@ -23,13 +23,13 @@ class ProducerTopicTest extends TestCase
         $topic = $producer->newTopic(KAFKA_TEST_TOPIC);
         $topicName = $topic->getName();
 
-        $this->assertEquals(KAFKA_TEST_TOPIC, $topicName);
+        $this->assertSame(KAFKA_TEST_TOPIC, $topicName);
     }
 
     /**
      * @group ffiOnly
      */
-    public function testGetCData()
+    public function testGetCData(): void
     {
         $producer = new Producer();
         $producer->addBrokers(KAFKA_BROKERS);
@@ -39,13 +39,13 @@ class ProducerTopicTest extends TestCase
         $this->assertInstanceOf(CData::class, $cData);
     }
 
-    public function testProduce()
+    public function testProduce(): void
     {
         $payload = '';
 
         $conf = new Conf();
         $conf->setDrMsgCb(
-            function (RdKafka $kafka, Message $message) use (&$payload) {
+            function (RdKafka $kafka, Message $message) use (&$payload): void {
                 $payload = $message->payload;
             }
         );
@@ -55,12 +55,12 @@ class ProducerTopicTest extends TestCase
 
         $topic->produce(RD_KAFKA_PARTITION_UA, 0, __METHOD__, 'key-topic-produce');
 
-        $producer->flush((int)KAFKA_TEST_TIMEOUT_MS);
+        $producer->flush((int) KAFKA_TEST_TIMEOUT_MS);
 
-        $this->assertEquals(__METHOD__, $payload);
+        $this->assertSame(__METHOD__, $payload);
     }
 
-    public function testProduceWithInvalidPartitionShouldFail()
+    public function testProduceWithInvalidPartitionShouldFail(): void
     {
         $producer = new Producer();
         $producer->addBrokers(KAFKA_BROKERS);
@@ -71,7 +71,7 @@ class ProducerTopicTest extends TestCase
         $topic->produce(-2, 0);
     }
 
-    public function testProduceWithInvalidMsgFlagsShouldFail()
+    public function testProduceWithInvalidMsgFlagsShouldFail(): void
     {
         $producer = new Producer();
         $producer->addBrokers(KAFKA_BROKERS);
@@ -82,13 +82,13 @@ class ProducerTopicTest extends TestCase
         $topic->produce(0, -1);
     }
 
-    public function testProducevWithTombstone()
+    public function testProducevWithTombstone(): void
     {
         $payload = '';
 
         $conf = new Conf();
         $conf->setDrMsgCb(
-            function (RdKafka $kafka, Message $message) use (&$payload) {
+            function (RdKafka $kafka, Message $message) use (&$payload): void {
                 $payload = $message->payload;
             }
         );
@@ -98,19 +98,19 @@ class ProducerTopicTest extends TestCase
 
         $topic->producev(RD_KAFKA_PARTITION_UA, 0, null, 'key-topic-produce');
 
-        $producer->flush((int)KAFKA_TEST_TIMEOUT_MS);
+        $producer->flush((int) KAFKA_TEST_TIMEOUT_MS);
 
-        $this->assertEquals(null, $payload);
+        $this->assertSame(null, $payload);
     }
 
-    public function testProducevWithHeader()
+    public function testProducevWithHeader(): void
     {
         $payload = '';
         $headers = [];
 
         $conf = new Conf();
         $conf->setDrMsgCb(
-            function (RdKafka $kafka, Message $message) use (&$payload, &$headers) {
+            function (RdKafka $kafka, Message $message) use (&$payload, &$headers): void {
                 $payload = $message->payload;
                 $headers = $message->headers;
             }
@@ -126,20 +126,20 @@ class ProducerTopicTest extends TestCase
             ['header-name-topic-produce' => 'header-value-topic-produce']
         );
 
-        $producer->flush((int)KAFKA_TEST_TIMEOUT_MS);
+        $producer->flush((int) KAFKA_TEST_TIMEOUT_MS);
 
-        $this->assertEquals(__METHOD__, $payload);
-        $this->assertEquals(['header-name-topic-produce' => 'header-value-topic-produce'], $headers);
+        $this->assertSame(__METHOD__, $payload);
+        $this->assertSame(['header-name-topic-produce' => 'header-value-topic-produce'], $headers);
     }
 
-    public function testProducevWithTimestamp()
+    public function testProducevWithTimestamp(): void
     {
         $payload = '';
         $timestamp = -1;
 
         $conf = new Conf();
         $conf->setDrMsgCb(
-            function (RdKafka $kafka, Message $message) use (&$payload, &$timestamp) {
+            function (RdKafka $kafka, Message $message) use (&$payload, &$timestamp): void {
                 $payload = $message->payload;
                 $timestamp = $message->timestamp;
             }
@@ -156,13 +156,13 @@ class ProducerTopicTest extends TestCase
             123456789
         );
 
-        $producer->flush((int)KAFKA_TEST_TIMEOUT_MS);
+        $producer->flush((int) KAFKA_TEST_TIMEOUT_MS);
 
-        $this->assertEquals(__METHOD__, $payload);
-        $this->assertEquals(123456789, $timestamp);
+        $this->assertSame(__METHOD__, $payload);
+        $this->assertSame(123456789, $timestamp);
     }
 
-    public function testProducevWithInvalidPartitionShouldFail()
+    public function testProducevWithInvalidPartitionShouldFail(): void
     {
         $producer = new Producer();
         $producer->addBrokers(KAFKA_BROKERS);
@@ -173,7 +173,7 @@ class ProducerTopicTest extends TestCase
         $topic->producev(-2, 0);
     }
 
-    public function testProducevWithInvalidMsgFlagsShouldFail()
+    public function testProducevWithInvalidMsgFlagsShouldFail(): void
     {
         $producer = new Producer();
         $producer->addBrokers(KAFKA_BROKERS);

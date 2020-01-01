@@ -11,8 +11,8 @@ use Exception;
  */
 class SubscriptionParser extends Parser
 {
-    const V0 = 0;
-    const V1 = 0;
+    public const V0 = 0;
+    public const V1 = 0;
 
     private int $version;
     private array $parsed;
@@ -25,7 +25,7 @@ class SubscriptionParser extends Parser
         $this->parse();
     }
 
-    protected function parse()
+    protected function parse(): void
     {
         $this->version = $this->parseInt16();
 

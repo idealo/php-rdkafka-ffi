@@ -13,7 +13,7 @@ use PHPUnit\Framework\TestCase;
  */
 class TopicConfTest extends TestCase
 {
-    public function testDump()
+    public function testDump(): void
     {
         $conf = new TopicConf();
 
@@ -37,20 +37,20 @@ class TopicConfTest extends TestCase
 
         $keys = \array_keys($conf->dump());
 
-        $this->assertEquals($expectedKeys, $keys);
+        $this->assertSame($expectedKeys, $keys);
     }
 
-    function testSet()
+    public function testSet(): void
     {
         $conf = new TopicConf();
         $conf->set('partitioner', 'consistent');
 
         $dump = $conf->dump();
 
-        $this->assertEquals('consistent', $dump['partitioner']);
+        $this->assertSame('consistent', $dump['partitioner']);
     }
 
-    public function testSetWithUnknownPropertyShouldFail()
+    public function testSetWithUnknownPropertyShouldFail(): void
     {
         $conf = new TopicConf();
 
@@ -59,7 +59,7 @@ class TopicConfTest extends TestCase
         $conf->set('any.unknown', 'property');
     }
 
-    function testSetWithInvalidValueShouldFail()
+    public function testSetWithInvalidValueShouldFail(): void
     {
         $conf = new TopicConf();
 
@@ -68,7 +68,7 @@ class TopicConfTest extends TestCase
         $conf->set('partitioner', 'any.unknown');
     }
 
-    public function testSetPartitioner()
+    public function testSetPartitioner(): void
     {
         $conf = new TopicConf();
         $conf->setPartitioner(RD_KAFKA_MSG_PARTITIONER_CONSISTENT);
@@ -81,29 +81,29 @@ class TopicConfTest extends TestCase
         $topic->produce(RD_KAFKA_PARTITION_UA, 0, 'test2', '2'); // crc32 % 3 = 1
         $topic->produce(RD_KAFKA_PARTITION_UA, 0, 'test3', '3'); // crc32 % 3 = 1
         $topic->produce(RD_KAFKA_PARTITION_UA, 0, 'test4', '1'); // crc32 % 3 = 2
-        $producer->flush((int)KAFKA_TEST_TIMEOUT_MS);
+        $producer->flush((int) KAFKA_TEST_TIMEOUT_MS);
 
         $consumer = new Consumer();
         $consumer->addBrokers(KAFKA_BROKERS);
         $consumerTopic = $consumer->newTopic(KAFKA_TEST_TOPIC_PARTITIONS, $conf);
 
         $consumerTopic->consumeStart(1, rd_kafka_offset_tail(2));
-        $msg2 = $consumerTopic->consume(1, (int)KAFKA_TEST_TIMEOUT_MS);
-        $msg3 = $consumerTopic->consume(1, (int)KAFKA_TEST_TIMEOUT_MS);
+        $msg2 = $consumerTopic->consume(1, (int) KAFKA_TEST_TIMEOUT_MS);
+        $msg3 = $consumerTopic->consume(1, (int) KAFKA_TEST_TIMEOUT_MS);
         $consumerTopic->consumeStop(1);
 
         $consumerTopic->consumeStart(2, rd_kafka_offset_tail(2));
-        $msg1 = $consumerTopic->consume(2, (int)KAFKA_TEST_TIMEOUT_MS);
-        $msg4 = $consumerTopic->consume(2, (int)KAFKA_TEST_TIMEOUT_MS);
+        $msg1 = $consumerTopic->consume(2, (int) KAFKA_TEST_TIMEOUT_MS);
+        $msg4 = $consumerTopic->consume(2, (int) KAFKA_TEST_TIMEOUT_MS);
         $consumerTopic->consumeStop(2);
 
-        $this->assertEquals('test1', $msg1->payload);
-        $this->assertEquals('test2', $msg2->payload);
-        $this->assertEquals('test3', $msg3->payload);
-        $this->assertEquals('test4', $msg4->payload);
+        $this->assertSame('test1', $msg1->payload);
+        $this->assertSame('test2', $msg2->payload);
+        $this->assertSame('test3', $msg3->payload);
+        $this->assertSame('test4', $msg4->payload);
     }
 
-    public function testSetPartitionerWithUnknownId()
+    public function testSetPartitionerWithUnknownId(): void
     {
         $conf = new TopicConf();
 
@@ -114,7 +114,7 @@ class TopicConfTest extends TestCase
     /**
      * @group ffiOnly
      */
-    public function testSetPartitionerCb()
+    public function testSetPartitionerCb(): void
     {
         $conf = new TopicConf();
         $conf->setPartitionerCb(
@@ -131,22 +131,22 @@ class TopicConfTest extends TestCase
         $topic->produce(RD_KAFKA_PARTITION_UA, 0, 'test2', '2');
         $topic->produce(RD_KAFKA_PARTITION_UA, 0, 'test3', '3');
         $topic->produce(RD_KAFKA_PARTITION_UA, 0, 'test4', '1');
-        $producer->flush((int)KAFKA_TEST_TIMEOUT_MS);
+        $producer->flush((int) KAFKA_TEST_TIMEOUT_MS);
 
         $consumer = new Consumer();
         $consumer->addBrokers(KAFKA_BROKERS);
         $consumerTopic = $consumer->newTopic(KAFKA_TEST_TOPIC_PARTITIONS, $conf);
 
         $consumerTopic->consumeStart(2, rd_kafka_offset_tail(4));
-        $msg1 = $consumerTopic->consume(2, (int)KAFKA_TEST_TIMEOUT_MS);
-        $msg2 = $consumerTopic->consume(2, (int)KAFKA_TEST_TIMEOUT_MS);
-        $msg3 = $consumerTopic->consume(2, (int)KAFKA_TEST_TIMEOUT_MS);
-        $msg4 = $consumerTopic->consume(2, (int)KAFKA_TEST_TIMEOUT_MS);
+        $msg1 = $consumerTopic->consume(2, (int) KAFKA_TEST_TIMEOUT_MS);
+        $msg2 = $consumerTopic->consume(2, (int) KAFKA_TEST_TIMEOUT_MS);
+        $msg3 = $consumerTopic->consume(2, (int) KAFKA_TEST_TIMEOUT_MS);
+        $msg4 = $consumerTopic->consume(2, (int) KAFKA_TEST_TIMEOUT_MS);
         $consumerTopic->consumeStop(2);
 
-        $this->assertEquals('test1', $msg1->payload);
-        $this->assertEquals('test2', $msg2->payload);
-        $this->assertEquals('test3', $msg3->payload);
-        $this->assertEquals('test4', $msg4->payload);
+        $this->assertSame('test1', $msg1->payload);
+        $this->assertSame('test2', $msg2->payload);
+        $this->assertSame('test3', $msg3->payload);
+        $this->assertSame('test4', $msg4->payload);
     }
 }

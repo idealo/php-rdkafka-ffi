@@ -41,10 +41,10 @@ class Message extends Api
         parent::__construct();
 
         $timestampType = self::$ffi->new('rd_kafka_timestamp_type_t');
-        $this->timestamp = (int)self::$ffi->rd_kafka_message_timestamp($nativeMessage, FFI::addr($timestampType));
-        $this->timestampType = (int)$timestampType->cdata;
+        $this->timestamp = (int) self::$ffi->rd_kafka_message_timestamp($nativeMessage, FFI::addr($timestampType));
+        $this->timestampType = (int) $timestampType->cdata;
 
-        $this->err = (int)$nativeMessage->err;
+        $this->err = (int) $nativeMessage->err;
 
         if ($nativeMessage->rkt !== null) {
             $this->topic_name = FFI::string(self::$ffi->rd_kafka_topic_name($nativeMessage->rkt));
@@ -52,11 +52,11 @@ class Message extends Api
             $this->topic_name = null;
         }
 
-        $this->partition = (int)$nativeMessage->partition;
+        $this->partition = (int) $nativeMessage->partition;
 
         if ($nativeMessage->payload !== null) {
             $this->payload = FFI::string($nativeMessage->payload, $nativeMessage->len);
-            $this->len = (int)$nativeMessage->len;
+            $this->len = (int) $nativeMessage->len;
         } else {
             $this->payload = null;
             $this->len = 0;
@@ -68,13 +68,13 @@ class Message extends Api
             $this->key = null;
         }
 
-        $this->offset = (int)$nativeMessage->offset;
+        $this->offset = (int) $nativeMessage->offset;
 
         $this->headers = $this->parseHeaders($nativeMessage);
 
-        $this->latency = (int)self::$ffi->rd_kafka_message_latency($nativeMessage);
+        $this->latency = (int) self::$ffi->rd_kafka_message_latency($nativeMessage);
 
-        $this->status = (int)self::$ffi->rd_kafka_message_status($nativeMessage);
+        $this->status = (int) self::$ffi->rd_kafka_message_status($nativeMessage);
     }
 
     public function errstr(): string
@@ -92,7 +92,7 @@ class Message extends Api
 
         $message_headers = self::$ffi->rd_kafka_headers_new(0);
 
-        $resp = (int)self::$ffi->rd_kafka_message_headers($nativeMessage, FFI::addr($message_headers));
+        $resp = (int) self::$ffi->rd_kafka_message_headers($nativeMessage, FFI::addr($message_headers));
         if ($resp === RD_KAFKA_RESP_ERR__NOENT) {
             return null;
         }
@@ -103,7 +103,7 @@ class Message extends Api
         }
 
         if ($message_headers !== null) {
-            $header_count = (int)self::$ffi->rd_kafka_header_cnt($message_headers);
+            $header_count = (int) self::$ffi->rd_kafka_header_cnt($message_headers);
             $header_name = FFI::new('char*');
             $header_name_ptr = FFI::addr($header_name);
             $header_value = FFI::new('char*');
@@ -112,7 +112,7 @@ class Message extends Api
             $header_size_ptr = FFI::addr($header_size);
 
             for ($i = 0; $i < $header_count; $i++) {
-                $header_response = (int)self::$ffi->rd_kafka_header_get_all(
+                $header_response = (int) self::$ffi->rd_kafka_header_get_all(
                     $message_headers,
                     $i,
                     $header_name_ptr,
@@ -124,7 +124,7 @@ class Message extends Api
                     break;
                 }
 
-                $headers[FFI::string($header_name)] = FFI::string($header_value, (int)$header_size->cdata);
+                $headers[FFI::string($header_name)] = FFI::string($header_value, (int) $header_size->cdata);
             }
         }
 

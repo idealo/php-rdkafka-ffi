@@ -9,19 +9,13 @@ use RdKafka;
 class Consumer extends RdKafka
 {
     /**
-     * @param Conf|null $conf
      * @throws Exception
      */
-    public function __construct(Conf $conf = null)
+    public function __construct(?Conf $conf = null)
     {
         parent::__construct(RD_KAFKA_CONSUMER, $conf);
     }
 
-    /**
-     * @param string $broker_list
-     *
-     * @return int
-     */
     public function addBrokers(string $broker_list): int
     {
         return self::$ffi->rd_kafka_brokers_add($this->kafka, $broker_list);
@@ -33,13 +27,9 @@ class Consumer extends RdKafka
     }
 
     /**
-     * @param string $topic_name
-     * @param TopicConf|null $topic_conf
-     *
-     * @return ConsumerTopic
      * @throws Exception
      */
-    public function newTopic(string $topic_name, TopicConf $topic_conf = null): ConsumerTopic
+    public function newTopic(string $topic_name, ?TopicConf $topic_conf = null): ConsumerTopic
     {
         return new ConsumerTopic($this, $topic_name, $topic_conf);
     }

@@ -13,7 +13,7 @@ use PHPUnit\Framework\TestCase;
  */
 class ApiTest extends TestCase
 {
-    public function testGetFFI()
+    public function testGetFFI(): void
     {
         $ffi = Api::getFFI();
 
@@ -21,7 +21,7 @@ class ApiTest extends TestCase
         $this->assertRegExp('/^\d+\.\d+\./', \FFI::string($ffi->rd_kafka_version_str()));
     }
 
-    public function testPreload()
+    public function testPreload(): void
     {
         $ffi = Api::preload();
 
@@ -29,7 +29,7 @@ class ApiTest extends TestCase
         $this->assertRegExp('/^\d+\.\d+\./', \FFI::string($ffi->rd_kafka_version_str()));
     }
 
-    public function testPreloadWithInvalidCdef()
+    public function testPreloadWithInvalidCdef(): void
     {
         Api::$cdef = 'invalid';
 

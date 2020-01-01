@@ -17,7 +17,7 @@ use stdClass;
  */
 class KafkaConsumerTest extends TestCase
 {
-    static public function setUpBeforeClass(): void
+    public static function setUpBeforeClass(): void
     {
         // produce two messages
         $producer = new Producer();
@@ -25,10 +25,10 @@ class KafkaConsumerTest extends TestCase
         $producerTopic = $producer->newTopic(KAFKA_TEST_TOPIC);
         $producerTopic->produce(RD_KAFKA_PARTITION_UA, 0, 'payload-kafka-consumer-1');
         $producerTopic->produce(RD_KAFKA_PARTITION_UA, 0, 'payload-kafka-consumer-2');
-        $producer->flush((int)KAFKA_TEST_TIMEOUT_MS);
+        $producer->flush((int) KAFKA_TEST_TIMEOUT_MS);
     }
 
-    public function testConstructWithMissingGroupIdConfShouldFail()
+    public function testConstructWithMissingGroupIdConfShouldFail(): void
     {
         $this->expectException(Exception::class);
         $this->expectExceptionMessageMatches('/group\.id/');
@@ -36,7 +36,7 @@ class KafkaConsumerTest extends TestCase
         new KafkaConsumer(new Conf());
     }
 
-    public function testAssign()
+    public function testAssign(): void
     {
         $conf = new Conf();
         $conf->set('group.id', __METHOD__);
@@ -52,13 +52,13 @@ class KafkaConsumerTest extends TestCase
         $topicPartitions = $consumer->getAssignment();
 
         $this->assertCount(2, $topicPartitions);
-        $this->assertEquals(KAFKA_TEST_TOPIC, $topicPartitions[0]->getTopic());
-        $this->assertEquals(0, $topicPartitions[0]->getPartition());
-        $this->assertEquals(KAFKA_TEST_TOPIC_PARTITIONS, $topicPartitions[1]->getTopic());
-        $this->assertEquals(2, $topicPartitions[1]->getPartition());
+        $this->assertSame(KAFKA_TEST_TOPIC, $topicPartitions[0]->getTopic());
+        $this->assertSame(0, $topicPartitions[0]->getPartition());
+        $this->assertSame(KAFKA_TEST_TOPIC_PARTITIONS, $topicPartitions[1]->getTopic());
+        $this->assertSame(2, $topicPartitions[1]->getPartition());
     }
 
-    public function testAssignWithNullShouldClearAssignment()
+    public function testAssignWithNullShouldClearAssignment(): void
     {
         $conf = new Conf();
         $conf->set('group.id', __METHOD__);
@@ -77,7 +77,7 @@ class KafkaConsumerTest extends TestCase
         $this->assertCount(0, $consumer->getAssignment());
     }
 
-    public function testSubscribe()
+    public function testSubscribe(): void
     {
         $conf = new Conf();
         $conf->set('group.id', __METHOD__);
@@ -93,11 +93,11 @@ class KafkaConsumerTest extends TestCase
         $topicPartitions = $consumer->getSubscription();
 
         $this->assertCount(2, $topicPartitions);
-        $this->assertEquals(KAFKA_TEST_TOPIC, $topicPartitions[0]);
-        $this->assertEquals(KAFKA_TEST_TOPIC_PARTITIONS, $topicPartitions[1]);
+        $this->assertSame(KAFKA_TEST_TOPIC, $topicPartitions[0]);
+        $this->assertSame(KAFKA_TEST_TOPIC_PARTITIONS, $topicPartitions[1]);
     }
 
-    public function testUnsubscribe()
+    public function testUnsubscribe(): void
     {
         $conf = new Conf();
         $conf->set('group.id', __METHOD__);
@@ -116,13 +116,13 @@ class KafkaConsumerTest extends TestCase
         $consumer->unsubscribe();
 
         $this->assertCount(0, $consumer->getSubscription());
-        $this->assertEquals(KAFKA_TEST_TOPIC, $topicPartitions[0]);
+        $this->assertSame(KAFKA_TEST_TOPIC, $topicPartitions[0]);
     }
 
-    public function testConsume()
+    public function testConsume(): void
     {
         $conf = new Conf();
-        $conf->set('group.id', __METHOD__ . rand(0, 999999999));
+        $conf->set('group.id', __METHOD__ . random_int(0, 999999999));
         $conf->set('metadata.broker.list', KAFKA_BROKERS);
         $conf->set('auto.offset.reset', 'earliest');
 
@@ -134,7 +134,7 @@ class KafkaConsumerTest extends TestCase
 
         $lastMessage = $message = null;
         while (true) {
-            $message = $consumer->consume((int)KAFKA_TEST_TIMEOUT_MS);
+            $message = $consumer->consume((int) KAFKA_TEST_TIMEOUT_MS);
             if ($message->err === RD_KAFKA_RESP_ERR__TIMED_OUT) {
                 if ($lastMessage === null) {
                     continue;
@@ -146,17 +146,17 @@ class KafkaConsumerTest extends TestCase
         }
 
         $this->assertInstanceOf(Message::class, $message);
-        $this->assertEquals('payload-kafka-consumer-2', $message->payload);
+        $this->assertSame('payload-kafka-consumer-2', $message->payload);
 
         $message = $consumer->consume(0);
 
         $this->assertInstanceOf(Message::class, $message);
-        $this->assertEquals(RD_KAFKA_RESP_ERR__TIMED_OUT, $message->err);
+        $this->assertSame(RD_KAFKA_RESP_ERR__TIMED_OUT, $message->err);
 
         $consumer->unsubscribe();
     }
 
-    public function testCommitWithInvalidArgumentShouldFail()
+    public function testCommitWithInvalidArgumentShouldFail(): void
     {
         $conf = new Conf();
         $conf->set('group.id', __METHOD__);
@@ -169,7 +169,7 @@ class KafkaConsumerTest extends TestCase
         $consumer->commit([new stdClass()]);
     }
 
-    public function testCommitAsyncWithInvalidArgumentShouldFail()
+    public function testCommitAsyncWithInvalidArgumentShouldFail(): void
     {
         $conf = new Conf();
         $conf->set('group.id', __METHOD__);
@@ -182,10 +182,10 @@ class KafkaConsumerTest extends TestCase
         $consumer->commitAsync(new stdClass());
     }
 
-    public function testCommitWithMessage()
+    public function testCommitWithMessage(): void
     {
         $conf = new Conf();
-        $conf->set('group.id', __METHOD__ . rand(0, 999999999));
+        $conf->set('group.id', __METHOD__ . random_int(0, 999999999));
         $conf->set('enable.auto.commit', 'false');
         $conf->set('metadata.broker.list', KAFKA_BROKERS);
         $conf->set('auto.offset.reset', 'earliest');
@@ -193,7 +193,7 @@ class KafkaConsumerTest extends TestCase
         $offset = 0;
 
         $conf->setOffsetCommitCb(
-            function (KafkaConsumer $kafka, int $err, array $topicPartitions, $opaque = null) use (&$offset) {
+            function (KafkaConsumer $kafka, int $err, array $topicPartitions, $opaque = null) use (&$offset): void {
                 $offset = $topicPartitions[0]->getOffset();
             }
         );
@@ -206,7 +206,7 @@ class KafkaConsumerTest extends TestCase
 
         $lastMessage = $message = null;
         while (true) {
-            $message = $consumer->consume((int)KAFKA_TEST_TIMEOUT_MS);
+            $message = $consumer->consume((int) KAFKA_TEST_TIMEOUT_MS);
             if ($message->err === RD_KAFKA_RESP_ERR__TIMED_OUT) {
                 if ($lastMessage === null) {
                     continue;
@@ -219,17 +219,17 @@ class KafkaConsumerTest extends TestCase
         $consumer->commit($lastMessage);
 
         // just trigger callback
-        $consumer->consume((int)KAFKA_TEST_TIMEOUT_MS);
+        $consumer->consume((int) KAFKA_TEST_TIMEOUT_MS);
 
-        $this->assertEquals($message->offset + 1, $offset);
+        $this->assertSame($message->offset + 1, $offset);
 
         $consumer->unsubscribe();
     }
 
-    public function testCommitWithOffset()
+    public function testCommitWithOffset(): void
     {
         $conf = new Conf();
-        $conf->set('group.id', __METHOD__ . rand(0, 999999999));
+        $conf->set('group.id', __METHOD__ . random_int(0, 999999999));
         $conf->set('enable.auto.commit', 'false');
         $conf->set('metadata.broker.list', KAFKA_BROKERS);
         $conf->set('auto.offset.reset', 'earliest');
@@ -246,16 +246,16 @@ class KafkaConsumerTest extends TestCase
             [
                 new TopicPartition(KAFKA_TEST_TOPIC, 0),
             ],
-            (int)KAFKA_TEST_TIMEOUT_MS
+            (int) KAFKA_TEST_TIMEOUT_MS
         );
 
         $this->assertCount(1, $topicPartitions);
-        $this->assertEquals(1, $topicPartitions[0]->getOffset());
+        $this->assertSame(1, $topicPartitions[0]->getOffset());
 
         $consumer->unsubscribe();
     }
 
-    public function testCommitAsyncWithOffset()
+    public function testCommitAsyncWithOffset(): void
     {
         $conf = new Conf();
         $conf->set('group.id', __METHOD__);
@@ -271,17 +271,17 @@ class KafkaConsumerTest extends TestCase
             [
                 new TopicPartition(KAFKA_TEST_TOPIC, 0),
             ],
-            (int)KAFKA_TEST_TIMEOUT_MS
+            (int) KAFKA_TEST_TIMEOUT_MS
         );
 
         $this->assertCount(1, $topicPartitions);
-        $this->assertEquals(2, $topicPartitions[0]->getOffset());
+        $this->assertSame(2, $topicPartitions[0]->getOffset());
     }
 
-    public function testGetCommittedOffsets()
+    public function testGetCommittedOffsets(): void
     {
         $conf = new Conf();
-        $conf->set('group.id', __METHOD__ . rand(0, 999999999));
+        $conf->set('group.id', __METHOD__ . random_int(0, 999999999));
         $conf->set('metadata.broker.list', KAFKA_BROKERS);
         $conf->set('auto.offset.reset', 'earliest');
 
@@ -292,15 +292,15 @@ class KafkaConsumerTest extends TestCase
             [
                 new TopicPartition(KAFKA_TEST_TOPIC, 0),
             ],
-            (int)KAFKA_TEST_TIMEOUT_MS
+            (int) KAFKA_TEST_TIMEOUT_MS
         );
 
         $this->assertCount(1, $topicPartitions);
-        $this->assertEquals(-1001 /*RD_KAFKA_OFFSET_INVALID*/, $topicPartitions[0]->getOffset());
+        $this->assertSame(-1001 /*RD_KAFKA_OFFSET_INVALID*/, $topicPartitions[0]->getOffset());
 
         $consumed = 0;
         while ($consumed < 2) {
-            $message = $consumer->consume((int)KAFKA_TEST_TIMEOUT_MS);
+            $message = $consumer->consume((int) KAFKA_TEST_TIMEOUT_MS);
             if ($message->err === RD_KAFKA_RESP_ERR__TIMED_OUT) {
                 continue;
             }
@@ -312,40 +312,40 @@ class KafkaConsumerTest extends TestCase
             [
                 new TopicPartition(KAFKA_TEST_TOPIC, 0),
             ],
-            (int)KAFKA_TEST_TIMEOUT_MS
+            (int) KAFKA_TEST_TIMEOUT_MS
         );
 
         $this->assertCount(1, $topicPartitions);
-        $this->assertEquals(2, $topicPartitions[0]->getOffset());
+        $this->assertSame(2, $topicPartitions[0]->getOffset());
     }
 
-    public function testOffsetsForTimesWithFutureTimestamp()
+    public function testOffsetsForTimesWithFutureTimestamp(): void
     {
         $conf = new Conf();
-        $conf->set('group.id', __METHOD__ . rand(0, 999999999));
+        $conf->set('group.id', __METHOD__ . random_int(0, 999999999));
         $conf->set('metadata.broker.list', KAFKA_BROKERS);
 
-        $future = (int)(time() + 3600) * 1000;
+        $future = (int) (time() + 3600) * 1000;
 
         $consumer = new KafkaConsumer($conf);
         $topicPartitions = $consumer->offsetsForTimes(
             [
                 new TopicPartition(KAFKA_TEST_TOPIC, 0, $future),
             ],
-            (int)KAFKA_TEST_TIMEOUT_MS
+            (int) KAFKA_TEST_TIMEOUT_MS
         );
 
         $this->assertCount(1, $topicPartitions);
-        $this->assertEquals(-1 /* no offsets in the future */, $topicPartitions[0]->getOffset());
+        $this->assertSame(-1 /* no offsets in the future */, $topicPartitions[0]->getOffset());
     }
 
-    public function testOffsetsForTimesWithNearNowTimestamp()
+    public function testOffsetsForTimesWithNearNowTimestamp(): void
     {
         $conf = new Conf();
-        $conf->set('group.id', __METHOD__ . rand(0, 999999999));
+        $conf->set('group.id', __METHOD__ . random_int(0, 999999999));
         $conf->set('metadata.broker.list', KAFKA_BROKERS);
 
-        $nearNow = (int)(time()) * 1000;
+        $nearNow = (int) (time()) * 1000;
 
         // produce two messages
         $producer = new Producer();
@@ -353,24 +353,24 @@ class KafkaConsumerTest extends TestCase
         $producerTopic = $producer->newTopic(KAFKA_TEST_TOPIC);
         $producerTopic->produce(RD_KAFKA_PARTITION_UA, 0, 'offsetsForTimes1');
         $producerTopic->produce(RD_KAFKA_PARTITION_UA, 0, 'offsetsForTimes2');
-        $producer->flush((int)KAFKA_TEST_TIMEOUT_MS);
+        $producer->flush((int) KAFKA_TEST_TIMEOUT_MS);
 
         $consumer = new KafkaConsumer($conf);
         $topicPartitions = $consumer->offsetsForTimes(
             [
                 new TopicPartition(KAFKA_TEST_TOPIC, 0, $nearNow),
             ],
-            (int)KAFKA_TEST_TIMEOUT_MS
+            (int) KAFKA_TEST_TIMEOUT_MS
         );
 
         $this->assertCount(1, $topicPartitions);
         $this->assertGreaterThan(1, $topicPartitions[0]->getOffset());
     }
 
-    public function testOffsetsForTimesWithAncientTimestamp()
+    public function testOffsetsForTimesWithAncientTimestamp(): void
     {
         $conf = new Conf();
-        $conf->set('group.id', __METHOD__ . rand(0, 999999999));
+        $conf->set('group.id', __METHOD__ . random_int(0, 999999999));
         $conf->set('metadata.broker.list', KAFKA_BROKERS);
 
         $past = 0;
@@ -380,14 +380,14 @@ class KafkaConsumerTest extends TestCase
             [
                 new TopicPartition(KAFKA_TEST_TOPIC, 0, $past),
             ],
-            (int)KAFKA_TEST_TIMEOUT_MS
+            (int) KAFKA_TEST_TIMEOUT_MS
         );
 
         $this->assertCount(1, $topicPartitions);
-        $this->assertEquals(0, $topicPartitions[0]->getOffset());
+        $this->assertSame(0, $topicPartitions[0]->getOffset());
     }
 
-    public function testGetMetadata()
+    public function testGetMetadata(): void
     {
         $conf = new Conf();
         $conf->set('group.id', __METHOD__);
@@ -395,12 +395,12 @@ class KafkaConsumerTest extends TestCase
 
         $consumer = new KafkaConsumer($conf);
 
-        $metadata = $consumer->getMetadata(true, null, (int)KAFKA_TEST_TIMEOUT_MS);
+        $metadata = $consumer->getMetadata(true, null, (int) KAFKA_TEST_TIMEOUT_MS);
 
         $this->assertInstanceOf(Metadata::class, $metadata);
     }
 
-    public function testNewTopic()
+    public function testNewTopic(): void
     {
         $conf = new Conf();
         $conf->set('group.id', __METHOD__);

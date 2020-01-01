@@ -26,22 +26,16 @@ class Conf extends Api
         self::$ffi->rd_kafka_conf_destroy($this->conf);
     }
 
-    /**
-     * @return CData
-     */
     public function getCData(): CData
     {
         return $this->conf;
     }
 
-    /**
-     * @return array
-     */
     public function dump(): array
     {
         $count = FFI::new('size_t');
         $dump = self::$ffi->rd_kafka_conf_dump($this->conf, FFI::addr($count));
-        $count = (int)$count->cdata;
+        $count = (int) $count->cdata;
 
         $result = [];
         for ($i = 0; $i < $count; $i += 2) {
@@ -60,15 +54,11 @@ class Conf extends Api
      * For callbacks use corresponding methods directly. For default_topic_conf use custom Topic in newTopic calls
      * or set default topic conf properties directly via Conf.
      *
-     * @param string $name
-     * @param string $value
-     *
-     * @return void
      * @throws Exception
      */
-    public function set(string $name, string $value)
+    public function set(string $name, string $value): void
     {
-        $errstr = FFI::new("char[512]");
+        $errstr = FFI::new('char[512]');
         $result = self::$ffi->rd_kafka_conf_set($this->conf, $name, $value, $errstr, FFI::sizeOf($errstr));
 
         switch ($result) {
@@ -83,14 +73,12 @@ class Conf extends Api
     }
 
     /**
-     * @param string $name
-     *
      * @return string|null
      * @throws Exception
      */
     public function get(string $name): string
     {
-        $value = FFI::new("char[512]");
+        $value = FFI::new('char[512]');
         $valueSize = FFI::new('size_t');
 
         $result = self::$ffi->rd_kafka_conf_get($this->conf, $name, $value, FFI::addr($valueSize));
@@ -102,26 +90,18 @@ class Conf extends Api
     }
 
     /**
-     * @param TopicConf $topic_conf
-     *
-     * @return void
      * @deprecated Use a custom TopicConf directly in newTopics calls. You also can set topic config properties directly via Conf as default TopicConf properties.
      */
-    public function setDefaultTopicConf(TopicConf $topic_conf)
+    public function setDefaultTopicConf(TopicConf $topic_conf): void
     {
         $topic_conf_dup = self::$ffi->rd_kafka_topic_conf_dup($topic_conf->getCData());
 
         self::$ffi->rd_kafka_conf_set_default_topic_conf($this->conf, $topic_conf_dup);
     }
 
-    /**
-     * @param callable $callback
-     *
-     * @return void
-     */
-    public function setDrMsgCb(callable $callback)
+    public function setDrMsgCb(callable $callback): void
     {
-        $proxyCallback = function ($producer, $nativeMessage, $opaque = null) use ($callback) {
+        $proxyCallback = function ($producer, $nativeMessage, $opaque = null) use ($callback): void {
             $callback(
                 RdKafka::resolveFromCData($producer),
                 new Message($nativeMessage),
@@ -133,19 +113,16 @@ class Conf extends Api
     }
 
     /**
-     * @param callable $callback
-     *
-     * @return void
      * @throws Exception
      */
-    public function setLogCb(callable $callback)
+    public function setLogCb(callable $callback): void
     {
         $this->set('log.queue', 'true');
 
-        $proxyCallback = function ($consumerOrProducer, $level, $fac, $buf) use ($callback) {
+        $proxyCallback = function ($consumerOrProducer, $level, $fac, $buf) use ($callback): void {
             $callback(
                 RdKafka::resolveFromCData($consumerOrProducer),
-                (int)$level,
+                (int) $level,
                 FFI::string($fac),
                 FFI::string($buf)
             );
@@ -154,17 +131,12 @@ class Conf extends Api
         self::$ffi->rd_kafka_conf_set_log_cb($this->conf, $proxyCallback);
     }
 
-    /**
-     * @param callable $callback
-     *
-     * @return void
-     */
-    public function setErrorCb(callable $callback)
+    public function setErrorCb(callable $callback): void
     {
-        $proxyCallback = function ($consumerOrProducer, $err, $reason, $opaque = null) use ($callback) {
+        $proxyCallback = function ($consumerOrProducer, $err, $reason, $opaque = null) use ($callback): void {
             $callback(
                 RdKafka::resolveFromCData($consumerOrProducer),
-                (int)$err,
+                (int) $err,
                 FFI::string($reason),
                 $opaque
             );
@@ -173,17 +145,12 @@ class Conf extends Api
         self::$ffi->rd_kafka_conf_set_error_cb($this->conf, $proxyCallback);
     }
 
-    /**
-     * @param callable $callback
-     *
-     * @return void
-     */
-    public function setRebalanceCb(callable $callback)
+    public function setRebalanceCb(callable $callback): void
     {
-        $proxyCallback = function ($consumer, $err, $nativeTopicPartitionList, $opaque = null) use ($callback) {
+        $proxyCallback = function ($consumer, $err, $nativeTopicPartitionList, $opaque = null) use ($callback): void {
             $callback(
                 RdKafka::resolveFromCData($consumer),
-                (int)$err,
+                (int) $err,
                 TopicPartitionList::fromCData($nativeTopicPartitionList)->asArray(),
                 $opaque
             );
@@ -192,18 +159,13 @@ class Conf extends Api
         self::$ffi->rd_kafka_conf_set_rebalance_cb($this->conf, $proxyCallback);
     }
 
-    /**
-     * @param callable $callback
-     *
-     * @return void
-     */
-    public function setStatsCb(callable $callback)
+    public function setStatsCb(callable $callback): void
     {
-        $proxyCallback = function ($consumerOrProducer, $json, $json_len, $opaque = null) use ($callback) {
+        $proxyCallback = function ($consumerOrProducer, $json, $json_len, $opaque = null) use ($callback): void {
             $callback(
                 RdKafka::resolveFromCData($consumerOrProducer),
                 FFI::string($json, $json_len),
-                (int)$json_len,
+                (int) $json_len,
                 $opaque
             );
         };
@@ -213,15 +175,13 @@ class Conf extends Api
 
     /**
      * @param callable $callback function(KafkaConsumer $consumer, int $err, TopicPartition[], mixed $opaque = null)
-     *
-     * @return void
      */
-    public function setOffsetCommitCb(callable $callback)
+    public function setOffsetCommitCb(callable $callback): void
     {
-        $proxyCallback = function ($consumer, $err, $nativeTopicPartitionList, $opaque = null) use ($callback) {
+        $proxyCallback = function ($consumer, $err, $nativeTopicPartitionList, $opaque = null) use ($callback): void {
             $callback(
                 RdKafka::resolveFromCData($consumer),
-                (int)$err,
+                (int) $err,
                 TopicPartitionList::fromCData($nativeTopicPartitionList)->asArray(),
                 $opaque
             );

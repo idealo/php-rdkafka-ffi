@@ -35,8 +35,6 @@ function rd_kafka_errno(): int
 }
 
 /**
- * @param int $cnt
- *
  * @return int Returns the special offset as an integer.
  */
 function rd_kafka_offset_tail(int $cnt): int

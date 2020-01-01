@@ -9,26 +9,21 @@ use InvalidArgumentException;
 class ProducerTopic extends Topic
 {
     /**
-     * @param Producer $producer
-     * @param string $name
      * @param TopicConf $conf
      * @throws Exception
      */
-    public function __construct(Producer $producer, string $name, TopicConf $conf = null)
+    public function __construct(Producer $producer, string $name, ?TopicConf $conf = null)
     {
         parent::__construct($producer, $name, $conf);
     }
 
     /**
-     * @param int $partition
-     * @param int $msgflags
      * @param string $payload
      * @param string $key
      *
-     * @return void
      * @throws Exception
      */
-    public function produce(int $partition, int $msgflags, string $payload = null, string $key = null)
+    public function produce(int $partition, int $msgflags, ?string $payload = null, ?string $key = null): void
     {
         $this->assertPartition($partition);
         $this->assertMsgflags($msgflags);
@@ -38,36 +33,29 @@ class ProducerTopic extends Topic
             $partition,
             $msgflags | RD_KAFKA_MSG_F_COPY,
             $payload,
-            \is_null($payload) ? null : \strlen($payload),
+            $payload === null ? null : \strlen($payload),
             $key,
-            \is_null($key) ? null : \strlen($key),
+            $key === null ? null : \strlen($key),
             null
         );
 
-        if ($ret == -1) {
+        if ($ret === -1) {
             $err = self::$ffi->rd_kafka_last_error();
             throw new Exception(self::err2str($err));
         }
     }
 
     /**
-     * @param int $partition
-     * @param int $msgflags
-     * @param string|null $payload
-     * @param string|null $key
-     * @param array $headers
-     *
-     * @return void
      * @throws Exception
      */
     public function producev(
         int $partition,
         int $msgflags,
-        string $payload = null,
-        string $key = null,
+        ?string $payload = null,
+        ?string $key = null,
         array $headers = [],
-        int $timestamp_ms = null
-    ) {
+        ?int $timestamp_ms = null
+    ): void {
         $this->assertPartition($partition);
         $this->assertMsgflags($msgflags);
 
@@ -80,12 +68,12 @@ class ProducerTopic extends Topic
             $msgflags | RD_KAFKA_MSG_F_COPY,
             RD_KAFKA_VTYPE_VALUE,
             $payload,
-            \is_null($payload) ? null : \strlen($payload),
+            $payload === null ? null : \strlen($payload),
             RD_KAFKA_VTYPE_KEY,
             $key,
-            \is_null($key) ? null : \strlen($key),
+            $key === null ? null : \strlen($key),
             RD_KAFKA_VTYPE_TIMESTAMP,
-            \is_null($timestamp_ms) ? 0 : $timestamp_ms,
+            $timestamp_ms === null ? 0 : $timestamp_ms,
         ];
 
         if (empty($headers) === false) {
@@ -104,7 +92,7 @@ class ProducerTopic extends Topic
             ...$args
         );
 
-        if ($ret == -1) {
+        if ($ret === -1) {
             $err = self::$ffi->rd_kafka_last_error();
             throw new Exception(self::err2str($err));
         }
@@ -112,14 +100,14 @@ class ProducerTopic extends Topic
 
     private function assertPartition(int $partition): void
     {
-        if ($partition != RD_KAFKA_PARTITION_UA && ($partition < 0 || $partition > 0x7FFFFFFF)) {
+        if ($partition !== RD_KAFKA_PARTITION_UA && ($partition < 0 || $partition > 0x7FFFFFFF)) {
             throw new InvalidArgumentException(sprintf("Out of range value '%d' for partition", $partition));
         }
     }
 
     private function assertMsgflags(int $msgflags): void
     {
-        if ($msgflags != 0 && $msgflags != RD_KAFKA_MSG_F_BLOCK) {
+        if ($msgflags !== 0 && $msgflags !== RD_KAFKA_MSG_F_BLOCK) {
             throw new InvalidArgumentException(sprintf("Invalid value '%d' for msgflags", $msgflags));
         }
     }

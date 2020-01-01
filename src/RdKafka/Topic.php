@@ -15,7 +15,7 @@ abstract class Topic extends Api
 
     protected RdKafka $kafka;
 
-    public function __construct(RdKafka $kafka, string $name, TopicConf $conf = null)
+    public function __construct(RdKafka $kafka, string $name, ?TopicConf $conf = null)
     {
         parent::__construct();
 
@@ -39,7 +39,7 @@ abstract class Topic extends Api
         self::$ffi->rd_kafka_topic_destroy($this->topic);
     }
 
-    private function duplicateConfCData(TopicConf $conf = null): ?CData
+    private function duplicateConfCData(?TopicConf $conf = null): ?CData
     {
         if ($conf === null) {
             return null;
@@ -53,9 +53,6 @@ abstract class Topic extends Api
         return $this->topic;
     }
 
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return $this->name;
