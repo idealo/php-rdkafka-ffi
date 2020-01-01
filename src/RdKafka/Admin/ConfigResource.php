@@ -14,9 +14,7 @@ class ConfigResource extends Api
 
     public function __construct(int $type, string $name)
     {
-        parent::__construct();
-
-        $this->resource = self::$ffi->rd_kafka_ConfigResource_new(
+        $this->resource = self::getFFI()->rd_kafka_ConfigResource_new(
             $type,
             $name
         );
@@ -24,7 +22,7 @@ class ConfigResource extends Api
 
     public function __destruct()
     {
-        self::$ffi->rd_kafka_ConfigResource_destroy($this->resource);
+        self::getFFI()->rd_kafka_ConfigResource_destroy($this->resource);
     }
 
     public function getCData(): CData
@@ -37,7 +35,7 @@ class ConfigResource extends Api
      */
     public function setConfig(string $name, string $value): void
     {
-        $err = (int) self::$ffi->rd_kafka_ConfigResource_set_config(
+        $err = (int) self::getFFI()->rd_kafka_ConfigResource_set_config(
             $this->resource,
             $name,
             $value

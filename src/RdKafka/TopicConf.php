@@ -17,13 +17,12 @@ class TopicConf extends Api
 
     public function __construct()
     {
-        parent::__construct();
-        $this->topicConf = self::$ffi->rd_kafka_topic_conf_new();
+        $this->topicConf = self::getFFI()->rd_kafka_topic_conf_new();
     }
 
     public function __destruct()
     {
-        self::$ffi->rd_kafka_topic_conf_destroy($this->topicConf);
+        self::getFFI()->rd_kafka_topic_conf_destroy($this->topicConf);
     }
 
     public function getCData(): CData
@@ -34,7 +33,7 @@ class TopicConf extends Api
     public function dump(): array
     {
         $count = FFI::new('size_t');
-        $dump = self::$ffi->rd_kafka_topic_conf_dump($this->topicConf, FFI::addr($count));
+        $dump = self::getFFI()->rd_kafka_topic_conf_dump($this->topicConf, FFI::addr($count));
         $count = (int) $count->cdata;
 
         $result = [];
@@ -44,7 +43,7 @@ class TopicConf extends Api
             $result[$key] = $val;
         }
 
-        self::$ffi->rd_kafka_conf_dump_free($dump, $count);
+        self::getFFI()->rd_kafka_conf_dump_free($dump, $count);
 
         return $result;
     }
@@ -56,7 +55,7 @@ class TopicConf extends Api
     {
         $errstr = FFI::new('char[512]');
 
-        $result = self::$ffi->rd_kafka_topic_conf_set($this->topicConf, $name, $value, $errstr, FFI::sizeOf($errstr));
+        $result = self::getFFI()->rd_kafka_topic_conf_set($this->topicConf, $name, $value, $errstr, FFI::sizeOf($errstr));
 
         switch ($result) {
             case RD_KAFKA_CONF_UNKNOWN:
@@ -93,14 +92,14 @@ class TopicConf extends Api
                 break;
         }
 
-        $ffi = self::$ffi;
+        $ffi = self::getFFI();
         $proxyCallback = function ($topic, $keydata, $keylen, $partition_cnt, $topic_opaque, $msg_opaque) use (
             $ffi,
             $partitionerMethod
         ) {
             return (int) $ffi->{$partitionerMethod}($topic, $keydata, $keylen, $partition_cnt, $topic_opaque, $msg_opaque);
         };
-        self::$ffi->rd_kafka_topic_conf_set_partitioner_cb(
+        self::getFFI()->rd_kafka_topic_conf_set_partitioner_cb(
             $this->topicConf,
             $proxyCallback
         );
@@ -116,7 +115,7 @@ class TopicConf extends Api
             );
         };
 
-        self::$ffi->rd_kafka_topic_conf_set_partitioner_cb(
+        self::getFFI()->rd_kafka_topic_conf_set_partitioner_cb(
             $this->topicConf,
             $proxyCallback
         );

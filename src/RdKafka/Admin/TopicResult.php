@@ -16,11 +16,9 @@ class TopicResult extends Api
 
     public function __construct(CData $result)
     {
-        parent::__construct();
-
-        $this->error = (int) self::$ffi->rd_kafka_topic_result_error($result);
-        $errorStringCdata = self::$ffi->rd_kafka_topic_result_error_string($result);
+        $this->error = (int) self::getFFI()->rd_kafka_topic_result_error($result);
+        $errorStringCdata = self::getFFI()->rd_kafka_topic_result_error_string($result);
         $this->errorString = $errorStringCdata === null ? null : FFI::string($errorStringCdata);
-        $this->name = FFI::string(self::$ffi->rd_kafka_topic_result_name($result));
+        $this->name = FFI::string(self::getFFI()->rd_kafka_topic_result_name($result));
     }
 }

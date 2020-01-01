@@ -14,12 +14,10 @@ class DeleteTopic extends Api
 
     public function __construct(string $name)
     {
-        parent::__construct();
-
-        $this->topic = self::$ffi->rd_kafka_DeleteTopic_new($name);
+        $this->topic = self::getFFI()->rd_kafka_DeleteTopic_new($name);
 
         if ($this->topic === null) {
-            $err = self::$ffi->rd_kafka_last_error();
+            $err = self::getFFI()->rd_kafka_last_error();
             throw new Exception(self::err2str($err));
         }
     }
@@ -30,7 +28,7 @@ class DeleteTopic extends Api
             return;
         }
 
-        self::$ffi->rd_kafka_DeleteTopic_destroy($this->topic);
+        self::getFFI()->rd_kafka_DeleteTopic_destroy($this->topic);
     }
 
     public function getCData(): CData

@@ -37,11 +37,9 @@ abstract class RdKafka extends Api
 
     public function __construct(int $type, ?Conf $conf = null)
     {
-        parent::__construct();
-
         $errstr = FFI::new('char[512]');
 
-        $this->kafka = self::$ffi->rd_kafka_new(
+        $this->kafka = self::getFFI()->rd_kafka_new(
             $type,
             $this->duplicateConfCData($conf),
             $errstr,
@@ -63,7 +61,7 @@ abstract class RdKafka extends Api
             return null;
         }
 
-        return self::$ffi->rd_kafka_conf_dup($conf->getCData());
+        return self::getFFI()->rd_kafka_conf_dup($conf->getCData());
     }
 
     private function initLogQueue(?Conf $conf): void
@@ -72,7 +70,7 @@ abstract class RdKafka extends Api
             return;
         }
 
-        $err = self::$ffi->rd_kafka_set_log_queue($this->kafka, null);
+        $err = self::getFFI()->rd_kafka_set_log_queue($this->kafka, null);
 
         if ($err !== RD_KAFKA_RESP_ERR_NO_ERROR) {
             throw new Exception(self::err2str($err));
@@ -85,7 +83,7 @@ abstract class RdKafka extends Api
             return;
         }
 
-        self::$ffi->rd_kafka_destroy($this->kafka);
+        self::getFFI()->rd_kafka_destroy($this->kafka);
 
         // clean up reference
         foreach (self::$instances as $i => $reference) {
@@ -115,12 +113,12 @@ abstract class RdKafka extends Api
      */
     protected function poll(int $timeout_ms): int
     {
-        return self::$ffi->rd_kafka_poll($this->kafka, $timeout_ms);
+        return self::getFFI()->rd_kafka_poll($this->kafka, $timeout_ms);
     }
 
     protected function getOutQLen(): int
     {
-        return self::$ffi->rd_kafka_outq_len($this->kafka);
+        return self::getFFI()->rd_kafka_outq_len($this->kafka);
     }
 
     /**
@@ -128,7 +126,7 @@ abstract class RdKafka extends Api
      */
     public function setLogLevel(int $level): void
     {
-        self::$ffi->rd_kafka_set_log_level($this->kafka, $level);
+        self::getFFI()->rd_kafka_set_log_level($this->kafka, $level);
     }
 
     /**
@@ -145,7 +143,7 @@ abstract class RdKafka extends Api
         $lowResult = FFI::new('int64_t');
         $highResult = FFI::new('int64_t');
 
-        $err = self::$ffi->rd_kafka_query_watermark_offsets(
+        $err = self::getFFI()->rd_kafka_query_watermark_offsets(
             $this->kafka,
             $topic,
             $partition,

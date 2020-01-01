@@ -22,7 +22,7 @@ class KafkaConsumerTopic extends Topic
             throw new InvalidArgumentException(sprintf("Out of range value '%d' for partition", $partition));
         }
 
-        $err = self::$ffi->rd_kafka_offset_store(
+        $err = self::getFFI()->rd_kafka_offset_store(
             $this->topic,
             $partition,
             $offset

@@ -27,17 +27,15 @@ class TopicPartitionList extends Api implements Iterator, Countable
      */
     public function __construct(TopicPartition ...$items)
     {
-        parent::__construct();
-
         $this->items = $items;
     }
 
     public function getCData(): CData
     {
-        $nativeTopicPartitionList = self::$ffi->rd_kafka_topic_partition_list_new($this->count());
+        $nativeTopicPartitionList = self::getFFI()->rd_kafka_topic_partition_list_new($this->count());
 
         foreach ($this->items as $item) {
-            $nativeTopicPartition = self::$ffi->rd_kafka_topic_partition_list_add(
+            $nativeTopicPartition = self::getFFI()->rd_kafka_topic_partition_list_add(
                 $nativeTopicPartitionList,
                 $item->getTopic(),
                 $item->getPartition()

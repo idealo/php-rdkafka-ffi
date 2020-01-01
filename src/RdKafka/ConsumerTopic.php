@@ -39,14 +39,14 @@ class ConsumerTopic extends Topic
     {
         $this->assertPartition($partition);
 
-        $nativeMessage = self::$ffi->rd_kafka_consume(
+        $nativeMessage = self::getFFI()->rd_kafka_consume(
             $this->topic,
             $partition,
             $timeout_ms
         );
 
         if ($nativeMessage === null) {
-            $err = self::$ffi->rd_kafka_last_error();
+            $err = self::getFFI()->rd_kafka_last_error();
 
             if ($err === RD_KAFKA_RESP_ERR__TIMED_OUT) {
                 return null;
@@ -57,7 +57,7 @@ class ConsumerTopic extends Topic
 
         $message = new Message($nativeMessage);
 
-        self::$ffi->rd_kafka_message_destroy($nativeMessage);
+        self::getFFI()->rd_kafka_message_destroy($nativeMessage);
 
         return $message;
     }
@@ -74,9 +74,9 @@ class ConsumerTopic extends Topic
 
         $this->assertPartition($partition);
 
-        $nativeMessages = self::$ffi->new('rd_kafka_message_t*[' . $batch_size . ']');
+        $nativeMessages = self::getFFI()->new('rd_kafka_message_t*[' . $batch_size . ']');
 
-        $result = (int) self::$ffi->rd_kafka_consume_batch(
+        $result = (int) self::getFFI()->rd_kafka_consume_batch(
             $this->topic,
             $partition,
             $timeout_ms,
@@ -85,7 +85,7 @@ class ConsumerTopic extends Topic
         );
 
         if ($result === -1) {
-            $err = self::$ffi->rd_kafka_last_error();
+            $err = self::getFFI()->rd_kafka_last_error();
             throw new Exception(self::err2str($err));
         }
 
@@ -100,7 +100,7 @@ class ConsumerTopic extends Topic
                 $messages[] = new Message($nativeMessages[$i]);
             }
             for ($i = 0; $i < $size; $i++) {
-                self::$ffi->rd_kafka_message_destroy($nativeMessages[$i]);
+                self::getFFI()->rd_kafka_message_destroy($nativeMessages[$i]);
             }
         }
         return $messages;
@@ -123,7 +123,7 @@ class ConsumerTopic extends Topic
             );
         }
 
-        $ret = self::$ffi->rd_kafka_consume_start_queue(
+        $ret = self::getFFI()->rd_kafka_consume_start_queue(
             $this->topic,
             $partition,
             $offset,
@@ -131,7 +131,7 @@ class ConsumerTopic extends Topic
         );
 
         if ($ret === -1) {
-            $err = self::$ffi->rd_kafka_last_error();
+            $err = self::getFFI()->rd_kafka_last_error();
             throw new Exception(self::err2str($err));
         }
 
@@ -155,14 +155,14 @@ class ConsumerTopic extends Topic
             );
         }
 
-        $ret = self::$ffi->rd_kafka_consume_start(
+        $ret = self::getFFI()->rd_kafka_consume_start(
             $this->topic,
             $partition,
             $offset
         );
 
         if ($ret === -1) {
-            $err = self::$ffi->rd_kafka_last_error();
+            $err = self::getFFI()->rd_kafka_last_error();
             throw new Exception(self::err2str($err));
         }
 
@@ -176,13 +176,13 @@ class ConsumerTopic extends Topic
     {
         $this->assertPartition($partition);
 
-        $ret = self::$ffi->rd_kafka_consume_stop(
+        $ret = self::getFFI()->rd_kafka_consume_stop(
             $this->topic,
             $partition
         );
 
         if ($ret === -1) {
-            $err = self::$ffi->rd_kafka_last_error();
+            $err = self::getFFI()->rd_kafka_last_error();
             throw new Exception(self::err2str($err));
         }
 
@@ -196,7 +196,7 @@ class ConsumerTopic extends Topic
     {
         $this->assertPartition($partition);
 
-        $err = self::$ffi->rd_kafka_offset_store(
+        $err = self::getFFI()->rd_kafka_offset_store(
             $this->topic,
             $partition,
             $offset
@@ -218,7 +218,7 @@ class ConsumerTopic extends Topic
             );
         };
 
-        $result = (int) self::$ffi->rd_kafka_consume_callback(
+        $result = (int) self::getFFI()->rd_kafka_consume_callback(
             $this->topic,
             $partition,
             $timeout_ms,
@@ -227,7 +227,7 @@ class ConsumerTopic extends Topic
         );
 
         if ($result === -1) {
-            $err = (int) self::$ffi->rd_kafka_last_error();
+            $err = (int) self::getFFI()->rd_kafka_last_error();
 
             throw new Exception(self::err2str($err));
         }

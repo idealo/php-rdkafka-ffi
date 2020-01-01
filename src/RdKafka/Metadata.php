@@ -15,11 +15,9 @@ class Metadata extends Api
 
     public function __construct(RdKafka $kafka, bool $all_topics, ?Topic $only_topic, int $timeout_ms)
     {
-        parent::__construct();
+        $this->metadata = self::getFFI()->new('struct rd_kafka_metadata*');
 
-        $this->metadata = self::$ffi->new('struct rd_kafka_metadata*');
-
-        $err = (int) self::$ffi->rd_kafka_metadata(
+        $err = (int) self::getFFI()->rd_kafka_metadata(
             $kafka->getCData(),
             (int) $all_topics,
             $only_topic ? $only_topic->getCData() : null,
@@ -34,7 +32,7 @@ class Metadata extends Api
 
     public function __destruct()
     {
-        self::$ffi->rd_kafka_metadata_destroy($this->metadata);
+        self::getFFI()->rd_kafka_metadata_destroy($this->metadata);
     }
 
     /**

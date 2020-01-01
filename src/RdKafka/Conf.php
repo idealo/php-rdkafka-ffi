@@ -17,13 +17,12 @@ class Conf extends Api
 
     public function __construct()
     {
-        parent::__construct();
-        $this->conf = self::$ffi->rd_kafka_conf_new();
+        $this->conf = self::getFFI()->rd_kafka_conf_new();
     }
 
     public function __destruct()
     {
-        self::$ffi->rd_kafka_conf_destroy($this->conf);
+        self::getFFI()->rd_kafka_conf_destroy($this->conf);
     }
 
     public function getCData(): CData
@@ -34,7 +33,7 @@ class Conf extends Api
     public function dump(): array
     {
         $count = FFI::new('size_t');
-        $dump = self::$ffi->rd_kafka_conf_dump($this->conf, FFI::addr($count));
+        $dump = self::getFFI()->rd_kafka_conf_dump($this->conf, FFI::addr($count));
         $count = (int) $count->cdata;
 
         $result = [];
@@ -44,7 +43,7 @@ class Conf extends Api
             $result[$key] = $val;
         }
 
-        self::$ffi->rd_kafka_conf_dump_free($dump, $count);
+        self::getFFI()->rd_kafka_conf_dump_free($dump, $count);
 
         return $result;
     }
@@ -59,7 +58,7 @@ class Conf extends Api
     public function set(string $name, string $value): void
     {
         $errstr = FFI::new('char[512]');
-        $result = self::$ffi->rd_kafka_conf_set($this->conf, $name, $value, $errstr, FFI::sizeOf($errstr));
+        $result = self::getFFI()->rd_kafka_conf_set($this->conf, $name, $value, $errstr, FFI::sizeOf($errstr));
 
         switch ($result) {
             case RD_KAFKA_CONF_UNKNOWN:
@@ -81,7 +80,7 @@ class Conf extends Api
         $value = FFI::new('char[512]');
         $valueSize = FFI::new('size_t');
 
-        $result = self::$ffi->rd_kafka_conf_get($this->conf, $name, $value, FFI::addr($valueSize));
+        $result = self::getFFI()->rd_kafka_conf_get($this->conf, $name, $value, FFI::addr($valueSize));
         if ($result === RD_KAFKA_CONF_UNKNOWN) {
             throw new Exception('Unknown property name.', $result);
         }
@@ -94,9 +93,9 @@ class Conf extends Api
      */
     public function setDefaultTopicConf(TopicConf $topic_conf): void
     {
-        $topic_conf_dup = self::$ffi->rd_kafka_topic_conf_dup($topic_conf->getCData());
+        $topic_conf_dup = self::getFFI()->rd_kafka_topic_conf_dup($topic_conf->getCData());
 
-        self::$ffi->rd_kafka_conf_set_default_topic_conf($this->conf, $topic_conf_dup);
+        self::getFFI()->rd_kafka_conf_set_default_topic_conf($this->conf, $topic_conf_dup);
     }
 
     public function setDrMsgCb(callable $callback): void
@@ -109,7 +108,7 @@ class Conf extends Api
             );
         };
 
-        self::$ffi->rd_kafka_conf_set_dr_msg_cb($this->conf, $proxyCallback);
+        self::getFFI()->rd_kafka_conf_set_dr_msg_cb($this->conf, $proxyCallback);
     }
 
     /**
@@ -128,7 +127,7 @@ class Conf extends Api
             );
         };
 
-        self::$ffi->rd_kafka_conf_set_log_cb($this->conf, $proxyCallback);
+        self::getFFI()->rd_kafka_conf_set_log_cb($this->conf, $proxyCallback);
     }
 
     public function setErrorCb(callable $callback): void
@@ -142,7 +141,7 @@ class Conf extends Api
             );
         };
 
-        self::$ffi->rd_kafka_conf_set_error_cb($this->conf, $proxyCallback);
+        self::getFFI()->rd_kafka_conf_set_error_cb($this->conf, $proxyCallback);
     }
 
     public function setRebalanceCb(callable $callback): void
@@ -156,7 +155,7 @@ class Conf extends Api
             );
         };
 
-        self::$ffi->rd_kafka_conf_set_rebalance_cb($this->conf, $proxyCallback);
+        self::getFFI()->rd_kafka_conf_set_rebalance_cb($this->conf, $proxyCallback);
     }
 
     public function setStatsCb(callable $callback): void
@@ -170,7 +169,7 @@ class Conf extends Api
             );
         };
 
-        self::$ffi->rd_kafka_conf_set_stats_cb($this->conf, $proxyCallback);
+        self::getFFI()->rd_kafka_conf_set_stats_cb($this->conf, $proxyCallback);
     }
 
     /**
@@ -187,6 +186,6 @@ class Conf extends Api
             );
         };
 
-        self::$ffi->rd_kafka_conf_set_offset_commit_cb($this->conf, $proxyCallback);
+        self::getFFI()->rd_kafka_conf_set_offset_commit_cb($this->conf, $proxyCallback);
     }
 }

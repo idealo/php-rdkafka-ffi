@@ -28,7 +28,7 @@ class ProducerTopic extends Topic
         $this->assertPartition($partition);
         $this->assertMsgflags($msgflags);
 
-        $ret = self::$ffi->rd_kafka_produce(
+        $ret = self::getFFI()->rd_kafka_produce(
             $this->topic,
             $partition,
             $msgflags | RD_KAFKA_MSG_F_COPY,
@@ -40,7 +40,7 @@ class ProducerTopic extends Topic
         );
 
         if ($ret === -1) {
-            $err = self::$ffi->rd_kafka_last_error();
+            $err = self::getFFI()->rd_kafka_last_error();
             throw new Exception(self::err2str($err));
         }
     }
@@ -87,13 +87,13 @@ class ProducerTopic extends Topic
 
         $args[] = RD_KAFKA_VTYPE_END;
 
-        $ret = self::$ffi->rd_kafka_producev(
+        $ret = self::getFFI()->rd_kafka_producev(
             $this->kafka->getCData(),
             ...$args
         );
 
         if ($ret === -1) {
-            $err = self::$ffi->rd_kafka_last_error();
+            $err = self::getFFI()->rd_kafka_last_error();
             throw new Exception(self::err2str($err));
         }
     }

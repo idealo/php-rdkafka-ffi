@@ -38,16 +38,14 @@ class Message extends Api
 
     public function __construct(CData $nativeMessage)
     {
-        parent::__construct();
-
-        $timestampType = self::$ffi->new('rd_kafka_timestamp_type_t');
-        $this->timestamp = (int) self::$ffi->rd_kafka_message_timestamp($nativeMessage, FFI::addr($timestampType));
+        $timestampType = self::getFFI()->new('rd_kafka_timestamp_type_t');
+        $this->timestamp = (int) self::getFFI()->rd_kafka_message_timestamp($nativeMessage, FFI::addr($timestampType));
         $this->timestampType = (int) $timestampType->cdata;
 
         $this->err = (int) $nativeMessage->err;
 
         if ($nativeMessage->rkt !== null) {
-            $this->topic_name = FFI::string(self::$ffi->rd_kafka_topic_name($nativeMessage->rkt));
+            $this->topic_name = FFI::string(self::getFFI()->rd_kafka_topic_name($nativeMessage->rkt));
         } else {
             $this->topic_name = null;
         }
@@ -72,9 +70,9 @@ class Message extends Api
 
         $this->headers = $this->parseHeaders($nativeMessage);
 
-        $this->latency = (int) self::$ffi->rd_kafka_message_latency($nativeMessage);
+        $this->latency = (int) self::getFFI()->rd_kafka_message_latency($nativeMessage);
 
-        $this->status = (int) self::$ffi->rd_kafka_message_status($nativeMessage);
+        $this->status = (int) self::getFFI()->rd_kafka_message_status($nativeMessage);
     }
 
     public function errstr(): string
@@ -90,9 +88,9 @@ class Message extends Api
             return null;
         }
 
-        $message_headers = self::$ffi->rd_kafka_headers_new(0);
+        $message_headers = self::getFFI()->rd_kafka_headers_new(0);
 
-        $resp = (int) self::$ffi->rd_kafka_message_headers($nativeMessage, FFI::addr($message_headers));
+        $resp = (int) self::getFFI()->rd_kafka_message_headers($nativeMessage, FFI::addr($message_headers));
         if ($resp === RD_KAFKA_RESP_ERR__NOENT) {
             return null;
         }
@@ -103,7 +101,7 @@ class Message extends Api
         }
 
         if ($message_headers !== null) {
-            $header_count = (int) self::$ffi->rd_kafka_header_cnt($message_headers);
+            $header_count = (int) self::getFFI()->rd_kafka_header_cnt($message_headers);
             $header_name = FFI::new('char*');
             $header_name_ptr = FFI::addr($header_name);
             $header_value = FFI::new('char*');
@@ -112,7 +110,7 @@ class Message extends Api
             $header_size_ptr = FFI::addr($header_size);
 
             for ($i = 0; $i < $header_count; $i++) {
-                $header_response = (int) self::$ffi->rd_kafka_header_get_all(
+                $header_response = (int) self::getFFI()->rd_kafka_header_get_all(
                     $message_headers,
                     $i,
                     $header_name_ptr,

@@ -7,12 +7,12 @@ namespace RdKafka;
 use FFI;
 use FFI\Exception;
 
-class Api
+abstract class Api
 {
     /**
      * @var FFI librdkafka binding - see https://docs.confluent.io/current/clients/librdkafka/rdkafka_8h.html
      */
-    protected static FFI $ffi;
+    private static FFI $ffi;
 
     public static string $libraryFile = 'librdkafka.so';
     public static string $cdef = <<<CDEF
@@ -549,11 +549,6 @@ void rd_kafka_DescribeConfigs(rd_kafka_t *rk, rd_kafka_ConfigResource_t **config
 rd_kafka_ConfigResource_t ** rd_kafka_DescribeConfigs_result_resources(rd_kafka_DescribeConfigs_result_t *result, size_t *cntp);
 CDEF;
 
-    protected function __construct()
-    {
-        self::ensureFFI();
-    }
-
     private static function ensureFFI(): void
     {
         if (isset(self::$ffi) === false) {
@@ -591,8 +586,7 @@ CDEF;
 
     public static function err2str(int $err): string
     {
-        self::ensureFFI();
-        return FFI::string(self::$ffi->rd_kafka_err2str($err));
+        return FFI::string(self::getFFI()->rd_kafka_err2str($err));
     }
 
     /**
@@ -600,8 +594,7 @@ CDEF;
      */
     public static function errno(): int
     {
-        self::ensureFFI();
-        return (int) self::$ffi->rd_kafka_errno();
+        return (int) self::getFFI()->rd_kafka_errno();
     }
 
     /**
@@ -609,19 +602,16 @@ CDEF;
      */
     public static function errno2err(int $err): int
     {
-        self::ensureFFI();
-        return (int) self::$ffi->rd_kafka_errno2err($err);
+        return (int) self::getFFI()->rd_kafka_errno2err($err);
     }
 
     public static function threadCount(): int
     {
-        self::ensureFFI();
-        return (int) self::$ffi->rd_kafka_thread_cnt();
+        return (int) self::getFFI()->rd_kafka_thread_cnt();
     }
 
     public static function version(): string
     {
-        self::ensureFFI();
-        return FFI::string(self::$ffi->rd_kafka_version_str());
+        return FFI::string(self::getFFI()->rd_kafka_version_str());
     }
 }

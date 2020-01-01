@@ -17,26 +17,24 @@ abstract class Topic extends Api
 
     public function __construct(RdKafka $kafka, string $name, ?TopicConf $conf = null)
     {
-        parent::__construct();
-
         $this->name = $name;
         $this->kafka = $kafka;
 
-        $this->topic = self::$ffi->rd_kafka_topic_new(
+        $this->topic = self::getFFI()->rd_kafka_topic_new(
             $kafka->getCData(),
             $name,
             $this->duplicateConfCData($conf)
         );
 
         if ($this->topic === null) {
-            $err = self::$ffi->rd_kafka_last_error();
+            $err = self::getFFI()->rd_kafka_last_error();
             throw new Exception(self::err2str($err));
         }
     }
 
     public function __destruct()
     {
-        self::$ffi->rd_kafka_topic_destroy($this->topic);
+        self::getFFI()->rd_kafka_topic_destroy($this->topic);
     }
 
     private function duplicateConfCData(?TopicConf $conf = null): ?CData
@@ -45,7 +43,7 @@ abstract class Topic extends Api
             return null;
         }
 
-        return self::$ffi->rd_kafka_topic_conf_dup($conf->getCData());
+        return self::getFFI()->rd_kafka_topic_conf_dup($conf->getCData());
     }
 
     public function getCData(): CData

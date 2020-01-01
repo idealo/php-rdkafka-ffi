@@ -16,10 +16,8 @@ class NewPartitions extends Api
 
     public function __construct(string $topicName, int $new_total_cnt)
     {
-        parent::__construct();
-
         $errstr = FFI::new('char[512]');
-        $this->partitions = self::$ffi->rd_kafka_NewPartitions_new(
+        $this->partitions = self::getFFI()->rd_kafka_NewPartitions_new(
             $topicName,
             $new_total_cnt,
             $errstr,
@@ -37,7 +35,7 @@ class NewPartitions extends Api
             return;
         }
 
-        self::$ffi->rd_kafka_NewPartitions_destroy($this->partitions);
+        self::getFFI()->rd_kafka_NewPartitions_destroy($this->partitions);
     }
 
     public function getCData(): CData
@@ -62,7 +60,7 @@ class NewPartitions extends Api
         }
 
         $errstr = FFI::new('char[512]');
-        $err = (int) self::$ffi->rd_kafka_NewPartitions_set_replica_assignment(
+        $err = (int) self::getFFI()->rd_kafka_NewPartitions_set_replica_assignment(
             $this->partitions,
             $new_partition_id,
             $brokerIds[0],

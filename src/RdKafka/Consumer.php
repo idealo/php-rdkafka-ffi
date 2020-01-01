@@ -18,7 +18,7 @@ class Consumer extends RdKafka
 
     public function addBrokers(string $broker_list): int
     {
-        return self::$ffi->rd_kafka_brokers_add($this->kafka, $broker_list);
+        return self::getFFI()->rd_kafka_brokers_add($this->kafka, $broker_list);
     }
 
     public function poll(int $timeout_ms): int
