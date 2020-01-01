@@ -6,7 +6,6 @@ namespace RdKafka\Examples\Protocol;
 
 /**
  * @see https://kafka.apache.org/protocol#protocol_types
- * @todo little/big endian handling & unsigned ints
  */
 class Parser
 {
@@ -22,7 +21,21 @@ class Parser
     protected function parseString(): string
     {
         $length = $this->parseInt16();
-        if ($length === 65535 /* -1 */ || $length === 0) {
+        if ($length <= 0) {
+            return '';
+        }
+        $value = substr($this->data, $this->offset, $length);
+        $this->offset += $length;
+        return $value;
+    }
+
+    protected function parseNullableString(): ?string
+    {
+        $length = $this->parseInt16();
+        if ($length < 0) {
+            return null;
+        }
+        if ($length === 0) {
             return '';
         }
         $value = substr($this->data, $this->offset, $length);
@@ -33,7 +46,21 @@ class Parser
     protected function parseBytes(): string
     {
         $length = $this->parseInt32();
-        if ($length === 4294967295 /* -1 */ || $length === 0) {
+        if ($length <= 0) {
+            return '';
+        }
+        $value = substr($this->data, $this->offset, $length);
+        $this->offset += $length;
+        return $value;
+    }
+
+    protected function parseNullableBytes(): ?string
+    {
+        $length = $this->parseInt32();
+        if ($length < 0) {
+            return null;
+        }
+        if ($length === 0) {
             return '';
         }
         $value = substr($this->data, $this->offset, $length);
@@ -44,11 +71,20 @@ class Parser
     protected function parseInt16(): int
     {
         $value = current(unpack('n1', $this->data, $this->offset));
+        $value = $value << 48 >> 48; // sign
         $this->offset += 2;
         return $value;
     }
 
     protected function parseInt32(): int
+    {
+        $value = current(unpack('N1', $this->data, $this->offset));
+        $value = $value << 32 >> 32; // sign
+        $this->offset += 4;
+        return $value;
+    }
+
+    protected function parseUInt32(): int
     {
         $value = current(unpack('N1', $this->data, $this->offset));
         $this->offset += 4;

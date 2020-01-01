@@ -46,7 +46,7 @@ class SubscriptionParser extends Parser
     {
         return [
             'topics' => $this->parseArray([$this, 'parseString']),
-            'user_data' => $this->parseBytes(),
+            'user_data' => $this->parseNullableBytes(),
         ];
     }
 
@@ -54,7 +54,7 @@ class SubscriptionParser extends Parser
     {
         return [
             'topics' => $this->parseArray([$this, 'parseString']),
-            'user_data' => $this->parseBytes(),
+            'user_data' => $this->parseNullableBytes(),
             'owned_partitions' => $this->parseArray([$this, 'parseTopicPartitionsV0']),
         ];
     }

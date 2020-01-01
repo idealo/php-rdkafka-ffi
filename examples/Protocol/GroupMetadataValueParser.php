@@ -55,8 +55,8 @@ class GroupMetadataValueParser extends Parser
         return [
             'protocol_type' => $this->parseString(),
             'generation' => $this->parseInt32(),
-            'protocol' => $this->parseString(), // nullable
-            'leader' => $this->parseString(), // nullable
+            'protocol' => $this->parseNullableString(),
+            'leader' => $this->parseNullableString(),
             'members' => $this->parseArray([$this, 'parseMembersV0']),
         ];
     }
@@ -78,8 +78,8 @@ class GroupMetadataValueParser extends Parser
         return [
             'protocol_type' => $this->parseString(),
             'generation' => $this->parseInt32(),
-            'protocol' => $this->parseString(), // nullable
-            'leader' => $this->parseString(), // nullable
+            'protocol' => $this->parseNullableString(),
+            'leader' => $this->parseNullableString(),
             'members' => $this->parseArray([$this, 'parseMembersV1']),
         ];
     }
@@ -102,8 +102,8 @@ class GroupMetadataValueParser extends Parser
         return [
             'protocol_type' => $this->parseString(),
             'generation' => $this->parseInt32(),
-            'protocol' => $this->parseString(), // nullable
-            'leader' => $this->parseString(), // nullable
+            'protocol' => $this->parseNullableString(),
+            'leader' => $this->parseNullableString(),
             'current_state_timestamp' => $this->parseInt64(),
             'members' => $this->parseArray([$this, 'parseMembersV2']),
         ];
@@ -119,8 +119,8 @@ class GroupMetadataValueParser extends Parser
         return [
             'protocol_type' => $this->parseString(),
             'generation' => $this->parseInt32(),
-            'protocol' => $this->parseString(), // nullable
-            'leader' => $this->parseString(), // nullable
+            'protocol' => $this->parseNullableString(),
+            'leader' => $this->parseNullableString(),
             'current_state_timestamp' => $this->parseInt64(),
             'members' => $this->parseArray([$this, 'parseMembersV3']),
         ];
@@ -130,7 +130,7 @@ class GroupMetadataValueParser extends Parser
     {
         return [
             'member_id' => $this->parseString(),
-            'group_instance_id' => $this->parseString(),
+            'group_instance_id' => $this->parseNullableString(),
             'client_id' => $this->parseString(),
             'client_host' => $this->parseString(),
             'rebalance_timeout' => $this->parseInt32(),
