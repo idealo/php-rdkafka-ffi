@@ -6,6 +6,7 @@ namespace RdKafka;
 
 use FFI\CData;
 use InvalidArgumentException;
+use RdKafka\FFI\ConsumeCallbackProxy;
 
 class ConsumerTopic extends Topic
 {
@@ -211,18 +212,11 @@ class ConsumerTopic extends Topic
     {
         $this->assertPartition($partition);
 
-        $proxyCallback = function ($nativeMessage, $opaque = null) use ($callback): void {
-            $callback(
-                new Message($nativeMessage),
-                $opaque
-            );
-        };
-
         $result = (int) self::getFFI()->rd_kafka_consume_callback(
             $this->topic,
             $partition,
             $timeout_ms,
-            $proxyCallback,
+            ConsumeCallbackProxy::create($callback),
             null // opaque
         );
 

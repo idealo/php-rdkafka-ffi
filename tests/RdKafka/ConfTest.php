@@ -9,6 +9,13 @@ use PHPUnit\Framework\TestCase;
 /**
  * @covers \RdKafka\Conf
  * @covers \RdKafka\Exception
+ * @covers \RdKafka\FFI\CallbackProxy
+ * @covers \RdKafka\FFI\DrMsgCallbackProxy
+ * @covers \RdKafka\FFI\ErrorCallbackProxy
+ * @covers \RdKafka\FFI\LogCallbackProxy
+ * @covers \RdKafka\FFI\OffsetCommitCallbackProxy
+ * @covers \RdKafka\FFI\RebalanceCallbackProxy
+ * @covers \RdKafka\FFI\StatsCallbackProxy
  */
 class ConfTest extends TestCase
 {
@@ -229,7 +236,8 @@ class ConfTest extends TestCase
         $conf->set('group.id', __METHOD__ . random_int(0, 99999999));
         $conf->set('metadata.broker.list', KAFKA_BROKERS);
         $conf->setRebalanceCb(
-            function (KafkaConsumer $consumer, $err, $topicPartitions, $opaque = null) use (&$rebalanceCallbackStack): void {
+            function (KafkaConsumer $consumer, $err, $topicPartitions, $opaque = null) use (&$rebalanceCallbackStack
+            ): void {
                 $rebalanceCallbackStack[] = [
                     'consumer' => $consumer,
                     'err' => $err,
@@ -306,7 +314,10 @@ class ConfTest extends TestCase
         $conf->set('group.id', __METHOD__ . random_int(0, 99999999));
         $conf->set('metadata.broker.list', KAFKA_BROKERS);
         $conf->setOffsetCommitCb(
-            function (KafkaConsumer $consumer, int $err, array $topicPartitions, $opaque = null) use (&$offsetCommitCallbackStack): void {
+            function (KafkaConsumer $consumer, int $err, array $topicPartitions, $opaque = null) use (
+                &
+                $offsetCommitCallbackStack
+            ): void {
                 $offsetCommitCallbackStack[] = [
                     'consumer' => $consumer,
                     'err' => $err,

@@ -10,6 +10,8 @@ use PHPUnit\Framework\TestCase;
 /**
  * @covers \RdKafka\TopicConf
  * @covers \RdKafka\Exception
+ * @covers \RdKafka\FFI\NativePartitionerCallbackProxy
+ * @covers \RdKafka\FFI\PartitionerCallbackProxy
  */
 class TopicConfTest extends TestCase
 {

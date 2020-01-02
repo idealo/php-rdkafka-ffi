@@ -11,6 +11,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * @covers \RdKafka\ConsumerTopic
  * @covers \RdKafka\Topic
+ * @covers \RdKafka\FFI\ConsumeCallbackProxy
  */
 class ConsumerTopicTest extends TestCase
 {

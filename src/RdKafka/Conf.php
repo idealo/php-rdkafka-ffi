@@ -6,7 +6,12 @@ namespace RdKafka;
 
 use FFI;
 use FFI\CData;
-use RdKafka;
+use RdKafka\FFI\DrMsgCallbackProxy;
+use RdKafka\FFI\ErrorCallbackProxy;
+use RdKafka\FFI\LogCallbackProxy;
+use RdKafka\FFI\OffsetCommitCallbackProxy;
+use RdKafka\FFI\RebalanceCallbackProxy;
+use RdKafka\FFI\StatsCallbackProxy;
 
 /**
  * Configuration reference: https://github.com/edenhill/librdkafka/blob/master/CONFIGURATION.md
@@ -98,94 +103,73 @@ class Conf extends Api
         self::getFFI()->rd_kafka_conf_set_default_topic_conf($this->conf, $topic_conf_dup);
     }
 
+    /**
+     * @param callable $callback function(Producer $producer, Message $message, ?object $opaque = null)
+     * @throws Exception
+     */
     public function setDrMsgCb(callable $callback): void
     {
-        $proxyCallback = function ($producer, $nativeMessage, $opaque = null) use ($callback): void {
-            $callback(
-                RdKafka::resolveFromCData($producer),
-                new Message($nativeMessage),
-                $opaque
-            );
-        };
-
-        self::getFFI()->rd_kafka_conf_set_dr_msg_cb($this->conf, $proxyCallback);
+        self::getFFI()->rd_kafka_conf_set_dr_msg_cb(
+            $this->conf,
+            DrMsgCallbackProxy::create($callback)
+        );
     }
 
     /**
+     * @param callable $callback function($consumerOrProducer, int $level, string $fac, string $buf)
      * @throws Exception
      */
     public function setLogCb(callable $callback): void
     {
         $this->set('log.queue', 'true');
 
-        $proxyCallback = function ($consumerOrProducer, $level, $fac, $buf) use ($callback): void {
-            $callback(
-                RdKafka::resolveFromCData($consumerOrProducer),
-                (int) $level,
-                FFI::string($fac),
-                FFI::string($buf)
-            );
-        };
-
-        self::getFFI()->rd_kafka_conf_set_log_cb($this->conf, $proxyCallback);
-    }
-
-    public function setErrorCb(callable $callback): void
-    {
-        $proxyCallback = function ($consumerOrProducer, $err, $reason, $opaque = null) use ($callback): void {
-            $callback(
-                RdKafka::resolveFromCData($consumerOrProducer),
-                (int) $err,
-                FFI::string($reason),
-                $opaque
-            );
-        };
-
-        self::getFFI()->rd_kafka_conf_set_error_cb($this->conf, $proxyCallback);
-    }
-
-    public function setRebalanceCb(callable $callback): void
-    {
-        $proxyCallback = function ($consumer, $err, $nativeTopicPartitionList, $opaque = null) use ($callback): void {
-            $callback(
-                RdKafka::resolveFromCData($consumer),
-                (int) $err,
-                TopicPartitionList::fromCData($nativeTopicPartitionList)->asArray(),
-                $opaque
-            );
-        };
-
-        self::getFFI()->rd_kafka_conf_set_rebalance_cb($this->conf, $proxyCallback);
-    }
-
-    public function setStatsCb(callable $callback): void
-    {
-        $proxyCallback = function ($consumerOrProducer, $json, $json_len, $opaque = null) use ($callback): void {
-            $callback(
-                RdKafka::resolveFromCData($consumerOrProducer),
-                FFI::string($json, $json_len),
-                (int) $json_len,
-                $opaque
-            );
-        };
-
-        self::getFFI()->rd_kafka_conf_set_stats_cb($this->conf, $proxyCallback);
+        self::getFFI()->rd_kafka_conf_set_log_cb(
+            $this->conf,
+            LogCallbackProxy::create($callback)
+        );
     }
 
     /**
-     * @param callable $callback function(KafkaConsumer $consumer, int $err, TopicPartition[], mixed $opaque = null)
+     * @param callable $callback function($consumerOrProducer, int $err, string $reason, ?object $opaque = null)
+     */
+    public function setErrorCb(callable $callback): void
+    {
+        self::getFFI()->rd_kafka_conf_set_error_cb(
+            $this->conf,
+            ErrorCallbackProxy::create($callback)
+        );
+    }
+
+    /**
+     * @param callable $callback function(KafkaConsumer $consumer, int $err, array $topicPartitions, ?object $opaque = null)
+     */
+    public function setRebalanceCb(callable $callback): void
+    {
+        self::getFFI()->rd_kafka_conf_set_rebalance_cb(
+            $this->conf,
+            RebalanceCallbackProxy::create($callback)
+        );
+    }
+
+    /**
+     * @param callable $callback function($consumerOrProducer, string $json, int $json_len, ?object $opaque = null)
+     */
+    public function setStatsCb(callable $callback): void
+    {
+        self::getFFI()->rd_kafka_conf_set_stats_cb(
+            $this->conf,
+            StatsCallbackProxy::create($callback)
+        );
+    }
+
+    /**
+     * @param callable $callback function(KafkaConsumer $consumer, int $err, array $topicPartitions, ?object $opaque = null)
      */
     public function setOffsetCommitCb(callable $callback): void
     {
-        $proxyCallback = function ($consumer, $err, $nativeTopicPartitionList, $opaque = null) use ($callback): void {
-            $callback(
-                RdKafka::resolveFromCData($consumer),
-                (int) $err,
-                TopicPartitionList::fromCData($nativeTopicPartitionList)->asArray(),
-                $opaque
-            );
-        };
-
-        self::getFFI()->rd_kafka_conf_set_offset_commit_cb($this->conf, $proxyCallback);
+        self::getFFI()->rd_kafka_conf_set_offset_commit_cb(
+            $this->conf,
+            OffsetCommitCallbackProxy::create($callback)
+        );
     }
 }

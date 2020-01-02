@@ -7,6 +7,8 @@ namespace RdKafka;
 use FFI;
 use FFI\CData;
 use InvalidArgumentException;
+use RdKafka\FFI\NativePartitionerCallbackProxy;
+use RdKafka\FFI\PartitionerCallbackProxy;
 
 /**
  * Configuration reference: https://github.com/edenhill/librdkafka/blob/master/CONFIGURATION.md
@@ -55,7 +57,13 @@ class TopicConf extends Api
     {
         $errstr = FFI::new('char[512]');
 
-        $result = self::getFFI()->rd_kafka_topic_conf_set($this->topicConf, $name, $value, $errstr, FFI::sizeOf($errstr));
+        $result = self::getFFI()->rd_kafka_topic_conf_set(
+            $this->topicConf,
+            $name,
+            $value,
+            $errstr,
+            FFI::sizeOf($errstr)
+        );
 
         switch ($result) {
             case RD_KAFKA_CONF_UNKNOWN:
@@ -92,32 +100,17 @@ class TopicConf extends Api
                 break;
         }
 
-        $ffi = self::getFFI();
-        $proxyCallback = function ($topic, $keydata, $keylen, $partition_cnt, $topic_opaque, $msg_opaque) use (
-            $ffi,
-            $partitionerMethod
-        ) {
-            return (int) $ffi->{$partitionerMethod}($topic, $keydata, $keylen, $partition_cnt, $topic_opaque, $msg_opaque);
-        };
         self::getFFI()->rd_kafka_topic_conf_set_partitioner_cb(
             $this->topicConf,
-            $proxyCallback
+            NativePartitionerCallbackProxy::create($partitionerMethod)
         );
     }
 
     public function setPartitionerCb(callable $callback): void
     {
-        $proxyCallback = function ($topic, $keydata, $keylen, $partition_cnt, $topic_opaque, $msg_opaque) use ($callback
-        ) {
-            return (int) $callback(
-                FFI::string($keydata, $keylen),
-                (int) $partition_cnt
-            );
-        };
-
         self::getFFI()->rd_kafka_topic_conf_set_partitioner_cb(
             $this->topicConf,
-            $proxyCallback
+            PartitionerCallbackProxy::create($callback)
         );
     }
 }
