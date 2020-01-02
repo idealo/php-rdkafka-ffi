@@ -177,17 +177,19 @@ Show comparison
 
 ### Benchmarks
 
-Some benchmarks based on PHP 7.4.1, librdkafka v1.3.0, ext latest master (^4.0.2), ffi with preload enabled.
+Some benchmarks based on PHP 7.4.1, librdkafka v1.3.0, ext latest master (4.0.3-dev), ffi with preload enabled.
 
-| benchmark     | subject                        | set | revs | tag:ffi:mean  | tag:ext:mean |
-|---------------|--------------------------------|-----|------|---------------|--------------|
-| ConsumerBench | benchConsume1Message           | 0   | 100  | 30,279.714μs  | 30,324.692μs |
-| ConsumerBench | benchConsumeCallback1Message   | 0   | 10   | 250,108.440μs | 30,098.120μs |
-| ConsumerBench | benchConsume100Messages        | 0   | 100  | 42,785.350μs  | 43,279.156μs |
-| ConsumerBench | benchConsumeBatch100Messages   | 0   | 100  | 38,984.180μs  | 28,632.604μs |
-| ConsumerBench | benchConsumeCallback100Message | 0   | 10   | 240,364.040μs | 28,801.480μs |
-| ProducerBench | benchProduce1Message           | 0   | 100  | 3,697.300μs   | 3,917.404μs  |
-| ProducerBench | benchProduce100Messages        | 0   | 100  | 3,947.314μs   | 3,987.014μs  |
+| benchmark     | subject                                         | set | revs | tag:ffi:mean | tag:ext:mean |
+|---------------|-------------------------------------------------|-----|------|--------------|--------------|
+| ConsumerBench | benchConsume1Message                            | 0   | 100  | 28,321.140μs | 27,761.178μs |
+| ConsumerBench | benchConsumeCallback1Message                    | 0   | 100  | 28,499.664μs | 27,838.560μs |
+| ConsumerBench | benchConsume100Messages                         | 0   | 100  | 39,748.522μs | 38,886.366μs |
+| ConsumerBench | benchConsume100MessagesWithLogCallback          | 0   | 100  | 41,097.162μs | 39,148.838μs |
+| ConsumerBench | benchConsumeBatch100Messages                    | 0   | 100  | 32,116.332μs | 27,272.554μs |
+| ConsumerBench | benchConsumeCallback100Message                  | 0   | 100  | 35,445.358μs | 27,619.512μs |
+| ProducerBench | benchProduce1Message                            | 0   | 100  | 3,776.272μs  | 3,654.974μs  |
+| ProducerBench | benchProduce100Messages                         | 0   | 100  | 3,844.302μs  | 3,847.884μs  |
+| ProducerBench | benchProduce100MessagesWithLogAndDrMsgCallbacks | 0   | 100  | 5,613.870μs  | 4,250.210μs  |
 
 See concrete [benchmarks details](./docs/benchmarks.md) for ffi & extension bindings.
 

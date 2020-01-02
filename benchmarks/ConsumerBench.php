@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 use RdKafka\Conf;
@@ -52,7 +53,7 @@ class ConsumerBench
 
     /**
      * @Warmup(1)
-     * @Revs(10)
+     * @Revs(100)
      * @Iterations(5)
      */
     public function benchConsumeCallback1Message()
@@ -60,7 +61,7 @@ class ConsumerBench
         $conf = new Conf();
         $conf->set('metadata.broker.list', 'kafka:9092');
         $conf->set('group.id', __METHOD__);
-        $conf->set('consume.callback.max.messages', (string)1);
+        $conf->set('consume.callback.max.messages', (string) 1);
         $consumer = new Consumer($conf);
         $topic = $consumer->newTopic('benchmarks');
 
@@ -69,8 +70,7 @@ class ConsumerBench
         $callback = function (\RdKafka\Message $message, $opaque = null) use (&$messages) {
             $messages++;
         };
-        while ($topic->consumeCallback(0, 500, $callback) && $messages < 1) {
-        }
+        $topic->consumeCallback(0, 500, $callback);
         $topic->consumeStop(0);
 
         if ($messages < 1) {
@@ -88,6 +88,37 @@ class ConsumerBench
         $conf = new Conf();
         $conf->set('metadata.broker.list', 'kafka:9092');
         $conf->set('group.id', __METHOD__);
+        $consumer = new Consumer($conf);
+        $topic = $consumer->newTopic('benchmarks');
+
+        $topic->consumeStart(0, 0);
+        $messages = 0;
+        while ($message = $topic->consume(0, 500) && $messages < 100) {
+            $messages++;
+        }
+        $topic->consumeStop(0);
+
+        if ($messages < 100) {
+            throw new Exception('failed to consume 100 messages');
+        }
+    }
+
+    /**
+     * @Warmup(1)
+     * @Revs(100)
+     * @Iterations(5)
+     */
+    public function benchConsume100MessagesWithLogCallback()
+    {
+        $conf = new Conf();
+        $conf->set('metadata.broker.list', 'kafka:9092');
+        $conf->set('group.id', __METHOD__);
+        $conf->set('debug', 'all');
+        $conf->setLogCb(
+            function (Consumer $consumer, int $level, string $fac, string $buf): void {
+                // echo "log: $level $fac $buf" . PHP_EOL;
+            }
+        );
         $consumer = new Consumer($conf);
         $topic = $consumer->newTopic('benchmarks');
 
@@ -127,7 +158,7 @@ class ConsumerBench
 
     /**
      * @Warmup(1)
-     * @Revs(10)
+     * @Revs(100)
      * @Iterations(5)
      */
     public function benchConsumeCallback100Message()
@@ -135,7 +166,7 @@ class ConsumerBench
         $conf = new Conf();
         $conf->set('metadata.broker.list', 'kafka:9092');
         $conf->set('group.id', __METHOD__);
-        $conf->set('consume.callback.max.messages', (string)100);
+        $conf->set('consume.callback.max.messages', (string) 100);
         $consumer = new Consumer($conf);
         $topic = $consumer->newTopic('benchmarks');
 
@@ -144,8 +175,7 @@ class ConsumerBench
         $callback = function (\RdKafka\Message $message, $opaque = null) use (&$messages) {
             $messages++;
         };
-        while ($topic->consumeCallback(0, 500, $callback) && $messages < 100) {
-        }
+        $topic->consumeCallback(0, 500, $callback);
         $topic->consumeStop(0);
 
         if ($messages < 100) {
