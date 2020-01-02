@@ -16,7 +16,7 @@ class ProducerBench
      * @Revs(100)
      * @Iterations(5)
      */
-    public function benchProduce1Message()
+    public function benchProduce1Message(): void
     {
         $conf = new Conf();
         $conf->set('metadata.broker.list', 'kafka:9092');
@@ -35,7 +35,7 @@ class ProducerBench
      * @Revs(100)
      * @Iterations(5)
      */
-    public function benchProduce100Messages()
+    public function benchProduce100Messages(): void
     {
         $conf = new Conf();
         $conf->set('metadata.broker.list', 'kafka:9092');
@@ -57,7 +57,7 @@ class ProducerBench
      * @Revs(100)
      * @Iterations(5)
      */
-    public function benchProduce100MessagesWithLogAndDrMsgCallbacks()
+    public function benchProduce100MessagesWithLogAndDrMsgCallbacks(): void
     {
         $conf = new Conf();
         $conf->set('metadata.broker.list', 'kafka:9092');
@@ -69,7 +69,7 @@ class ProducerBench
             }
         );
         $conf->setDrMsgCb(
-            function (Producer $producer, Message $message, $opaque = null) {
+            function (Producer $producer, Message $message, $opaque = null): void {
                 // do nothing
             }
         );

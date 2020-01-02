@@ -12,7 +12,7 @@ use RdKafka\Producer;
  */
 class ConsumerBench
 {
-    public function produce10000Messages()
+    public function produce10000Messages(): void
     {
         $conf = new Conf();
         $conf->set('metadata.broker.list', 'kafka:9092');
@@ -31,7 +31,7 @@ class ConsumerBench
      * @Revs(100)
      * @Iterations(5)
      */
-    public function benchConsume1Message()
+    public function benchConsume1Message(): void
     {
         $conf = new Conf();
         $conf->set('metadata.broker.list', 'kafka:9092');
@@ -56,7 +56,7 @@ class ConsumerBench
      * @Revs(100)
      * @Iterations(5)
      */
-    public function benchConsumeCallback1Message()
+    public function benchConsumeCallback1Message(): void
     {
         $conf = new Conf();
         $conf->set('metadata.broker.list', 'kafka:9092');
@@ -67,7 +67,7 @@ class ConsumerBench
 
         $topic->consumeStart(0, 0);
         $messages = 0;
-        $callback = function (\RdKafka\Message $message, $opaque = null) use (&$messages) {
+        $callback = function (\RdKafka\Message $message, $opaque = null) use (&$messages): void {
             $messages++;
         };
         $topic->consumeCallback(0, 500, $callback);
@@ -83,7 +83,7 @@ class ConsumerBench
      * @Revs(100)
      * @Iterations(5)
      */
-    public function benchConsume100Messages()
+    public function benchConsume100Messages(): void
     {
         $conf = new Conf();
         $conf->set('metadata.broker.list', 'kafka:9092');
@@ -108,7 +108,7 @@ class ConsumerBench
      * @Revs(100)
      * @Iterations(5)
      */
-    public function benchConsume100MessagesWithLogCallback()
+    public function benchConsume100MessagesWithLogCallback(): void
     {
         $conf = new Conf();
         $conf->set('metadata.broker.list', 'kafka:9092');
@@ -139,7 +139,7 @@ class ConsumerBench
      * @Revs(100)
      * @Iterations(5)
      */
-    public function benchConsumeBatch100Messages()
+    public function benchConsumeBatch100Messages(): void
     {
         $conf = new Conf();
         $conf->set('metadata.broker.list', 'kafka:9092');
@@ -161,7 +161,7 @@ class ConsumerBench
      * @Revs(100)
      * @Iterations(5)
      */
-    public function benchConsumeCallback100Message()
+    public function benchConsumeCallback100Message(): void
     {
         $conf = new Conf();
         $conf->set('metadata.broker.list', 'kafka:9092');
@@ -172,7 +172,7 @@ class ConsumerBench
 
         $topic->consumeStart(0, 0);
         $messages = 0;
-        $callback = function (\RdKafka\Message $message, $opaque = null) use (&$messages) {
+        $callback = function (\RdKafka\Message $message, $opaque = null) use (&$messages): void {
             $messages++;
         };
         $topic->consumeCallback(0, 500, $callback);
