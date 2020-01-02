@@ -295,10 +295,27 @@ class ConfTest extends TestCase
         $consumer3->subscribe([KAFKA_TEST_TOPIC_PARTITIONS]);
 
         do {
-            $consumer1->consume((int) KAFKA_TEST_TIMEOUT_MS);
-            $consumer2->consume((int) KAFKA_TEST_TIMEOUT_MS);
-            $consumer3->consume((int) KAFKA_TEST_TIMEOUT_MS);
+            $consumer1->consume((int) 50);
+            $consumer2->consume((int) 50);
+            $consumer3->consume((int) 50);
         } while (\count($rebalanceCallbackStack) < 3);
+
+        $assignedConsumers = array_column($rebalanceCallbackStack, 'consumer');
+        $this->assertContains($consumer1, $assignedConsumers);
+        $this->assertContains($consumer2, $assignedConsumers);
+        $this->assertContains($consumer3, $assignedConsumers);
+
+        $this->assertSame(RD_KAFKA_RESP_ERR__ASSIGN_PARTITIONS, $rebalanceCallbackStack[0]['err']);
+        $this->assertSame(1, \count($rebalanceCallbackStack[0]['partitions']));
+
+        $this->assertSame(RD_KAFKA_RESP_ERR__ASSIGN_PARTITIONS, $rebalanceCallbackStack[1]['err']);
+        $this->assertSame(1, \count($rebalanceCallbackStack[1]['partitions']));
+
+        $this->assertSame(RD_KAFKA_RESP_ERR__ASSIGN_PARTITIONS, $rebalanceCallbackStack[2]['err']);
+        $this->assertSame(1, \count($rebalanceCallbackStack[2]['partitions']));
+
+        // reset stack
+        $rebalanceCallbackStack = [];
 
         // revoke
         $consumer1->close();
@@ -307,31 +324,21 @@ class ConfTest extends TestCase
 
         do {
             usleep(50 * 1000);
-        } while (\count($rebalanceCallbackStack) < 6);
+        } while (\count($rebalanceCallbackStack) < 3);
 
-        $this->assertSame(RD_KAFKA_RESP_ERR__ASSIGN_PARTITIONS, $rebalanceCallbackStack[0]['err']);
-        $this->assertSame($consumer2, $rebalanceCallbackStack[0]['consumer']);
+        $revokedConsumers = array_column($rebalanceCallbackStack, 'consumer');
+        $this->assertContains($consumer1, $revokedConsumers);
+        $this->assertContains($consumer2, $revokedConsumers);
+        $this->assertContains($consumer3, $revokedConsumers);
+
+        $this->assertSame(RD_KAFKA_RESP_ERR__REVOKE_PARTITIONS, $rebalanceCallbackStack[0]['err']);
         $this->assertSame(1, \count($rebalanceCallbackStack[0]['partitions']));
 
-        $this->assertSame(RD_KAFKA_RESP_ERR__ASSIGN_PARTITIONS, $rebalanceCallbackStack[1]['err']);
-        $this->assertSame($consumer3, $rebalanceCallbackStack[1]['consumer']);
+        $this->assertSame(RD_KAFKA_RESP_ERR__REVOKE_PARTITIONS, $rebalanceCallbackStack[1]['err']);
         $this->assertSame(1, \count($rebalanceCallbackStack[1]['partitions']));
 
-        $this->assertSame(RD_KAFKA_RESP_ERR__ASSIGN_PARTITIONS, $rebalanceCallbackStack[2]['err']);
-        $this->assertSame($consumer1, $rebalanceCallbackStack[2]['consumer']);
+        $this->assertSame(RD_KAFKA_RESP_ERR__REVOKE_PARTITIONS, $rebalanceCallbackStack[2]['err']);
         $this->assertSame(1, \count($rebalanceCallbackStack[2]['partitions']));
-
-        $this->assertSame(RD_KAFKA_RESP_ERR__REVOKE_PARTITIONS, $rebalanceCallbackStack[3]['err']);
-        $this->assertSame($consumer1, $rebalanceCallbackStack[3]['consumer']);
-        $this->assertSame(1, \count($rebalanceCallbackStack[3]['partitions']));
-
-        $this->assertSame(RD_KAFKA_RESP_ERR__REVOKE_PARTITIONS, $rebalanceCallbackStack[4]['err']);
-        $this->assertSame($consumer2, $rebalanceCallbackStack[4]['consumer']);
-        $this->assertSame(1, \count($rebalanceCallbackStack[4]['partitions']));
-
-        $this->assertSame(RD_KAFKA_RESP_ERR__REVOKE_PARTITIONS, $rebalanceCallbackStack[5]['err']);
-        $this->assertSame($consumer3, $rebalanceCallbackStack[5]['consumer']);
-        $this->assertSame(1, \count($rebalanceCallbackStack[5]['partitions']));
     }
 
     public function testSetOffsetCommitCb(): void
