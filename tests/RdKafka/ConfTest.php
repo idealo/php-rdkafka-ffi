@@ -9,7 +9,6 @@ use PHPUnit\Framework\TestCase;
 /**
  * @covers \RdKafka\Conf
  * @covers \RdKafka\Exception
- * @covers \RdKafka\FFI\CallbackProxy
  * @covers \RdKafka\FFI\DrMsgCallbackProxy
  * @covers \RdKafka\FFI\ErrorCallbackProxy
  * @covers \RdKafka\FFI\LogCallbackProxy
@@ -203,6 +202,35 @@ class ConfTest extends TestCase
         $this->assertSame(RD_KAFKA_RESP_ERR__ALL_BROKERS_DOWN, $errorCallbackStack[1]);
     }
 
+    public function testSetDrMsgCb(): void
+    {
+        $drMsgCallbackStack = [];
+
+        $conf = new Conf();
+        $conf->set('metadata.broker.list', KAFKA_BROKERS);
+        $conf->setDrMsgCb(
+            function ($producer, $message) use (&$drMsgCallbackStack): void {
+                $drMsgCallbackStack[] = [
+                    'producer' => $producer,
+                    'message' => $message,
+                ];
+            }
+        );
+        $producer = new Producer($conf);
+        $producerTopic = $producer->newTopic(KAFKA_TEST_TOPIC);
+        $producerTopic->produce(0, 0, __METHOD__ . '1');
+        $producerTopic->produce(0, 0, __METHOD__ . '2');
+        $producer->poll((int) KAFKA_TEST_TIMEOUT_MS);
+
+        $this->assertCount(2, $drMsgCallbackStack);
+        $this->assertSame($producer, $drMsgCallbackStack[0]['producer']);
+        $this->assertSame(__METHOD__ . '1', $drMsgCallbackStack[0]['message']->payload);
+        $this->assertSame($producer, $drMsgCallbackStack[1]['producer']);
+        $this->assertSame(__METHOD__ . '2', $drMsgCallbackStack[1]['message']->payload);
+
+        $producer->flush((int) KAFKA_TEST_TIMEOUT_MS);
+    }
+
     public function testSetStatsCb(): void
     {
         $statsJson = '';
@@ -236,8 +264,8 @@ class ConfTest extends TestCase
         $conf->set('group.id', __METHOD__ . random_int(0, 99999999));
         $conf->set('metadata.broker.list', KAFKA_BROKERS);
         $conf->setRebalanceCb(
-            function (KafkaConsumer $consumer, $err, $topicPartitions, $opaque = null) use (&$rebalanceCallbackStack
-            ): void {
+            function (KafkaConsumer $consumer, $err, $topicPartitions, $opaque = null)
+            use (&$rebalanceCallbackStack): void {
                 $rebalanceCallbackStack[] = [
                     'consumer' => $consumer,
                     'err' => $err,
@@ -282,27 +310,27 @@ class ConfTest extends TestCase
         } while (\count($rebalanceCallbackStack) < 6);
 
         $this->assertSame(RD_KAFKA_RESP_ERR__ASSIGN_PARTITIONS, $rebalanceCallbackStack[0]['err']);
-        $this->assertEquals($consumer1, $rebalanceCallbackStack[0]['consumer']);
+        $this->assertSame($consumer2, $rebalanceCallbackStack[0]['consumer']);
         $this->assertSame(1, \count($rebalanceCallbackStack[0]['partitions']));
 
         $this->assertSame(RD_KAFKA_RESP_ERR__ASSIGN_PARTITIONS, $rebalanceCallbackStack[1]['err']);
-        $this->assertEquals($consumer2, $rebalanceCallbackStack[1]['consumer']);
+        $this->assertSame($consumer3, $rebalanceCallbackStack[1]['consumer']);
         $this->assertSame(1, \count($rebalanceCallbackStack[1]['partitions']));
 
         $this->assertSame(RD_KAFKA_RESP_ERR__ASSIGN_PARTITIONS, $rebalanceCallbackStack[2]['err']);
-        $this->assertEquals($consumer3, $rebalanceCallbackStack[2]['consumer']);
+        $this->assertSame($consumer1, $rebalanceCallbackStack[2]['consumer']);
         $this->assertSame(1, \count($rebalanceCallbackStack[2]['partitions']));
 
         $this->assertSame(RD_KAFKA_RESP_ERR__REVOKE_PARTITIONS, $rebalanceCallbackStack[3]['err']);
-        $this->assertEquals($consumer1, $rebalanceCallbackStack[3]['consumer']);
+        $this->assertSame($consumer1, $rebalanceCallbackStack[3]['consumer']);
         $this->assertSame(1, \count($rebalanceCallbackStack[3]['partitions']));
 
         $this->assertSame(RD_KAFKA_RESP_ERR__REVOKE_PARTITIONS, $rebalanceCallbackStack[4]['err']);
-        $this->assertEquals($consumer2, $rebalanceCallbackStack[4]['consumer']);
+        $this->assertSame($consumer2, $rebalanceCallbackStack[4]['consumer']);
         $this->assertSame(1, \count($rebalanceCallbackStack[4]['partitions']));
 
         $this->assertSame(RD_KAFKA_RESP_ERR__REVOKE_PARTITIONS, $rebalanceCallbackStack[5]['err']);
-        $this->assertEquals($consumer3, $rebalanceCallbackStack[5]['consumer']);
+        $this->assertSame($consumer3, $rebalanceCallbackStack[5]['consumer']);
         $this->assertSame(1, \count($rebalanceCallbackStack[5]['partitions']));
     }
 
@@ -314,10 +342,8 @@ class ConfTest extends TestCase
         $conf->set('group.id', __METHOD__ . random_int(0, 99999999));
         $conf->set('metadata.broker.list', KAFKA_BROKERS);
         $conf->setOffsetCommitCb(
-            function (KafkaConsumer $consumer, int $err, array $topicPartitions, $opaque = null) use (
-                &
-                $offsetCommitCallbackStack
-            ): void {
+            function (KafkaConsumer $consumer, int $err, array $topicPartitions, $opaque = null)
+            use (&$offsetCommitCallbackStack): void {
                 $offsetCommitCallbackStack[] = [
                     'consumer' => $consumer,
                     'err' => $err,

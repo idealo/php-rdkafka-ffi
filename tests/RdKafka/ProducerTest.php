@@ -9,7 +9,6 @@ use RdKafka;
 
 /**
  * @covers \RdKafka\Producer
- * @covers \RdKafka\Conf
  * @covers \RdKafka
  */
 class ProducerTest extends TestCase

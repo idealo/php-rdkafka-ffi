@@ -11,10 +11,10 @@ use PHPUnit\Framework\TestCase;
  */
 class CallbackProxyTest extends TestCase
 {
-    public function testCreateWithCallable()
+    public function testCreateWithCallable(): void
     {
         $testCallback = new class() {
-            function __invoke(string $value)
+            public function __invoke(string $value)
             {
                 return $value;
             }
@@ -27,7 +27,7 @@ class CallbackProxyTest extends TestCase
         $this->assertSame('test', $proxy('test'));
     }
 
-    public function testCreateWithClosure()
+    public function testCreateWithClosure(): void
     {
         $testCallback = function (string $value) {
             return $value;

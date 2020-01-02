@@ -9,7 +9,7 @@ use RdKafka\Message;
 
 class ConsumeCallbackProxy extends CallbackProxy
 {
-    public function __invoke(CData $nativeMessage, $opaque = null)
+    public function __invoke(CData $nativeMessage, $opaque = null): void
     {
         $callback = $this->callback;
         $callback(new Message($nativeMessage), $opaque);
