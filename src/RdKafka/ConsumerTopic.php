@@ -70,7 +70,7 @@ class ConsumerTopic extends Topic
     public function consumeBatch(int $partition, int $timeout_ms, int $batch_size): array
     {
         if ($batch_size <= 0) {
-            throw new InvalidArgumentException(sprintf("Out of range value '%d' for batch_size", $batch_size));
+            throw new InvalidArgumentException(\sprintf("Out of range value '%d' for batch_size", $batch_size));
         }
 
         $this->assertPartition($partition);
@@ -116,7 +116,7 @@ class ConsumerTopic extends Topic
 
         if (\array_key_exists($partition, $this->consuming)) {
             throw new Exception(
-                sprintf(
+                \sprintf(
                     '%s:%d is already being consumed by the same Consumer instance',
                     $this->getName(),
                     $partition
@@ -148,7 +148,7 @@ class ConsumerTopic extends Topic
 
         if (\array_key_exists($partition, $this->consuming)) {
             throw new Exception(
-                sprintf(
+                \sprintf(
                     '%s:%d is already being consumed by the same Consumer instance',
                     $this->getName(),
                     $partition
@@ -232,7 +232,7 @@ class ConsumerTopic extends Topic
     private function assertPartition(int $partition): void
     {
         if ($partition !== RD_KAFKA_PARTITION_UA && ($partition < 0 || $partition > 0x7FFFFFFF)) {
-            throw new InvalidArgumentException(sprintf("Out of range value '%d' for partition", $partition));
+            throw new InvalidArgumentException(\sprintf("Out of range value '%d' for partition", $partition));
         }
     }
 }

@@ -101,14 +101,14 @@ class ProducerTopic extends Topic
     private function assertPartition(int $partition): void
     {
         if ($partition !== RD_KAFKA_PARTITION_UA && ($partition < 0 || $partition > 0x7FFFFFFF)) {
-            throw new InvalidArgumentException(sprintf("Out of range value '%d' for partition", $partition));
+            throw new InvalidArgumentException(\sprintf("Out of range value '%d' for partition", $partition));
         }
     }
 
     private function assertMsgflags(int $msgflags): void
     {
         if ($msgflags !== 0 && $msgflags !== RD_KAFKA_MSG_F_BLOCK) {
-            throw new InvalidArgumentException(sprintf("Invalid value '%d' for msgflags", $msgflags));
+            throw new InvalidArgumentException(\sprintf("Invalid value '%d' for msgflags", $msgflags));
         }
     }
 }

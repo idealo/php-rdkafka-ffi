@@ -19,7 +19,7 @@ class KafkaConsumerTopic extends Topic
     public function offsetStore(int $partition, int $offset): void
     {
         if ($partition !== RD_KAFKA_PARTITION_UA && ($partition < 0 || $partition > 0x7FFFFFFF)) {
-            throw new InvalidArgumentException(sprintf("Out of range value '%d' for partition", $partition));
+            throw new InvalidArgumentException(\sprintf("Out of range value '%d' for partition", $partition));
         }
 
         $err = self::getFFI()->rd_kafka_offset_store(

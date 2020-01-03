@@ -307,7 +307,7 @@ class Client extends Api
 
         if ($event->type() !== $eventType) {
             throw new Exception(
-                sprintf(
+                \sprintf(
                     'Expected %d result event, not %d.',
                     $eventType,
                     $event->type()

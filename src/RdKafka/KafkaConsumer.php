@@ -102,7 +102,7 @@ class KafkaConsumer extends RdKafka
             $topicPartitionList = $this->createTopicPartitionList($message_or_offsets);
         } catch (TypeError $exception) {
             throw new InvalidArgumentException(
-                sprintf(
+                \sprintf(
                     '%s expects parameter %d to be %s, %s given',
                     __METHOD__,
                     1,
@@ -125,7 +125,7 @@ class KafkaConsumer extends RdKafka
             $topicPartitionList = $this->createTopicPartitionList($message_or_offsets);
         } catch (TypeError $exception) {
             throw new InvalidArgumentException(
-                sprintf(
+                \sprintf(
                     '%s expects parameter %d to be %s, %s given',
                     __METHOD__,
                     1,
@@ -168,7 +168,7 @@ class KafkaConsumer extends RdKafka
         }
 
         throw new TypeError(
-            sprintf(
+            \sprintf(
                 'Argument 1 passed to %s must be an instance of RdKafka\\Message, an array of RdKafka\\TopicPartition or null',
                 __METHOD__
             )
