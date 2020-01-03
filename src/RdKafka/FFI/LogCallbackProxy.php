@@ -5,16 +5,16 @@ declare(strict_types=1);
 namespace RdKafka\FFI;
 
 use FFI;
+use FFI\CData;
 use RdKafka;
 
 class LogCallbackProxy extends CallbackProxy
 {
-    public function __invoke($consumerOrProducer, $level, $fac, $buf): void
+    public function __invoke(CData $consumerOrProducer, int $level, CData $fac, CData $buf): void
     {
-        $callback = $this->callback;
-        $callback(
+        ($this->callback)(
             RdKafka::resolveFromCData($consumerOrProducer),
-            (int) $level,
+            $level,
             FFI::string($fac),
             FFI::string($buf)
         );

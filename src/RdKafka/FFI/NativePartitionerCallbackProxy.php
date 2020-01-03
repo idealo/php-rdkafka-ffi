@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace RdKafka\FFI;
 
+use FFI\CData;
+
 class NativePartitionerCallbackProxy extends Api
 {
     private string $partitionerMethod;
@@ -13,8 +15,14 @@ class NativePartitionerCallbackProxy extends Api
         $this->partitionerMethod = $partitionerMethod;
     }
 
-    public function __invoke($topic, $keydata, $keylen, $partition_cnt, $topic_opaque = null, $msg_opaque = null): int
-    {
+    public function __invoke(
+        ?CData $topic,
+        ?CData $keydata,
+        int $keylen,
+        int $partition_cnt,
+        ?object $topic_opaque = null,
+        ?object $msg_opaque = null
+    ): int {
         return (int) self::getFFI()->{$this->partitionerMethod}(
             $topic,
             $keydata,
