@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace RdKafka;
 
 use PHPUnit\Framework\TestCase;
+use RdKafka\FFI\Api;
 
 /**
  * @covers \RdKafka\Queue

@@ -11,7 +11,7 @@ use PHPUnit\Framework\TestCase;
  * @covers ::rd_kafka_offset_tail
  * @covers ::rd_kafka_version
  * @covers ::rd_kafka_thread_cnt
- * @covers \RdKafka\Api
+ * @covers \RdKafka\FFI\Api
  */
 class FunctionsTest extends TestCase
 {
