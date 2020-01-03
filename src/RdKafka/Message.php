@@ -6,6 +6,7 @@ namespace RdKafka;
 
 use FFI;
 use FFI\CData;
+use RdKafka\FFI\Api;
 
 class Message extends Api
 {

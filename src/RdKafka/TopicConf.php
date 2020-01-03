@@ -7,6 +7,7 @@ namespace RdKafka;
 use FFI;
 use FFI\CData;
 use InvalidArgumentException;
+use RdKafka\FFI\Api;
 use RdKafka\FFI\NativePartitionerCallbackProxy;
 use RdKafka\FFI\PartitionerCallbackProxy;
 

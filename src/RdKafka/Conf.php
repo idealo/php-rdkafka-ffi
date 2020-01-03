@@ -6,6 +6,7 @@ namespace RdKafka;
 
 use FFI;
 use FFI\CData;
+use RdKafka\FFI\Api;
 use RdKafka\FFI\DrMsgCallbackProxy;
 use RdKafka\FFI\ErrorCallbackProxy;
 use RdKafka\FFI\LogCallbackProxy;

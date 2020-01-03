@@ -7,6 +7,7 @@ namespace RdKafka;
 use FFI;
 use FFI\CData;
 use RdKafka;
+use RdKafka\FFI\Api;
 use RdKafka\Metadata\Collection;
 
 class Metadata extends Api

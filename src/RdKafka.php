@@ -3,9 +3,9 @@
 declare(strict_types=1);
 
 use FFI\CData;
-use RdKafka\Api;
 use RdKafka\Conf;
 use RdKafka\Exception;
+use RdKafka\FFI\Api;
 use RdKafka\Metadata;
 use RdKafka\Topic;
 

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use RdKafka\Api;
+use RdKafka\FFI\Api;
 
 /**
  * @param int $err Error code

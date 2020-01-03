@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-$ffi = \RdKafka\Api::getFFI();
+$ffi = \RdKafka\FFI\Api::getFFI();
 
 echo 'conf:' . PHP_EOL;
 $conf = $ffi->rd_kafka_conf_new();

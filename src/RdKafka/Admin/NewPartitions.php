@@ -7,8 +7,8 @@ namespace RdKafka\Admin;
 use Assert\Assert;
 use FFI;
 use FFI\CData;
-use RdKafka\Api;
 use RdKafka\Exception;
+use RdKafka\FFI\Api;
 
 class NewPartitions extends Api
 {

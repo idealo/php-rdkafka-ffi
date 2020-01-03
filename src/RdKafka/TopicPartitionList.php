@@ -7,6 +7,7 @@ namespace RdKafka;
 use Countable;
 use FFI\CData;
 use Iterator;
+use RdKafka\FFI\Api;
 
 class TopicPartitionList extends Api implements Iterator, Countable
 {

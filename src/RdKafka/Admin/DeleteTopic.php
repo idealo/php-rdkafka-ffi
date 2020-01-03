@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace RdKafka\Admin;
 
 use FFI\CData;
-use RdKafka\Api;
 use RdKafka\Exception;
+use RdKafka\FFI\Api;
 
 class DeleteTopic extends Api
 {

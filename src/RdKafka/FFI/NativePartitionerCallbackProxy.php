@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace RdKafka\FFI;
 
-use RdKafka\Api;
-
 class NativePartitionerCallbackProxy extends Api
 {
     private string $partitionerMethod;

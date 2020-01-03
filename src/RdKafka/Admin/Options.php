@@ -7,8 +7,8 @@ namespace RdKafka\Admin;
 use FFI;
 use FFI\CData;
 use RdKafka;
-use RdKafka\Api;
 use RdKafka\Exception;
+use RdKafka\FFI\Api;
 
 abstract class Options extends Api
 {

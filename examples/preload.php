@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use RdKafka\Api;
+use RdKafka\FFI\Api;
 
 require_once dirname(__DIR__) . '/vendor/autoload.php';
 

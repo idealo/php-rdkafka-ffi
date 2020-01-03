@@ -6,6 +6,7 @@ namespace RdKafka;
 
 use FFI\CData;
 use RdKafka;
+use RdKafka\FFI\Api;
 
 abstract class Topic extends Api
 {

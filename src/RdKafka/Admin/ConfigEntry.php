@@ -6,7 +6,7 @@ namespace RdKafka\Admin;
 
 use FFI;
 use FFI\CData;
-use RdKafka\Api;
+use RdKafka\FFI\Api;
 
 class ConfigEntry extends Api
 {
