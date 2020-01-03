@@ -14,10 +14,9 @@ abstract class Api
      */
     private static FFI $ffi;
 
-    public static string $libraryFile = 'librdkafka.so';
+    public static string $scope = 'RdKafka';
+    public static string $library = 'librdkafka.so';
     public static string $cdef = <<<CDEF
-#define FFI_SCOPE "RdKafka"
-#define FFI_LIB "librdkafka.so"
 typedef long int ssize_t;
 struct _IO_FILE;
 typedef struct _IO_FILE FILE;
@@ -553,14 +552,14 @@ CDEF;
     {
         if (isset(self::$ffi) === false) {
             try {
-                self::$ffi = FFI::scope('RdKafka');
+                self::$ffi = FFI::scope(self::$scope);
             } catch (Exception $e) {
                 if (\ini_get('ffi.enable') === 'preload' && PHP_SAPI !== 'cli') {
                     throw new \RuntimeException(
                         'FFI_SCOPE "RdKafka" not found (ffi.enable=preload requires you to call \RdKafka\Api::preload in )'
                     );
                 }
-                self::$ffi = FFI::cdef(self::$cdef, self::$libraryFile);
+                self::$ffi = FFI::cdef(self::$cdef, self::$library);
             }
         }
     }
@@ -575,7 +574,9 @@ CDEF;
     {
         try {
             $file = \tempnam(\sys_get_temp_dir(), 'php-rdkafka-ffi');
-            \file_put_contents($file, self::$cdef);
+            $scope = \sprintf('#define FFI_SCOPE "%s"', self::$scope) . "\n";
+            $library = \sprintf('#define FFI_LIB "%s"', self::$library) . "\n";
+            \file_put_contents($file, $scope . $library . self::$cdef);
             $ffi = FFI::load($file);
         } finally {
             \unlink($file);
