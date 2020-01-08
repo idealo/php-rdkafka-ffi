@@ -284,7 +284,7 @@ class KafkaConsumerTest extends TestCase
 
         $this->assertCount(1, $topicPartitions);
         $this->assertSame(1, $topicPartitions[0]->getOffset());
-        $this->assertSame(null, $topicPartitions[0]->getMetadata());
+        $this->assertSame('metadata', $topicPartitions[0]->getMetadata());
 
         $consumer->unsubscribe();
     }
