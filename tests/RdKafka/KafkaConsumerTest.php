@@ -226,7 +226,7 @@ class KafkaConsumerTest extends TestCase
         $consumer->unsubscribe();
     }
 
-    public function testCommitWithOffset(): void
+    public function testCommitWithOffsetAndMetadata(): void
     {
         $conf = new Conf();
         $conf->set('group.id', __METHOD__ . random_int(0, 999999999));
@@ -240,7 +240,7 @@ class KafkaConsumerTest extends TestCase
         // wait for partition assignment
         sleep(1);
 
-        $consumer->commit([new TopicPartition(KAFKA_TEST_TOPIC, 0, 1)]);
+        $consumer->commit([new TopicPartition(KAFKA_TEST_TOPIC, 0, 1, 'metadata')]);
 
         $topicPartitions = $consumer->getCommittedOffsets(
             [
@@ -251,6 +251,7 @@ class KafkaConsumerTest extends TestCase
 
         $this->assertCount(1, $topicPartitions);
         $this->assertSame(1, $topicPartitions[0]->getOffset());
+        $this->assertSame('metadata', $topicPartitions[0]->getMetadata());
 
         $consumer->unsubscribe();
     }

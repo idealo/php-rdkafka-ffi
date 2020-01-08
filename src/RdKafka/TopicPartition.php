@@ -13,9 +13,6 @@ class TopicPartition
     private int $partition;
     private ?int $offset = null;
     private ?string $metadata = null;
-    /**
-     * @var mixed
-     */
     private ?object $opaque = null;
     private ?int $err = null;
 
@@ -27,18 +24,21 @@ class TopicPartition
             (int) $topicPartition->offset
         );
 
-        $topar->metadata = FFI::string($topicPartition->metadata, $topicPartition->metadata_size);
+        $topar->metadata = $topicPartition->metadata === null
+            ? null
+            : FFI::string($topicPartition->metadata, $topicPartition->metadata_size);
         $topar->opaque = $topicPartition->opaque;
         $topar->err = (int) $topicPartition->err;
 
         return $topar;
     }
 
-    public function __construct(string $topic, int $partition, ?int $offset = null)
+    public function __construct(string $topic, int $partition, ?int $offset = null, ?string $metadata = null)
     {
         $this->topic = $topic;
         $this->partition = $partition;
         $this->offset = $offset;
+        $this->metadata = $metadata;
     }
 
     public function getOffset(): ?int
@@ -84,5 +84,10 @@ class TopicPartition
     public function setTopic(string $topic_name): void
     {
         $this->topic = $topic_name;
+    }
+
+    public function setMetadata(?string $metadata): void
+    {
+        $this->metadata = $metadata;
     }
 }

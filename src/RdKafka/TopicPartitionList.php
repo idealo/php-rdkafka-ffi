@@ -42,6 +42,13 @@ class TopicPartitionList extends Api implements Iterator, Countable
                 $item->getPartition()
             );
             $nativeTopicPartition->offset = $item->getOffset();
+            if ($item->getMetadata() !== null) {
+                $metadataSize = strlen($item->getMetadata());
+                $metadataTest = \FFI::new('char[' . $metadataSize . ']', false, true);
+                \FFI::memcpy($metadataTest, $item->getMetadata(), $metadataSize);
+                $nativeTopicPartition->metadata = \FFI::cast('char*', $metadataTest);
+                $nativeTopicPartition->metadata_size = $metadataSize;
+            }
         }
 
         return $nativeTopicPartitionList;
