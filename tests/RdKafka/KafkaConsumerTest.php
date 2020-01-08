@@ -226,8 +226,41 @@ class KafkaConsumerTest extends TestCase
         $consumer->unsubscribe();
     }
 
+    public function testCommitWithOffset(): void
+    {
+        $conf = new Conf();
+        $conf->set('group.id', __METHOD__ . random_int(0, 999999999));
+        $conf->set('enable.auto.commit', 'false');
+        $conf->set('metadata.broker.list', KAFKA_BROKERS);
+        $conf->set('auto.offset.reset', 'earliest');
+
+        $consumer = new KafkaConsumer($conf);
+        $consumer->subscribe([KAFKA_TEST_TOPIC]);
+
+        // wait for partition assignment
+        sleep(1);
+
+        $consumer->commit([new TopicPartition(KAFKA_TEST_TOPIC, 0, 1)]);
+
+        $topicPartitions = $consumer->getCommittedOffsets(
+            [
+                new TopicPartition(KAFKA_TEST_TOPIC, 0),
+            ],
+            (int) KAFKA_TEST_TIMEOUT_MS
+        );
+
+        $this->assertCount(1, $topicPartitions);
+        $this->assertSame(1, $topicPartitions[0]->getOffset());
+
+        $consumer->unsubscribe();
+    }
+
     public function testCommitWithOffsetAndMetadata(): void
     {
+        if (version_compare(rd_kafka_version(), '1.2.0', '<')) {
+            $this->markTestSkipped('Requires librdkafka ^1.2.0');
+        }
+
         $conf = new Conf();
         $conf->set('group.id', __METHOD__ . random_int(0, 999999999));
         $conf->set('enable.auto.commit', 'false');
@@ -251,7 +284,7 @@ class KafkaConsumerTest extends TestCase
 
         $this->assertCount(1, $topicPartitions);
         $this->assertSame(1, $topicPartitions[0]->getOffset());
-        $this->assertSame('metadata', $topicPartitions[0]->getMetadata());
+        $this->assertSame(null, $topicPartitions[0]->getMetadata());
 
         $consumer->unsubscribe();
     }
