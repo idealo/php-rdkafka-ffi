@@ -14,6 +14,7 @@ jobs:
     - name: "librdkafka master"
     - name: "librdkafka latest osx"
     - name: "librdkafka latest windows"
+    - name: "rdkafka ext, librdkafka v1.3.0"
   include:
     - &STANDARD_TEST_JOB
       stage: Test
@@ -61,6 +62,28 @@ jobs:
       env: LIBRDKAFKA_VERSION=master
       name: "librdkafka master"
 
+    - env: LIBRDKAFKA_VERSION=v1.3.0
+      stage: Test
+      name: "rdkafka ext, librdkafka v1.3.0"
+      os: linux
+      dist: xenial
+      language: minimal
+      services:
+        - docker
+      script:
+        - |
+          set -e;
+          docker-compose build --pull --parallel --build-arg LIBRDKAFKA_VERSION="$LIBRDKAFKA_VERSION";
+          docker-compose up -d kafka;
+          sleep 10s;
+          docker-compose run --user $(id -u):$(id -g) --rm --no-deps -v $HOME/.composer/cache:/tmp/.composer php74 composer update -d /app/resources/test-extension --ignore-platform-reqs;
+          docker-compose run --user $(id -u):$(id -g) --rm php74 php examples/create-topic.php -ttest -p1 -r1;
+          docker-compose run --user $(id -u):$(id -g) --rm php74 php examples/create-topic.php -ttest_partitions -p3 -r1;
+          docker-compose run --user $(id -u):$(id -g) --rm php74 php -dextension=rdkafka.so resources/test-extension/vendor/bin/phpunit -c resources/test-extension/phpunit.xml;
+      after_script:
+        - |
+          docker-compose down;
+
     - env: KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092
       stage: Test
       name: "librdkafka latest osx"
@@ -98,7 +121,7 @@ jobs:
           choco install nuget.commandline
           choco install php --version 7.4.1
           choco install nssm
-          refreshenv
+        - |
           php -v
           php -i
           nuget install librdkafka.redist
