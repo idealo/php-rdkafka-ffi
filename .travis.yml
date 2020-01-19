@@ -63,13 +63,13 @@ jobs:
 
     - env: KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092
       stage: Test
-      name: "librdkafka master osx"
+      name: "librdkafka latest osx"
       os: osx
       before_script:
         - |
           brew update;
           brew install php@7.4;
-          brew install librdkafka --HEAD;
+          brew install librdkafka;
           brew install composer;
           brew cask install homebrew/cask-versions/adoptopenjdk8;
           brew install kafka;
@@ -90,21 +90,23 @@ jobs:
 
     - env: KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092
       stage: Test
-      name: "librdkafka master windows"
+      name: "librdkafka latest windows"
       os: windows
       language: bash
       before_script:
         - |
+          choco install nuget.commandline
           choco install php --version 7.4.1
+          choco install nssm
+          refreshenv
           php -v
           php -i
-          nuget install librdkafka.redist -version 1.3.0
+          nuget install librdkafka.redist
           choco install composer
           wget https://www.apache.org/dyn/closer.cgi?path=/kafka/2.4.0/kafka_2.12-2.4.0.tgz
           tar -xzf kafka_2.12-2.4.0.tgz
           cd kafka_2.12-2.4.0
           dir
-          choco install nssm
           nssm install zookeeper .\bin\zookeeper-server-start.bat config\zookeeper.properties
           nssm install kafka .\bin\kafka-server-start.bat config\server.properties
       script:
