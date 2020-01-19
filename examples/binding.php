@@ -2,7 +2,11 @@
 
 declare(strict_types=1);
 
-$ffi = \RdKafka\FFI\Api::getFFI();
+use RdKafka\FFI\Api;
+
+require_once dirname(__DIR__) . '/vendor/autoload.php';
+
+$ffi = Api::getFFI();
 
 echo 'conf:' . PHP_EOL;
 $conf = $ffi->rd_kafka_conf_new();
