@@ -12,7 +12,8 @@ env:
 jobs:
   allow_failures:
     - name: "librdkafka master"
-    - name: "librdkafka master mac os"
+    - name: "librdkafka master osx"
+    - name: "librdkafka master windows"
   include:
     - &STANDARD_TEST_JOB
       stage: Test
@@ -62,7 +63,7 @@ jobs:
 
     - env: KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092
       stage: Test
-      name: "librdkafka master mac os"
+      name: "librdkafka master osx"
       os: osx
       before_script:
         - |
@@ -86,4 +87,37 @@ jobs:
         - |
           brew services stop kafka;
           brew services stop zookeeper;
+
+    - env: KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092
+      stage: Test
+      name: "librdkafka master windows"
+      os: windows
+      language: bash
+      before_script:
+        - |
+          choco install php --version 7.4.1
+          php -v
+          php -i
+          nuget install librdkafka.redist -version 1.3.0
+          choco install composer
+          wget https://www.apache.org/dyn/closer.cgi?path=/kafka/2.4.0/kafka_2.12-2.4.0.tgz
+          tar -xzf kafka_2.12-2.4.0.tgz
+          cd kafka_2.12-2.4.0
+          dir
+          choco install nssm
+          nssm install zookeeper .\bin\zookeeper-server-start.bat config\zookeeper.properties
+          nssm install kafka .\bin\kafka-server-start.bat config\server.properties
+      script:
+        - |
+          nssm start zookeeper;
+          nssm start kafka;
+          sleep 10s;
+          composer update --prefer-stable --no-interaction --no-suggest;
+          php examples/create-topic.php -ttest -p1 -r1;
+          php examples/create-topic.php -ttest_partitions -p3 -r1;
+          php vendor/bin/phpunit;
+      after_script:
+        - |
+          nssm stop kafka;
+          nssm stop zookeeper;
 
