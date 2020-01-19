@@ -77,8 +77,8 @@ jobs:
           docker-compose up -d kafka;
           sleep 10s;
           docker-compose run --user $(id -u):$(id -g) --rm --no-deps -v $HOME/.composer/cache:/tmp/.composer php74 composer update -d /app/resources/test-extension --ignore-platform-reqs;
-          docker-compose run --user $(id -u):$(id -g) --rm php74 php examples/create-topic.php -ttest -p1 -r1;
-          docker-compose run --user $(id -u):$(id -g) --rm php74 php examples/create-topic.php -ttest_partitions -p3 -r1;
+          docker-compose exec kafka sh -c '/usr/bin/kafka-topics --create --bootstrap-server localhost:9092 --topic test --partitions 1 --replication-factor 1'
+          docker-compose exec kafka sh -c '/usr/bin/kafka-topics --create --bootstrap-server localhost:9092 --topic test_partitions --partitions 3 --replication-factor 1'
           docker-compose run --user $(id -u):$(id -g) --rm php74 php -dextension=rdkafka.so resources/test-extension/vendor/bin/phpunit -c resources/test-extension/phpunit.xml;
       after_script:
         - |
@@ -122,14 +122,17 @@ jobs:
           choco install php --version 7.4.1
           choco install nssm
         - |
-          php -v
-          php -i
+          php.exe -v
+          php.exe -i
           nuget install librdkafka.redist
           choco install composer
-          wget https://www.apache.org/dyn/closer.cgi?path=/kafka/2.4.0/kafka_2.12-2.4.0.tgz
+          wget -O kafka_2.12-2.4.0.tgz https://www.apache.org/dyn/closer.cgi?path=/kafka/2.4.0/kafka_2.12-2.4.0.tgz
           tar -xzf kafka_2.12-2.4.0.tgz
           cd kafka_2.12-2.4.0
           dir
+          echo %cd%
+          echo %PATH%
+          printenv
           nssm install zookeeper .\bin\zookeeper-server-start.bat config\zookeeper.properties
           nssm install kafka .\bin\kafka-server-start.bat config\server.properties
       script:
@@ -138,9 +141,9 @@ jobs:
           nssm start kafka;
           sleep 10s;
           composer update --prefer-stable --no-interaction --no-suggest;
-          php examples/create-topic.php -ttest -p1 -r1;
-          php examples/create-topic.php -ttest_partitions -p3 -r1;
-          php vendor/bin/phpunit;
+          php.exe examples/create-topic.php -ttest -p1 -r1;
+          php.exe examples/create-topic.php -ttest_partitions -p3 -r1;
+          php.exe vendor/bin/phpunit;
       after_script:
         - |
           nssm stop kafka;
