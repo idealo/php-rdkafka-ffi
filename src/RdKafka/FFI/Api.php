@@ -15,7 +15,7 @@ abstract class Api
     private static FFI $ffi;
 
     public static string $scope = 'RdKafka';
-    public static string $library = 'librdkafka.so';
+    public static ?string $library = null;
     public static string $cdef = <<<CDEF
 typedef long int ssize_t;
 struct _IO_FILE;
@@ -559,7 +559,7 @@ CDEF;
                         'FFI_SCOPE "RdKafka" not found (ffi.enable=preload requires you to call \RdKafka\Api::preload in )'
                     );
                 }
-                self::$ffi = FFI::cdef(self::$cdef, self::$library);
+                self::$ffi = FFI::cdef(self::$cdef, self::getLibrary());
             }
         }
     }
@@ -570,12 +570,31 @@ CDEF;
         return self::$ffi;
     }
 
+    public static function getLibrary(): string
+    {
+        if (self::$library !== null) {
+            return self::$library;
+        }
+
+        switch (PHP_OS_FAMILY) {
+            case 'Darwin':
+                return 'librdkafka.dylib';
+                break;
+            case 'Windows':
+                return 'librdkafka.dll';
+                break;
+            default:
+                return 'librdkafka.so';
+                break;
+        }
+    }
+
     public static function preload(): FFI
     {
         try {
             $file = \tempnam(\sys_get_temp_dir(), 'php-rdkafka-ffi');
             $scope = \sprintf('#define FFI_SCOPE "%s"', self::$scope) . "\n";
-            $library = \sprintf('#define FFI_LIB "%s"', self::$library) . "\n";
+            $library = \sprintf('#define FFI_LIB "%s"', self::getLibrary()) . "\n";
             \file_put_contents($file, $scope . $library . self::$cdef);
             $ffi = FFI::load($file);
         } finally {
@@ -595,7 +614,7 @@ CDEF;
      */
     public static function errno(): int
     {
-        return (int) self::getFFI()->rd_kafka_errno();
+        return (int)self::getFFI()->rd_kafka_errno();
     }
 
     /**
@@ -603,12 +622,12 @@ CDEF;
      */
     public static function errno2err(int $err): int
     {
-        return (int) self::getFFI()->rd_kafka_errno2err($err);
+        return (int)self::getFFI()->rd_kafka_errno2err($err);
     }
 
     public static function threadCount(): int
     {
-        return (int) self::getFFI()->rd_kafka_thread_cnt();
+        return (int)self::getFFI()->rd_kafka_thread_cnt();
     }
 
     public static function version(): string

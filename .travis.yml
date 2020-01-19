@@ -1,11 +1,10 @@
-language: minimal
-dist: xenial
 sudo: true
-services:
-  - docker
 cache:
   directories:
     - $HOME/.composer/cache
+addons:
+  hosts:
+    - kafka
 env:
   global:
     - CC_TEST_REPORTER_ID=c543ca814944c789fa9a5ee4c553866eee2e7498d1644258575a24bc05302641
@@ -13,12 +12,17 @@ env:
 jobs:
   allow_failures:
     - name: "librdkafka master"
+    - name: "librdkafka master mac os"
   include:
     - &STANDARD_TEST_JOB
       stage: Test
       name: "librdkafka v1.0.1"
+      os: linux
+      dist: xenial
+      language: minimal
+      services:
+        - docker
       env: LIBRDKAFKA_VERSION=v1.0.1
-
       before_script:
         - |
           curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter;
@@ -55,3 +59,32 @@ jobs:
     - <<: *STANDARD_TEST_JOB
       env: LIBRDKAFKA_VERSION=master
       name: "librdkafka master"
+
+    - env: KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092
+      stage: Test
+      name: "librdkafka master mac os"
+      os: osx
+      before_script:
+        - |
+          set -e;
+          brew update;
+          brew install php@7.4;
+          brew install librdkafka --HEAD;
+          brew install composer;
+          brew cask install homebrew/cask-versions/adoptopenjdk8;
+          brew install kafka;
+      script:
+        - |
+          set -e;
+          brew services start zookeeper;
+          brew services start kafka;
+          sleep 10s;
+          composer update --prefer-stable --no-interaction --no-suggest;
+          php examples/create-topic.php -ttest -p1 -r1;
+          php examples/create-topic.php -ttest_partitions -p3 -r1;
+          php vendor/bin/phpunit;
+      after_script:
+        - |
+          brew services stop kafka;
+          brew services stop zookeeper;
+
