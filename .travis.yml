@@ -12,8 +12,8 @@ env:
 jobs:
   allow_failures:
     - name: "librdkafka master"
-    - name: "librdkafka master osx"
-    - name: "librdkafka master windows"
+    - name: "librdkafka latest osx"
+    - name: "librdkafka latest windows"
   include:
     - &STANDARD_TEST_JOB
       stage: Test
