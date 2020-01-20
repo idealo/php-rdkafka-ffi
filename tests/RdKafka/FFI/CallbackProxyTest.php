@@ -13,6 +13,23 @@ use PHPUnit\Framework\TestCase;
  */
 class CallbackProxyTest extends TestCase
 {
+    protected function createCallbackProxyStub()
+    {
+        return new class extends CallbackProxy {
+            public function __construct(?callable $callback = null)
+            {
+                if ($callback !== null) {
+                    parent::__construct($callback);
+                }
+            }
+
+            public function __invoke(...$args)
+            {
+                return ($this->callback)(...$args);
+            }
+        };
+    }
+
     public function testCreateWithCallable(): void
     {
         $testCallback = new class() {
@@ -23,7 +40,8 @@ class CallbackProxyTest extends TestCase
         };
         $this->assertNotInstanceOf(\Closure::class, $testCallback);
 
-        $proxy = CallbackProxyStub::create($testCallback);
+        $stub = $this->createCallbackProxyStub();
+        $proxy = $stub::create($testCallback);
 
         $this->assertInstanceOf(\Closure::class, $proxy);
         $this->assertSame('test', $proxy('test'));
@@ -36,7 +54,8 @@ class CallbackProxyTest extends TestCase
         };
         $this->assertInstanceOf(\Closure::class, $testCallback);
 
-        $proxy = CallbackProxyStub::create($testCallback);
+        $stub = $this->createCallbackProxyStub();
+        $proxy = $stub::create($testCallback);
 
         $this->assertInstanceOf(\Closure::class, $proxy);
         $this->assertSame('test', $proxy('test'));
