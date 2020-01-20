@@ -126,12 +126,13 @@ jobs:
           choco install nuget.commandline
           nuget install librdkafka.redist
         - |
+          choco install adoptopenjdk8
           wget -O kafka-2.4.0.tar.gz https://github.com/apache/kafka/archive/2.4.0.tar.gz
           tar -xzf kafka-2.4.0.tar.gz
           cd kafka-2.4.0
           dir
-          echo %cd%
-          echo %PATH%
+          echo $PWD
+          export PATH=$PWD/bin:$PATH
           printenv
         - |
           choco install nssm
