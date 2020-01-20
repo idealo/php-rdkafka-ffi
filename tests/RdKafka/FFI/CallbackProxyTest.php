@@ -8,6 +8,8 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \RdKafka\FFI\CallbackProxy
+ *
+ * @group ffiOnly
  */
 class CallbackProxyTest extends TestCase
 {
