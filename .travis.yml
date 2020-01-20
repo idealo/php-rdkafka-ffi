@@ -126,7 +126,8 @@ jobs:
           choco install nuget.commandline
           nuget install librdkafka.redist
         - |
-          choco install adoptopenjdk8
+          choco install adoptopenjdk8 --version 8.232.9
+          export JAVA_HOME=c/Program Files/AdoptOpenJDK/jdk-8.0.232.09-hotspot
           wget -O kafka-2.4.0.tar.gz https://github.com/apache/kafka/archive/2.4.0.tar.gz
           tar -xzf kafka-2.4.0.tar.gz
           cd kafka-2.4.0
