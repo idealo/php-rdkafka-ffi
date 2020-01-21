@@ -122,6 +122,8 @@ jobs:
           php -v
           php -i
           choco install composer
+          export PATH=/c/Program\ Files\ (x86)/ComposerSetup:$PATH
+          composer --version
         - |
           choco install nuget.commandline
           nuget install librdkafka.redist
