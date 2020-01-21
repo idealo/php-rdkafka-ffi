@@ -128,17 +128,14 @@ jobs:
         - |
           choco install adoptopenjdk8 --version 8.232.9
           export JAVA_HOME=/c/Program\ Files/AdoptOpenJDK/jdk-8.0.232.09-hotspot
-          wget -O kafka-2.4.0.tar.gz https://github.com/apache/kafka/archive/2.4.0.tar.gz
-          tar -xzf kafka-2.4.0.tar.gz
-          cd kafka-2.4.0
-          dir
-          echo $PWD
-          export PATH=$PWD/bin:$PATH
-          printenv
+          wget -O kafka.tar.gz https://github.com/apache/kafka/archive/2.4.0.tar.gz
+          tar -xzf kafka.tar.gz
+          export PATH=$PWD/kafka/bin:$PATH
         - |
           choco install nssm
-          nssm install zookeeper $PWD/bin/windows/zookeeper-server-start.bat $PWD/config/zookeeper.properties
-          nssm install kafka $PWD/bin/windows/kafka-server-start.bat $PWD/config/server.properties
+          nssm install zookeeper $PWD/kafka/bin/windows/zookeeper-server-start.bat $PWD/kafka/config/zookeeper.properties
+          nssm install kafka $PWD/kafka/bin/windows/kafka-server-start.bat $PWD/kafka/config/server.properties
+          printenv
       script:
         - |
           nssm start zookeeper;
