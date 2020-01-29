@@ -128,7 +128,7 @@ jobs:
         - |
           choco install nuget.commandline
           nuget install librdkafka.redist -Version 1.3.0
-          export PATH=$PWD/librdkafka.redist.1.3.0/runtimes/win-x64/native:$PATH
+          export PATH=$PWD/librdkafka.redist.1.3.0/runtimes/win-x86/native:$PATH
         - |
           choco install adoptopenjdk8 --version 8.232.9
           export JAVA_HOME=/c/Program\ Files/AdoptOpenJDK/jdk-8.0.232.09-hotspot
