@@ -286,7 +286,6 @@ void rd_kafka_conf_set_stats_cb(rd_kafka_conf_t *conf, int(*stats_cb)(rd_kafka_t
 void rd_kafka_conf_set_socket_cb(rd_kafka_conf_t *conf, int(*socket_cb)(int domain, int type, int protocol, void *opaque));
 void rd_kafka_conf_set_connect_cb(rd_kafka_conf_t *conf, int(*connect_cb)(int sockfd, struct sockaddr *addr, int addrlen, char *id, void *opaque));
 void rd_kafka_conf_set_closesocket_cb(rd_kafka_conf_t *conf, int(*closesocket_cb)(int sockfd, void *opaque));
-void rd_kafka_conf_set_open_cb(rd_kafka_conf_t *conf, int(*open_cb)(char *pathname, int flags, mode_t mode, void *opaque));
 void rd_kafka_conf_set_opaque(rd_kafka_conf_t *conf, void *opaque);
 void * rd_kafka_opaque(rd_kafka_t *rk);
 void rd_kafka_conf_set_default_topic_conf(rd_kafka_conf_t *conf, rd_kafka_topic_conf_t *tconf);
@@ -429,7 +428,6 @@ int rd_kafka_brokers_add(rd_kafka_t *rk, char *brokerlist);
 void rd_kafka_set_logger(rd_kafka_t *rk, void(*func)(rd_kafka_t *rk, int level, char *fac, char *buf));
 void rd_kafka_set_log_level(rd_kafka_t *rk, int level);
 void rd_kafka_log_print(rd_kafka_t *rk, int level, char *fac, char *buf);
-void rd_kafka_log_syslog(rd_kafka_t *rk, int level, char *fac, char *buf);
 int rd_kafka_outq_len(rd_kafka_t *rk);
 void rd_kafka_dump(FILE *fp, rd_kafka_t *rk);
 int rd_kafka_thread_cnt(void);
