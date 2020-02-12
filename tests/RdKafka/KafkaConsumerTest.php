@@ -255,30 +255,36 @@ class KafkaConsumerTest extends TestCase
         $consumer->unsubscribe();
     }
 
-    private function isRdKafkaVersion(string $version, string $operator = '<')
+    private function requiresRdKafkaVersion(string $operator, string $version)
     {
-        if (function_exists('rd_kafka_version()')) {
+        if (function_exists('rd_kafka_version')) {
             $runtimeVersion = rd_kafka_version();
         } elseif (defined('RD_KAFKA_VERSION')) {
             $runtimeVersion = sprintf(
-                "%u.%u.%u.%u",
+                "%u.%u.%u",
                 (RD_KAFKA_VERSION & 0xFF000000) >> 24,
                 (RD_KAFKA_VERSION & 0x00FF0000) >> 16,
-                (RD_KAFKA_VERSION & 0x0000FF00) >> 8,
-                (RD_KAFKA_VERSION & 0x000000FF)
+                (RD_KAFKA_VERSION & 0x0000FF00) >> 8
             );
         } else {
-            return false;
+            $this->markTestSkipped('Requires librdkafka. Cannot detect current version.');
         }
 
-        return (bool)(version_compare($runtimeVersion, $version, $operator));
+        if (!version_compare($runtimeVersion, $version, $operator)) {
+            $this->markTestSkipped(
+                sprintf(
+                    'Requires librdkafka %s %s. Current version is %s.',
+                    $operator,
+                    $version,
+                    $runtimeVersion
+                )
+            );
+        };
     }
 
     public function testCommitWithOffsetAndMetadata(): void
     {
-        if ($this->isRdKafkaVersion('1.2.0', '<')) {
-            $this->markTestSkipped('Requires librdkafka ^1.2.0');
-        }
+        $this->requiresRdKafkaVersion('>=', '1.2.0');
 
         $conf = new Conf();
         $conf->set('group.id', __METHOD__ . random_int(0, 999999999));
