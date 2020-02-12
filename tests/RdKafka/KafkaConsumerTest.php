@@ -282,6 +282,9 @@ class KafkaConsumerTest extends TestCase
         };
     }
 
+    /**
+     * @group ffiOnly
+     */
     public function testCommitWithOffsetAndMetadata(): void
     {
         $this->requiresRdKafkaVersion('>=', '1.2.0');
