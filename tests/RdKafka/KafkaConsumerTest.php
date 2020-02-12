@@ -255,9 +255,28 @@ class KafkaConsumerTest extends TestCase
         $consumer->unsubscribe();
     }
 
+    private function isRdKafkaVersion(string $version, string $operator = '<')
+    {
+        if (function_exists('rd_kafka_version()')) {
+            $runtimeVersion = rd_kafka_version();
+        } elseif (defined('RD_KAFKA_VERSION')) {
+            $runtimeVersion = sprintf(
+                "%u.%u.%u.%u",
+                (RD_KAFKA_VERSION & 0xFF000000) >> 24,
+                (RD_KAFKA_VERSION & 0x00FF0000) >> 16,
+                (RD_KAFKA_VERSION & 0x0000FF00) >> 8,
+                (RD_KAFKA_VERSION & 0x000000FF)
+            );
+        } else {
+            return false;
+        }
+
+        return (bool)(version_compare($runtimeVersion, $version, $operator));
+    }
+
     public function testCommitWithOffsetAndMetadata(): void
     {
-        if (version_compare(rd_kafka_version(), '1.2.0', '<')) {
+        if ($this->isRdKafkaVersion('1.2.0', '<')) {
             $this->markTestSkipped('Requires librdkafka ^1.2.0');
         }
 
