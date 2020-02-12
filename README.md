@@ -1,23 +1,34 @@
-# Pure PHP Kafka Client library based on PHP 7.4, FFI and librdkafka
+# PHP Kafka client - binding librdkafka via FFI
 
-__EXTREMLY EXPERIMENTAL WIP__
+__WIP__
 
 [![Build Status](https://travis-ci.org/dirx/php-ffi-librdkafka.svg?branch=master)](https://travis-ci.org/dirx/php-ffi-librdkafka)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/e60645b9d6d8fa9dd9d6/test_coverage)](https://codeclimate.com/github/dirx/php-ffi-librdkafka/test_coverage)
 [![Maintainability](https://api.codeclimate.com/v1/badges/e60645b9d6d8fa9dd9d6/maintainability)](https://codeclimate.com/github/dirx/php-ffi-librdkafka/maintainability)
 
-This is a Kafka client library written in pure PHP.
+This is a Kafka client library for PHP ^7.4 with a slim [librdkafka](https://github.com/edenhill/librdkafka) binding via FFI.
 It is intended as a replacement for the [PHP RdKafka extension](https://github.com/arnaud-lb/php-rdkafka).
 
-Playing around with:
+## Usage
+
+There is no pre-release yet. Please do not use in production.
+
+### Requirements
+
+* PHP ^7.4 with extensions FFI and pcntl
+* librdkafka ^1.0.0
+
+Note: Support for macOS and Windows is currently experimental and very very very unstable.
+
+## Try out & contribute
+
+Checkout this repo and have some fun playing around with:
 
 * [FFI extension](https://www.php.net/manual/en/book.ffi.php)
-* [librdkafka v1.0, v1.1, v1.2, v1.3, master](https://github.com/edenhill/librdkafka) ([docs](https://docs.confluent.io/current/clients/librdkafka/rdkafka_8h.html))
-* [PHP 7.4](https://www.php.net/archive/2019.php#2019-11-28-1)
+* [librdkafka ^1.0](https://github.com/edenhill/librdkafka) ([docs](https://docs.confluent.io/current/clients/librdkafka/rdkafka_8h.html))
+* [PHP ^7.4](https://www.php.net/archive/2019.php#2019-11-28-1)
 * Confluent [Kafka](https://hub.docker.com/r/confluentinc/cp-kafka) / [Zookeeper](https://hub.docker.com/r/confluentinc/cp-zookeeper) docker images
 * [phpbench lib](https://github.com/phpbench/phpbench) for benchmarking
-
-## Prepare
 
 ### Directory overview
 
@@ -41,6 +52,10 @@ Alternative: build the image individually
 
     docker-compose build --no-cache --pull php74
 
+Alternative: build the image individually and set optional build args (LIBRDKAFKA_VERSION default = v1.0.0, RDKAFKA_EXT_VERSION default = master)
+
+    docker-compose build --no-cache --pull php74 --build-arg LIBRDKAFKA_VERSION="v1.3.0" --build-arg RDKAFKA_EXT_VERSION="4.0.3"
+
 Test - should show latest 7.4 version
 
     docker-compose run php74 php -v
@@ -57,7 +72,7 @@ Test - should show ```rdkafka``` in modules list
 
     docker-compose run php74 php -dextension=rdkafka.so -m
 
-## Startup
+### Startup
 
 Startup php & kafka
 
@@ -74,7 +89,7 @@ Create required topics
     docker-compose run --rm php74 php examples/create-topic.php -ttest_partitions -p3 -r1 && \
     docker-compose run --rm php74 php examples/create-topic.php -tbenchmarks -p1 -r1 
 
-## Having fun with examples
+### Having fun with examples
 
 Examples use topic ```playground```.
 
@@ -125,7 +140,7 @@ Delete topic ```playground``` ...
 
     docker-compose run --rm php74 php examples/delete-topic.php -tplayground
 
-## Run tests
+### Run tests
 
 Tests use topics ```test*```.
 
@@ -141,7 +156,7 @@ Run tests with coverage
 
     docker-compose run --rm php74 vendor/bin/phpunit --coverage-html build/coverage
 
-### Run tests against RdKafka extension / PHP 7.4
+#### Run tests against RdKafka extension / PHP 7.4
 
 Updating Dependencies
 
@@ -151,7 +166,7 @@ Run tests
 
      docker-compose run --rm php74 php -dextension=rdkafka.so resources/test-extension/vendor/bin/phpunit -c resources/test-extension/phpunit.xml
 
-## Run benchmarks
+### Run benchmarks
 
 Benchmarks use topic ```benchmarks```.
 
@@ -175,7 +190,7 @@ Show comparison
 
     docker-compose run --rm php74 phpbench report --uuid=tag:ffi --uuid=tag:ext --report='{extends: compare, compare: tag}'
 
-### Benchmarks
+#### Benchmarks
 
 Some benchmarks based on PHP 7.4.1, librdkafka v1.3.0, ext latest master (4.0.3-dev), ffi with preload enabled.
 
@@ -193,13 +208,13 @@ Some benchmarks based on PHP 7.4.1, librdkafka v1.3.0, ext latest master (4.0.3-
 
 See concrete [benchmarks details](./docs/benchmarks.md) for ffi & extension bindings.
 
-## Shutdown & cleanup
+### Shutdown & cleanup
 
 Shutdown and remove volumes:
 
     docker-compose down -v
 
-## Todos
+### Todos
 
 * [x] Callbacks
 * [x] High Level KafkaConsumer
@@ -208,6 +223,7 @@ Shutdown and remove volumes:
 * [x] Compatible to librdkafka ^1.0.0
 * [x] Benchmarking against rdkafka extension
 * [x] Provide ffi preload
-* [ ] Documentation
-* [ ] Compatible to rdkafka extension ^3.1.0
+* [x] Compatible to rdkafka extension ^4.0
 * [ ] Sig Handling & destruct (expect seg faults & lost msgs & shutdown hangs)
+* [ ] Documentation
+* [ ] Prepare for composer & first release
