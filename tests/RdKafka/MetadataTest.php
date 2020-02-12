@@ -58,7 +58,7 @@ class MetadataTest extends TestCase
         /** @var Topic $topic */
         $topic = $topics->current();
 
-        $this->assertGreaterThan('__consumer_offsets', $topic->getTopic());
+        $this->assertIsString($topic->getTopic());
         $this->assertSame(RD_KAFKA_RESP_ERR_NO_ERROR, $topic->getErr());
 
         $partitions = $topic->getPartitions();
