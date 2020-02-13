@@ -179,16 +179,16 @@ foreach ($supported as $version => $hFileUrl) {
         }
     }
 
-    echo "Generate bindings RdKafka\\Binding\\LibRdKafkaV${versionName}" . PHP_EOL;
-
-    (new FFIMe\FFIMe('librdkafka.so'))
-        ->include($hFileParsed)
-        ->codeGen(
-            'RdKafka\\Binding\\LibRdKafka',
-            dirname(__DIR__) . '/src/RdKafka/Binding/LibRdKafkaV' . $versionName . '.php'
-        );
-
-    echo 'Generate bindings done.' . PHP_EOL;
+//    echo "Generate bindings RdKafka\\Binding\\LibRdKafkaV${versionName}" . PHP_EOL;
+//
+//    (new FFIMe\FFIMe('librdkafka.so'))
+//        ->include($hFileParsed)
+//        ->codeGen(
+//            'RdKafka\\Binding\\LibRdKafka',
+//            dirname(__DIR__) . '/src/RdKafka/Binding/LibRdKafkaV' . $versionName . '.php'
+//        );
+//
+//    echo 'Generate bindings done.' . PHP_EOL;
 }
 
 file_put_contents(
