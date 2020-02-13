@@ -21,6 +21,7 @@ class Client extends Api
 {
     private RdKafka $kafka;
     private bool $isDerived;
+    private int $waitForResultEventTimeoutMs = 50;
 
     private function __construct(RdKafka $kafka)
     {
@@ -298,7 +299,7 @@ class Client extends Api
     private function waitForResultEvent(Queue $queue, int $eventType): Event
     {
         do {
-            $event = $queue->poll(50);
+            $event = $queue->poll($this->waitForResultEventTimeoutMs);
         } while ($event === null);
 
         if ($event->error() !== RD_KAFKA_RESP_ERR_NO_ERROR) {
@@ -316,5 +317,10 @@ class Client extends Api
         }
 
         return $event;
+    }
+
+    public function setWaitForResultEventTimeout(int $timeoutMs)
+    {
+        $this->waitForResultEventTimeoutMs = $timeoutMs;
     }
 }

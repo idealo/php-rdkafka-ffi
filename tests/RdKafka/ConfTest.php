@@ -160,6 +160,9 @@ class ConfTest extends TestCase
         $conf->get('unknown.property');
     }
 
+    /**
+     * @small
+     */
     public function testSetLogCb(): void
     {
         $loggerCallbacks = 0;
@@ -181,6 +184,9 @@ class ConfTest extends TestCase
         $this->assertSame(1, $loggerCallbacks, 'Expected debug level log callback');
     }
 
+    /**
+     * @small
+     */
     public function testSetErrorCb(): void
     {
         $errorCallbackStack = [];
@@ -231,6 +237,9 @@ class ConfTest extends TestCase
         $producer->flush((int) KAFKA_TEST_TIMEOUT_MS);
     }
 
+    /**
+     * @small
+     */
     public function testSetStatsCb(): void
     {
         $statsJson = '';
@@ -256,6 +265,9 @@ class ConfTest extends TestCase
         $this->assertSame([], $stats['brokers']);
     }
 
+    /**
+     * @medium
+     */
     public function testSetRebalanceCb(): void
     {
         $rebalanceCallbackStack = [];

@@ -51,6 +51,7 @@ class ClientTest extends TestCase
         $conf = new Conf();
         $conf->set('metadata.broker.list', KAFKA_BROKERS);
         $client = Client::fromConf($conf);
+        $client->setWaitForResultEventTimeout((int) KAFKA_TEST_TIMEOUT_MS);
 
         $topics = [
             new NewTopic('test_admin_1', 1, 1),
@@ -88,6 +89,7 @@ class ClientTest extends TestCase
         $conf = new Conf();
         $conf->set('metadata.broker.list', KAFKA_BROKERS);
         $client = Client::fromConf($conf);
+        $client->setWaitForResultEventTimeout((int) KAFKA_TEST_TIMEOUT_MS);
 
         $partitions = [
             new NewPartitions('test_admin_1', 4),
@@ -125,6 +127,7 @@ class ClientTest extends TestCase
         $conf = new Conf();
         $conf->set('metadata.broker.list', KAFKA_BROKERS);
         $client = Client::fromConf($conf);
+        $client->setWaitForResultEventTimeout((int) KAFKA_TEST_TIMEOUT_MS);
 
         $topics = [
             new DeleteTopic('test_admin_1'),
@@ -162,6 +165,7 @@ class ClientTest extends TestCase
         $conf = new Conf();
         $conf->set('metadata.broker.list', KAFKA_BROKERS);
         $client = Client::fromConf($conf);
+        $client->setWaitForResultEventTimeout((int) KAFKA_TEST_TIMEOUT_MS);
 
         $topic = new NewTopic('test_admin_3', 2, -1);
         $topic->setReplicaAssignment(0, [(int) KAFKA_BROKER_ID]);
@@ -198,6 +202,7 @@ class ClientTest extends TestCase
         $conf = new Conf();
         $conf->set('metadata.broker.list', KAFKA_BROKERS);
         $client = Client::fromConf($conf);
+        $client->setWaitForResultEventTimeout((int) KAFKA_TEST_TIMEOUT_MS);
 
         $partition = new NewPartitions('test_admin_3', 4);
         $partition->setReplicaAssignment(0, [(int) KAFKA_BROKER_ID]);
@@ -243,7 +248,7 @@ class ClientTest extends TestCase
 
     private static function waitAfterTopicDeletion(): void
     {
-        usleep(500 * 1000);
+        sleep(2);
     }
 
     public function testDescribeConfigs(): void
@@ -251,6 +256,7 @@ class ClientTest extends TestCase
         $conf = new Conf();
         $conf->set('metadata.broker.list', KAFKA_BROKERS);
         $client = Client::fromConf($conf);
+        $client->setWaitForResultEventTimeout((int) KAFKA_TEST_TIMEOUT_MS);
 
         $configResource = new ConfigResource(RD_KAFKA_RESOURCE_BROKER, (string) KAFKA_BROKER_ID);
 
@@ -278,6 +284,7 @@ class ClientTest extends TestCase
         $conf->set('metadata.broker.list', KAFKA_BROKERS);
         $conf->set('broker.version.fallback', '2.0.0');
         $client = Client::fromConf($conf);
+        $client->setWaitForResultEventTimeout((int) KAFKA_TEST_TIMEOUT_MS);
 
         $configResource = new ConfigResource(RD_KAFKA_RESOURCE_BROKER, (string) KAFKA_BROKER_ID);
         $configResource->setConfig('max.connections.per.ip', (string) 500000);

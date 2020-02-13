@@ -119,6 +119,9 @@ class KafkaConsumerTest extends TestCase
         $this->assertSame(KAFKA_TEST_TOPIC, $topicPartitions[0]);
     }
 
+    /**
+     * @medium
+     */
     public function testConsume(): void
     {
         $conf = new Conf();
@@ -182,6 +185,9 @@ class KafkaConsumerTest extends TestCase
         $consumer->commitAsync(new stdClass());
     }
 
+    /**
+     * @medium
+     */
     public function testCommitWithMessage(): void
     {
         $conf = new Conf();
@@ -340,6 +346,9 @@ class KafkaConsumerTest extends TestCase
         $this->assertSame(2, $topicPartitions[0]->getOffset());
     }
 
+    /**
+     * @medium
+     */
     public function testGetCommittedOffsets(): void
     {
         $conf = new Conf();

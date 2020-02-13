@@ -104,7 +104,7 @@ jobs:
           composer update --prefer-stable --no-interaction --no-suggest;
           php examples/create-topic.php -ttest -p1 -r1;
           php examples/create-topic.php -ttest_partitions -p3 -r1;
-          php vendor/bin/phpunit;
+          php vendor/bin/phpunit --verbose --colors --enforce-time-limit;
       after_script:
         - |
           brew services stop kafka;
@@ -149,7 +149,7 @@ jobs:
           composer update --prefer-stable --no-interaction --no-suggest --ignore-platform-reqs;
           php examples/create-topic.php -ttest -p1 -r1;
           php examples/create-topic.php -ttest_partitions -p3 -r1;
-          vendor/bin/phpunit --verbose --colors;
+          vendor/bin/phpunit --verbose --colors --enforce-time-limit;
       after_script:
         - |
           nssm stop kafka;
