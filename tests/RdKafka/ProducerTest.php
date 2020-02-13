@@ -40,7 +40,7 @@ class ProducerTest extends TestCase
 
     public function testGetMetadata(): void
     {
-        $metadata = $this->producer->getMetadata(true, null, (int) KAFKA_TEST_TIMEOUT_MS);
+        $metadata = $this->producer->getMetadata(true, null, KAFKA_TEST_TIMEOUT_MS);
 
         self::assertInstanceOf(Metadata::class, $metadata);
     }
@@ -93,7 +93,7 @@ class ProducerTest extends TestCase
     {
         $producer = new Producer();
         $producer->addBrokers(KAFKA_BROKERS);
-        $res = $producer->flush((int) KAFKA_TEST_TIMEOUT_MS);
+        $res = $producer->flush(KAFKA_TEST_TIMEOUT_MS);
 
         $this->assertSame(0, $res);
     }

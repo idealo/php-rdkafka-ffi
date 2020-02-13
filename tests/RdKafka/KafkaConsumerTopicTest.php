@@ -39,7 +39,7 @@ class KafkaConsumerTopicTest extends TestCase
 
         $topicPartitions = $consumer->getCommittedOffsets(
             [new TopicPartition(KAFKA_TEST_TOPIC, 0)],
-            (int) KAFKA_TEST_TIMEOUT_MS
+            KAFKA_TEST_TIMEOUT_MS
         );
         $this->assertSame(-1001, $topicPartitions[0]->getOffset());
 
@@ -48,7 +48,7 @@ class KafkaConsumerTopicTest extends TestCase
 
         $topicPartitions = $consumer->getCommittedOffsets(
             [new TopicPartition(KAFKA_TEST_TOPIC, 0)],
-            (int) KAFKA_TEST_TIMEOUT_MS
+            KAFKA_TEST_TIMEOUT_MS
         );
         $this->assertSame(2, $topicPartitions[0]->getOffset());
     }

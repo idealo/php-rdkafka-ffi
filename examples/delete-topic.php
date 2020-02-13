@@ -20,6 +20,7 @@ if (empty($options)) {
 $conf = new Conf();
 $conf->set('metadata.broker.list', 'kafka:9092');
 $client = Client::fromConf($conf);
+$client->setWaitForResultEventTimeout(2000);
 
 $result = $client->deleteTopics(
     [

@@ -30,7 +30,7 @@ class MetadataTest extends TestCase
         // wait for metadata refresh
         sleep(1);
 
-        $this->metadata = $producer->getMetadata(true, null, (int) KAFKA_TEST_TIMEOUT_MS);
+        $this->metadata = $producer->getMetadata(true, null, KAFKA_TEST_TIMEOUT_MS);
     }
 
     public function testGetBrokers(): void
@@ -68,14 +68,14 @@ class MetadataTest extends TestCase
         $partition = $partitions->current();
 
         $this->assertSame(0, $partition->getId());
-        $this->assertSame((int) KAFKA_BROKER_ID, $partition->getIsrs()->current());
-        $this->assertSame((int) KAFKA_BROKER_ID, $partition->getLeader());
-        $this->assertSame((int) KAFKA_BROKER_ID, $partition->getReplicas()->current());
+        $this->assertSame(KAFKA_BROKER_ID, $partition->getIsrs()->current());
+        $this->assertSame(KAFKA_BROKER_ID, $partition->getLeader());
+        $this->assertSame(KAFKA_BROKER_ID, $partition->getReplicas()->current());
     }
 
     public function testGetOrigBrokerId(): void
     {
-        $this->assertSame((int) KAFKA_BROKER_ID, $this->metadata->getOrigBrokerId());
+        $this->assertSame(KAFKA_BROKER_ID, $this->metadata->getOrigBrokerId());
     }
 
     public function testGetOrigBrokerName(): void
