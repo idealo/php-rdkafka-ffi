@@ -117,9 +117,6 @@ jobs:
       language: bash
       before_script:
         - |
-          ping -n 1 kafka
-          cat /c/Windows/System32/drivers/etc/host
-        - |
           choco install php --version 7.4.2 --package-parameters='"/InstallDir:C:\PHP"'
           sed -i 's/;extension=ffi/extension=ffi/g' /c/PHP/php.ini
           cmd //C "RefreshEnv.cmd"
@@ -141,8 +138,6 @@ jobs:
           tar -xzf kafka_2.12-2.4.0.tgz
           cp -pr kafka_2.12-2.4.0 /c/kafka
           sed -i "s|broker.id=0|broker.id=111|g" /c/kafka/config/server.properties
-          sed -i "s|#listeners=PLAINTEXT://your.host.name:9092|listeners=PLAINTEXT://kafka:9092|g" /c/kafka/config/server.properties
-          sed -i "s|#advertised.listeners=PLAINTEXT://your.host.name:9092|advertised.listeners=PLAINTEXT://kafka:9092|g" /c/kafka/config/server.properties
           cat /c/kafka/config/server.properties
         - |
           choco install nssm
