@@ -27,6 +27,9 @@ use RdKafka\Producer;
  * @covers \RdKafka\Event
  *
  * @group ffiOnly
+ * @requires OS Linux|Darwin
+ *
+ * Kafka crashes on Windows on deleting topics - see https://github.com/apache/kafka/pull/6329
  */
 class ClientTest extends TestCase
 {
