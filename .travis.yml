@@ -137,7 +137,7 @@ jobs:
           cp -pr kafka_2.12-2.4.0 /c/kafka
           sed -i "s|broker.id=0|broker.id=111|g" /c/kafka/config/server.properties
           sed -i "s|#advertised.listeners=PLAINTEXT://your.host.name:9092|advertised.listeners=PLAINTEXT://kafka:9092|g" /c/kafka/config/server.properties
-          cat /c/kafka/config/zookeeper.properties
+          cat /c/kafka/config/server.properties
         - |
           choco install nssm
           nssm install zookeeper /c/kafka/bin/windows/zookeeper-server-start.bat /c/kafka/config/zookeeper.properties
