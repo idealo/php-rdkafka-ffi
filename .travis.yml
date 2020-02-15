@@ -95,20 +95,18 @@ jobs:
           brew install composer;
           brew cask install homebrew/cask-versions/adoptopenjdk8;
           brew install kafka;
-          echo "broker.id=111
-          advertised.listeners=PLAINTEXT://kafka:9092" > /usr/local/etc/kafka/server.properties
       script:
         - |
           set -e;
           zookeeper-server-start -daemon /usr/local/etc/kafka/zookeeper.properties
-          kafka-server-start -daemon /usr/local/etc/kafka/server.properties -override broker.id=111 -override advertised.listeners=PLAINTEXT://kafka:9092
+          kafka-server-start -daemon /usr/local/etc/kafka/server.properties --override broker.id=111 --override advertised.listeners=PLAINTEXT://kafka:9092
           sleep 10s;
           composer update --prefer-stable --no-interaction --no-suggest;
           netstat -a
           php examples/create-topic.php -ttest -p1 -r1;
           php examples/create-topic.php -ttest_partitions -p3 -r1;
-          php vendor/bin/phpunit --verbose --colors;
           php examples/metadata.php;
+          php vendor/bin/phpunit --verbose --colors;
       after_script:
         - |
           kafka-server-stop;
@@ -139,8 +137,8 @@ jobs:
           wget -O kafka_2.12-2.4.0.tgz http://ftp.fau.de/apache/kafka/2.4.0/kafka_2.12-2.4.0.tgz
           tar -xzf kafka_2.12-2.4.0.tgz
           cp -pr kafka_2.12-2.4.0 /c/kafka
-          echo "broker.id=111
-          advertised.listeners=PLAINTEXT://kafka:9092" > /c/kafka/config/server.properties
+          sed -i "s|broker.id=0|broker.id=111|g" /c/kafka/config/server.properties
+          sed -i "s|#advertised.listeners=PLAINTEXT://your.host.name:9092|advertised.listeners=PLAINTEXT://kafka:9092|g" /c/kafka/config/server.properties
         - |
           choco install nssm
           nssm install zookeeper /c/kafka/bin/windows/zookeeper-server-start.bat /c/kafka/config/zookeeper.properties
@@ -157,8 +155,8 @@ jobs:
           netstat -a
           php examples/create-topic.php -ttest -p1 -r1;
           php examples/create-topic.php -ttest_partitions -p3 -r1;
-          vendor/bin/phpunit --verbose --colors;
           php examples/metadata.php;
+          vendor/bin/phpunit --verbose --colors;
       after_script:
         - |
           nssm stop kafka;
