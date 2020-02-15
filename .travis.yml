@@ -104,9 +104,11 @@ jobs:
           kafka-server-start -daemon /usr/local/etc/kafka/server.properties -override broker.id=111 -override advertised.listeners=PLAINTEXT://kafka:9092
           sleep 10s;
           composer update --prefer-stable --no-interaction --no-suggest;
+          netstat -a
           php examples/create-topic.php -ttest -p1 -r1;
           php examples/create-topic.php -ttest_partitions -p3 -r1;
           php vendor/bin/phpunit --verbose --colors;
+          php examples/metadata.php;
       after_script:
         - |
           kafka-server-stop;
@@ -156,6 +158,7 @@ jobs:
           php examples/create-topic.php -ttest -p1 -r1;
           php examples/create-topic.php -ttest_partitions -p3 -r1;
           vendor/bin/phpunit --verbose --colors;
+          php examples/metadata.php;
       after_script:
         - |
           nssm stop kafka;
