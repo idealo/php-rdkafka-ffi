@@ -117,8 +117,13 @@ jobs:
       language: bash
       before_script:
         - |
+          echo "127.0.0.1 kafka" >> /c/Windows/System32/drivers/etc/hosts
+          cat /c/Windows/System32/drivers/etc/host
+        - |
           choco install php --version 7.4.2 --package-parameters='"/InstallDir:C:\PHP"'
           sed -i 's/;extension=ffi/extension=ffi/g' /c/PHP/php.ini
+          cmd //C "RefreshEnv.cmd"
+          printenv
           export PATH=/c/PHP:$PATH
           php -i
         - |
@@ -142,7 +147,9 @@ jobs:
         - |
           choco install nssm
           nssm install zookeeper /c/kafka/bin/windows/zookeeper-server-start.bat /c/kafka/config/zookeeper.properties
+          nssm set zookeeper AppExit Default Exit
           nssm install kafka /c/kafka/bin/windows/kafka-server-start.bat /c/kafka/config/server.properties
+          nssm set kafka AppExit Default Exit
           printenv
       script:
         - |
