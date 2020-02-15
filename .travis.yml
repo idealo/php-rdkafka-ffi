@@ -95,7 +95,8 @@ jobs:
           brew install composer;
           brew cask install homebrew/cask-versions/adoptopenjdk8;
           brew install kafka;
-          cp resources/travis/server.properties /usr/local/etc/kafka/server.properties
+          echo "broker.id=111
+          advertised.listeners=PLAINTEXT://kafka:9092" > /usr/local/etc/kafka/server.properties
       script:
         - |
           set -e;
@@ -150,8 +151,8 @@ jobs:
           nssm start kafka;
           nssm status kafka;
           sleep 10s;
-          netstat -a
           composer update --prefer-stable --no-interaction --no-suggest --ignore-platform-reqs;
+          netstat -a
           php examples/create-topic.php -ttest -p1 -r1;
           php examples/create-topic.php -ttest_partitions -p3 -r1;
           vendor/bin/phpunit --verbose --colors;
