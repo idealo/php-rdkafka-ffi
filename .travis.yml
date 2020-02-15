@@ -84,33 +84,31 @@ jobs:
 #        - |
 #          docker-compose down;
 #
-    - env: KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092
-      stage: Test
-      name: "librdkafka latest osx"
-      os: osx
-      before_script:
-        - |
-          brew install php@7.4;
-          brew install librdkafka;
-          brew install composer;
-          brew cask install homebrew/cask-versions/adoptopenjdk8;
-          brew install kafka;
-      script:
-        - |
-          set -e;
-          zookeeper-server-start -daemon /usr/local/etc/kafka/zookeeper.properties
-          kafka-server-start -daemon /usr/local/etc/kafka/server.properties --override broker.id=111 --override advertised.listeners=PLAINTEXT://kafka:9092
-          sleep 10s;
-          composer update --prefer-stable --no-interaction --no-suggest;
-          netstat -a
-          php examples/create-topic.php -ttest -p1 -r1;
-          php examples/create-topic.php -ttest_partitions -p3 -r1;
-          php examples/metadata.php;
-          php vendor/bin/phpunit --verbose --colors;
-      after_script:
-        - |
-          kafka-server-stop;
-          zookeeper-server-stop;
+#    - env: KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092
+#      stage: Test
+#      name: "librdkafka latest osx"
+#      os: osx
+#      before_script:
+#        - |
+#          brew install php@7.4;
+#          brew install librdkafka;
+#          brew install composer;
+#          brew cask install homebrew/cask-versions/adoptopenjdk8;
+#          brew install kafka;
+#      script:
+#        - |
+#          set -e;
+#          zookeeper-server-start -daemon /usr/local/etc/kafka/zookeeper.properties
+#          kafka-server-start -daemon /usr/local/etc/kafka/server.properties --override broker.id=111 --override advertised.listeners=PLAINTEXT://kafka:9092
+#          sleep 10s;
+#          composer update --prefer-stable --no-interaction --no-suggest;
+#          php examples/create-topic.php -ttest -p1 -r1;
+#          php examples/create-topic.php -ttest_partitions -p3 -r1;
+#          php vendor/bin/phpunit --verbose --colors;
+#      after_script:
+#        - |
+#          kafka-server-stop;
+#          zookeeper-server-stop;
 
     - env: KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092
       stage: Test
@@ -139,6 +137,7 @@ jobs:
           cp -pr kafka_2.12-2.4.0 /c/kafka
           sed -i "s|broker.id=0|broker.id=111|g" /c/kafka/config/server.properties
           sed -i "s|#advertised.listeners=PLAINTEXT://your.host.name:9092|advertised.listeners=PLAINTEXT://kafka:9092|g" /c/kafka/config/server.properties
+          cat /c/kafka/config/zookeeper.properties
         - |
           choco install nssm
           nssm install zookeeper /c/kafka/bin/windows/zookeeper-server-start.bat /c/kafka/config/zookeeper.properties
@@ -153,6 +152,7 @@ jobs:
           sleep 10s;
           composer update --prefer-stable --no-interaction --no-suggest --ignore-platform-reqs;
           netstat -a
+          ls -la /c/kafka/logs
           php examples/create-topic.php -ttest -p1 -r1;
           php examples/create-topic.php -ttest_partitions -p3 -r1;
           php examples/metadata.php;
