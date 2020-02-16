@@ -156,6 +156,7 @@ jobs:
           composer update --prefer-stable --no-interaction --no-suggest --ignore-platform-reqs;
           netstat -a
           ls -la /c/kafka/logs
+          cat /c/kafka/logs/server.log
           php examples/create-topic.php -ttest -p1 -r1;
           php examples/create-topic.php -ttest_partitions -p3 -r1;
           php examples/metadata.php;
