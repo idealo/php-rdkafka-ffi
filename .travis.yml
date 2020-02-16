@@ -16,99 +16,99 @@ jobs:
     - name: "librdkafka latest windows"
     - name: "rdkafka ext, librdkafka v1.3.0"
   include:
-#    - &STANDARD_TEST_JOB
-#      stage: Test
-#      name: "librdkafka v1.0.1"
-#      os: linux
-#      dist: xenial
-#      language: minimal
-#      services:
-#        - docker
-#      env: LIBRDKAFKA_VERSION=v1.0.1
-#      before_script:
-#        - |
-#          curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter;
-#          chmod +x ./cc-test-reporter;
-#          if [ "$LIBRDKAFKA_VERSION" = "v1.0.1" ]; then ./cc-test-reporter before-build; fi;
-#      script:
-#        - |
-#          set -e;
-#          docker-compose build --pull --parallel --build-arg LIBRDKAFKA_VERSION="$LIBRDKAFKA_VERSION";
-#          docker-compose up -d kafka;
-#          sleep 10s;
-#          docker-compose run --user $(id -u):$(id -g) --rm --no-deps -v $HOME/.composer/cache:/tmp/.composer php74 composer update --prefer-stable --no-interaction --no-suggest;
-#          docker-compose run --user $(id -u):$(id -g) --rm php74 php examples/create-topic.php -ttest -p1 -r1;
-#          docker-compose run --user $(id -u):$(id -g) --rm php74 php examples/create-topic.php -ttest_partitions -p3 -r1;
-#          docker-compose run --user $(id -u):$(id -g) --rm php74 vendor/bin/phpunit --coverage-text --coverage-clover=clover.xml;
-#      after_script:
-#        - |
-#          docker-compose down;
-#          sed -i "s|/app/|`pwd`/|g" clover.xml;
-#          if [ "$LIBRDKAFKA_VERSION" = "v1.0.1" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT; fi;
-#
-#    - <<: *STANDARD_TEST_JOB
-#      env: LIBRDKAFKA_VERSION=v1.1.0
-#      name: "librdkafka v1.1.0"
-#
-#    - <<: *STANDARD_TEST_JOB
-#      env: LIBRDKAFKA_VERSION=v1.2.2
-#      name: "librdkafka v1.2.2"
-#
-#    - <<: *STANDARD_TEST_JOB
-#      env: LIBRDKAFKA_VERSION=v1.3.0
-#      name: "librdkafka v1.3.0"
-#
-#    - <<: *STANDARD_TEST_JOB
-#      env: LIBRDKAFKA_VERSION=master
-#      name: "librdkafka master"
-#
-#    - env: LIBRDKAFKA_VERSION=v1.3.0
-#      stage: Test
-#      name: "rdkafka ext, librdkafka v1.3.0"
-#      os: linux
-#      dist: xenial
-#      language: minimal
-#      services:
-#        - docker
-#      script:
-#        - |
-#          set -e;
-#          docker-compose build --pull --parallel --build-arg LIBRDKAFKA_VERSION="$LIBRDKAFKA_VERSION";
-#          docker-compose up -d kafka;
-#          sleep 10s;
-#          docker-compose run --user $(id -u):$(id -g) --rm --no-deps -v $HOME/.composer/cache:/tmp/.composer php74 composer update -d /app/resources/test-extension --ignore-platform-reqs;
-#          docker-compose exec kafka sh -c '/usr/bin/kafka-topics --create --bootstrap-server localhost:9092 --topic test --partitions 1 --replication-factor 1'
-#          docker-compose exec kafka sh -c '/usr/bin/kafka-topics --create --bootstrap-server localhost:9092 --topic test_partitions --partitions 3 --replication-factor 1'
-#          docker-compose run --user $(id -u):$(id -g) --rm php74 php -dextension=rdkafka.so resources/test-extension/vendor/bin/phpunit -c resources/test-extension/phpunit.xml;
-#      after_script:
-#        - |
-#          docker-compose down;
-#
-#    - env: KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092
-#      stage: Test
-#      name: "librdkafka latest osx"
-#      os: osx
-#      before_script:
-#        - |
-#          brew install php@7.4;
-#          brew install librdkafka;
-#          brew install composer;
-#          brew cask install homebrew/cask-versions/adoptopenjdk8;
-#          brew install kafka;
-#      script:
-#        - |
-#          set -e;
-#          zookeeper-server-start -daemon /usr/local/etc/kafka/zookeeper.properties
-#          kafka-server-start -daemon /usr/local/etc/kafka/server.properties --override broker.id=111 --override advertised.listeners=PLAINTEXT://kafka:9092
-#          sleep 10s;
-#          composer update --prefer-stable --no-interaction --no-suggest;
-#          php examples/create-topic.php -ttest -p1 -r1;
-#          php examples/create-topic.php -ttest_partitions -p3 -r1;
-#          php vendor/bin/phpunit --verbose --colors;
-#      after_script:
-#        - |
-#          kafka-server-stop;
-#          zookeeper-server-stop;
+    - &STANDARD_TEST_JOB
+      stage: Test
+      name: "librdkafka v1.0.1"
+      os: linux
+      dist: xenial
+      language: minimal
+      services:
+        - docker
+      env: LIBRDKAFKA_VERSION=v1.0.1
+      before_script:
+        - |
+          curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter;
+          chmod +x ./cc-test-reporter;
+          if [ "$LIBRDKAFKA_VERSION" = "v1.0.1" ]; then ./cc-test-reporter before-build; fi;
+      script:
+        - |
+          set -e;
+          docker-compose build --pull --parallel --build-arg LIBRDKAFKA_VERSION="$LIBRDKAFKA_VERSION";
+          docker-compose up -d kafka;
+          sleep 10s;
+          docker-compose run --user $(id -u):$(id -g) --rm --no-deps -v $HOME/.composer/cache:/tmp/.composer php74 composer update --prefer-stable --no-interaction --no-suggest;
+          docker-compose run --user $(id -u):$(id -g) --rm php74 php examples/create-topic.php -ttest -p1 -r1;
+          docker-compose run --user $(id -u):$(id -g) --rm php74 php examples/create-topic.php -ttest_partitions -p3 -r1;
+          docker-compose run --user $(id -u):$(id -g) --rm php74 vendor/bin/phpunit --coverage-text --coverage-clover=clover.xml;
+      after_script:
+        - |
+          docker-compose down;
+          sed -i "s|/app/|`pwd`/|g" clover.xml;
+          if [ "$LIBRDKAFKA_VERSION" = "v1.0.1" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT; fi;
+
+    - <<: *STANDARD_TEST_JOB
+      env: LIBRDKAFKA_VERSION=v1.1.0
+      name: "librdkafka v1.1.0"
+
+    - <<: *STANDARD_TEST_JOB
+      env: LIBRDKAFKA_VERSION=v1.2.2
+      name: "librdkafka v1.2.2"
+
+    - <<: *STANDARD_TEST_JOB
+      env: LIBRDKAFKA_VERSION=v1.3.0
+      name: "librdkafka v1.3.0"
+
+    - <<: *STANDARD_TEST_JOB
+      env: LIBRDKAFKA_VERSION=master
+      name: "librdkafka master"
+
+    - env: LIBRDKAFKA_VERSION=v1.3.0
+      stage: Test
+      name: "rdkafka ext, librdkafka v1.3.0"
+      os: linux
+      dist: xenial
+      language: minimal
+      services:
+        - docker
+      script:
+        - |
+          set -e;
+          docker-compose build --pull --parallel --build-arg LIBRDKAFKA_VERSION="$LIBRDKAFKA_VERSION";
+          docker-compose up -d kafka;
+          sleep 10s;
+          docker-compose run --user $(id -u):$(id -g) --rm --no-deps -v $HOME/.composer/cache:/tmp/.composer php74 composer update -d /app/resources/test-extension --ignore-platform-reqs;
+          docker-compose exec kafka sh -c '/usr/bin/kafka-topics --create --bootstrap-server localhost:9092 --topic test --partitions 1 --replication-factor 1';
+          docker-compose exec kafka sh -c '/usr/bin/kafka-topics --create --bootstrap-server localhost:9092 --topic test_partitions --partitions 3 --replication-factor 1';
+          docker-compose run --user $(id -u):$(id -g) --rm php74 php -dextension=rdkafka.so resources/test-extension/vendor/bin/phpunit -c resources/test-extension/phpunit.xml;
+      after_script:
+        - |
+          docker-compose down;
+
+    - env: KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092
+      stage: Test
+      name: "librdkafka latest osx"
+      os: osx
+      before_script:
+        - |
+          brew install php@7.4;
+          brew install librdkafka;
+          brew install composer;
+          brew cask install homebrew/cask-versions/adoptopenjdk8;
+          brew install kafka;
+      script:
+        - |
+          set -e;
+          zookeeper-server-start -daemon /usr/local/etc/kafka/zookeeper.properties;
+          kafka-server-start -daemon /usr/local/etc/kafka/server.properties --override broker.id=111 --override advertised.listeners=PLAINTEXT://kafka:9092;
+          sleep 10s;
+          composer update --prefer-stable --no-interaction --no-suggest;
+          php examples/create-topic.php -ttest -p1 -r1;
+          php examples/create-topic.php -ttest_partitions -p3 -r1;
+          php vendor/bin/phpunit --verbose --colors;
+      after_script:
+        - |
+          kafka-server-stop;
+          zookeeper-server-stop;
 
     - env: KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092
       stage: Test
@@ -154,17 +154,12 @@ jobs:
           sleep 10s;
         - |
           composer update --prefer-stable --no-interaction --no-suggest --ignore-platform-reqs;
-          netstat -a;
-          ls -la /c/kafka/logs;
-          cat /c/kafka/logs/server.log;
-        - |
           php examples/create-topic.php -ttest -p1 -r1 -b127.0.0.1:9092;
           php examples/create-topic.php -ttest_partitions -p3 -r1  -b127.0.0.1:9092;
         - |
           export KAFKA_BROKERS=127.0.0.1:9092
-          vendor/bin/phpunit --verbose;
+          vendor/bin/phpunit --verbose --debug;
       after_script:
         - |
           nssm stop kafka;
           nssm stop zookeeper;
-          cat /c/kafka/logs/server.log
