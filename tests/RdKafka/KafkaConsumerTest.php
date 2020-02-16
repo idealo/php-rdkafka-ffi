@@ -25,7 +25,7 @@ class KafkaConsumerTest extends TestCase
         $producerTopic = $producer->newTopic(KAFKA_TEST_TOPIC);
         $producerTopic->produce(RD_KAFKA_PARTITION_UA, 0, 'payload-kafka-consumer-1');
         $producerTopic->produce(RD_KAFKA_PARTITION_UA, 0, 'payload-kafka-consumer-2');
-        $producer->flush((int) KAFKA_TEST_TIMEOUT_MS);
+        $producer->flush(KAFKA_TEST_TIMEOUT_MS);
     }
 
     public function testConstructWithMissingGroupIdConfShouldFail(): void
@@ -134,7 +134,7 @@ class KafkaConsumerTest extends TestCase
 
         $lastMessage = $message = null;
         while (true) {
-            $message = $consumer->consume((int) KAFKA_TEST_TIMEOUT_MS);
+            $message = $consumer->consume(KAFKA_TEST_TIMEOUT_MS);
             if ($message->err === RD_KAFKA_RESP_ERR__TIMED_OUT) {
                 if ($lastMessage === null) {
                     continue;
@@ -206,7 +206,7 @@ class KafkaConsumerTest extends TestCase
 
         $lastMessage = $message = null;
         while (true) {
-            $message = $consumer->consume((int) KAFKA_TEST_TIMEOUT_MS);
+            $message = $consumer->consume(KAFKA_TEST_TIMEOUT_MS);
             if ($message->err === RD_KAFKA_RESP_ERR__TIMED_OUT) {
                 if ($lastMessage === null) {
                     continue;
@@ -219,7 +219,7 @@ class KafkaConsumerTest extends TestCase
         $consumer->commit($lastMessage);
 
         // just trigger callback
-        $consumer->consume((int) KAFKA_TEST_TIMEOUT_MS);
+        $consumer->consume(KAFKA_TEST_TIMEOUT_MS);
 
         $this->assertSame($message->offset + 1, $offset);
 
@@ -246,7 +246,7 @@ class KafkaConsumerTest extends TestCase
             [
                 new TopicPartition(KAFKA_TEST_TOPIC, 0),
             ],
-            (int) KAFKA_TEST_TIMEOUT_MS
+            KAFKA_TEST_TIMEOUT_MS
         );
 
         $this->assertCount(1, $topicPartitions);
@@ -255,11 +255,39 @@ class KafkaConsumerTest extends TestCase
         $consumer->unsubscribe();
     }
 
+    private function requiresRdKafkaVersion(string $operator, string $version)
+    {
+        if (function_exists('rd_kafka_version')) {
+            $runtimeVersion = rd_kafka_version();
+        } elseif (defined('RD_KAFKA_VERSION')) {
+            $runtimeVersion = sprintf(
+                "%u.%u.%u",
+                (RD_KAFKA_VERSION & 0xFF000000) >> 24,
+                (RD_KAFKA_VERSION & 0x00FF0000) >> 16,
+                (RD_KAFKA_VERSION & 0x0000FF00) >> 8
+            );
+        } else {
+            $this->markTestSkipped('Requires librdkafka. Cannot detect current version.');
+        }
+
+        if (!version_compare($runtimeVersion, $version, $operator)) {
+            $this->markTestSkipped(
+                sprintf(
+                    'Requires librdkafka %s %s. Current version is %s.',
+                    $operator,
+                    $version,
+                    $runtimeVersion
+                )
+            );
+        };
+    }
+
+    /**
+     * @group ffiOnly
+     */
     public function testCommitWithOffsetAndMetadata(): void
     {
-        if (version_compare(rd_kafka_version(), '1.2.0', '<')) {
-            $this->markTestSkipped('Requires librdkafka ^1.2.0');
-        }
+        $this->requiresRdKafkaVersion('>=', '1.2.0');
 
         $conf = new Conf();
         $conf->set('group.id', __METHOD__ . random_int(0, 999999999));
@@ -279,7 +307,7 @@ class KafkaConsumerTest extends TestCase
             [
                 new TopicPartition(KAFKA_TEST_TOPIC, 0),
             ],
-            (int) KAFKA_TEST_TIMEOUT_MS
+            KAFKA_TEST_TIMEOUT_MS
         );
 
         $this->assertCount(1, $topicPartitions);
@@ -305,7 +333,7 @@ class KafkaConsumerTest extends TestCase
             [
                 new TopicPartition(KAFKA_TEST_TOPIC, 0),
             ],
-            (int) KAFKA_TEST_TIMEOUT_MS
+            KAFKA_TEST_TIMEOUT_MS
         );
 
         $this->assertCount(1, $topicPartitions);
@@ -326,7 +354,7 @@ class KafkaConsumerTest extends TestCase
             [
                 new TopicPartition(KAFKA_TEST_TOPIC, 0),
             ],
-            (int) KAFKA_TEST_TIMEOUT_MS
+            KAFKA_TEST_TIMEOUT_MS
         );
 
         $this->assertCount(1, $topicPartitions);
@@ -334,7 +362,7 @@ class KafkaConsumerTest extends TestCase
 
         $consumed = 0;
         while ($consumed < 2) {
-            $message = $consumer->consume((int) KAFKA_TEST_TIMEOUT_MS);
+            $message = $consumer->consume(KAFKA_TEST_TIMEOUT_MS);
             if ($message->err === RD_KAFKA_RESP_ERR__TIMED_OUT) {
                 continue;
             }
@@ -346,7 +374,7 @@ class KafkaConsumerTest extends TestCase
             [
                 new TopicPartition(KAFKA_TEST_TOPIC, 0),
             ],
-            (int) KAFKA_TEST_TIMEOUT_MS
+            KAFKA_TEST_TIMEOUT_MS
         );
 
         $this->assertCount(1, $topicPartitions);
@@ -366,7 +394,7 @@ class KafkaConsumerTest extends TestCase
             [
                 new TopicPartition(KAFKA_TEST_TOPIC, 0, $future),
             ],
-            (int) KAFKA_TEST_TIMEOUT_MS
+            KAFKA_TEST_TIMEOUT_MS
         );
 
         $this->assertCount(1, $topicPartitions);
@@ -387,14 +415,14 @@ class KafkaConsumerTest extends TestCase
         $producerTopic = $producer->newTopic(KAFKA_TEST_TOPIC);
         $producerTopic->produce(RD_KAFKA_PARTITION_UA, 0, 'offsetsForTimes1');
         $producerTopic->produce(RD_KAFKA_PARTITION_UA, 0, 'offsetsForTimes2');
-        $producer->flush((int) KAFKA_TEST_TIMEOUT_MS);
+        $producer->flush(KAFKA_TEST_TIMEOUT_MS);
 
         $consumer = new KafkaConsumer($conf);
         $topicPartitions = $consumer->offsetsForTimes(
             [
                 new TopicPartition(KAFKA_TEST_TOPIC, 0, $nearNow),
             ],
-            (int) KAFKA_TEST_TIMEOUT_MS
+            KAFKA_TEST_TIMEOUT_MS
         );
 
         $this->assertCount(1, $topicPartitions);
@@ -414,7 +442,7 @@ class KafkaConsumerTest extends TestCase
             [
                 new TopicPartition(KAFKA_TEST_TOPIC, 0, $past),
             ],
-            (int) KAFKA_TEST_TIMEOUT_MS
+            KAFKA_TEST_TIMEOUT_MS
         );
 
         $this->assertCount(1, $topicPartitions);
@@ -429,7 +457,7 @@ class KafkaConsumerTest extends TestCase
 
         $consumer = new KafkaConsumer($conf);
 
-        $metadata = $consumer->getMetadata(true, null, (int) KAFKA_TEST_TIMEOUT_MS);
+        $metadata = $consumer->getMetadata(true, null, KAFKA_TEST_TIMEOUT_MS);
 
         $this->assertInstanceOf(Metadata::class, $metadata);
     }

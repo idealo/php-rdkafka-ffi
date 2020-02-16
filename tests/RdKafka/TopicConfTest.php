@@ -83,20 +83,20 @@ class TopicConfTest extends TestCase
         $topic->produce(RD_KAFKA_PARTITION_UA, 0, 'test2', '2'); // crc32 % 3 = 1
         $topic->produce(RD_KAFKA_PARTITION_UA, 0, 'test3', '3'); // crc32 % 3 = 1
         $topic->produce(RD_KAFKA_PARTITION_UA, 0, 'test4', '1'); // crc32 % 3 = 2
-        $producer->flush((int) KAFKA_TEST_TIMEOUT_MS);
+        $producer->flush(KAFKA_TEST_TIMEOUT_MS);
 
         $consumer = new Consumer();
         $consumer->addBrokers(KAFKA_BROKERS);
         $consumerTopic = $consumer->newTopic(KAFKA_TEST_TOPIC_PARTITIONS, $conf);
 
         $consumerTopic->consumeStart(1, rd_kafka_offset_tail(2));
-        $msg2 = $consumerTopic->consume(1, (int) KAFKA_TEST_TIMEOUT_MS);
-        $msg3 = $consumerTopic->consume(1, (int) KAFKA_TEST_TIMEOUT_MS);
+        $msg2 = $consumerTopic->consume(1, KAFKA_TEST_TIMEOUT_MS);
+        $msg3 = $consumerTopic->consume(1, KAFKA_TEST_TIMEOUT_MS);
         $consumerTopic->consumeStop(1);
 
         $consumerTopic->consumeStart(2, rd_kafka_offset_tail(2));
-        $msg1 = $consumerTopic->consume(2, (int) KAFKA_TEST_TIMEOUT_MS);
-        $msg4 = $consumerTopic->consume(2, (int) KAFKA_TEST_TIMEOUT_MS);
+        $msg1 = $consumerTopic->consume(2, KAFKA_TEST_TIMEOUT_MS);
+        $msg4 = $consumerTopic->consume(2, KAFKA_TEST_TIMEOUT_MS);
         $consumerTopic->consumeStop(2);
 
         $this->assertSame('test1', $msg1->payload);
@@ -133,17 +133,17 @@ class TopicConfTest extends TestCase
         $topic->produce(RD_KAFKA_PARTITION_UA, 0, 'test2', '2');
         $topic->produce(RD_KAFKA_PARTITION_UA, 0, 'test3', '3');
         $topic->produce(RD_KAFKA_PARTITION_UA, 0, 'test4', '1');
-        $producer->flush((int) KAFKA_TEST_TIMEOUT_MS);
+        $producer->flush(KAFKA_TEST_TIMEOUT_MS);
 
         $consumer = new Consumer();
         $consumer->addBrokers(KAFKA_BROKERS);
         $consumerTopic = $consumer->newTopic(KAFKA_TEST_TOPIC_PARTITIONS, $conf);
 
         $consumerTopic->consumeStart(2, rd_kafka_offset_tail(4));
-        $msg1 = $consumerTopic->consume(2, (int) KAFKA_TEST_TIMEOUT_MS);
-        $msg2 = $consumerTopic->consume(2, (int) KAFKA_TEST_TIMEOUT_MS);
-        $msg3 = $consumerTopic->consume(2, (int) KAFKA_TEST_TIMEOUT_MS);
-        $msg4 = $consumerTopic->consume(2, (int) KAFKA_TEST_TIMEOUT_MS);
+        $msg1 = $consumerTopic->consume(2, KAFKA_TEST_TIMEOUT_MS);
+        $msg2 = $consumerTopic->consume(2, KAFKA_TEST_TIMEOUT_MS);
+        $msg3 = $consumerTopic->consume(2, KAFKA_TEST_TIMEOUT_MS);
+        $msg4 = $consumerTopic->consume(2, KAFKA_TEST_TIMEOUT_MS);
         $consumerTopic->consumeStop(2);
 
         $this->assertSame('test1', $msg1->payload);

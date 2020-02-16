@@ -8,7 +8,7 @@ abstract class CallbackProxy
 {
     protected \Closure $callback;
 
-    private function __construct(callable $callback)
+    protected function __construct(callable $callback)
     {
         if ($callback instanceof \Closure) {
             $this->callback = $callback;

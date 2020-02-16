@@ -1,11 +1,10 @@
-language: minimal
-dist: xenial
 sudo: true
-services:
-  - docker
 cache:
   directories:
     - $HOME/.composer/cache
+addons:
+  hosts:
+    - kafka
 env:
   global:
     - CC_TEST_REPORTER_ID=c543ca814944c789fa9a5ee4c553866eee2e7498d1644258575a24bc05302641
@@ -13,12 +12,19 @@ env:
 jobs:
   allow_failures:
     - name: "librdkafka master"
+    - name: "librdkafka latest osx"
+    - name: "librdkafka latest windows"
+    - name: "rdkafka ext, librdkafka v1.3.0"
   include:
     - &STANDARD_TEST_JOB
       stage: Test
       name: "librdkafka v1.0.1"
+      os: linux
+      dist: xenial
+      language: minimal
+      services:
+        - docker
       env: LIBRDKAFKA_VERSION=v1.0.1
-
       before_script:
         - |
           curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter;
@@ -55,3 +61,105 @@ jobs:
     - <<: *STANDARD_TEST_JOB
       env: LIBRDKAFKA_VERSION=master
       name: "librdkafka master"
+
+    - env: LIBRDKAFKA_VERSION=v1.3.0
+      stage: Test
+      name: "rdkafka ext, librdkafka v1.3.0"
+      os: linux
+      dist: xenial
+      language: minimal
+      services:
+        - docker
+      script:
+        - |
+          set -e;
+          docker-compose build --pull --parallel --build-arg LIBRDKAFKA_VERSION="$LIBRDKAFKA_VERSION";
+          docker-compose up -d kafka;
+          sleep 10s;
+          docker-compose run --user $(id -u):$(id -g) --rm --no-deps -v $HOME/.composer/cache:/tmp/.composer php74 composer update -d /app/resources/test-extension --ignore-platform-reqs;
+          docker-compose exec kafka sh -c '/usr/bin/kafka-topics --create --bootstrap-server localhost:9092 --topic test --partitions 1 --replication-factor 1';
+          docker-compose exec kafka sh -c '/usr/bin/kafka-topics --create --bootstrap-server localhost:9092 --topic test_partitions --partitions 3 --replication-factor 1';
+          docker-compose run --user $(id -u):$(id -g) --rm php74 php -dextension=rdkafka.so resources/test-extension/vendor/bin/phpunit -c resources/test-extension/phpunit.xml;
+      after_script:
+        - |
+          docker-compose down;
+
+    - env: KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092
+      stage: Test
+      name: "librdkafka latest osx"
+      os: osx
+      before_script:
+        - |
+          brew install php@7.4;
+          brew install librdkafka;
+          brew install composer;
+          brew cask install homebrew/cask-versions/adoptopenjdk8;
+          brew install kafka;
+      script:
+        - |
+          set -e;
+          zookeeper-server-start -daemon /usr/local/etc/kafka/zookeeper.properties;
+          kafka-server-start -daemon /usr/local/etc/kafka/server.properties --override broker.id=111 --override advertised.listeners=PLAINTEXT://kafka:9092;
+          sleep 10s;
+          composer update --prefer-stable --no-interaction --no-suggest;
+          php examples/create-topic.php -ttest -p1 -r1;
+          php examples/create-topic.php -ttest_partitions -p3 -r1;
+          php vendor/bin/phpunit --verbose --colors;
+      after_script:
+        - |
+          kafka-server-stop;
+          zookeeper-server-stop;
+
+    - env: KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092
+      stage: Test
+      name: "librdkafka latest windows"
+      os: windows
+      language: bash
+      before_script:
+        - |
+          choco install php --version 7.4.2 --package-parameters='"/InstallDir:C:\PHP"';
+          sed -i 's/;extension=ffi/extension=ffi/g' /c/PHP/php.ini;
+          export PATH=/c/PHP:$PATH;
+          php -i;
+        - |
+          choco install composer;
+          export PATH=/c/ProgramData/ComposerSetup/bin:$PATH;
+          composer --version;
+          composer global require hirak/prestissimo;
+        - |
+          choco install nuget.commandline;
+          nuget install librdkafka.redist -Version 1.3.0;
+          export PATH=$PWD/librdkafka.redist.1.3.0/runtimes/win-x64/native:$PATH;
+        - |
+          choco install adoptopenjdk8 --version 8.232.9;
+          export JAVA_HOME=/c/Program\ Files/AdoptOpenJDK/jdk-8.0.232.09-hotspot;
+          wget -O kafka_2.12-2.4.0.tgz http://ftp.fau.de/apache/kafka/2.4.0/kafka_2.12-2.4.0.tgz;
+          tar -xzf kafka_2.12-2.4.0.tgz;
+          cp -pr kafka_2.12-2.4.0 /c/kafka;
+          sed -i "s|broker.id=0|broker.id=111|g" /c/kafka/config/server.properties;
+          cat /c/kafka/config/server.properties;
+        - |
+          choco install nssm;
+          nssm install zookeeper /c/kafka/bin/windows/zookeeper-server-start.bat /c/kafka/config/zookeeper.properties;
+          nssm set zookeeper AppExit Default Exit;
+          nssm install kafka /c/kafka/bin/windows/kafka-server-start.bat /c/kafka/config/server.properties;
+          nssm set kafka AppExit Default Exit;
+          printenv;
+      script:
+        - |
+          nssm start zookeeper;
+          nssm status zookeeper;
+          nssm start kafka;
+          nssm status kafka;
+          sleep 10s;
+        - |
+          composer update --prefer-stable --no-interaction --no-suggest --ignore-platform-reqs;
+          php examples/create-topic.php -ttest -p1 -r1 -b127.0.0.1:9092;
+          php examples/create-topic.php -ttest_partitions -p3 -r1  -b127.0.0.1:9092;
+        - |
+          export KAFKA_BROKERS=127.0.0.1:9092
+          vendor/bin/phpunit --verbose --debug;
+      after_script:
+        - |
+          nssm stop kafka;
+          nssm stop zookeeper;

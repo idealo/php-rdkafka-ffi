@@ -15,7 +15,7 @@ abstract class Api
     private static FFI $ffi;
 
     public static string $scope = 'RdKafka';
-    public static string $library = 'librdkafka.so';
+    public static ?string $library = null;
     public static string $cdef = <<<CDEF
 typedef long int ssize_t;
 struct _IO_FILE;
@@ -286,7 +286,6 @@ void rd_kafka_conf_set_stats_cb(rd_kafka_conf_t *conf, int(*stats_cb)(rd_kafka_t
 void rd_kafka_conf_set_socket_cb(rd_kafka_conf_t *conf, int(*socket_cb)(int domain, int type, int protocol, void *opaque));
 void rd_kafka_conf_set_connect_cb(rd_kafka_conf_t *conf, int(*connect_cb)(int sockfd, struct sockaddr *addr, int addrlen, char *id, void *opaque));
 void rd_kafka_conf_set_closesocket_cb(rd_kafka_conf_t *conf, int(*closesocket_cb)(int sockfd, void *opaque));
-void rd_kafka_conf_set_open_cb(rd_kafka_conf_t *conf, int(*open_cb)(char *pathname, int flags, mode_t mode, void *opaque));
 void rd_kafka_conf_set_opaque(rd_kafka_conf_t *conf, void *opaque);
 void * rd_kafka_opaque(rd_kafka_t *rk);
 void rd_kafka_conf_set_default_topic_conf(rd_kafka_conf_t *conf, rd_kafka_topic_conf_t *tconf);
@@ -429,7 +428,6 @@ int rd_kafka_brokers_add(rd_kafka_t *rk, char *brokerlist);
 void rd_kafka_set_logger(rd_kafka_t *rk, void(*func)(rd_kafka_t *rk, int level, char *fac, char *buf));
 void rd_kafka_set_log_level(rd_kafka_t *rk, int level);
 void rd_kafka_log_print(rd_kafka_t *rk, int level, char *fac, char *buf);
-void rd_kafka_log_syslog(rd_kafka_t *rk, int level, char *fac, char *buf);
 int rd_kafka_outq_len(rd_kafka_t *rk);
 void rd_kafka_dump(FILE *fp, rd_kafka_t *rk);
 int rd_kafka_thread_cnt(void);
@@ -559,7 +557,7 @@ CDEF;
                         'FFI_SCOPE "RdKafka" not found (ffi.enable=preload requires you to call \RdKafka\Api::preload in )'
                     );
                 }
-                self::$ffi = FFI::cdef(self::$cdef, self::$library);
+                self::$ffi = FFI::cdef(self::$cdef, self::getLibrary());
             }
         }
     }
@@ -570,12 +568,31 @@ CDEF;
         return self::$ffi;
     }
 
+    public static function getLibrary(): string
+    {
+        if (self::$library !== null) {
+            return self::$library;
+        }
+
+        switch (PHP_OS_FAMILY) {
+            case 'Darwin':
+                return 'librdkafka.dylib';
+                break;
+            case 'Windows':
+                return 'librdkafka.dll';
+                break;
+            default:
+                return 'librdkafka.so';
+                break;
+        }
+    }
+
     public static function preload(): FFI
     {
         try {
             $file = \tempnam(\sys_get_temp_dir(), 'php-rdkafka-ffi');
             $scope = \sprintf('#define FFI_SCOPE "%s"', self::$scope) . "\n";
-            $library = \sprintf('#define FFI_LIB "%s"', self::$library) . "\n";
+            $library = \sprintf('#define FFI_LIB "%s"', self::getLibrary()) . "\n";
             \file_put_contents($file, $scope . $library . self::$cdef);
             $ffi = FFI::load($file);
         } finally {
@@ -595,7 +612,7 @@ CDEF;
      */
     public static function errno(): int
     {
-        return (int) self::getFFI()->rd_kafka_errno();
+        return (int)self::getFFI()->rd_kafka_errno();
     }
 
     /**
@@ -603,12 +620,12 @@ CDEF;
      */
     public static function errno2err(int $err): int
     {
-        return (int) self::getFFI()->rd_kafka_errno2err($err);
+        return (int)self::getFFI()->rd_kafka_errno2err($err);
     }
 
     public static function threadCount(): int
     {
-        return (int) self::getFFI()->rd_kafka_thread_cnt();
+        return (int)self::getFFI()->rd_kafka_thread_cnt();
     }
 
     public static function version(): string

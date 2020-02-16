@@ -40,7 +40,7 @@ class ConsumerTest extends TestCase
         $consumer = new Consumer();
         $consumer->addBrokers(KAFKA_BROKERS);
 
-        $metadata = $consumer->getMetadata(true, null, (int) KAFKA_TEST_TIMEOUT_MS);
+        $metadata = $consumer->getMetadata(true, null, KAFKA_TEST_TIMEOUT_MS);
 
         $this->assertInstanceOf(Metadata::class, $metadata);
     }
@@ -161,7 +161,7 @@ class ConsumerTest extends TestCase
             0,
             $lowWatermarkOffset1,
             $highWatermarkOffset1,
-            (int) KAFKA_TEST_TIMEOUT_MS
+            KAFKA_TEST_TIMEOUT_MS
         );
 
         $this->assertSame(0, $lowWatermarkOffset1);
@@ -170,7 +170,7 @@ class ConsumerTest extends TestCase
         $producer->addBrokers(KAFKA_BROKERS);
         $producerTopic = $producer->newTopic(KAFKA_TEST_TOPIC);
         $producerTopic->produce(0, 0, __METHOD__);
-        $producer->flush((int) KAFKA_TEST_TIMEOUT_MS);
+        $producer->flush(KAFKA_TEST_TIMEOUT_MS);
 
         $lowWatermarkOffset2 = 0;
         $highWatermarkOffset2 = 0;
@@ -180,7 +180,7 @@ class ConsumerTest extends TestCase
             0,
             $lowWatermarkOffset2,
             $highWatermarkOffset2,
-            (int) KAFKA_TEST_TIMEOUT_MS
+            KAFKA_TEST_TIMEOUT_MS
         );
 
         $this->assertSame(0, $lowWatermarkOffset2);

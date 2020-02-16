@@ -92,6 +92,17 @@ foreach ($supported as $version => $hFileUrl) {
         $hFileContentFiltered
     );
 
+    // clean up: not supported on windows
+    $hFileContentFiltered = preg_replace_callback(
+        '/(RD_EXPORT)[^;]+?(rd_kafka_log_syslog|rd_kafka_conf_set_open_cb)[^;]+?;/si',
+        function ($matches) {
+            return '//' . str_replace("\n", "\n//", $matches[0]);
+        },
+        $hFileContentFiltered
+    );
+
+
+
     echo "Save as ${hFileFiltered}" . PHP_EOL;
 
     file_put_contents($hFileFiltered, $types . $hFileContentFiltered);
@@ -168,16 +179,16 @@ foreach ($supported as $version => $hFileUrl) {
         }
     }
 
-    echo "Generate bindings RdKafka\\Binding\\LibRdKafkaV${versionName}" . PHP_EOL;
-
-    (new FFIMe\FFIMe('librdkafka.so'))
-        ->include($hFileParsed)
-        ->codeGen(
-            'RdKafka\\Binding\\LibRdKafka',
-            dirname(__DIR__) . '/src/RdKafka/Binding/LibRdKafkaV' . $versionName . '.php'
-        );
-
-    echo 'Generate bindings done.' . PHP_EOL;
+//    echo "Generate bindings RdKafka\\Binding\\LibRdKafkaV${versionName}" . PHP_EOL;
+//
+//    (new FFIMe\FFIMe('librdkafka.so'))
+//        ->include($hFileParsed)
+//        ->codeGen(
+//            'RdKafka\\Binding\\LibRdKafka',
+//            dirname(__DIR__) . '/src/RdKafka/Binding/LibRdKafkaV' . $versionName . '.php'
+//        );
+//
+//    echo 'Generate bindings done.' . PHP_EOL;
 }
 
 file_put_contents(
