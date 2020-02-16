@@ -319,7 +319,7 @@ class Client extends Api
         return $event;
     }
 
-    public function setWaitForResultEventTimeout(int $timeoutMs)
+    public function setWaitForResultEventTimeout(int $timeoutMs): void
     {
         $this->waitForResultEventTimeoutMs = $timeoutMs;
     }

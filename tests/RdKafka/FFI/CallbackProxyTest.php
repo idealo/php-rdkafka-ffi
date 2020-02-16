@@ -15,7 +15,7 @@ class CallbackProxyTest extends TestCase
 {
     protected function createCallbackProxyStub()
     {
-        return new class extends CallbackProxy {
+        return new class() extends CallbackProxy {
             public function __construct(?callable $callback = null)
             {
                 if ($callback !== null) {

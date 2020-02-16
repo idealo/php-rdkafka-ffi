@@ -612,7 +612,7 @@ CDEF;
      */
     public static function errno(): int
     {
-        return (int)self::getFFI()->rd_kafka_errno();
+        return (int) self::getFFI()->rd_kafka_errno();
     }
 
     /**
@@ -620,12 +620,12 @@ CDEF;
      */
     public static function errno2err(int $err): int
     {
-        return (int)self::getFFI()->rd_kafka_errno2err($err);
+        return (int) self::getFFI()->rd_kafka_errno2err($err);
     }
 
     public static function threadCount(): int
     {
-        return (int)self::getFFI()->rd_kafka_thread_cnt();
+        return (int) self::getFFI()->rd_kafka_thread_cnt();
     }
 
     public static function version(): string
