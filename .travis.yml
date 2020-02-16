@@ -117,36 +117,34 @@ jobs:
       language: bash
       before_script:
         - |
-          choco install php --version 7.4.2 --package-parameters='"/InstallDir:C:\PHP"'
-          sed -i 's/;extension=ffi/extension=ffi/g' /c/PHP/php.ini
-          cmd //C "RefreshEnv.cmd"
-          printenv
-          export PATH=/c/PHP:$PATH
-          php -i
+          choco install php --version 7.4.2 --package-parameters='"/InstallDir:C:\PHP"';
+          sed -i 's/;extension=ffi/extension=ffi/g' /c/PHP/php.ini;
+          export PATH=/c/PHP:$PATH;
+          php -i;
         - |
-          choco install composer
-          export PATH=/c/ProgramData/ComposerSetup/bin:$PATH
-          composer --version
-          composer global require hirak/prestissimo
+          choco install composer;
+          export PATH=/c/ProgramData/ComposerSetup/bin:$PATH;
+          composer --version;
+          composer global require hirak/prestissimo;
         - |
-          choco install nuget.commandline
-          nuget install librdkafka.redist -Version 1.3.0
-          export PATH=$PWD/librdkafka.redist.1.3.0/runtimes/win-x64/native:$PATH
+          choco install nuget.commandline;
+          nuget install librdkafka.redist -Version 1.3.0;
+          export PATH=$PWD/librdkafka.redist.1.3.0/runtimes/win-x64/native:$PATH;
         - |
-          choco install adoptopenjdk8 --version 8.232.9
-          export JAVA_HOME=/c/Program\ Files/AdoptOpenJDK/jdk-8.0.232.09-hotspot
-          wget -O kafka_2.12-2.4.0.tgz http://ftp.fau.de/apache/kafka/2.4.0/kafka_2.12-2.4.0.tgz
-          tar -xzf kafka_2.12-2.4.0.tgz
-          cp -pr kafka_2.12-2.4.0 /c/kafka
-          sed -i "s|broker.id=0|broker.id=111|g" /c/kafka/config/server.properties
-          cat /c/kafka/config/server.properties
+          choco install adoptopenjdk8 --version 8.232.9;
+          export JAVA_HOME=/c/Program\ Files/AdoptOpenJDK/jdk-8.0.232.09-hotspot;
+          wget -O kafka_2.12-2.4.0.tgz http://ftp.fau.de/apache/kafka/2.4.0/kafka_2.12-2.4.0.tgz;
+          tar -xzf kafka_2.12-2.4.0.tgz;
+          cp -pr kafka_2.12-2.4.0 /c/kafka;
+          sed -i "s|broker.id=0|broker.id=111|g" /c/kafka/config/server.properties;
+          cat /c/kafka/config/server.properties;
         - |
-          choco install nssm
-          nssm install zookeeper /c/kafka/bin/windows/zookeeper-server-start.bat /c/kafka/config/zookeeper.properties
-          nssm set zookeeper AppExit Default Exit
-          nssm install kafka /c/kafka/bin/windows/kafka-server-start.bat /c/kafka/config/server.properties
-          nssm set kafka AppExit Default Exit
-          printenv
+          choco install nssm;
+          nssm install zookeeper /c/kafka/bin/windows/zookeeper-server-start.bat /c/kafka/config/zookeeper.properties;
+          nssm set zookeeper AppExit Default Exit;
+          nssm install kafka /c/kafka/bin/windows/kafka-server-start.bat /c/kafka/config/server.properties;
+          nssm set kafka AppExit Default Exit;
+          printenv;
       script:
         - |
           nssm start zookeeper;
@@ -154,14 +152,19 @@ jobs:
           nssm start kafka;
           nssm status kafka;
           sleep 10s;
+        - |
           composer update --prefer-stable --no-interaction --no-suggest --ignore-platform-reqs;
-          netstat -a
-          ls -la /c/kafka/logs
-          cat /c/kafka/logs/server.log
+          netstat -a;
+          ls -la /c/kafka/logs;
+          cat /c/kafka/logs/server.log;
+        - |
           php examples/create-topic.php -ttest -p1 -r1 -b127.0.0.1:9092;
           php examples/create-topic.php -ttest_partitions -p3 -r1  -b127.0.0.1:9092;
-          vendor/bin/phpunit --verbose --colors;
+        - |
+          export KAFKA_BROKERS=127.0.0.1:9092
+          vendor/bin/phpunit --verbose;
       after_script:
         - |
           nssm stop kafka;
           nssm stop zookeeper;
+          cat /c/kafka/logs/server.log
