@@ -8,17 +8,17 @@ use RdKafka\Conf;
 
 require_once dirname(__DIR__) . '/vendor/autoload.php';
 
-$options = getopt('t:');
+$options = getopt('t:b::');
 if (empty($options)) {
     echo sprintf(
-        'Usage: %s -t{topicname}' . PHP_EOL,
+        'Usage: %s -t{topicname} [-b{brokerList:kafka:9092}' . PHP_EOL,
         basename(__FILE__)
     );
     exit();
 }
 
 $conf = new Conf();
-$conf->set('metadata.broker.list', 'kafka:9092');
+$conf->set('metadata.broker.list', $options['b'] ?: 'kafka:9092');
 $client = Client::fromConf($conf);
 $client->setWaitForResultEventTimeout(2000);
 
