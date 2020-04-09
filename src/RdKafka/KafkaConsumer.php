@@ -18,7 +18,7 @@ class KafkaConsumer extends RdKafka
         try {
             $conf->get('group.id');
         } catch (Exception $exception) {
-            throw new Exception('"group.id" must be configured.');
+            throw new Exception('"group.id" must be configured.', $exception->getCode(), $exception);
         }
 
         $this->closed = false;
@@ -108,7 +108,9 @@ class KafkaConsumer extends RdKafka
                     1,
                     'an instance of RdKafka\\Message, an array of RdKafka\\TopicPartition or null',
                     gettype($message_or_offsets)
-                )
+                ),
+                $exception->getCode(),
+                $exception
             );
         }
         $this->commitInternal($topicPartitionList, false);
@@ -131,7 +133,9 @@ class KafkaConsumer extends RdKafka
                     1,
                     'an instance of RdKafka\\Message, an array of RdKafka\\TopicPartition or null',
                     gettype($message_or_offsets)
-                )
+                ),
+                $exception->getCode(),
+                $exception
             );
         }
         $this->commitInternal($topicPartitionList, true);
