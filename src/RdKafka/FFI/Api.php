@@ -554,7 +554,7 @@ CDEF;
             } catch (Exception $e) {
                 if (\ini_get('ffi.enable') === 'preload' && PHP_SAPI !== 'cli') {
                     throw new \RuntimeException(
-                        'FFI_SCOPE "RdKafka" not found (ffi.enable=preload requires you to call \RdKafka\Api::preload in )'
+                        'FFI_SCOPE "RdKafka" not found (ffi.enable=preload requires you to call \RdKafka\Api::preload in )', $e->getCode(), $e
                     );
                 }
                 self::$ffi = FFI::cdef(self::$cdef, self::getLibrary());
