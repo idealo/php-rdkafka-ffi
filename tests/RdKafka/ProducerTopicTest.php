@@ -100,7 +100,7 @@ class ProducerTopicTest extends TestCase
 
         $producer->flush(KAFKA_TEST_TIMEOUT_MS);
 
-        $this->assertSame(null, $payload);
+        $this->assertNull($payload);
     }
 
     public function testProducevWithHeader(): void

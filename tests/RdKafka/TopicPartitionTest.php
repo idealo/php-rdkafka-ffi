@@ -52,8 +52,8 @@ class TopicPartitionTest extends TestCase
         $this->assertCount(1, $topicPartitions);
         $this->assertSame(KAFKA_TEST_TOPIC, $topicPartitions[0]->getTopic());
         $this->assertSame(0, $topicPartitions[0]->getErr());
-        $this->assertSame(null, $topicPartitions[0]->getOpqaque());
-        $this->assertSame(null, $topicPartitions[0]->getMetadata());
+        $this->assertNull($topicPartitions[0]->getOpqaque());
+        $this->assertNull($topicPartitions[0]->getMetadata());
     }
 
     public function testGetterAndSetter(): void
@@ -62,8 +62,8 @@ class TopicPartitionTest extends TestCase
 
         $this->assertSame(KAFKA_TEST_TOPIC, $topicPartition->getTopic());
         $this->assertSame(0, $topicPartition->getPartition());
-        $this->assertSame(null, $topicPartition->getOffset());
-        $this->assertSame(null, $topicPartition->getMetadata());
+        $this->assertNull($topicPartition->getOffset());
+        $this->assertNull($topicPartition->getMetadata());
 
         $topicPartition->setTopic('other');
         $topicPartition->setPartition(1);

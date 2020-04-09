@@ -59,9 +59,9 @@ class MessageTest extends TestCase
 
         $this->prepareMessage(0, 0, null);
 
-        $this->assertSame(null, $this->message->payload);
-        $this->assertSame(null, $this->message->key);
-        $this->assertSame(null, $this->message->headers);
+        $this->assertNull($this->message->payload);
+        $this->assertNull($this->message->key);
+        $this->assertNull($this->message->headers);
 
         $this->prepareMessage(0, 0, __METHOD__ . '3', gzencode('123'), ['no_null_byte' => gzencode('456')]);
 

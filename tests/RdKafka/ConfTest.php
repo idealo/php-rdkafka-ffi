@@ -306,13 +306,13 @@ class ConfTest extends TestCase
         $this->assertContains($consumer3, $assignedConsumers);
 
         $this->assertSame(RD_KAFKA_RESP_ERR__ASSIGN_PARTITIONS, $rebalanceCallbackStack[0]['err']);
-        $this->assertSame(1, \count($rebalanceCallbackStack[0]['partitions']));
+        $this->assertCount(1, $rebalanceCallbackStack[0]['partitions']);
 
         $this->assertSame(RD_KAFKA_RESP_ERR__ASSIGN_PARTITIONS, $rebalanceCallbackStack[1]['err']);
-        $this->assertSame(1, \count($rebalanceCallbackStack[1]['partitions']));
+        $this->assertCount(1, $rebalanceCallbackStack[1]['partitions']);
 
         $this->assertSame(RD_KAFKA_RESP_ERR__ASSIGN_PARTITIONS, $rebalanceCallbackStack[2]['err']);
-        $this->assertSame(1, \count($rebalanceCallbackStack[2]['partitions']));
+        $this->assertCount(1, $rebalanceCallbackStack[2]['partitions']);
 
         // reset stack
         $rebalanceCallbackStack = [];
@@ -332,13 +332,13 @@ class ConfTest extends TestCase
         $this->assertContains($consumer3, $revokedConsumers);
 
         $this->assertSame(RD_KAFKA_RESP_ERR__REVOKE_PARTITIONS, $rebalanceCallbackStack[0]['err']);
-        $this->assertSame(1, \count($rebalanceCallbackStack[0]['partitions']));
+        $this->assertCount(1, $rebalanceCallbackStack[0]['partitions']);
 
         $this->assertSame(RD_KAFKA_RESP_ERR__REVOKE_PARTITIONS, $rebalanceCallbackStack[1]['err']);
-        $this->assertSame(1, \count($rebalanceCallbackStack[1]['partitions']));
+        $this->assertCount(1, $rebalanceCallbackStack[1]['partitions']);
 
         $this->assertSame(RD_KAFKA_RESP_ERR__REVOKE_PARTITIONS, $rebalanceCallbackStack[2]['err']);
-        $this->assertSame(1, \count($rebalanceCallbackStack[2]['partitions']));
+        $this->assertCount(1, $rebalanceCallbackStack[2]['partitions']);
     }
 
     public function testSetOffsetCommitCb(): void
