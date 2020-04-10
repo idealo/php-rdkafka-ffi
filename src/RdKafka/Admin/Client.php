@@ -20,7 +20,6 @@ use RdKafka\Topic;
 class Client extends Api
 {
     private RdKafka $kafka;
-    private bool $isDerived;
     private int $waitForResultEventTimeoutMs = 50;
 
     private function __construct(RdKafka $kafka)
@@ -28,35 +27,23 @@ class Client extends Api
         $this->kafka = $kafka;
     }
 
-    public function __destruct()
-    {
-//        if ($this->isDerived === false) {
-//            self::getFFI()->rd_kafka_flush($this->kafka->getCData(), 5000);
-//        }
-    }
-
     /**
+     * @return Client
      * @throws Exception
      */
     public static function fromConf(Conf $conf): self
     {
-        $client = new self(new Producer($conf));
-        $client->isDerived = false;
-        return $client;
+        return new self(new Producer($conf));
     }
 
     public static function fromConsumer(Consumer $consumer): self
     {
-        $client = new self($consumer);
-        $client->isDerived = true;
-        return $client;
+        return new self($consumer);
     }
 
     public static function fromProducer(Producer $producer): self
     {
-        $client = new self($producer);
-        $client->isDerived = true;
-        return $client;
+        return new self($producer);
     }
 
     /**
