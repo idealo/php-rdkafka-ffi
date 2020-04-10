@@ -19,7 +19,7 @@ class ApiTest extends TestCase
         $ffi = Api::getFFI();
 
         $this->assertInstanceOf(\FFI::class, $ffi);
-        $this->assertRegExp('/^\d+\.\d+\./', \FFI::string($ffi->rd_kafka_version_str()));
+        $this->assertMatchesRegularExpression('/^\d+\.\d+\./', \FFI::string($ffi->rd_kafka_version_str()));
     }
 
     public function testPreload(): void
@@ -27,7 +27,7 @@ class ApiTest extends TestCase
         $ffi = Api::preload();
 
         $this->assertInstanceOf(\FFI::class, $ffi);
-        $this->assertRegExp('/^\d+\.\d+\./', \FFI::string($ffi->rd_kafka_version_str()));
+        $this->assertMatchesRegularExpression('/^\d+\.\d+\./', \FFI::string($ffi->rd_kafka_version_str()));
     }
 
     public function testPreloadWithInvalidCdef(): void

@@ -46,6 +46,6 @@ class FunctionsTest extends TestCase
      */
     public function testVersion(): void
     {
-        $this->assertRegExp('/^\d+\.\d+\./', rd_kafka_version());
+        $this->assertMatchesRegularExpression('/^\d+\.\d+\./', rd_kafka_version());
     }
 }
