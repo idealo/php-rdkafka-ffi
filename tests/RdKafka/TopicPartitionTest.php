@@ -63,16 +63,27 @@ class TopicPartitionTest extends TestCase
         $this->assertSame(KAFKA_TEST_TOPIC, $topicPartition->getTopic());
         $this->assertSame(0, $topicPartition->getPartition());
         $this->assertSame(0, $topicPartition->getOffset());
-        $this->assertNull($topicPartition->getMetadata());
 
         $topicPartition->setTopic('other');
         $topicPartition->setPartition(1);
         $topicPartition->setOffset(2);
-        $topicPartition->setMetadata('meta');
 
         $this->assertSame('other', $topicPartition->getTopic());
         $this->assertSame(1, $topicPartition->getPartition());
         $this->assertSame(2, $topicPartition->getOffset());
+    }
+
+    /**
+     * @group ffiOnly
+     */
+    public function testGetAndSetMetaData(): void
+    {
+        $topicPartition = new TopicPartition(KAFKA_TEST_TOPIC, 0);
+
+        $this->assertNull($topicPartition->getMetadata());
+
+        $topicPartition->setMetadata('meta');
+
         $this->assertSame('meta', $topicPartition->getMetadata());
     }
 }

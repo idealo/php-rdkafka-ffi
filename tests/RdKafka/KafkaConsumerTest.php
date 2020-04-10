@@ -156,6 +156,9 @@ class KafkaConsumerTest extends TestCase
         $consumer->unsubscribe();
     }
 
+    /**
+     * @group ffiOnly
+     */
     public function testCommitWithInvalidArgumentShouldFail(): void
     {
         $conf = new Conf();
@@ -169,6 +172,9 @@ class KafkaConsumerTest extends TestCase
         $consumer->commit([new stdClass()]);
     }
 
+    /**
+     * @group ffiOnly
+     */
     public function testCommitAsyncWithInvalidArgumentShouldFail(): void
     {
         $conf = new Conf();
