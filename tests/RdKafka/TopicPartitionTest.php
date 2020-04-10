@@ -62,7 +62,7 @@ class TopicPartitionTest extends TestCase
 
         $this->assertSame(KAFKA_TEST_TOPIC, $topicPartition->getTopic());
         $this->assertSame(0, $topicPartition->getPartition());
-        $this->assertNull($topicPartition->getOffset());
+        $this->assertSame(0, $topicPartition->getOffset());
         $this->assertNull($topicPartition->getMetadata());
 
         $topicPartition->setTopic('other');

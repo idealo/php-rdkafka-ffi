@@ -11,7 +11,7 @@ class TopicPartition
 {
     private string $topic;
     private int $partition;
-    private ?int $offset = null;
+    private int $offset;
     private ?string $metadata = null;
     private ?object $opaque = null;
     private ?int $err = null;
@@ -33,7 +33,7 @@ class TopicPartition
         return $topar;
     }
 
-    public function __construct(string $topic, int $partition, ?int $offset = null, ?string $metadata = null)
+    public function __construct(string $topic, int $partition, int $offset = 0, ?string $metadata = null)
     {
         $this->topic = $topic;
         $this->partition = $partition;
@@ -41,7 +41,7 @@ class TopicPartition
         $this->metadata = $metadata;
     }
 
-    public function getOffset(): ?int
+    public function getOffset(): int
     {
         return $this->offset;
     }
