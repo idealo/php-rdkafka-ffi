@@ -116,6 +116,15 @@ Consuming (with high level consumer) ...
 Broker metadata ...
 
     docker-compose run --rm php74 php examples/metadata.php
+    
+Describe config values for a topic ...
+
+    docker-compose run --rm php74 php examples/describe-config.php
+    docker-compose run --rm php74 php examples/describe-config.php -t2 -vtest
+
+Describe config values for a broker ...
+
+    docker-compose run --rm php74 php examples/describe-config.php -t4 -v111
 
 Test preload (should show current librdkafka version)
 
