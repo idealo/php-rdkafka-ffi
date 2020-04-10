@@ -285,7 +285,7 @@ class KafkaConsumerTest extends TestCase
                     $runtimeVersion
                 )
             );
-        };
+        }
     }
 
     /**
