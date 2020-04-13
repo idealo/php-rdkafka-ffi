@@ -8,17 +8,17 @@ use FFI\CData;
 use RdKafka\Exception;
 use RdKafka\FFI\Api;
 
-class DeleteTopic extends Api
+class DeleteTopic
 {
     private ?CData $topic;
 
     public function __construct(string $name)
     {
-        $this->topic = self::getFFI()->rd_kafka_DeleteTopic_new($name);
+        $this->topic = Api::rd_kafka_DeleteTopic_new($name);
 
         if ($this->topic === null) {
-            $err = self::getFFI()->rd_kafka_last_error();
-            throw new Exception(self::err2str($err));
+            $err = (int) Api::rd_kafka_last_error();
+            throw Exception::fromError($err);
         }
     }
 
@@ -28,7 +28,7 @@ class DeleteTopic extends Api
             return;
         }
 
-        self::getFFI()->rd_kafka_DeleteTopic_destroy($this->topic);
+        Api::rd_kafka_DeleteTopic_destroy($this->topic);
     }
 
     public function getCData(): CData

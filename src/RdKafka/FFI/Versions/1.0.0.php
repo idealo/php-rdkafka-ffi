@@ -1,0 +1,773 @@
+<?php
+/**
+ * This file is generated! Do not edit directly.
+ */
+
+declare(strict_types=1);
+
+// version specific constants
+/**
+ * typedefenum rd_kafka_resp_err_t
+ */
+const RD_KAFKA_RESP_ERR_UNSUPPORTED_COMPRESSION_TYPE = 74;
+/**
+ * typedefenum rd_kafka_resp_err_t
+ */
+const RD_KAFKA_RESP_ERR_END_ALL = 75;
+const RD_KAFKA_SUPPORTED_METHODS = [
+    'rd_kafka_version' => 'rd_kafka_version',
+    'rd_kafka_version_str' => 'rd_kafka_version_str',
+    'rd_kafka_get_debug_contexts' => 'rd_kafka_get_debug_contexts',
+    'rd_kafka_get_err_descs' => 'rd_kafka_get_err_descs',
+    'rd_kafka_err2str' => 'rd_kafka_err2str',
+    'rd_kafka_err2name' => 'rd_kafka_err2name',
+    'rd_kafka_last_error' => 'rd_kafka_last_error',
+    'rd_kafka_errno2err' => 'rd_kafka_errno2err',
+    'rd_kafka_errno' => 'rd_kafka_errno',
+    'rd_kafka_fatal_error' => 'rd_kafka_fatal_error',
+    'rd_kafka_test_fatal_error' => 'rd_kafka_test_fatal_error',
+    'rd_kafka_topic_partition_destroy' => 'rd_kafka_topic_partition_destroy',
+    'rd_kafka_topic_partition_list_new' => 'rd_kafka_topic_partition_list_new',
+    'rd_kafka_topic_partition_list_destroy' => 'rd_kafka_topic_partition_list_destroy',
+    'rd_kafka_topic_partition_list_add' => 'rd_kafka_topic_partition_list_add',
+    'rd_kafka_topic_partition_list_add_range' => 'rd_kafka_topic_partition_list_add_range',
+    'rd_kafka_topic_partition_list_del' => 'rd_kafka_topic_partition_list_del',
+    'rd_kafka_topic_partition_list_del_by_idx' => 'rd_kafka_topic_partition_list_del_by_idx',
+    'rd_kafka_topic_partition_list_copy' => 'rd_kafka_topic_partition_list_copy',
+    'rd_kafka_topic_partition_list_set_offset' => 'rd_kafka_topic_partition_list_set_offset',
+    'rd_kafka_topic_partition_list_find' => 'rd_kafka_topic_partition_list_find',
+    'rd_kafka_topic_partition_list_sort' => 'rd_kafka_topic_partition_list_sort',
+    'rd_kafka_headers_new' => 'rd_kafka_headers_new',
+    'rd_kafka_headers_destroy' => 'rd_kafka_headers_destroy',
+    'rd_kafka_headers_copy' => 'rd_kafka_headers_copy',
+    'rd_kafka_header_add' => 'rd_kafka_header_add',
+    'rd_kafka_header_remove' => 'rd_kafka_header_remove',
+    'rd_kafka_header_get_last' => 'rd_kafka_header_get_last',
+    'rd_kafka_header_get' => 'rd_kafka_header_get',
+    'rd_kafka_header_get_all' => 'rd_kafka_header_get_all',
+    'rd_kafka_message_destroy' => 'rd_kafka_message_destroy',
+    'rd_kafka_message_timestamp' => 'rd_kafka_message_timestamp',
+    'rd_kafka_message_latency' => 'rd_kafka_message_latency',
+    'rd_kafka_message_headers' => 'rd_kafka_message_headers',
+    'rd_kafka_message_detach_headers' => 'rd_kafka_message_detach_headers',
+    'rd_kafka_message_set_headers' => 'rd_kafka_message_set_headers',
+    'rd_kafka_header_cnt' => 'rd_kafka_header_cnt',
+    'rd_kafka_message_status' => 'rd_kafka_message_status',
+    'rd_kafka_conf_new' => 'rd_kafka_conf_new',
+    'rd_kafka_conf_destroy' => 'rd_kafka_conf_destroy',
+    'rd_kafka_conf_dup' => 'rd_kafka_conf_dup',
+    'rd_kafka_conf_dup_filter' => 'rd_kafka_conf_dup_filter',
+    'rd_kafka_conf_set' => 'rd_kafka_conf_set',
+    'rd_kafka_conf_set_events' => 'rd_kafka_conf_set_events',
+    'rd_kafka_conf_set_background_event_cb' => 'rd_kafka_conf_set_background_event_cb',
+    'rd_kafka_conf_set_dr_cb' => 'rd_kafka_conf_set_dr_cb',
+    'rd_kafka_conf_set_dr_msg_cb' => 'rd_kafka_conf_set_dr_msg_cb',
+    'rd_kafka_conf_set_consume_cb' => 'rd_kafka_conf_set_consume_cb',
+    'rd_kafka_conf_set_rebalance_cb' => 'rd_kafka_conf_set_rebalance_cb',
+    'rd_kafka_conf_set_offset_commit_cb' => 'rd_kafka_conf_set_offset_commit_cb',
+    'rd_kafka_conf_set_error_cb' => 'rd_kafka_conf_set_error_cb',
+    'rd_kafka_conf_set_throttle_cb' => 'rd_kafka_conf_set_throttle_cb',
+    'rd_kafka_conf_set_log_cb' => 'rd_kafka_conf_set_log_cb',
+    'rd_kafka_conf_set_stats_cb' => 'rd_kafka_conf_set_stats_cb',
+    'rd_kafka_conf_set_socket_cb' => 'rd_kafka_conf_set_socket_cb',
+    'rd_kafka_conf_set_connect_cb' => 'rd_kafka_conf_set_connect_cb',
+    'rd_kafka_conf_set_closesocket_cb' => 'rd_kafka_conf_set_closesocket_cb',
+    'rd_kafka_conf_set_opaque' => 'rd_kafka_conf_set_opaque',
+    'rd_kafka_opaque' => 'rd_kafka_opaque',
+    'rd_kafka_conf_set_default_topic_conf' => 'rd_kafka_conf_set_default_topic_conf',
+    'rd_kafka_conf_get' => 'rd_kafka_conf_get',
+    'rd_kafka_topic_conf_get' => 'rd_kafka_topic_conf_get',
+    'rd_kafka_conf_dump' => 'rd_kafka_conf_dump',
+    'rd_kafka_topic_conf_dump' => 'rd_kafka_topic_conf_dump',
+    'rd_kafka_conf_dump_free' => 'rd_kafka_conf_dump_free',
+    'rd_kafka_conf_properties_show' => 'rd_kafka_conf_properties_show',
+    'rd_kafka_topic_conf_new' => 'rd_kafka_topic_conf_new',
+    'rd_kafka_topic_conf_dup' => 'rd_kafka_topic_conf_dup',
+    'rd_kafka_default_topic_conf_dup' => 'rd_kafka_default_topic_conf_dup',
+    'rd_kafka_topic_conf_destroy' => 'rd_kafka_topic_conf_destroy',
+    'rd_kafka_topic_conf_set' => 'rd_kafka_topic_conf_set',
+    'rd_kafka_topic_conf_set_opaque' => 'rd_kafka_topic_conf_set_opaque',
+    'rd_kafka_topic_conf_set_partitioner_cb' => 'rd_kafka_topic_conf_set_partitioner_cb',
+    'rd_kafka_topic_conf_set_msg_order_cmp' => 'rd_kafka_topic_conf_set_msg_order_cmp',
+    'rd_kafka_topic_partition_available' => 'rd_kafka_topic_partition_available',
+    'rd_kafka_msg_partitioner_random' => 'rd_kafka_msg_partitioner_random',
+    'rd_kafka_msg_partitioner_consistent' => 'rd_kafka_msg_partitioner_consistent',
+    'rd_kafka_msg_partitioner_consistent_random' => 'rd_kafka_msg_partitioner_consistent_random',
+    'rd_kafka_msg_partitioner_murmur2' => 'rd_kafka_msg_partitioner_murmur2',
+    'rd_kafka_msg_partitioner_murmur2_random' => 'rd_kafka_msg_partitioner_murmur2_random',
+    'rd_kafka_new' => 'rd_kafka_new',
+    'rd_kafka_destroy' => 'rd_kafka_destroy',
+    'rd_kafka_destroy_flags' => 'rd_kafka_destroy_flags',
+    'rd_kafka_name' => 'rd_kafka_name',
+    'rd_kafka_type' => 'rd_kafka_type',
+    'rd_kafka_memberid' => 'rd_kafka_memberid',
+    'rd_kafka_clusterid' => 'rd_kafka_clusterid',
+    'rd_kafka_controllerid' => 'rd_kafka_controllerid',
+    'rd_kafka_topic_new' => 'rd_kafka_topic_new',
+    'rd_kafka_topic_destroy' => 'rd_kafka_topic_destroy',
+    'rd_kafka_topic_name' => 'rd_kafka_topic_name',
+    'rd_kafka_topic_opaque' => 'rd_kafka_topic_opaque',
+    'rd_kafka_poll' => 'rd_kafka_poll',
+    'rd_kafka_yield' => 'rd_kafka_yield',
+    'rd_kafka_pause_partitions' => 'rd_kafka_pause_partitions',
+    'rd_kafka_resume_partitions' => 'rd_kafka_resume_partitions',
+    'rd_kafka_query_watermark_offsets' => 'rd_kafka_query_watermark_offsets',
+    'rd_kafka_get_watermark_offsets' => 'rd_kafka_get_watermark_offsets',
+    'rd_kafka_offsets_for_times' => 'rd_kafka_offsets_for_times',
+    'rd_kafka_mem_free' => 'rd_kafka_mem_free',
+    'rd_kafka_queue_new' => 'rd_kafka_queue_new',
+    'rd_kafka_queue_destroy' => 'rd_kafka_queue_destroy',
+    'rd_kafka_queue_get_main' => 'rd_kafka_queue_get_main',
+    'rd_kafka_queue_get_consumer' => 'rd_kafka_queue_get_consumer',
+    'rd_kafka_queue_get_partition' => 'rd_kafka_queue_get_partition',
+    'rd_kafka_queue_get_background' => 'rd_kafka_queue_get_background',
+    'rd_kafka_queue_forward' => 'rd_kafka_queue_forward',
+    'rd_kafka_set_log_queue' => 'rd_kafka_set_log_queue',
+    'rd_kafka_queue_length' => 'rd_kafka_queue_length',
+    'rd_kafka_queue_io_event_enable' => 'rd_kafka_queue_io_event_enable',
+    'rd_kafka_queue_cb_event_enable' => 'rd_kafka_queue_cb_event_enable',
+    'rd_kafka_consume_start' => 'rd_kafka_consume_start',
+    'rd_kafka_consume_start_queue' => 'rd_kafka_consume_start_queue',
+    'rd_kafka_consume_stop' => 'rd_kafka_consume_stop',
+    'rd_kafka_seek' => 'rd_kafka_seek',
+    'rd_kafka_consume' => 'rd_kafka_consume',
+    'rd_kafka_consume_batch' => 'rd_kafka_consume_batch',
+    'rd_kafka_consume_callback' => 'rd_kafka_consume_callback',
+    'rd_kafka_consume_queue' => 'rd_kafka_consume_queue',
+    'rd_kafka_consume_batch_queue' => 'rd_kafka_consume_batch_queue',
+    'rd_kafka_consume_callback_queue' => 'rd_kafka_consume_callback_queue',
+    'rd_kafka_offset_store' => 'rd_kafka_offset_store',
+    'rd_kafka_offsets_store' => 'rd_kafka_offsets_store',
+    'rd_kafka_subscribe' => 'rd_kafka_subscribe',
+    'rd_kafka_unsubscribe' => 'rd_kafka_unsubscribe',
+    'rd_kafka_subscription' => 'rd_kafka_subscription',
+    'rd_kafka_consumer_poll' => 'rd_kafka_consumer_poll',
+    'rd_kafka_consumer_close' => 'rd_kafka_consumer_close',
+    'rd_kafka_assign' => 'rd_kafka_assign',
+    'rd_kafka_assignment' => 'rd_kafka_assignment',
+    'rd_kafka_commit' => 'rd_kafka_commit',
+    'rd_kafka_commit_message' => 'rd_kafka_commit_message',
+    'rd_kafka_commit_queue' => 'rd_kafka_commit_queue',
+    'rd_kafka_committed' => 'rd_kafka_committed',
+    'rd_kafka_position' => 'rd_kafka_position',
+    'rd_kafka_produce' => 'rd_kafka_produce',
+    'rd_kafka_producev' => 'rd_kafka_producev',
+    'rd_kafka_produce_batch' => 'rd_kafka_produce_batch',
+    'rd_kafka_flush' => 'rd_kafka_flush',
+    'rd_kafka_purge' => 'rd_kafka_purge',
+    'rd_kafka_metadata' => 'rd_kafka_metadata',
+    'rd_kafka_metadata_destroy' => 'rd_kafka_metadata_destroy',
+    'rd_kafka_list_groups' => 'rd_kafka_list_groups',
+    'rd_kafka_group_list_destroy' => 'rd_kafka_group_list_destroy',
+    'rd_kafka_brokers_add' => 'rd_kafka_brokers_add',
+    'rd_kafka_set_logger' => 'rd_kafka_set_logger',
+    'rd_kafka_set_log_level' => 'rd_kafka_set_log_level',
+    'rd_kafka_log_print' => 'rd_kafka_log_print',
+    'rd_kafka_outq_len' => 'rd_kafka_outq_len',
+    'rd_kafka_dump' => 'rd_kafka_dump',
+    'rd_kafka_thread_cnt' => 'rd_kafka_thread_cnt',
+    'rd_kafka_wait_destroyed' => 'rd_kafka_wait_destroyed',
+    'rd_kafka_unittest' => 'rd_kafka_unittest',
+    'rd_kafka_poll_set_consumer' => 'rd_kafka_poll_set_consumer',
+    'rd_kafka_event_type' => 'rd_kafka_event_type',
+    'rd_kafka_event_name' => 'rd_kafka_event_name',
+    'rd_kafka_event_destroy' => 'rd_kafka_event_destroy',
+    'rd_kafka_event_message_next' => 'rd_kafka_event_message_next',
+    'rd_kafka_event_message_array' => 'rd_kafka_event_message_array',
+    'rd_kafka_event_message_count' => 'rd_kafka_event_message_count',
+    'rd_kafka_event_error' => 'rd_kafka_event_error',
+    'rd_kafka_event_error_string' => 'rd_kafka_event_error_string',
+    'rd_kafka_event_error_is_fatal' => 'rd_kafka_event_error_is_fatal',
+    'rd_kafka_event_opaque' => 'rd_kafka_event_opaque',
+    'rd_kafka_event_log' => 'rd_kafka_event_log',
+    'rd_kafka_event_stats' => 'rd_kafka_event_stats',
+    'rd_kafka_event_topic_partition_list' => 'rd_kafka_event_topic_partition_list',
+    'rd_kafka_event_topic_partition' => 'rd_kafka_event_topic_partition',
+    'rd_kafka_event_CreateTopics_result' => 'rd_kafka_event_CreateTopics_result',
+    'rd_kafka_event_DeleteTopics_result' => 'rd_kafka_event_DeleteTopics_result',
+    'rd_kafka_event_CreatePartitions_result' => 'rd_kafka_event_CreatePartitions_result',
+    'rd_kafka_event_AlterConfigs_result' => 'rd_kafka_event_AlterConfigs_result',
+    'rd_kafka_event_DescribeConfigs_result' => 'rd_kafka_event_DescribeConfigs_result',
+    'rd_kafka_queue_poll' => 'rd_kafka_queue_poll',
+    'rd_kafka_queue_poll_callback' => 'rd_kafka_queue_poll_callback',
+    'rd_kafka_topic_result_error' => 'rd_kafka_topic_result_error',
+    'rd_kafka_topic_result_error_string' => 'rd_kafka_topic_result_error_string',
+    'rd_kafka_topic_result_name' => 'rd_kafka_topic_result_name',
+    'rd_kafka_AdminOptions_new' => 'rd_kafka_AdminOptions_new',
+    'rd_kafka_AdminOptions_destroy' => 'rd_kafka_AdminOptions_destroy',
+    'rd_kafka_AdminOptions_set_request_timeout' => 'rd_kafka_AdminOptions_set_request_timeout',
+    'rd_kafka_AdminOptions_set_operation_timeout' => 'rd_kafka_AdminOptions_set_operation_timeout',
+    'rd_kafka_AdminOptions_set_validate_only' => 'rd_kafka_AdminOptions_set_validate_only',
+    'rd_kafka_AdminOptions_set_broker' => 'rd_kafka_AdminOptions_set_broker',
+    'rd_kafka_AdminOptions_set_opaque' => 'rd_kafka_AdminOptions_set_opaque',
+    'rd_kafka_NewTopic_new' => 'rd_kafka_NewTopic_new',
+    'rd_kafka_NewTopic_destroy' => 'rd_kafka_NewTopic_destroy',
+    'rd_kafka_NewTopic_destroy_array' => 'rd_kafka_NewTopic_destroy_array',
+    'rd_kafka_NewTopic_set_replica_assignment' => 'rd_kafka_NewTopic_set_replica_assignment',
+    'rd_kafka_NewTopic_set_config' => 'rd_kafka_NewTopic_set_config',
+    'rd_kafka_CreateTopics' => 'rd_kafka_CreateTopics',
+    'rd_kafka_CreateTopics_result_topics' => 'rd_kafka_CreateTopics_result_topics',
+    'rd_kafka_DeleteTopic_new' => 'rd_kafka_DeleteTopic_new',
+    'rd_kafka_DeleteTopic_destroy' => 'rd_kafka_DeleteTopic_destroy',
+    'rd_kafka_DeleteTopic_destroy_array' => 'rd_kafka_DeleteTopic_destroy_array',
+    'rd_kafka_DeleteTopics' => 'rd_kafka_DeleteTopics',
+    'rd_kafka_DeleteTopics_result_topics' => 'rd_kafka_DeleteTopics_result_topics',
+    'rd_kafka_NewPartitions_new' => 'rd_kafka_NewPartitions_new',
+    'rd_kafka_NewPartitions_destroy' => 'rd_kafka_NewPartitions_destroy',
+    'rd_kafka_NewPartitions_destroy_array' => 'rd_kafka_NewPartitions_destroy_array',
+    'rd_kafka_NewPartitions_set_replica_assignment' => 'rd_kafka_NewPartitions_set_replica_assignment',
+    'rd_kafka_CreatePartitions' => 'rd_kafka_CreatePartitions',
+    'rd_kafka_CreatePartitions_result_topics' => 'rd_kafka_CreatePartitions_result_topics',
+    'rd_kafka_ConfigSource_name' => 'rd_kafka_ConfigSource_name',
+    'rd_kafka_ConfigEntry_name' => 'rd_kafka_ConfigEntry_name',
+    'rd_kafka_ConfigEntry_value' => 'rd_kafka_ConfigEntry_value',
+    'rd_kafka_ConfigEntry_source' => 'rd_kafka_ConfigEntry_source',
+    'rd_kafka_ConfigEntry_is_read_only' => 'rd_kafka_ConfigEntry_is_read_only',
+    'rd_kafka_ConfigEntry_is_default' => 'rd_kafka_ConfigEntry_is_default',
+    'rd_kafka_ConfigEntry_is_sensitive' => 'rd_kafka_ConfigEntry_is_sensitive',
+    'rd_kafka_ConfigEntry_is_synonym' => 'rd_kafka_ConfigEntry_is_synonym',
+    'rd_kafka_ConfigEntry_synonyms' => 'rd_kafka_ConfigEntry_synonyms',
+    'rd_kafka_ResourceType_name' => 'rd_kafka_ResourceType_name',
+    'rd_kafka_ConfigResource_new' => 'rd_kafka_ConfigResource_new',
+    'rd_kafka_ConfigResource_destroy' => 'rd_kafka_ConfigResource_destroy',
+    'rd_kafka_ConfigResource_destroy_array' => 'rd_kafka_ConfigResource_destroy_array',
+    'rd_kafka_ConfigResource_set_config' => 'rd_kafka_ConfigResource_set_config',
+    'rd_kafka_ConfigResource_configs' => 'rd_kafka_ConfigResource_configs',
+    'rd_kafka_ConfigResource_type' => 'rd_kafka_ConfigResource_type',
+    'rd_kafka_ConfigResource_name' => 'rd_kafka_ConfigResource_name',
+    'rd_kafka_ConfigResource_error' => 'rd_kafka_ConfigResource_error',
+    'rd_kafka_ConfigResource_error_string' => 'rd_kafka_ConfigResource_error_string',
+    'rd_kafka_AlterConfigs' => 'rd_kafka_AlterConfigs',
+    'rd_kafka_AlterConfigs_result_resources' => 'rd_kafka_AlterConfigs_result_resources',
+    'rd_kafka_DescribeConfigs' => 'rd_kafka_DescribeConfigs',
+    'rd_kafka_DescribeConfigs_result_resources' => 'rd_kafka_DescribeConfigs_result_resources',
+];
+const RD_KAFKA_CDEF = <<<CDEF
+typedef long int ssize_t;
+struct _IO_FILE;
+typedef struct _IO_FILE FILE;
+typedef long int mode_t;
+typedef signed int int16_t;
+typedef signed int int32_t;
+typedef signed long int int64_t;
+int rd_kafka_version(void);
+char * rd_kafka_version_str(void);
+typedef enum rd_kafka_type_t {
+  RD_KAFKA_PRODUCER,
+  RD_KAFKA_CONSUMER,
+} rd_kafka_type_t;
+typedef enum rd_kafka_timestamp_type_t {
+  RD_KAFKA_TIMESTAMP_NOT_AVAILABLE,
+  RD_KAFKA_TIMESTAMP_CREATE_TIME,
+  RD_KAFKA_TIMESTAMP_LOG_APPEND_TIME,
+} rd_kafka_timestamp_type_t;
+char * rd_kafka_get_debug_contexts(void);
+typedef struct rd_kafka_s rd_kafka_t;
+typedef struct rd_kafka_topic_s rd_kafka_topic_t;
+typedef struct rd_kafka_conf_s rd_kafka_conf_t;
+typedef struct rd_kafka_topic_conf_s rd_kafka_topic_conf_t;
+typedef struct rd_kafka_queue_s rd_kafka_queue_t;
+typedef struct rd_kafka_op_s rd_kafka_event_t;
+typedef struct rd_kafka_topic_result_s rd_kafka_topic_result_t;
+typedef enum {
+  RD_KAFKA_RESP_ERR__BEGIN = (- 200),
+  RD_KAFKA_RESP_ERR__BAD_MSG = (- 199),
+  RD_KAFKA_RESP_ERR__BAD_COMPRESSION = (- 198),
+  RD_KAFKA_RESP_ERR__DESTROY = (- 197),
+  RD_KAFKA_RESP_ERR__FAIL = (- 196),
+  RD_KAFKA_RESP_ERR__TRANSPORT = (- 195),
+  RD_KAFKA_RESP_ERR__CRIT_SYS_RESOURCE = (- 194),
+  RD_KAFKA_RESP_ERR__RESOLVE = (- 193),
+  RD_KAFKA_RESP_ERR__MSG_TIMED_OUT = (- 192),
+  RD_KAFKA_RESP_ERR__PARTITION_EOF = (- 191),
+  RD_KAFKA_RESP_ERR__UNKNOWN_PARTITION = (- 190),
+  RD_KAFKA_RESP_ERR__FS = (- 189),
+  RD_KAFKA_RESP_ERR__UNKNOWN_TOPIC = (- 188),
+  RD_KAFKA_RESP_ERR__ALL_BROKERS_DOWN = (- 187),
+  RD_KAFKA_RESP_ERR__INVALID_ARG = (- 186),
+  RD_KAFKA_RESP_ERR__TIMED_OUT = (- 185),
+  RD_KAFKA_RESP_ERR__QUEUE_FULL = (- 184),
+  RD_KAFKA_RESP_ERR__ISR_INSUFF = (- 183),
+  RD_KAFKA_RESP_ERR__NODE_UPDATE = (- 182),
+  RD_KAFKA_RESP_ERR__SSL = (- 181),
+  RD_KAFKA_RESP_ERR__WAIT_COORD = (- 180),
+  RD_KAFKA_RESP_ERR__UNKNOWN_GROUP = (- 179),
+  RD_KAFKA_RESP_ERR__IN_PROGRESS = (- 178),
+  RD_KAFKA_RESP_ERR__PREV_IN_PROGRESS = (- 177),
+  RD_KAFKA_RESP_ERR__EXISTING_SUBSCRIPTION = (- 176),
+  RD_KAFKA_RESP_ERR__ASSIGN_PARTITIONS = (- 175),
+  RD_KAFKA_RESP_ERR__REVOKE_PARTITIONS = (- 174),
+  RD_KAFKA_RESP_ERR__CONFLICT = (- 173),
+  RD_KAFKA_RESP_ERR__STATE = (- 172),
+  RD_KAFKA_RESP_ERR__UNKNOWN_PROTOCOL = (- 171),
+  RD_KAFKA_RESP_ERR__NOT_IMPLEMENTED = (- 170),
+  RD_KAFKA_RESP_ERR__AUTHENTICATION = (- 169),
+  RD_KAFKA_RESP_ERR__NO_OFFSET = (- 168),
+  RD_KAFKA_RESP_ERR__OUTDATED = (- 167),
+  RD_KAFKA_RESP_ERR__TIMED_OUT_QUEUE = (- 166),
+  RD_KAFKA_RESP_ERR__UNSUPPORTED_FEATURE = (- 165),
+  RD_KAFKA_RESP_ERR__WAIT_CACHE = (- 164),
+  RD_KAFKA_RESP_ERR__INTR = (- 163),
+  RD_KAFKA_RESP_ERR__KEY_SERIALIZATION = (- 162),
+  RD_KAFKA_RESP_ERR__VALUE_SERIALIZATION = (- 161),
+  RD_KAFKA_RESP_ERR__KEY_DESERIALIZATION = (- 160),
+  RD_KAFKA_RESP_ERR__VALUE_DESERIALIZATION = (- 159),
+  RD_KAFKA_RESP_ERR__PARTIAL = (- 158),
+  RD_KAFKA_RESP_ERR__READ_ONLY = (- 157),
+  RD_KAFKA_RESP_ERR__NOENT = (- 156),
+  RD_KAFKA_RESP_ERR__UNDERFLOW = (- 155),
+  RD_KAFKA_RESP_ERR__INVALID_TYPE = (- 154),
+  RD_KAFKA_RESP_ERR__RETRY = (- 153),
+  RD_KAFKA_RESP_ERR__PURGE_QUEUE = (- 152),
+  RD_KAFKA_RESP_ERR__PURGE_INFLIGHT = (- 151),
+  RD_KAFKA_RESP_ERR__FATAL = (- 150),
+  RD_KAFKA_RESP_ERR__INCONSISTENT = (- 149),
+  RD_KAFKA_RESP_ERR__GAPLESS_GUARANTEE = (- 148),
+  RD_KAFKA_RESP_ERR__MAX_POLL_EXCEEDED = (- 147),
+  RD_KAFKA_RESP_ERR__END = (- 100),
+  RD_KAFKA_RESP_ERR_UNKNOWN = (- 1),
+  RD_KAFKA_RESP_ERR_NO_ERROR = 0,
+  RD_KAFKA_RESP_ERR_OFFSET_OUT_OF_RANGE = 1,
+  RD_KAFKA_RESP_ERR_INVALID_MSG = 2,
+  RD_KAFKA_RESP_ERR_UNKNOWN_TOPIC_OR_PART = 3,
+  RD_KAFKA_RESP_ERR_INVALID_MSG_SIZE = 4,
+  RD_KAFKA_RESP_ERR_LEADER_NOT_AVAILABLE = 5,
+  RD_KAFKA_RESP_ERR_NOT_LEADER_FOR_PARTITION = 6,
+  RD_KAFKA_RESP_ERR_REQUEST_TIMED_OUT = 7,
+  RD_KAFKA_RESP_ERR_BROKER_NOT_AVAILABLE = 8,
+  RD_KAFKA_RESP_ERR_REPLICA_NOT_AVAILABLE = 9,
+  RD_KAFKA_RESP_ERR_MSG_SIZE_TOO_LARGE = 10,
+  RD_KAFKA_RESP_ERR_STALE_CTRL_EPOCH = 11,
+  RD_KAFKA_RESP_ERR_OFFSET_METADATA_TOO_LARGE = 12,
+  RD_KAFKA_RESP_ERR_NETWORK_EXCEPTION = 13,
+  RD_KAFKA_RESP_ERR_GROUP_LOAD_IN_PROGRESS = 14,
+  RD_KAFKA_RESP_ERR_GROUP_COORDINATOR_NOT_AVAILABLE = 15,
+  RD_KAFKA_RESP_ERR_NOT_COORDINATOR_FOR_GROUP = 16,
+  RD_KAFKA_RESP_ERR_TOPIC_EXCEPTION = 17,
+  RD_KAFKA_RESP_ERR_RECORD_LIST_TOO_LARGE = 18,
+  RD_KAFKA_RESP_ERR_NOT_ENOUGH_REPLICAS = 19,
+  RD_KAFKA_RESP_ERR_NOT_ENOUGH_REPLICAS_AFTER_APPEND = 20,
+  RD_KAFKA_RESP_ERR_INVALID_REQUIRED_ACKS = 21,
+  RD_KAFKA_RESP_ERR_ILLEGAL_GENERATION = 22,
+  RD_KAFKA_RESP_ERR_INCONSISTENT_GROUP_PROTOCOL = 23,
+  RD_KAFKA_RESP_ERR_INVALID_GROUP_ID = 24,
+  RD_KAFKA_RESP_ERR_UNKNOWN_MEMBER_ID = 25,
+  RD_KAFKA_RESP_ERR_INVALID_SESSION_TIMEOUT = 26,
+  RD_KAFKA_RESP_ERR_REBALANCE_IN_PROGRESS = 27,
+  RD_KAFKA_RESP_ERR_INVALID_COMMIT_OFFSET_SIZE = 28,
+  RD_KAFKA_RESP_ERR_TOPIC_AUTHORIZATION_FAILED = 29,
+  RD_KAFKA_RESP_ERR_GROUP_AUTHORIZATION_FAILED = 30,
+  RD_KAFKA_RESP_ERR_CLUSTER_AUTHORIZATION_FAILED = 31,
+  RD_KAFKA_RESP_ERR_INVALID_TIMESTAMP = 32,
+  RD_KAFKA_RESP_ERR_UNSUPPORTED_SASL_MECHANISM = 33,
+  RD_KAFKA_RESP_ERR_ILLEGAL_SASL_STATE = 34,
+  RD_KAFKA_RESP_ERR_UNSUPPORTED_VERSION = 35,
+  RD_KAFKA_RESP_ERR_TOPIC_ALREADY_EXISTS = 36,
+  RD_KAFKA_RESP_ERR_INVALID_PARTITIONS = 37,
+  RD_KAFKA_RESP_ERR_INVALID_REPLICATION_FACTOR = 38,
+  RD_KAFKA_RESP_ERR_INVALID_REPLICA_ASSIGNMENT = 39,
+  RD_KAFKA_RESP_ERR_INVALID_CONFIG = 40,
+  RD_KAFKA_RESP_ERR_NOT_CONTROLLER = 41,
+  RD_KAFKA_RESP_ERR_INVALID_REQUEST = 42,
+  RD_KAFKA_RESP_ERR_UNSUPPORTED_FOR_MESSAGE_FORMAT = 43,
+  RD_KAFKA_RESP_ERR_POLICY_VIOLATION = 44,
+  RD_KAFKA_RESP_ERR_OUT_OF_ORDER_SEQUENCE_NUMBER = 45,
+  RD_KAFKA_RESP_ERR_DUPLICATE_SEQUENCE_NUMBER = 46,
+  RD_KAFKA_RESP_ERR_INVALID_PRODUCER_EPOCH = 47,
+  RD_KAFKA_RESP_ERR_INVALID_TXN_STATE = 48,
+  RD_KAFKA_RESP_ERR_INVALID_PRODUCER_ID_MAPPING = 49,
+  RD_KAFKA_RESP_ERR_INVALID_TRANSACTION_TIMEOUT = 50,
+  RD_KAFKA_RESP_ERR_CONCURRENT_TRANSACTIONS = 51,
+  RD_KAFKA_RESP_ERR_TRANSACTION_COORDINATOR_FENCED = 52,
+  RD_KAFKA_RESP_ERR_TRANSACTIONAL_ID_AUTHORIZATION_FAILED = 53,
+  RD_KAFKA_RESP_ERR_SECURITY_DISABLED = 54,
+  RD_KAFKA_RESP_ERR_OPERATION_NOT_ATTEMPTED = 55,
+  RD_KAFKA_RESP_ERR_KAFKA_STORAGE_ERROR = 56,
+  RD_KAFKA_RESP_ERR_LOG_DIR_NOT_FOUND = 57,
+  RD_KAFKA_RESP_ERR_SASL_AUTHENTICATION_FAILED = 58,
+  RD_KAFKA_RESP_ERR_UNKNOWN_PRODUCER_ID = 59,
+  RD_KAFKA_RESP_ERR_REASSIGNMENT_IN_PROGRESS = 60,
+  RD_KAFKA_RESP_ERR_DELEGATION_TOKEN_AUTH_DISABLED = 61,
+  RD_KAFKA_RESP_ERR_DELEGATION_TOKEN_NOT_FOUND = 62,
+  RD_KAFKA_RESP_ERR_DELEGATION_TOKEN_OWNER_MISMATCH = 63,
+  RD_KAFKA_RESP_ERR_DELEGATION_TOKEN_REQUEST_NOT_ALLOWED = 64,
+  RD_KAFKA_RESP_ERR_DELEGATION_TOKEN_AUTHORIZATION_FAILED = 65,
+  RD_KAFKA_RESP_ERR_DELEGATION_TOKEN_EXPIRED = 66,
+  RD_KAFKA_RESP_ERR_INVALID_PRINCIPAL_TYPE = 67,
+  RD_KAFKA_RESP_ERR_NON_EMPTY_GROUP = 68,
+  RD_KAFKA_RESP_ERR_GROUP_ID_NOT_FOUND = 69,
+  RD_KAFKA_RESP_ERR_FETCH_SESSION_ID_NOT_FOUND = 70,
+  RD_KAFKA_RESP_ERR_INVALID_FETCH_SESSION_EPOCH = 71,
+  RD_KAFKA_RESP_ERR_LISTENER_NOT_FOUND = 72,
+  RD_KAFKA_RESP_ERR_TOPIC_DELETION_DISABLED = 73,
+  RD_KAFKA_RESP_ERR_UNSUPPORTED_COMPRESSION_TYPE = 74,
+  RD_KAFKA_RESP_ERR_END_ALL,
+} rd_kafka_resp_err_t;
+struct rd_kafka_err_desc {
+  rd_kafka_resp_err_t code;
+  char *name;
+  char *desc;
+};
+void rd_kafka_get_err_descs(struct rd_kafka_err_desc **errdescs, size_t *cntp);
+char * rd_kafka_err2str(rd_kafka_resp_err_t err);
+char * rd_kafka_err2name(rd_kafka_resp_err_t err);
+rd_kafka_resp_err_t rd_kafka_last_error(void);
+rd_kafka_resp_err_t rd_kafka_errno2err(int errnox);
+int rd_kafka_errno(void);
+rd_kafka_resp_err_t rd_kafka_fatal_error(rd_kafka_t *rk, char *errstr, size_t errstr_size);
+rd_kafka_resp_err_t rd_kafka_test_fatal_error(rd_kafka_t *rk, rd_kafka_resp_err_t err, char *reason);
+typedef struct rd_kafka_topic_partition_s {
+  char *topic;
+  int32_t partition;
+  int64_t offset;
+  void *metadata;
+  size_t metadata_size;
+  void *opaque;
+  rd_kafka_resp_err_t err;
+  void *_private;
+} rd_kafka_topic_partition_t;
+void rd_kafka_topic_partition_destroy(rd_kafka_topic_partition_t *rktpar);
+typedef struct rd_kafka_topic_partition_list_s {
+  int cnt;
+  int size;
+  rd_kafka_topic_partition_t *elems;
+} rd_kafka_topic_partition_list_t;
+rd_kafka_topic_partition_list_t * rd_kafka_topic_partition_list_new(int size);
+void rd_kafka_topic_partition_list_destroy(rd_kafka_topic_partition_list_t *rkparlist);
+rd_kafka_topic_partition_t * rd_kafka_topic_partition_list_add(rd_kafka_topic_partition_list_t *rktparlist, char *topic, int32_t partition);
+void rd_kafka_topic_partition_list_add_range(rd_kafka_topic_partition_list_t *rktparlist, char *topic, int32_t start, int32_t stop);
+int rd_kafka_topic_partition_list_del(rd_kafka_topic_partition_list_t *rktparlist, char *topic, int32_t partition);
+int rd_kafka_topic_partition_list_del_by_idx(rd_kafka_topic_partition_list_t *rktparlist, int idx);
+rd_kafka_topic_partition_list_t * rd_kafka_topic_partition_list_copy(rd_kafka_topic_partition_list_t *src);
+rd_kafka_resp_err_t rd_kafka_topic_partition_list_set_offset(rd_kafka_topic_partition_list_t *rktparlist, char *topic, int32_t partition, int64_t offset);
+rd_kafka_topic_partition_t * rd_kafka_topic_partition_list_find(rd_kafka_topic_partition_list_t *rktparlist, char *topic, int32_t partition);
+void rd_kafka_topic_partition_list_sort(rd_kafka_topic_partition_list_t *rktparlist, int(*cmp)(void *a, void *b, void *opaque), void *opaque);
+typedef enum rd_kafka_vtype_t {
+  RD_KAFKA_VTYPE_END,
+  RD_KAFKA_VTYPE_TOPIC,
+  RD_KAFKA_VTYPE_RKT,
+  RD_KAFKA_VTYPE_PARTITION,
+  RD_KAFKA_VTYPE_VALUE,
+  RD_KAFKA_VTYPE_KEY,
+  RD_KAFKA_VTYPE_OPAQUE,
+  RD_KAFKA_VTYPE_MSGFLAGS,
+  RD_KAFKA_VTYPE_TIMESTAMP,
+  RD_KAFKA_VTYPE_HEADER,
+  RD_KAFKA_VTYPE_HEADERS,
+} rd_kafka_vtype_t;
+typedef struct rd_kafka_headers_s rd_kafka_headers_t;
+rd_kafka_headers_t * rd_kafka_headers_new(size_t initial_count);
+void rd_kafka_headers_destroy(rd_kafka_headers_t *hdrs);
+rd_kafka_headers_t * rd_kafka_headers_copy(rd_kafka_headers_t *src);
+rd_kafka_resp_err_t rd_kafka_header_add(rd_kafka_headers_t *hdrs, char *name, ssize_t name_size, void *value, ssize_t value_size);
+rd_kafka_resp_err_t rd_kafka_header_remove(rd_kafka_headers_t *hdrs, char *name);
+rd_kafka_resp_err_t rd_kafka_header_get_last(rd_kafka_headers_t *hdrs, char *name, void **valuep, size_t *sizep);
+rd_kafka_resp_err_t rd_kafka_header_get(rd_kafka_headers_t *hdrs, size_t idx, char *name, void **valuep, size_t *sizep);
+rd_kafka_resp_err_t rd_kafka_header_get_all(rd_kafka_headers_t *hdrs, size_t idx, char **namep, void **valuep, size_t *sizep);
+typedef struct rd_kafka_message_s {
+  rd_kafka_resp_err_t err;
+  rd_kafka_topic_t *rkt;
+  int32_t partition;
+  void *payload;
+  size_t len;
+  void *key;
+  size_t key_len;
+  int64_t offset;
+  void *_private;
+} rd_kafka_message_t;
+void rd_kafka_message_destroy(rd_kafka_message_t *rkmessage);
+int64_t rd_kafka_message_timestamp(rd_kafka_message_t *rkmessage, rd_kafka_timestamp_type_t *tstype);
+int64_t rd_kafka_message_latency(rd_kafka_message_t *rkmessage);
+rd_kafka_resp_err_t rd_kafka_message_headers(rd_kafka_message_t *rkmessage, rd_kafka_headers_t **hdrsp);
+rd_kafka_resp_err_t rd_kafka_message_detach_headers(rd_kafka_message_t *rkmessage, rd_kafka_headers_t **hdrsp);
+void rd_kafka_message_set_headers(rd_kafka_message_t *rkmessage, rd_kafka_headers_t *hdrs);
+size_t rd_kafka_header_cnt(rd_kafka_headers_t *hdrs);
+typedef enum {
+  RD_KAFKA_MSG_STATUS_NOT_PERSISTED = 0,
+  RD_KAFKA_MSG_STATUS_POSSIBLY_PERSISTED = 1,
+  RD_KAFKA_MSG_STATUS_PERSISTED = 2,
+} rd_kafka_msg_status_t;
+rd_kafka_msg_status_t rd_kafka_message_status(rd_kafka_message_t *rkmessage);
+typedef enum {
+  RD_KAFKA_CONF_UNKNOWN = (- 2),
+  RD_KAFKA_CONF_INVALID = (- 1),
+  RD_KAFKA_CONF_OK = 0,
+} rd_kafka_conf_res_t;
+rd_kafka_conf_t * rd_kafka_conf_new(void);
+void rd_kafka_conf_destroy(rd_kafka_conf_t *conf);
+rd_kafka_conf_t * rd_kafka_conf_dup(rd_kafka_conf_t *conf);
+rd_kafka_conf_t * rd_kafka_conf_dup_filter(rd_kafka_conf_t *conf, size_t filter_cnt, char **filter);
+rd_kafka_conf_res_t rd_kafka_conf_set(rd_kafka_conf_t *conf, char *name, char *value, char *errstr, size_t errstr_size);
+void rd_kafka_conf_set_events(rd_kafka_conf_t *conf, int events);
+void rd_kafka_conf_set_background_event_cb(rd_kafka_conf_t *conf, void(*event_cb)(rd_kafka_t *rk, rd_kafka_event_t *rkev, void *opaque));
+void rd_kafka_conf_set_dr_cb(rd_kafka_conf_t *conf, void(*dr_cb)(rd_kafka_t *rk, void *payload, size_t len, rd_kafka_resp_err_t err, void *opaque, void *msg_opaque));
+void rd_kafka_conf_set_dr_msg_cb(rd_kafka_conf_t *conf, void(*dr_msg_cb)(rd_kafka_t *rk, rd_kafka_message_t *rkmessage, void *opaque));
+void rd_kafka_conf_set_consume_cb(rd_kafka_conf_t *conf, void(*consume_cb)(rd_kafka_message_t *rkmessage, void *opaque));
+void rd_kafka_conf_set_rebalance_cb(rd_kafka_conf_t *conf, void(*rebalance_cb)(rd_kafka_t *rk, rd_kafka_resp_err_t err, rd_kafka_topic_partition_list_t *partitions, void *opaque));
+void rd_kafka_conf_set_offset_commit_cb(rd_kafka_conf_t *conf, void(*offset_commit_cb)(rd_kafka_t *rk, rd_kafka_resp_err_t err, rd_kafka_topic_partition_list_t *offsets, void *opaque));
+void rd_kafka_conf_set_error_cb(rd_kafka_conf_t *conf, void(*error_cb)(rd_kafka_t *rk, int err, char *reason, void *opaque));
+void rd_kafka_conf_set_throttle_cb(rd_kafka_conf_t *conf, void(*throttle_cb)(rd_kafka_t *rk, char *broker_name, int32_t broker_id, int throttle_time_ms, void *opaque));
+void rd_kafka_conf_set_log_cb(rd_kafka_conf_t *conf, void(*log_cb)(rd_kafka_t *rk, int level, char *fac, char *buf));
+void rd_kafka_conf_set_stats_cb(rd_kafka_conf_t *conf, int(*stats_cb)(rd_kafka_t *rk, char *json, size_t json_len, void *opaque));
+void rd_kafka_conf_set_socket_cb(rd_kafka_conf_t *conf, int(*socket_cb)(int domain, int type, int protocol, void *opaque));
+void rd_kafka_conf_set_connect_cb(rd_kafka_conf_t *conf, int(*connect_cb)(int sockfd, struct sockaddr *addr, int addrlen, char *id, void *opaque));
+void rd_kafka_conf_set_closesocket_cb(rd_kafka_conf_t *conf, int(*closesocket_cb)(int sockfd, void *opaque));
+void rd_kafka_conf_set_opaque(rd_kafka_conf_t *conf, void *opaque);
+void * rd_kafka_opaque(rd_kafka_t *rk);
+void rd_kafka_conf_set_default_topic_conf(rd_kafka_conf_t *conf, rd_kafka_topic_conf_t *tconf);
+rd_kafka_conf_res_t rd_kafka_conf_get(rd_kafka_conf_t *conf, char *name, char *dest, size_t *dest_size);
+rd_kafka_conf_res_t rd_kafka_topic_conf_get(rd_kafka_topic_conf_t *conf, char *name, char *dest, size_t *dest_size);
+char ** rd_kafka_conf_dump(rd_kafka_conf_t *conf, size_t *cntp);
+char ** rd_kafka_topic_conf_dump(rd_kafka_topic_conf_t *conf, size_t *cntp);
+void rd_kafka_conf_dump_free(char **arr, size_t cnt);
+void rd_kafka_conf_properties_show(FILE *fp);
+rd_kafka_topic_conf_t * rd_kafka_topic_conf_new(void);
+rd_kafka_topic_conf_t * rd_kafka_topic_conf_dup(rd_kafka_topic_conf_t *conf);
+rd_kafka_topic_conf_t * rd_kafka_default_topic_conf_dup(rd_kafka_t *rk);
+void rd_kafka_topic_conf_destroy(rd_kafka_topic_conf_t *topic_conf);
+rd_kafka_conf_res_t rd_kafka_topic_conf_set(rd_kafka_topic_conf_t *conf, char *name, char *value, char *errstr, size_t errstr_size);
+void rd_kafka_topic_conf_set_opaque(rd_kafka_topic_conf_t *conf, void *opaque);
+void rd_kafka_topic_conf_set_partitioner_cb(rd_kafka_topic_conf_t *topic_conf, int32_t(*partitioner)(rd_kafka_topic_t *rkt, void *keydata, size_t keylen, int32_t partition_cnt, void *rkt_opaque, void *msg_opaque));
+void rd_kafka_topic_conf_set_msg_order_cmp(rd_kafka_topic_conf_t *topic_conf, int(*msg_order_cmp)(rd_kafka_message_t *a, rd_kafka_message_t *b));
+int rd_kafka_topic_partition_available(rd_kafka_topic_t *rkt, int32_t partition);
+int32_t rd_kafka_msg_partitioner_random(rd_kafka_topic_t *rkt, void *key, size_t keylen, int32_t partition_cnt, void *opaque, void *msg_opaque);
+int32_t rd_kafka_msg_partitioner_consistent(rd_kafka_topic_t *rkt, void *key, size_t keylen, int32_t partition_cnt, void *opaque, void *msg_opaque);
+int32_t rd_kafka_msg_partitioner_consistent_random(rd_kafka_topic_t *rkt, void *key, size_t keylen, int32_t partition_cnt, void *opaque, void *msg_opaque);
+int32_t rd_kafka_msg_partitioner_murmur2(rd_kafka_topic_t *rkt, void *key, size_t keylen, int32_t partition_cnt, void *rkt_opaque, void *msg_opaque);
+int32_t rd_kafka_msg_partitioner_murmur2_random(rd_kafka_topic_t *rkt, void *key, size_t keylen, int32_t partition_cnt, void *rkt_opaque, void *msg_opaque);
+rd_kafka_t * rd_kafka_new(rd_kafka_type_t type, rd_kafka_conf_t *conf, char *errstr, size_t errstr_size);
+void rd_kafka_destroy(rd_kafka_t *rk);
+void rd_kafka_destroy_flags(rd_kafka_t *rk, int flags);
+char * rd_kafka_name(rd_kafka_t *rk);
+rd_kafka_type_t rd_kafka_type(rd_kafka_t *rk);
+char * rd_kafka_memberid(rd_kafka_t *rk);
+char * rd_kafka_clusterid(rd_kafka_t *rk, int timeout_ms);
+int32_t rd_kafka_controllerid(rd_kafka_t *rk, int timeout_ms);
+rd_kafka_topic_t * rd_kafka_topic_new(rd_kafka_t *rk, char *topic, rd_kafka_topic_conf_t *conf);
+void rd_kafka_topic_destroy(rd_kafka_topic_t *rkt);
+char * rd_kafka_topic_name(rd_kafka_topic_t *rkt);
+void * rd_kafka_topic_opaque(rd_kafka_topic_t *rkt);
+int rd_kafka_poll(rd_kafka_t *rk, int timeout_ms);
+void rd_kafka_yield(rd_kafka_t *rk);
+rd_kafka_resp_err_t rd_kafka_pause_partitions(rd_kafka_t *rk, rd_kafka_topic_partition_list_t *partitions);
+rd_kafka_resp_err_t rd_kafka_resume_partitions(rd_kafka_t *rk, rd_kafka_topic_partition_list_t *partitions);
+rd_kafka_resp_err_t rd_kafka_query_watermark_offsets(rd_kafka_t *rk, char *topic, int32_t partition, int64_t *low, int64_t *high, int timeout_ms);
+rd_kafka_resp_err_t rd_kafka_get_watermark_offsets(rd_kafka_t *rk, char *topic, int32_t partition, int64_t *low, int64_t *high);
+rd_kafka_resp_err_t rd_kafka_offsets_for_times(rd_kafka_t *rk, rd_kafka_topic_partition_list_t *offsets, int timeout_ms);
+void rd_kafka_mem_free(rd_kafka_t *rk, void *ptr);
+rd_kafka_queue_t * rd_kafka_queue_new(rd_kafka_t *rk);
+void rd_kafka_queue_destroy(rd_kafka_queue_t *rkqu);
+rd_kafka_queue_t * rd_kafka_queue_get_main(rd_kafka_t *rk);
+rd_kafka_queue_t * rd_kafka_queue_get_consumer(rd_kafka_t *rk);
+rd_kafka_queue_t * rd_kafka_queue_get_partition(rd_kafka_t *rk, char *topic, int32_t partition);
+rd_kafka_queue_t * rd_kafka_queue_get_background(rd_kafka_t *rk);
+void rd_kafka_queue_forward(rd_kafka_queue_t *src, rd_kafka_queue_t *dst);
+rd_kafka_resp_err_t rd_kafka_set_log_queue(rd_kafka_t *rk, rd_kafka_queue_t *rkqu);
+size_t rd_kafka_queue_length(rd_kafka_queue_t *rkqu);
+void rd_kafka_queue_io_event_enable(rd_kafka_queue_t *rkqu, int fd, void *payload, size_t size);
+void rd_kafka_queue_cb_event_enable(rd_kafka_queue_t *rkqu, void(*event_cb)(rd_kafka_t *rk, void *opaque), void *opaque);
+int rd_kafka_consume_start(rd_kafka_topic_t *rkt, int32_t partition, int64_t offset);
+int rd_kafka_consume_start_queue(rd_kafka_topic_t *rkt, int32_t partition, int64_t offset, rd_kafka_queue_t *rkqu);
+int rd_kafka_consume_stop(rd_kafka_topic_t *rkt, int32_t partition);
+rd_kafka_resp_err_t rd_kafka_seek(rd_kafka_topic_t *rkt, int32_t partition, int64_t offset, int timeout_ms);
+rd_kafka_message_t * rd_kafka_consume(rd_kafka_topic_t *rkt, int32_t partition, int timeout_ms);
+ssize_t rd_kafka_consume_batch(rd_kafka_topic_t *rkt, int32_t partition, int timeout_ms, rd_kafka_message_t **rkmessages, size_t rkmessages_size);
+int rd_kafka_consume_callback(rd_kafka_topic_t *rkt, int32_t partition, int timeout_ms, void(*consume_cb)(rd_kafka_message_t *rkmessage, void *opaque), void *opaque);
+rd_kafka_message_t * rd_kafka_consume_queue(rd_kafka_queue_t *rkqu, int timeout_ms);
+ssize_t rd_kafka_consume_batch_queue(rd_kafka_queue_t *rkqu, int timeout_ms, rd_kafka_message_t **rkmessages, size_t rkmessages_size);
+int rd_kafka_consume_callback_queue(rd_kafka_queue_t *rkqu, int timeout_ms, void(*consume_cb)(rd_kafka_message_t *rkmessage, void *opaque), void *opaque);
+rd_kafka_resp_err_t rd_kafka_offset_store(rd_kafka_topic_t *rkt, int32_t partition, int64_t offset);
+rd_kafka_resp_err_t rd_kafka_offsets_store(rd_kafka_t *rk, rd_kafka_topic_partition_list_t *offsets);
+rd_kafka_resp_err_t rd_kafka_subscribe(rd_kafka_t *rk, rd_kafka_topic_partition_list_t *topics);
+rd_kafka_resp_err_t rd_kafka_unsubscribe(rd_kafka_t *rk);
+rd_kafka_resp_err_t rd_kafka_subscription(rd_kafka_t *rk, rd_kafka_topic_partition_list_t **topics);
+rd_kafka_message_t * rd_kafka_consumer_poll(rd_kafka_t *rk, int timeout_ms);
+rd_kafka_resp_err_t rd_kafka_consumer_close(rd_kafka_t *rk);
+rd_kafka_resp_err_t rd_kafka_assign(rd_kafka_t *rk, rd_kafka_topic_partition_list_t *partitions);
+rd_kafka_resp_err_t rd_kafka_assignment(rd_kafka_t *rk, rd_kafka_topic_partition_list_t **partitions);
+rd_kafka_resp_err_t rd_kafka_commit(rd_kafka_t *rk, rd_kafka_topic_partition_list_t *offsets, int async);
+rd_kafka_resp_err_t rd_kafka_commit_message(rd_kafka_t *rk, rd_kafka_message_t *rkmessage, int async);
+rd_kafka_resp_err_t rd_kafka_commit_queue(rd_kafka_t *rk, rd_kafka_topic_partition_list_t *offsets, rd_kafka_queue_t *rkqu, void(*cb)(rd_kafka_t *rk, rd_kafka_resp_err_t err, rd_kafka_topic_partition_list_t *offsets, void *opaque), void *opaque);
+rd_kafka_resp_err_t rd_kafka_committed(rd_kafka_t *rk, rd_kafka_topic_partition_list_t *partitions, int timeout_ms);
+rd_kafka_resp_err_t rd_kafka_position(rd_kafka_t *rk, rd_kafka_topic_partition_list_t *partitions);
+int rd_kafka_produce(rd_kafka_topic_t *rkt, int32_t partition, int msgflags, void *payload, size_t len, void *key, size_t keylen, void *msg_opaque);
+rd_kafka_resp_err_t rd_kafka_producev(rd_kafka_t *rk, ...);
+int rd_kafka_produce_batch(rd_kafka_topic_t *rkt, int32_t partition, int msgflags, rd_kafka_message_t *rkmessages, int message_cnt);
+rd_kafka_resp_err_t rd_kafka_flush(rd_kafka_t *rk, int timeout_ms);
+rd_kafka_resp_err_t rd_kafka_purge(rd_kafka_t *rk, int purge_flags);
+typedef struct rd_kafka_metadata_broker {
+  int32_t id;
+  char *host;
+  int port;
+} rd_kafka_metadata_broker_t;
+typedef struct rd_kafka_metadata_partition {
+  int32_t id;
+  rd_kafka_resp_err_t err;
+  int32_t leader;
+  int replica_cnt;
+  int32_t *replicas;
+  int isr_cnt;
+  int32_t *isrs;
+} rd_kafka_metadata_partition_t;
+typedef struct rd_kafka_metadata_topic {
+  char *topic;
+  int partition_cnt;
+  struct rd_kafka_metadata_partition *partitions;
+  rd_kafka_resp_err_t err;
+} rd_kafka_metadata_topic_t;
+typedef struct rd_kafka_metadata {
+  int broker_cnt;
+  struct rd_kafka_metadata_broker *brokers;
+  int topic_cnt;
+  struct rd_kafka_metadata_topic *topics;
+  int32_t orig_broker_id;
+  char *orig_broker_name;
+} rd_kafka_metadata_t;
+rd_kafka_resp_err_t rd_kafka_metadata(rd_kafka_t *rk, int all_topics, rd_kafka_topic_t *only_rkt, struct rd_kafka_metadata **metadatap, int timeout_ms);
+void rd_kafka_metadata_destroy(struct rd_kafka_metadata *metadata);
+struct rd_kafka_group_member_info {
+  char *member_id;
+  char *client_id;
+  char *client_host;
+  void *member_metadata;
+  int member_metadata_size;
+  void *member_assignment;
+  int member_assignment_size;
+};
+struct rd_kafka_group_info {
+  struct rd_kafka_metadata_broker broker;
+  char *group;
+  rd_kafka_resp_err_t err;
+  char *state;
+  char *protocol_type;
+  char *protocol;
+  struct rd_kafka_group_member_info *members;
+  int member_cnt;
+};
+struct rd_kafka_group_list {
+  struct rd_kafka_group_info *groups;
+  int group_cnt;
+};
+rd_kafka_resp_err_t rd_kafka_list_groups(rd_kafka_t *rk, char *group, struct rd_kafka_group_list **grplistp, int timeout_ms);
+void rd_kafka_group_list_destroy(struct rd_kafka_group_list *grplist);
+int rd_kafka_brokers_add(rd_kafka_t *rk, char *brokerlist);
+void rd_kafka_set_logger(rd_kafka_t *rk, void(*func)(rd_kafka_t *rk, int level, char *fac, char *buf));
+void rd_kafka_set_log_level(rd_kafka_t *rk, int level);
+void rd_kafka_log_print(rd_kafka_t *rk, int level, char *fac, char *buf);
+int rd_kafka_outq_len(rd_kafka_t *rk);
+void rd_kafka_dump(FILE *fp, rd_kafka_t *rk);
+int rd_kafka_thread_cnt(void);
+int rd_kafka_wait_destroyed(int timeout_ms);
+int rd_kafka_unittest(void);
+rd_kafka_resp_err_t rd_kafka_poll_set_consumer(rd_kafka_t *rk);
+typedef int rd_kafka_event_type_t;
+rd_kafka_event_type_t rd_kafka_event_type(rd_kafka_event_t *rkev);
+char * rd_kafka_event_name(rd_kafka_event_t *rkev);
+void rd_kafka_event_destroy(rd_kafka_event_t *rkev);
+rd_kafka_message_t * rd_kafka_event_message_next(rd_kafka_event_t *rkev);
+size_t rd_kafka_event_message_array(rd_kafka_event_t *rkev, rd_kafka_message_t **rkmessages, size_t size);
+size_t rd_kafka_event_message_count(rd_kafka_event_t *rkev);
+rd_kafka_resp_err_t rd_kafka_event_error(rd_kafka_event_t *rkev);
+char * rd_kafka_event_error_string(rd_kafka_event_t *rkev);
+int rd_kafka_event_error_is_fatal(rd_kafka_event_t *rkev);
+void * rd_kafka_event_opaque(rd_kafka_event_t *rkev);
+int rd_kafka_event_log(rd_kafka_event_t *rkev, char **fac, char **str, int *level);
+char * rd_kafka_event_stats(rd_kafka_event_t *rkev);
+rd_kafka_topic_partition_list_t * rd_kafka_event_topic_partition_list(rd_kafka_event_t *rkev);
+rd_kafka_topic_partition_t * rd_kafka_event_topic_partition(rd_kafka_event_t *rkev);
+typedef rd_kafka_event_t rd_kafka_CreateTopics_result_t;
+typedef rd_kafka_event_t rd_kafka_DeleteTopics_result_t;
+typedef rd_kafka_event_t rd_kafka_CreatePartitions_result_t;
+typedef rd_kafka_event_t rd_kafka_AlterConfigs_result_t;
+typedef rd_kafka_event_t rd_kafka_DescribeConfigs_result_t;
+rd_kafka_CreateTopics_result_t * rd_kafka_event_CreateTopics_result(rd_kafka_event_t *rkev);
+rd_kafka_DeleteTopics_result_t * rd_kafka_event_DeleteTopics_result(rd_kafka_event_t *rkev);
+rd_kafka_CreatePartitions_result_t * rd_kafka_event_CreatePartitions_result(rd_kafka_event_t *rkev);
+rd_kafka_AlterConfigs_result_t * rd_kafka_event_AlterConfigs_result(rd_kafka_event_t *rkev);
+rd_kafka_DescribeConfigs_result_t * rd_kafka_event_DescribeConfigs_result(rd_kafka_event_t *rkev);
+rd_kafka_event_t * rd_kafka_queue_poll(rd_kafka_queue_t *rkqu, int timeout_ms);
+int rd_kafka_queue_poll_callback(rd_kafka_queue_t *rkqu, int timeout_ms);
+rd_kafka_resp_err_t rd_kafka_topic_result_error(rd_kafka_topic_result_t *topicres);
+char * rd_kafka_topic_result_error_string(rd_kafka_topic_result_t *topicres);
+char * rd_kafka_topic_result_name(rd_kafka_topic_result_t *topicres);
+typedef enum rd_kafka_admin_op_t {
+  RD_KAFKA_ADMIN_OP_ANY = 0,
+  RD_KAFKA_ADMIN_OP_CREATETOPICS,
+  RD_KAFKA_ADMIN_OP_DELETETOPICS,
+  RD_KAFKA_ADMIN_OP_CREATEPARTITIONS,
+  RD_KAFKA_ADMIN_OP_ALTERCONFIGS,
+  RD_KAFKA_ADMIN_OP_DESCRIBECONFIGS,
+  RD_KAFKA_ADMIN_OP__CNT,
+} rd_kafka_admin_op_t;
+typedef struct rd_kafka_AdminOptions_s rd_kafka_AdminOptions_t;
+rd_kafka_AdminOptions_t * rd_kafka_AdminOptions_new(rd_kafka_t *rk, rd_kafka_admin_op_t for_api);
+void rd_kafka_AdminOptions_destroy(rd_kafka_AdminOptions_t *options);
+rd_kafka_resp_err_t rd_kafka_AdminOptions_set_request_timeout(rd_kafka_AdminOptions_t *options, int timeout_ms, char *errstr, size_t errstr_size);
+rd_kafka_resp_err_t rd_kafka_AdminOptions_set_operation_timeout(rd_kafka_AdminOptions_t *options, int timeout_ms, char *errstr, size_t errstr_size);
+rd_kafka_resp_err_t rd_kafka_AdminOptions_set_validate_only(rd_kafka_AdminOptions_t *options, int true_or_false, char *errstr, size_t errstr_size);
+rd_kafka_resp_err_t rd_kafka_AdminOptions_set_broker(rd_kafka_AdminOptions_t *options, int32_t broker_id, char *errstr, size_t errstr_size);
+void rd_kafka_AdminOptions_set_opaque(rd_kafka_AdminOptions_t *options, void *opaque);
+typedef struct rd_kafka_NewTopic_s rd_kafka_NewTopic_t;
+rd_kafka_NewTopic_t * rd_kafka_NewTopic_new(char *topic, int num_partitions, int replication_factor, char *errstr, size_t errstr_size);
+void rd_kafka_NewTopic_destroy(rd_kafka_NewTopic_t *new_topic);
+void rd_kafka_NewTopic_destroy_array(rd_kafka_NewTopic_t **new_topics, size_t new_topic_cnt);
+rd_kafka_resp_err_t rd_kafka_NewTopic_set_replica_assignment(rd_kafka_NewTopic_t *new_topic, int32_t partition, int32_t *broker_ids, size_t broker_id_cnt, char *errstr, size_t errstr_size);
+rd_kafka_resp_err_t rd_kafka_NewTopic_set_config(rd_kafka_NewTopic_t *new_topic, char *name, char *value);
+void rd_kafka_CreateTopics(rd_kafka_t *rk, rd_kafka_NewTopic_t **new_topics, size_t new_topic_cnt, rd_kafka_AdminOptions_t *options, rd_kafka_queue_t *rkqu);
+rd_kafka_topic_result_t ** rd_kafka_CreateTopics_result_topics(rd_kafka_CreateTopics_result_t *result, size_t *cntp);
+typedef struct rd_kafka_DeleteTopic_s rd_kafka_DeleteTopic_t;
+rd_kafka_DeleteTopic_t * rd_kafka_DeleteTopic_new(char *topic);
+void rd_kafka_DeleteTopic_destroy(rd_kafka_DeleteTopic_t *del_topic);
+void rd_kafka_DeleteTopic_destroy_array(rd_kafka_DeleteTopic_t **del_topics, size_t del_topic_cnt);
+void rd_kafka_DeleteTopics(rd_kafka_t *rk, rd_kafka_DeleteTopic_t **del_topics, size_t del_topic_cnt, rd_kafka_AdminOptions_t *options, rd_kafka_queue_t *rkqu);
+rd_kafka_topic_result_t ** rd_kafka_DeleteTopics_result_topics(rd_kafka_DeleteTopics_result_t *result, size_t *cntp);
+typedef struct rd_kafka_NewPartitions_s rd_kafka_NewPartitions_t;
+rd_kafka_NewPartitions_t * rd_kafka_NewPartitions_new(char *topic, size_t new_total_cnt, char *errstr, size_t errstr_size);
+void rd_kafka_NewPartitions_destroy(rd_kafka_NewPartitions_t *new_parts);
+void rd_kafka_NewPartitions_destroy_array(rd_kafka_NewPartitions_t **new_parts, size_t new_parts_cnt);
+rd_kafka_resp_err_t rd_kafka_NewPartitions_set_replica_assignment(rd_kafka_NewPartitions_t *new_parts, int32_t new_partition_idx, int32_t *broker_ids, size_t broker_id_cnt, char *errstr, size_t errstr_size);
+void rd_kafka_CreatePartitions(rd_kafka_t *rk, rd_kafka_NewPartitions_t **new_parts, size_t new_parts_cnt, rd_kafka_AdminOptions_t *options, rd_kafka_queue_t *rkqu);
+rd_kafka_topic_result_t ** rd_kafka_CreatePartitions_result_topics(rd_kafka_CreatePartitions_result_t *result, size_t *cntp);
+typedef enum rd_kafka_ConfigSource_t {
+  RD_KAFKA_CONFIG_SOURCE_UNKNOWN_CONFIG = 0,
+  RD_KAFKA_CONFIG_SOURCE_DYNAMIC_TOPIC_CONFIG = 1,
+  RD_KAFKA_CONFIG_SOURCE_DYNAMIC_BROKER_CONFIG = 2,
+  RD_KAFKA_CONFIG_SOURCE_DYNAMIC_DEFAULT_BROKER_CONFIG = 3,
+  RD_KAFKA_CONFIG_SOURCE_STATIC_BROKER_CONFIG = 4,
+  RD_KAFKA_CONFIG_SOURCE_DEFAULT_CONFIG = 5,
+  RD_KAFKA_CONFIG_SOURCE__CNT,
+} rd_kafka_ConfigSource_t;
+char * rd_kafka_ConfigSource_name(rd_kafka_ConfigSource_t confsource);
+typedef struct rd_kafka_ConfigEntry_s rd_kafka_ConfigEntry_t;
+char * rd_kafka_ConfigEntry_name(rd_kafka_ConfigEntry_t *entry);
+char * rd_kafka_ConfigEntry_value(rd_kafka_ConfigEntry_t *entry);
+rd_kafka_ConfigSource_t rd_kafka_ConfigEntry_source(rd_kafka_ConfigEntry_t *entry);
+int rd_kafka_ConfigEntry_is_read_only(rd_kafka_ConfigEntry_t *entry);
+int rd_kafka_ConfigEntry_is_default(rd_kafka_ConfigEntry_t *entry);
+int rd_kafka_ConfigEntry_is_sensitive(rd_kafka_ConfigEntry_t *entry);
+int rd_kafka_ConfigEntry_is_synonym(rd_kafka_ConfigEntry_t *entry);
+rd_kafka_ConfigEntry_t ** rd_kafka_ConfigEntry_synonyms(rd_kafka_ConfigEntry_t *entry, size_t *cntp);
+typedef enum rd_kafka_ResourceType_t {
+  RD_KAFKA_RESOURCE_UNKNOWN = 0,
+  RD_KAFKA_RESOURCE_ANY = 1,
+  RD_KAFKA_RESOURCE_TOPIC = 2,
+  RD_KAFKA_RESOURCE_GROUP = 3,
+  RD_KAFKA_RESOURCE_BROKER = 4,
+  RD_KAFKA_RESOURCE__CNT,
+} rd_kafka_ResourceType_t;
+char * rd_kafka_ResourceType_name(rd_kafka_ResourceType_t restype);
+typedef struct rd_kafka_ConfigResource_s rd_kafka_ConfigResource_t;
+rd_kafka_ConfigResource_t * rd_kafka_ConfigResource_new(rd_kafka_ResourceType_t restype, char *resname);
+void rd_kafka_ConfigResource_destroy(rd_kafka_ConfigResource_t *config);
+void rd_kafka_ConfigResource_destroy_array(rd_kafka_ConfigResource_t **config, size_t config_cnt);
+rd_kafka_resp_err_t rd_kafka_ConfigResource_set_config(rd_kafka_ConfigResource_t *config, char *name, char *value);
+rd_kafka_ConfigEntry_t ** rd_kafka_ConfigResource_configs(rd_kafka_ConfigResource_t *config, size_t *cntp);
+rd_kafka_ResourceType_t rd_kafka_ConfigResource_type(rd_kafka_ConfigResource_t *config);
+char * rd_kafka_ConfigResource_name(rd_kafka_ConfigResource_t *config);
+rd_kafka_resp_err_t rd_kafka_ConfigResource_error(rd_kafka_ConfigResource_t *config);
+char * rd_kafka_ConfigResource_error_string(rd_kafka_ConfigResource_t *config);
+void rd_kafka_AlterConfigs(rd_kafka_t *rk, rd_kafka_ConfigResource_t **configs, size_t config_cnt, rd_kafka_AdminOptions_t *options, rd_kafka_queue_t *rkqu);
+rd_kafka_ConfigResource_t ** rd_kafka_AlterConfigs_result_resources(rd_kafka_AlterConfigs_result_t *result, size_t *cntp);
+void rd_kafka_DescribeConfigs(rd_kafka_t *rk, rd_kafka_ConfigResource_t **configs, size_t config_cnt, rd_kafka_AdminOptions_t *options, rd_kafka_queue_t *rkqu);
+rd_kafka_ConfigResource_t ** rd_kafka_DescribeConfigs_result_resources(rd_kafka_DescribeConfigs_result_t *result, size_t *cntp);
+CDEF;

@@ -6,7 +6,7 @@ namespace RdKafka\FFI;
 
 use FFI\CData;
 
-class NativePartitionerCallbackProxy extends Api
+class NativePartitionerCallbackProxy
 {
     private string $partitionerMethod;
 
@@ -23,7 +23,7 @@ class NativePartitionerCallbackProxy extends Api
         ?object $topic_opaque = null,
         ?object $msg_opaque = null
     ): int {
-        return (int) self::getFFI()->{$this->partitionerMethod}(
+        return (int) Api::{$this->partitionerMethod}(
             $topic,
             $keydata,
             $keylen,

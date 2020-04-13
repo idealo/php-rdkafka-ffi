@@ -32,9 +32,7 @@ class ApiTest extends TestCase
 
     public function testPreloadWithInvalidCdef(): void
     {
-        Api::$cdef = 'invalid';
-
         $this->expectException(\FFI\Exception::class);
-        Api::preload();
+        Api::preload('', 'Any', null, 'invalid');
     }
 }

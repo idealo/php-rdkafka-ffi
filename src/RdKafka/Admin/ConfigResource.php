@@ -8,13 +8,13 @@ use FFI\CData;
 use RdKafka\Exception;
 use RdKafka\FFI\Api;
 
-class ConfigResource extends Api
+class ConfigResource
 {
     private CData $resource;
 
     public function __construct(int $type, string $name)
     {
-        $this->resource = self::getFFI()->rd_kafka_ConfigResource_new(
+        $this->resource = Api::rd_kafka_ConfigResource_new(
             $type,
             $name
         );
@@ -22,7 +22,7 @@ class ConfigResource extends Api
 
     public function __destruct()
     {
-        self::getFFI()->rd_kafka_ConfigResource_destroy($this->resource);
+        Api::rd_kafka_ConfigResource_destroy($this->resource);
     }
 
     public function getCData(): CData
@@ -35,14 +35,14 @@ class ConfigResource extends Api
      */
     public function setConfig(string $name, string $value): void
     {
-        $err = (int) self::getFFI()->rd_kafka_ConfigResource_set_config(
+        $err = (int) Api::rd_kafka_ConfigResource_set_config(
             $this->resource,
             $name,
             $value
         );
 
         if ($err !== RD_KAFKA_RESP_ERR_NO_ERROR) {
-            throw new Exception(self::err2str($err));
+            throw Exception::fromError($err);
         }
     }
 }

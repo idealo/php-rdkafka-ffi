@@ -8,7 +8,7 @@ use FFI\CData;
 use RdKafka;
 use RdKafka\FFI\Api;
 
-abstract class Topic extends Api
+abstract class Topic
 {
     protected CData $topic;
 
@@ -21,21 +21,21 @@ abstract class Topic extends Api
         $this->name = $name;
         $this->kafka = $kafka;
 
-        $this->topic = self::getFFI()->rd_kafka_topic_new(
+        $this->topic = Api::rd_kafka_topic_new(
             $kafka->getCData(),
             $name,
             $this->duplicateConfCData($conf)
         );
 
         if ($this->topic === null) {
-            $err = self::getFFI()->rd_kafka_last_error();
-            throw new Exception(self::err2str($err));
+            $err = (int) Api::rd_kafka_last_error();
+            throw Exception::fromError($err);
         }
     }
 
     public function __destruct()
     {
-        self::getFFI()->rd_kafka_topic_destroy($this->topic);
+        Api::rd_kafka_topic_destroy($this->topic);
     }
 
     private function duplicateConfCData(?TopicConf $conf = null): ?CData
@@ -44,7 +44,7 @@ abstract class Topic extends Api
             return null;
         }
 
-        return self::getFFI()->rd_kafka_topic_conf_dup($conf->getCData());
+        return Api::rd_kafka_topic_conf_dup($conf->getCData());
     }
 
     public function getCData(): CData

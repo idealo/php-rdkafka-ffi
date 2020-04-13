@@ -8,7 +8,7 @@ use FFI;
 use FFI\CData;
 use RdKafka\FFI\Api;
 
-class ConfigEntry extends Api
+class ConfigEntry
 {
     public string $name;
     public ?string $value;
@@ -25,17 +25,17 @@ class ConfigEntry extends Api
 
     public function __construct(CData $entry)
     {
-        $this->name = FFI::string(self::getFFI()->rd_kafka_ConfigEntry_name($entry));
-        $valueCdata = self::getFFI()->rd_kafka_ConfigEntry_value($entry);
+        $this->name = FFI::string(Api::rd_kafka_ConfigEntry_name($entry));
+        $valueCdata = Api::rd_kafka_ConfigEntry_value($entry);
         $this->value = $valueCdata === null ? null : FFI::string($valueCdata);
-        $this->source = (int) self::getFFI()->rd_kafka_ConfigEntry_source($entry);
-        $this->isReadOnly = (bool) self::getFFI()->rd_kafka_ConfigEntry_is_read_only($entry);
-        $this->isDefault = (bool) self::getFFI()->rd_kafka_ConfigEntry_is_default($entry);
-        $this->isSensitive = (bool) self::getFFI()->rd_kafka_ConfigEntry_is_sensitive($entry);
-        $this->isSynonym = (bool) self::getFFI()->rd_kafka_ConfigEntry_is_synonym($entry);
+        $this->source = (int) Api::rd_kafka_ConfigEntry_source($entry);
+        $this->isReadOnly = (bool) Api::rd_kafka_ConfigEntry_is_read_only($entry);
+        $this->isDefault = (bool) Api::rd_kafka_ConfigEntry_is_default($entry);
+        $this->isSensitive = (bool) Api::rd_kafka_ConfigEntry_is_sensitive($entry);
+        $this->isSynonym = (bool) Api::rd_kafka_ConfigEntry_is_synonym($entry);
 
         $size = FFI::new('size_t');
-        $synonymsPtr = self::getFFI()->rd_kafka_ConfigEntry_synonyms($entry, FFI::addr($size));
+        $synonymsPtr = Api::rd_kafka_ConfigEntry_synonyms($entry, FFI::addr($size));
         $synonyms = [];
         for ($i = 0; $i < (int) $size->cdata; $i++) {
             $synonyms[] = new self($synonymsPtr[$i]);

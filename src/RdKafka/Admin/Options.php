@@ -10,19 +10,19 @@ use RdKafka;
 use RdKafka\Exception;
 use RdKafka\FFI\Api;
 
-abstract class Options extends Api
+abstract class Options
 {
     private CData $options;
 
     public function __construct(RdKafka $kafka, int $for_api)
     {
-        $this->options = self::getFFI()->rd_kafka_AdminOptions_new($kafka->getCData(), $for_api);
+        $this->options = Api::rd_kafka_AdminOptions_new($kafka->getCData(), $for_api);
     }
 
     public function __destruct()
     {
         if (isset($this->options)) {
-            self::getFFI()->rd_kafka_AdminOptions_destroy($this->options);
+            Api::rd_kafka_AdminOptions_destroy($this->options);
         }
     }
 
@@ -34,7 +34,7 @@ abstract class Options extends Api
     public function setRequestTimeout(int $timeout_ms): void
     {
         $errstr = FFI::new('char[512]');
-        $err = self::getFFI()->rd_kafka_AdminOptions_set_request_timeout(
+        $err = Api::rd_kafka_AdminOptions_set_request_timeout(
             $this->options,
             $timeout_ms,
             $errstr,
@@ -48,7 +48,7 @@ abstract class Options extends Api
     public function setOperationTimeout(int $timeout_ms): void
     {
         $errstr = FFI::new('char[512]');
-        $err = self::getFFI()->rd_kafka_AdminOptions_set_operation_timeout(
+        $err = Api::rd_kafka_AdminOptions_set_operation_timeout(
             $this->options,
             $timeout_ms,
             $errstr,
@@ -62,7 +62,7 @@ abstract class Options extends Api
     public function setValidateOnly(bool $true_or_false): void
     {
         $errstr = FFI::new('char[512]');
-        $err = self::getFFI()->rd_kafka_AdminOptions_set_validate_only(
+        $err = Api::rd_kafka_AdminOptions_set_validate_only(
             $this->options,
             (int) $true_or_false,
             $errstr,
@@ -76,7 +76,7 @@ abstract class Options extends Api
     public function setBrokerId(int $broker_id): void
     {
         $errstr = FFI::new('char[512]');
-        $err = self::getFFI()->rd_kafka_AdminOptions_set_broker(
+        $err = Api::rd_kafka_AdminOptions_set_broker(
             $this->options,
             $broker_id,
             $errstr,

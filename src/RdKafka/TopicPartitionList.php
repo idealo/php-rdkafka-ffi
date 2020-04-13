@@ -9,7 +9,7 @@ use FFI\CData;
 use Iterator;
 use RdKafka\FFI\Api;
 
-class TopicPartitionList extends Api implements Iterator, Countable
+class TopicPartitionList implements Iterator, Countable
 {
     private array $items;
 
@@ -33,10 +33,10 @@ class TopicPartitionList extends Api implements Iterator, Countable
 
     public function getCData(): CData
     {
-        $nativeTopicPartitionList = self::getFFI()->rd_kafka_topic_partition_list_new($this->count());
+        $nativeTopicPartitionList = Api::rd_kafka_topic_partition_list_new($this->count());
 
         foreach ($this->items as $item) {
-            $nativeTopicPartition = self::getFFI()->rd_kafka_topic_partition_list_add(
+            $nativeTopicPartition = Api::rd_kafka_topic_partition_list_add(
                 $nativeTopicPartitionList,
                 $item->getTopic(),
                 $item->getPartition()

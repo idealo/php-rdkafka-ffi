@@ -17,7 +17,7 @@ use RdKafka\Producer;
 use RdKafka\Queue;
 use RdKafka\Topic;
 
-class Client extends Api
+class Client
 {
     private RdKafka $kafka;
     private int $waitForResultEventTimeoutMs = 50;
@@ -59,12 +59,12 @@ class Client extends Api
         $queue = Queue::fromRdKafka($this->kafka);
 
         $resourcesCount = \count($resources);
-        $resourcesPtr = self::getFFI()->new('rd_kafka_ConfigResource_t*[' . $resourcesCount . ']');
+        $resourcesPtr = Api::new('rd_kafka_ConfigResource_t*[' . $resourcesCount . ']');
         foreach (\array_values($resources) as $i => $resource) {
             $resourcesPtr[$i] = $resource->getCData();
         }
 
-        self::getFFI()->rd_kafka_AlterConfigs(
+        Api::rd_kafka_AlterConfigs(
             $this->kafka->getCData(),
             $resourcesPtr,
             $resourcesCount,
@@ -74,10 +74,10 @@ class Client extends Api
 
         $event = $this->waitForResultEvent($queue, RD_KAFKA_EVENT_ALTERCONFIGS_RESULT);
 
-        $eventResult = self::getFFI()->rd_kafka_event_AlterConfigs_result($event->getCData());
+        $eventResult = Api::rd_kafka_event_AlterConfigs_result($event->getCData());
 
         $size = FFI::new('size_t');
-        $result = self::getFFI()->rd_kafka_AlterConfigs_result_resources($eventResult, FFI::addr($size));
+        $result = Api::rd_kafka_AlterConfigs_result_resources($eventResult, FFI::addr($size));
 
         $topicResult = [];
         for ($i = 0; $i < (int) $size->cdata; $i++) {
@@ -100,12 +100,12 @@ class Client extends Api
         $queue = Queue::fromRdKafka($this->kafka);
 
         $resourcesCount = \count($resources);
-        $resourcesPtr = self::getFFI()->new('rd_kafka_ConfigResource_t*[' . $resourcesCount . ']');
+        $resourcesPtr = Api::new('rd_kafka_ConfigResource_t*[' . $resourcesCount . ']');
         foreach (\array_values($resources) as $i => $resource) {
             $resourcesPtr[$i] = $resource->getCData();
         }
 
-        self::getFFI()->rd_kafka_DescribeConfigs(
+        Api::rd_kafka_DescribeConfigs(
             $this->kafka->getCData(),
             $resourcesPtr,
             $resourcesCount,
@@ -115,10 +115,10 @@ class Client extends Api
 
         $event = $this->waitForResultEvent($queue, RD_KAFKA_EVENT_DESCRIBECONFIGS_RESULT);
 
-        $eventResult = self::getFFI()->rd_kafka_event_DescribeConfigs_result($event->getCData());
+        $eventResult = Api::rd_kafka_event_DescribeConfigs_result($event->getCData());
 
         $size = FFI::new('size_t');
-        $result = self::getFFI()->rd_kafka_DescribeConfigs_result_resources($eventResult, FFI::addr($size));
+        $result = Api::rd_kafka_DescribeConfigs_result_resources($eventResult, FFI::addr($size));
 
         $topicResult = [];
         for ($i = 0; $i < (int) $size->cdata; $i++) {
@@ -140,12 +140,12 @@ class Client extends Api
 
         $queue = Queue::fromRdKafka($this->kafka);
 
-        $partitions_ptr = self::getFFI()->new('rd_kafka_NewPartitions_t*[' . \count($partitions) . ']');
+        $partitions_ptr = Api::new('rd_kafka_NewPartitions_t*[' . \count($partitions) . ']');
         foreach (\array_values($partitions) as $i => $partition) {
             $partitions_ptr[$i] = $partition->getCData();
         }
 
-        self::getFFI()->rd_kafka_CreatePartitions(
+        Api::rd_kafka_CreatePartitions(
             $this->kafka->getCData(),
             $partitions_ptr,
             \count($partitions),
@@ -155,10 +155,10 @@ class Client extends Api
 
         $event = $this->waitForResultEvent($queue, RD_KAFKA_EVENT_CREATEPARTITIONS_RESULT);
 
-        $eventResult = self::getFFI()->rd_kafka_event_CreatePartitions_result($event->getCData());
+        $eventResult = Api::rd_kafka_event_CreatePartitions_result($event->getCData());
 
         $size = FFI::new('size_t');
-        $result = self::getFFI()->rd_kafka_CreatePartitions_result_topics($eventResult, FFI::addr($size));
+        $result = Api::rd_kafka_CreatePartitions_result_topics($eventResult, FFI::addr($size));
 
         $topicResult = [];
         for ($i = 0; $i < (int) $size->cdata; $i++) {
@@ -180,12 +180,12 @@ class Client extends Api
 
         $queue = Queue::fromRdKafka($this->kafka);
 
-        $topics_ptr = self::getFFI()->new('rd_kafka_NewTopic_t*[' . \count($topics) . ']');
+        $topics_ptr = Api::new('rd_kafka_NewTopic_t*[' . \count($topics) . ']');
         foreach (\array_values($topics) as $i => $topic) {
             $topics_ptr[$i] = $topic->getCData();
         }
 
-        self::getFFI()->rd_kafka_CreateTopics(
+        Api::rd_kafka_CreateTopics(
             $this->kafka->getCData(),
             $topics_ptr,
             \count($topics),
@@ -195,10 +195,10 @@ class Client extends Api
 
         $event = $this->waitForResultEvent($queue, RD_KAFKA_EVENT_CREATETOPICS_RESULT);
 
-        $eventResult = self::getFFI()->rd_kafka_event_CreateTopics_result($event->getCData());
+        $eventResult = Api::rd_kafka_event_CreateTopics_result($event->getCData());
 
         $size = FFI::new('size_t');
-        $result = self::getFFI()->rd_kafka_CreateTopics_result_topics($eventResult, FFI::addr($size));
+        $result = Api::rd_kafka_CreateTopics_result_topics($eventResult, FFI::addr($size));
 
         $topicResult = [];
         for ($i = 0; $i < (int) $size->cdata; $i++) {
@@ -220,12 +220,12 @@ class Client extends Api
 
         $queue = Queue::fromRdKafka($this->kafka);
 
-        $topics_ptr = self::getFFI()->new('rd_kafka_DeleteTopic_t*[' . \count($topics) . ']');
+        $topics_ptr = Api::new('rd_kafka_DeleteTopic_t*[' . \count($topics) . ']');
         foreach (\array_values($topics) as $i => $topic) {
             $topics_ptr[$i] = $topic->getCData();
         }
 
-        self::getFFI()->rd_kafka_DeleteTopics(
+        Api::rd_kafka_DeleteTopics(
             $this->kafka->getCData(),
             $topics_ptr,
             \count($topics),
@@ -235,10 +235,10 @@ class Client extends Api
 
         $event = $this->waitForResultEvent($queue, RD_KAFKA_EVENT_DELETETOPICS_RESULT);
 
-        $eventResult = self::getFFI()->rd_kafka_event_DeleteTopics_result($event->getCData());
+        $eventResult = Api::rd_kafka_event_DeleteTopics_result($event->getCData());
 
         $size = FFI::new('size_t');
-        $result = self::getFFI()->rd_kafka_DeleteTopics_result_topics($eventResult, FFI::addr($size));
+        $result = Api::rd_kafka_DeleteTopics_result_topics($eventResult, FFI::addr($size));
 
         $topicResult = [];
         for ($i = 0; $i < (int) $size->cdata; $i++) {

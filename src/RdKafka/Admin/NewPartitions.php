@@ -10,14 +10,14 @@ use FFI\CData;
 use RdKafka\Exception;
 use RdKafka\FFI\Api;
 
-class NewPartitions extends Api
+class NewPartitions
 {
     private CData $partitions;
 
     public function __construct(string $topicName, int $new_total_cnt)
     {
         $errstr = FFI::new('char[512]');
-        $this->partitions = self::getFFI()->rd_kafka_NewPartitions_new(
+        $this->partitions = Api::rd_kafka_NewPartitions_new(
             $topicName,
             $new_total_cnt,
             $errstr,
@@ -35,7 +35,7 @@ class NewPartitions extends Api
             return;
         }
 
-        self::getFFI()->rd_kafka_NewPartitions_destroy($this->partitions);
+        Api::rd_kafka_NewPartitions_destroy($this->partitions);
     }
 
     public function getCData(): CData
@@ -60,7 +60,7 @@ class NewPartitions extends Api
         }
 
         $errstr = FFI::new('char[512]');
-        $err = (int) self::getFFI()->rd_kafka_NewPartitions_set_replica_assignment(
+        $err = (int) Api::rd_kafka_NewPartitions_set_replica_assignment(
             $this->partitions,
             $new_partition_id,
             $brokerIds[0],
