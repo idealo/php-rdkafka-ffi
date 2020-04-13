@@ -1,6 +1,6 @@
 <?php
 
-define('LIBRDKAFKA_VERSION', getenv('LIBRDKAFKA_VERSION') ?: '');
+define('LIBRDKAFKA_VERSION', ltrim(getenv('LIBRDKAFKA_VERSION') ?: '', 'v'));
 define('KAFKA_BROKERS', getenv('KAFKA_BROKERS') ?: 'kafka:9092');
 const KAFKA_TEST_TOPIC = "test";
 const KAFKA_TEST_TOPIC_PARTITIONS = "test_partitions";

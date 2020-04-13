@@ -14,22 +14,22 @@ jobs:
     - name: "librdkafka master"
     - name: "librdkafka latest osx"
     - name: "librdkafka latest windows"
-    - name: "rdkafka ext, librdkafka 1.4.0"
+    - name: "rdkafka ext, librdkafka v1.4.0"
   include:
     - &STANDARD_TEST_JOB
       stage: Test
-      name: "librdkafka 1.0.1"
+      name: "librdkafka v1.0.1"
       os: linux
       dist: xenial
       language: minimal
       services:
         - docker
-      env: LIBRDKAFKA_VERSION=1.0.1
+      env: LIBRDKAFKA_VERSION=v1.0.1
       before_script:
         - |
           curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter;
           chmod +x ./cc-test-reporter;
-          if [ "$LIBRDKAFKA_VERSION" = "1.0.1" ]; then ./cc-test-reporter before-build; fi;
+          if [ "$LIBRDKAFKA_VERSION" = "v1.0.1" ]; then ./cc-test-reporter before-build; fi;
       script:
         - |
           set -e;
@@ -44,31 +44,31 @@ jobs:
         - |
           docker-compose down;
           sed -i "s|/app/|`pwd`/|g" clover.xml;
-          if [ "$LIBRDKAFKA_VERSION" = "1.0.1" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT; fi;
+          if [ "$LIBRDKAFKA_VERSION" = "v1.0.1" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT; fi;
 
     - <<: *STANDARD_TEST_JOB
-      env: LIBRDKAFKA_VERSION=1.1.0
-      name: "librdkafka 1.1.0"
+      env: LIBRDKAFKA_VERSION=v1.1.0
+      name: "librdkafka v1.1.0"
 
     - <<: *STANDARD_TEST_JOB
-      env: LIBRDKAFKA_VERSION=1.2.2
-      name: "librdkafka 1.2.2"
+      env: LIBRDKAFKA_VERSION=v1.2.2
+      name: "librdkafka v1.2.2"
 
     - <<: *STANDARD_TEST_JOB
-      env: LIBRDKAFKA_VERSION=1.3.0
-      name: "librdkafka 1.3.0"
+      env: LIBRDKAFKA_VERSION=v1.3.0
+      name: "librdkafka v1.3.0"
 
     - <<: *STANDARD_TEST_JOB
-      env: LIBRDKAFKA_VERSION=1.4.0
-      name: "librdkafka 1.4.0"
+      env: LIBRDKAFKA_VERSION=v1.4.0
+      name: "librdkafka v1.4.0"
 
     - <<: *STANDARD_TEST_JOB
       env: LIBRDKAFKA_VERSION=master
       name: "librdkafka master"
 
-    - env: LIBRDKAFKA_VERSION=1.4.0
+    - env: LIBRDKAFKA_VERSION=v1.4.0
       stage: Test
-      name: "rdkafka ext, librdkafka 1.4.0"
+      name: "rdkafka ext, librdkafka v1.4.0"
       os: linux
       dist: xenial
       language: minimal
