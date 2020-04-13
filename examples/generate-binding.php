@@ -451,6 +451,7 @@ class VersionRelatedConstGenerator
         ];
 
         $returnType = $compiler->compileType($declaration->type->return);
+        $origReturnType = $returnType;
         $returnTypeCode = $returnType;
 
         if ($returnType === 'void_ptr') {
@@ -477,6 +478,7 @@ class VersionRelatedConstGenerator
         foreach ($params as $idx => $type) {
             $name = $declaration->type->paramNames[$idx];
             $origName = $name;
+            $origType = $type;
             $typeCode = $type;
 
             if ($type === 'void_ptr') {
@@ -493,14 +495,14 @@ class VersionRelatedConstGenerator
                 $type = '\\' . CData::class;
                 $typeCode = '\\' . CData::class;
             } elseif ($type !== 'void') {
-                    $type = $type . '|null';
-                    $typeCode = '?' . $typeCode;
+                $type = $type . '|null';
+                $typeCode = '?' . $typeCode;
             }
             $origName = $origName ?: $name;
             $paramSignature[] = $type . ' $' . $name;
             $paramsTraitSignature[] = $typeCode . ' $' . $origName;
             $paramsTraitInternalSignature[] = '$' . $origName;
-            $paramsTraitSignatureAnnotation[] = " * @param $type $$origName $name";
+            $paramsTraitSignatureAnnotation[] = " * @param $type $$origName $origType";
         }
 
         // lets add generic variadic param
@@ -534,10 +536,10 @@ class VersionRelatedConstGenerator
                 empty($paramsTraitSignatureAnnotation)
                     ? ''
                     : "\n    " . implode("\n    ", $paramsTraitSignatureAnnotation),
-                $returnType === 'void' ? '' : "\n     * @return " . $returnType,
+                $returnType === 'void' ? '' : "\n     * @return " . $returnType . ($origReturnType !== $returnType ? ' ' . $origReturnType : ''),
                 $declaration->name,
                 implode(', ', $paramsTraitSignature),
-                $returnTypeCode ? ':' . $returnTypeCode : '',
+                $returnTypeCode ? ': ' . $returnTypeCode : '',
                 $returnTypeCode === 'void' ? '' : 'return ',
                 $declaration->name,
                 implode(', ', $paramsTraitInternalSignature)

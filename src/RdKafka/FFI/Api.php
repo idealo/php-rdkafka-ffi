@@ -46,9 +46,6 @@ class Api
 
     /**
      * @param string|CType $type
-     * @param bool $owned
-     * @param bool $persistent
-     * @return CData
      */
     public static function new($type, bool $owned = true, bool $persistent = false): CData
     {
@@ -57,8 +54,6 @@ class Api
 
     /**
      * @param string|CType $type
-     * @param CData $ptr
-     * @return CData
      */
     public static function cast($type, CData $ptr): CData
     {
@@ -67,7 +62,6 @@ class Api
 
     /**
      * @param string|CType $type
-     * @return CType
      */
     public static function type($type): CType
     {
@@ -202,6 +196,7 @@ class Api
         }
 
         require_once($constantsFile);
+
         self::$cdef = RD_KAFKA_CDEF;
     }
 

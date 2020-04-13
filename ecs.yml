@@ -1,4 +1,9 @@
 parameters:
+  exclude_files:
+    # generated files
+    - 'src/constants.php'
+    - 'src/RdKafka/FFI/Methods.php'
+    - 'src/RdKafka/FFI/Versions/*.php'
   sets:
     - 'psr12'
     - 'php70'
