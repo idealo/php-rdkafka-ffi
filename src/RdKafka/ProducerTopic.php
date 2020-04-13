@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace RdKafka;
 
 use InvalidArgumentException;
+use RdKafka\FFI\Api;
 
 class ProducerTopic extends Topic
 {
@@ -28,7 +29,7 @@ class ProducerTopic extends Topic
         $this->assertPartition($partition);
         $this->assertMsgflags($msgflags);
 
-        $ret = self::getFFI()->rd_kafka_produce(
+        $ret = Api::rd_kafka_produce(
             $this->topic,
             $partition,
             $msgflags | RD_KAFKA_MSG_F_COPY,
@@ -40,8 +41,8 @@ class ProducerTopic extends Topic
         );
 
         if ($ret === -1) {
-            $err = self::getFFI()->rd_kafka_last_error();
-            throw new Exception(self::err2str($err));
+            $err = (int) Api::rd_kafka_last_error();
+            throw Exception::fromError($err);
         }
     }
 
@@ -87,14 +88,14 @@ class ProducerTopic extends Topic
 
         $args[] = RD_KAFKA_VTYPE_END;
 
-        $ret = self::getFFI()->rd_kafka_producev(
+        $ret = Api::rd_kafka_producev(
             $this->kafka->getCData(),
             ...$args
         );
 
         if ($ret === -1) {
-            $err = self::getFFI()->rd_kafka_last_error();
-            throw new Exception(self::err2str($err));
+            $err = (int) Api::rd_kafka_last_error();
+            throw Exception::fromError($err);
         }
     }
 

@@ -10,15 +10,15 @@ use RdKafka;
 use RdKafka\FFI\Api;
 use RdKafka\Metadata\Collection;
 
-class Metadata extends Api
+class Metadata
 {
     private CData $metadata;
 
     public function __construct(RdKafka $kafka, bool $all_topics, ?Topic $only_topic, int $timeout_ms)
     {
-        $this->metadata = self::getFFI()->new('struct rd_kafka_metadata*');
+        $this->metadata = Api::new('struct rd_kafka_metadata*');
 
-        $err = (int) self::getFFI()->rd_kafka_metadata(
+        $err = (int) Api::rd_kafka_metadata(
             $kafka->getCData(),
             (int) $all_topics,
             $only_topic ? $only_topic->getCData() : null,
@@ -27,13 +27,13 @@ class Metadata extends Api
         );
 
         if ($err !== RD_KAFKA_RESP_ERR_NO_ERROR) {
-            throw new Exception(self::err2str($err));
+            throw Exception::fromError($err);
         }
     }
 
     public function __destruct()
     {
-        self::getFFI()->rd_kafka_metadata_destroy($this->metadata);
+        Api::rd_kafka_metadata_destroy($this->metadata);
     }
 
     /**

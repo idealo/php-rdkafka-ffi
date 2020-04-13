@@ -60,6 +60,27 @@ class ProducerTopicTest extends TestCase
         $this->assertSame(__METHOD__, $payload);
     }
 
+    public function testProduceWithTombstone(): void
+    {
+        $payload = '';
+
+        $conf = new Conf();
+        $conf->setDrMsgCb(
+            function (RdKafka $kafka, Message $message) use (&$payload): void {
+                $payload = $message->payload;
+            }
+        );
+        $producer = new Producer($conf);
+        $producer->addBrokers(KAFKA_BROKERS);
+        $topic = $producer->newTopic(KAFKA_TEST_TOPIC);
+
+        $topic->produce(RD_KAFKA_PARTITION_UA, 0, null, 'key-topic-produce');
+
+        $producer->flush(KAFKA_TEST_TIMEOUT_MS);
+
+        $this->assertNull($payload);
+    }
+
     public function testProduceWithInvalidPartitionShouldFail(): void
     {
         $producer = new Producer();
@@ -80,6 +101,27 @@ class ProducerTopicTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessageMatches('/msgflags/');
         $topic->produce(0, -1);
+    }
+
+    public function testProducev(): void
+    {
+        $payload = '';
+
+        $conf = new Conf();
+        $conf->setDrMsgCb(
+            function (RdKafka $kafka, Message $message) use (&$payload): void {
+                $payload = $message->payload;
+            }
+        );
+        $producer = new Producer($conf);
+        $producer->addBrokers(KAFKA_BROKERS);
+        $topic = $producer->newTopic(KAFKA_TEST_TOPIC);
+
+        $topic->producev(RD_KAFKA_PARTITION_UA, 0, __METHOD__, 'key-topic-produce');
+
+        $producer->flush(KAFKA_TEST_TIMEOUT_MS);
+
+        $this->assertSame(__METHOD__, $payload);
     }
 
     public function testProducevWithTombstone(): void

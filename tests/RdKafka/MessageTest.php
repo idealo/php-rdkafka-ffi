@@ -103,8 +103,8 @@ class MessageTest extends TestCase
         $expectedLatencyInMicroseconds = $this->expectedLatencyInSeconds * 1000 * 1000;
 
         $this->assertSame(__METHOD__, $this->message->payload);
-        $this->assertGreaterThan($expectedLatencyInMicroseconds - 500, $this->producedMessage->latency);
-        $this->assertLessThan($expectedLatencyInMicroseconds + 500, $this->producedMessage->latency);
+        $this->assertGreaterThan($expectedLatencyInMicroseconds + 1000, $this->producedMessage->latency);
+        $this->assertLessThan($expectedLatencyInMicroseconds - 1000, $this->producedMessage->latency);
     }
 
     public function testErrstr(): void

@@ -64,7 +64,7 @@ Test - should show ```FFI``` in modules list
 
     docker-compose run php74 php -m
 
-Test ffi librdkafka binding - should show 1.0.0 version of librdkafka:
+Test ffi librdkafka binding - should show current version of librdkafka:
 
     docker-compose run php74 php examples/version.php
 
@@ -233,6 +233,7 @@ Shutdown and remove volumes:
 * [x] Benchmarking against rdkafka extension
 * [x] Provide ffi preload
 * [x] Compatible to rdkafka extension ^4.0
+* [ ] Add version specific binding for librdkafka to handle (changed) const values correctly and provide support for new features
 * [ ] Sig Handling & destruct (expect seg faults & lost msgs & shutdown hangs)
 * [ ] Documentation
 * [ ] Prepare for composer & first release

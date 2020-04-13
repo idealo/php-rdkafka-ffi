@@ -8,7 +8,7 @@ use FFI;
 use FFI\CData;
 use RdKafka\FFI\Api;
 
-class Event extends Api
+class Event
 {
     private CData $event;
 
@@ -19,7 +19,7 @@ class Event extends Api
 
     public function __destruct()
     {
-        self::getFFI()->rd_kafka_event_destroy($this->event);
+        Api::rd_kafka_event_destroy($this->event);
     }
 
     public function getCData()
@@ -29,22 +29,22 @@ class Event extends Api
 
     public function type(): int
     {
-        return (int) self::getFFI()->rd_kafka_event_type($this->event);
+        return (int) Api::rd_kafka_event_type($this->event);
     }
 
     public function name(): string
     {
-        return FFI::string(self::getFFI()->rd_kafka_event_name($this->event));
+        return FFI::string(Api::rd_kafka_event_name($this->event));
     }
 
     public function error(): int
     {
-        return (int) self::getFFI()->rd_kafka_event_error($this->event);
+        return (int) Api::rd_kafka_event_error($this->event);
     }
 
     public function errorString(): string
     {
-        return FFI::string(self::getFFI()->rd_kafka_event_error_string($this->event));
+        return FFI::string(Api::rd_kafka_event_error_string($this->event));
     }
 
     public function errorIsFatal(): bool
@@ -53,6 +53,6 @@ class Event extends Api
             return false;
         }
 
-        return (bool) self::getFFI()->rd_kafka_event_error_is_fatal($this->event);
+        return (bool) Api::rd_kafka_event_error_is_fatal($this->event);
     }
 }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace RdKafka;
 
 use InvalidArgumentException;
+use RdKafka\FFI\Api;
 
 class KafkaConsumerTopic extends Topic
 {
@@ -22,14 +23,14 @@ class KafkaConsumerTopic extends Topic
             throw new InvalidArgumentException(\sprintf("Out of range value '%d' for partition", $partition));
         }
 
-        $err = self::getFFI()->rd_kafka_offset_store(
+        $err = Api::rd_kafka_offset_store(
             $this->topic,
             $partition,
             $offset
         );
 
         if ($err !== RD_KAFKA_RESP_ERR_NO_ERROR) {
-            throw new Exception(self::err2str($err));
+            throw Exception::fromError($err);
         }
     }
 }

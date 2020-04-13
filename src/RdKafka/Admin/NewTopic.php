@@ -10,14 +10,14 @@ use FFI\CData;
 use RdKafka\Exception;
 use RdKafka\FFI\Api;
 
-class NewTopic extends Api
+class NewTopic
 {
     private ?CData $topic;
 
     public function __construct(string $name, int $num_partitions, int $replication_factor)
     {
         $errstr = FFI::new('char[512]');
-        $this->topic = self::getFFI()->rd_kafka_NewTopic_new(
+        $this->topic = Api::rd_kafka_NewTopic_new(
             $name,
             $num_partitions,
             $replication_factor,
@@ -36,7 +36,7 @@ class NewTopic extends Api
             return;
         }
 
-        self::getFFI()->rd_kafka_NewTopic_destroy($this->topic);
+        Api::rd_kafka_NewTopic_destroy($this->topic);
     }
 
     public function getCData(): CData
@@ -57,7 +57,7 @@ class NewTopic extends Api
         }
 
         $errstr = FFI::new('char[512]');
-        $err = (int) self::getFFI()->rd_kafka_NewTopic_set_replica_assignment(
+        $err = (int) Api::rd_kafka_NewTopic_set_replica_assignment(
             $this->topic,
             $partition_id,
             $brokerIds[0],
@@ -73,10 +73,10 @@ class NewTopic extends Api
 
     public function setConfig(string $name, string $value): void
     {
-        $err = self::getFFI()->rd_kafka_NewTopic_set_config($this->topic, $name, $value);
+        $err = Api::rd_kafka_NewTopic_set_config($this->topic, $name, $value);
 
         if ($err !== RD_KAFKA_RESP_ERR_NO_ERROR) {
-            throw new Exception(self::err2str($err));
+            throw Exception::fromError($err);
         }
     }
 }

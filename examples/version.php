@@ -2,25 +2,12 @@
 
 declare(strict_types=1);
 
-switch (PHP_OS_FAMILY) {
-    case 'Darwin':
-        $library = 'librdkafka.dylib';
-        break;
-    case 'Windows':
-        $library = 'librdkafka.dll';
-        break;
-    default:
-        $library = 'librdkafka.so';
-        break;
-}
+use RdKafka\FFI\Api;
 
-$ffiKafka = \FFI::cdef(
-    '
-    int rd_kafka_version(void);
-    const char *rd_kafka_version_str (void);  
-    ',
-    $library
-);
+require_once dirname(__DIR__) . '/vendor/autoload.php';
 
-echo 'Version (int)   : ' . $ffiKafka->rd_kafka_version() . PHP_EOL;
-echo 'Version (string): ' . $ffiKafka->rd_kafka_version_str() . PHP_EOL;
+Api::init('1.0.0');
+
+echo 'Binding Version (string): ' . Api::getVersion() . PHP_EOL;
+echo 'Library Version (int)   : ' . Api::rd_kafka_version() . PHP_EOL;
+echo 'Library Version (string): ' . FFI::string(Api::rd_kafka_version_str()) . PHP_EOL;
