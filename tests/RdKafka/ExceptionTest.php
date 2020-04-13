@@ -12,7 +12,7 @@ use PHPUnit\Framework\TestCase;
  */
 class ExceptionTest extends TestCase
 {
-    public function testFromError()
+    public function testFromError(): void
     {
         $exception = Exception::fromError(RD_KAFKA_RESP_ERR__ALL_BROKERS_DOWN);
 
