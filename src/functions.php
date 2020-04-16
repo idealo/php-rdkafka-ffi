@@ -11,7 +11,7 @@ use RdKafka\FFI\Api;
  */
 function rd_kafka_err2str(int $err): string
 {
-    return FFI::string(Api::rd_kafka_err2str($err));
+    return Api::rd_kafka_err2str($err);
 }
 
 /**

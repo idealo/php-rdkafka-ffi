@@ -8,6 +8,16 @@ use FFI;
 use FFI\CData;
 use FFI\CType;
 use FFI\Exception;
+use InvalidArgumentException;
+
+use RuntimeException;
+
+use function file_put_contents;
+use function ini_get;
+use function sprintf;
+use function sys_get_temp_dir;
+use function tempnam;
+use function unlink;
 
 class Api
 {
@@ -79,8 +89,8 @@ class Api
         try {
             self::$ffi = FFI::scope(self::$scope);
         } catch (Exception $exception) {
-            if (\ini_get('ffi.enable') === 'preload' && PHP_SAPI !== 'cli') {
-                throw new \RuntimeException(
+            if (ini_get('ffi.enable') === 'preload' && PHP_SAPI !== 'cli') {
+                throw new RuntimeException(
                     sprintf(
                         'FFI_SCOPE "%s" not found (ffi.enable=preload requires you to call \RdKafka\Api::preload() in preload script)',
                         self::$scope
@@ -127,13 +137,13 @@ class Api
         self::init($version, $scope, $library, $cdef);
 
         try {
-            $file = \tempnam(\sys_get_temp_dir(), 'php-rdkafka-ffi');
-            $scope = \sprintf('#define FFI_SCOPE "%s"', self::$scope) . "\n";
-            $library = \sprintf('#define FFI_LIB "%s"', self::getLibrary()) . "\n";
-            \file_put_contents($file, $scope . $library . self::$cdef);
+            $file = tempnam(sys_get_temp_dir(), 'php-rdkafka-ffi');
+            $scope = sprintf('#define FFI_SCOPE "%s"', self::$scope) . "\n";
+            $library = sprintf('#define FFI_LIB "%s"', self::getLibrary()) . "\n";
+            file_put_contents($file, $scope . $library . self::$cdef);
             $ffi = FFI::load($file);
         } finally {
-            \unlink($file);
+            unlink($file);
         }
 
         return $ffi;
@@ -174,9 +184,9 @@ class Api
         }
     }
 
-    public static function getLibraryVersion()
+    public static function getLibraryVersion():string
     {
-        return FFI::string(self::rd_kafka_version_str());
+        return self::rd_kafka_version_str();
     }
 
     private static function chooseVersion(): void
@@ -186,13 +196,13 @@ class Api
         }
 
         if (self::$version === self::VERSION_AUTODETECT) {
-            $ffi = FFI::cdef('char * rd_kafka_version_str(void);', self::getLibrary());
-            self::$version = FFI::string($ffi->rd_kafka_version_str());
+            $ffi = FFI::cdef('const char * rd_kafka_version_str(void);', self::getLibrary());
+            self::$version = $ffi->rd_kafka_version_str();
         }
 
         $constantsFile = __DIR__ . '/Versions/' . self::$version . '.php';
         if (file_exists($constantsFile) === false) {
-            throw new \InvalidArgumentException(sprintf('Version %s not support', self::$version));
+            throw new InvalidArgumentException(sprintf('Version %s not support', self::$version));
         }
 
         require_once($constantsFile);

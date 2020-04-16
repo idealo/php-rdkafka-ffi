@@ -17,8 +17,7 @@ class TopicResult
     public function __construct(CData $result)
     {
         $this->error = (int) Api::rd_kafka_topic_result_error($result);
-        $errorStringCdata = Api::rd_kafka_topic_result_error_string($result);
-        $this->errorString = $errorStringCdata === null ? null : FFI::string($errorStringCdata);
-        $this->name = FFI::string(Api::rd_kafka_topic_result_name($result));
+        $this->errorString = Api::rd_kafka_topic_result_error_string($result);
+        $this->name = Api::rd_kafka_topic_result_name($result);
     }
 }

@@ -25,9 +25,8 @@ class ConfigEntry
 
     public function __construct(CData $entry)
     {
-        $this->name = FFI::string(Api::rd_kafka_ConfigEntry_name($entry));
-        $valueCdata = Api::rd_kafka_ConfigEntry_value($entry);
-        $this->value = $valueCdata === null ? null : FFI::string($valueCdata);
+        $this->name = Api::rd_kafka_ConfigEntry_name($entry);
+        $this->value = Api::rd_kafka_ConfigEntry_value($entry);
         $this->source = (int) Api::rd_kafka_ConfigEntry_source($entry);
         $this->isReadOnly = (bool) Api::rd_kafka_ConfigEntry_is_read_only($entry);
         $this->isDefault = (bool) Api::rd_kafka_ConfigEntry_is_default($entry);

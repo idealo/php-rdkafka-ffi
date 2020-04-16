@@ -34,7 +34,7 @@ class Event
 
     public function name(): string
     {
-        return FFI::string(Api::rd_kafka_event_name($this->event));
+        return Api::rd_kafka_event_name($this->event);
     }
 
     public function error(): int
@@ -44,7 +44,7 @@ class Event
 
     public function errorString(): string
     {
-        return FFI::string(Api::rd_kafka_event_error_string($this->event));
+        return Api::rd_kafka_event_error_string($this->event);
     }
 
     public function errorIsFatal(): bool
