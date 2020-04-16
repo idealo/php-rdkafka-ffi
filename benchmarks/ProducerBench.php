@@ -7,7 +7,7 @@ use RdKafka\Message;
 use RdKafka\Producer;
 
 /**
- * @Groups({"Producer"})
+ * @Groups({"Producer", "ffi", "ext"})
  */
 class ProducerBench
 {
