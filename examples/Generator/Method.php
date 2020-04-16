@@ -52,7 +52,7 @@ class Method
     {
         $template = <<<PHPCODE
         %s
-        public function %s(%s)%s 
+        public static function %s(%s)%s 
         {
             %sstatic::getFFI()->%s(%s);
         }
