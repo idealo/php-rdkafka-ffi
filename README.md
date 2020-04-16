@@ -185,7 +185,7 @@ Run & store benchmarks for ffi based rdkafka binding
     docker-compose up -d kafka; \
     sleep 10s; \
     docker-compose run --rm php74 php examples/create-topic.php -tbenchmarks -p1 -r1; \
-    docker-compose run --rm php74 phpbench run benchmarks --config=/app/benchmarks/ffi.json --report=default --store --tag=ffi
+    docker-compose run --rm php74 phpbench run benchmarks --config=/app/benchmarks/ffi.json --report=default --store --tag=ffi --group=ffi
 
 Run & store benchmarks for extension based rdkafka binding
 
@@ -193,11 +193,15 @@ Run & store benchmarks for extension based rdkafka binding
     docker-compose up -d kafka; \
     sleep 10s; \
     docker-compose run --rm php74 php examples/create-topic.php -tbenchmarks -p1 -r1; \
-    docker-compose run --rm php74 phpbench run benchmarks --config=/app/benchmarks/ext.json --report=default --store --tag=ext    
+    docker-compose run --rm php74 phpbench run benchmarks --config=/app/benchmarks/ext.json --report=default --store --tag=ext --group=ext
 
 Show comparison
 
     docker-compose run --rm php74 phpbench report --uuid=tag:ffi --uuid=tag:ext --report='{extends: compare, compare: tag}'
+
+Run Api::init benchmark (fix vs auto detected version)
+
+    docker-compose run --rm php74 phpbench run benchmarks --config=/app/benchmarks/ffi.json --report=default --group=Api
 
 #### Benchmarks
 

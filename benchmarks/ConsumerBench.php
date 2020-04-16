@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 use RdKafka\Conf;
 use RdKafka\Consumer;
+use RdKafka\Message;
 use RdKafka\Producer;
 
 /**
- * @Groups({"Consumer"})
+ * @Groups({"Consumer", "ffi", "ext"})
  * @BeforeMethods({"produce10000Messages"})
  */
 class ConsumerBench
@@ -67,7 +68,7 @@ class ConsumerBench
 
         $topic->consumeStart(0, 0);
         $messages = 0;
-        $callback = function (\RdKafka\Message $message, $opaque = null) use (&$messages): void {
+        $callback = function (Message $message, $opaque = null) use (&$messages): void {
             $messages++;
         };
         $topic->consumeCallback(0, 500, $callback);
@@ -172,7 +173,7 @@ class ConsumerBench
 
         $topic->consumeStart(0, 0);
         $messages = 0;
-        $callback = function (\RdKafka\Message $message, $opaque = null) use (&$messages): void {
+        $callback = function (Message $message, $opaque = null) use (&$messages): void {
             $messages++;
         };
         $topic->consumeCallback(0, 500, $callback);

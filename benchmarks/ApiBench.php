@@ -2,28 +2,30 @@
 
 declare(strict_types=1);
 
+use RdKafka\FFI\Api;
+
 /**
- * @Groups({"Library"})
+ * @Groups({"Api", "ffi"})
  */
 class ApiBench
 {
     /**
-     * @Revs(1000)
+     * @Revs(100)
      * @Iterations(5)
      */
     public function benchVersionAutoDetection(): void
     {
-        \RdKafka\FFI\Api::init();
-        \RdKafka\FFI\Api::getLibraryVersion();
+        Api::init();
+        Api::rd_kafka_version();
     }
 
     /**
-     * @Revs(1000)
+     * @Revs(100)
      * @Iterations(5)
      */
     public function benchVersionFix(): void
     {
-        \RdKafka\FFI\Api::init('1.0.0');
-        \RdKafka\FFI\Api::getLibraryVersion();
+        Api::init('1.0.0');
+        Api::rd_kafka_version();
     }
 }

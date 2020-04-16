@@ -1,14 +1,24 @@
----
-layout: default
-title: Benchmarks
-nav_order: 5
----
-
 # Benchmarks
+
+Some benchmarks based on PHP 7.4.1, librdkafka v1.3.0 and librdkafka binding via extension latest master (4.0.3-dev) vs via FFI with preload enabled.
+
+## Comparison FFI <> Extension
+
+| benchmark     | subject                                         | set | revs | tag:ffi:mean | tag:ext:mean |
+|---------------|-------------------------------------------------|-----|------|--------------|--------------|
+| ConsumerBench | benchConsume1Message                            | 0   | 100  | 28,321.140μs | 27,761.178μs |
+| ConsumerBench | benchConsumeCallback1Message                    | 0   | 100  | 28,499.664μs | 27,838.560μs |
+| ConsumerBench | benchConsume100Messages                         | 0   | 100  | 39,748.522μs | 38,886.366μs |
+| ConsumerBench | benchConsume100MessagesWithLogCallback          | 0   | 100  | 41,097.162μs | 39,148.838μs |
+| ConsumerBench | benchConsumeBatch100Messages                    | 0   | 100  | 32,116.332μs | 27,272.554μs |
+| ConsumerBench | benchConsumeCallback100Message                  | 0   | 100  | 35,445.358μs | 27,619.512μs |
+| ProducerBench | benchProduce1Message                            | 0   | 100  | 3,776.272μs  | 3,654.974μs  |
+| ProducerBench | benchProduce100Messages                         | 0   | 100  | 3,844.302μs  | 3,847.884μs  |
+| ProducerBench | benchProduce100MessagesWithLogAndDrMsgCallbacks | 0   | 100  | 5,613.870μs  | 4,250.210μs  |
 
 Benchmarks based on PHP 7.4.1, librdkafka v1.3.0, ext latest master (4.0.3-dev), ffi with preload enabled.
 
-## FFI binding report (tag:ffi)
+## Details FFI report (tag:ffi)
 
 | benchmark     | subject                                         | set | revs | iter | mem_peak | time_rev     | comp_z_value | comp_deviation |
 |---------------|-------------------------------------------------|-----|------|------|----------|--------------|--------------|----------------|
@@ -58,7 +68,7 @@ Benchmarks based on PHP 7.4.1, librdkafka v1.3.0, ext latest master (4.0.3-dev),
 | ProducerBench | benchProduce100MessagesWithLogAndDrMsgCallbacks | 0   | 100  | 3    | 582,736b | 5,638.700μs  | +0.19σ       | +0.44%         |
 | ProducerBench | benchProduce100MessagesWithLogAndDrMsgCallbacks | 0   | 100  | 4    | 582,736b | 5,815.480μs  | +1.52σ       | +3.59%         |
 
-## Extension binding report (tag:ext)
+## Details Extension report (tag:ext)
 
 | benchmark     | subject                                         | set | revs | iter | mem_peak | time_rev     | comp_z_value | comp_deviation |
 |---------------|-------------------------------------------------|-----|------|------|----------|--------------|--------------|----------------|
@@ -107,3 +117,27 @@ Benchmarks based on PHP 7.4.1, librdkafka v1.3.0, ext latest master (4.0.3-dev),
 | ProducerBench | benchProduce100MessagesWithLogAndDrMsgCallbacks | 0   | 100  | 2    | 785,496b | 4,398.450μs  | +1.44σ       | +3.49%         |
 | ProducerBench | benchProduce100MessagesWithLogAndDrMsgCallbacks | 0   | 100  | 3    | 785,496b | 4,184.740μs  | -0.63σ       | -1.54%         |
 | ProducerBench | benchProduce100MessagesWithLogAndDrMsgCallbacks | 0   | 100  | 4    | 785,496b | 4,094.260μs  | -1.51σ       | -3.67%         |
+
+## Run benchmarks
+
+Benchmarks use topic ```benchmarks```.
+
+Run & store benchmarks for ffi based rdkafka binding
+
+    docker-compose down -v; \
+    docker-compose up -d kafka; \
+    sleep 10s; \
+    docker-compose run --rm php74 php examples/create-topic.php -tbenchmarks -p1 -r1; \
+    docker-compose run --rm php74 phpbench run benchmarks --config=/app/benchmarks/ffi.json --report=default --store --tag=ffi
+
+Run & store benchmarks for extension based rdkafka binding
+
+    docker-compose down -v; \
+    docker-compose up -d kafka; \
+    sleep 10s; \
+    docker-compose run --rm php74 php examples/create-topic.php -tbenchmarks -p1 -r1; \
+    docker-compose run --rm php74 phpbench run benchmarks --config=/app/benchmarks/ext.json --report=default --store --tag=ext
+
+Show comparison
+
+    docker-compose run --rm php74 phpbench report --uuid=tag:ffi --uuid=tag:ext --report='{extends: compare, compare: tag}'
