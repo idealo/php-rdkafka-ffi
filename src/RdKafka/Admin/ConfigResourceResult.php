@@ -22,11 +22,10 @@ class ConfigResourceResult
 
     public function __construct(CData $result)
     {
-        $this->name = FFI::string(Api::rd_kafka_ConfigResource_name($result));
+        $this->name = Api::rd_kafka_ConfigResource_name($result);
         $this->type = Api::rd_kafka_ConfigResource_type($result);
         $this->error = Api::rd_kafka_ConfigResource_error($result);
-        $errorStringCdata = Api::rd_kafka_ConfigResource_error_string($result);
-        $this->errorString = $errorStringCdata === null ? null : FFI::string($errorStringCdata);
+        $this->errorString = Api::rd_kafka_ConfigResource_error_string($result);
 
         $size = FFI::new('size_t');
         $configsPtr = Api::rd_kafka_ConfigResource_configs($result, FFI::addr($size));

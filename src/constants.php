@@ -17,110 +17,162 @@ const RD_KAFKA_MSG_PARTITIONER_MURMUR2_RANDOM = 6;
 
 // librdkafka overall constants
 /**
+ * #define
+ * @since 1.0.0 of librdkafka
+ */
+const _STDIO_H = 0;
+/**
+ * #define
+ * @since 1.0.0 of librdkafka
+ */
+const _INTTYPES_H = 0;
+/**
+ * #define
+ * @since 1.0.0 of librdkafka
+ */
+const _SYS_TYPES_H = 0;
+/**
+ * #define
+ * @since 1.0.0 of librdkafka
+ */
+const _SYS_SOCKET_H = 0;
+/**
+ * #define
+ * @since 1.0.0 of librdkafka
+ */
+const LIBRDKAFKA_TYPECHECKS = 1;
+/**
+ * #define
  * @since 1.0.0 of librdkafka
  */
 const RD_KAFKA_DESTROY_F_NO_CONSUMER_CLOSE = 8;
 /**
+ * #define
  * @since 1.0.0 of librdkafka
  */
 const RD_KAFKA_PARTITION_UA = -1;
 /**
+ * #define
  * @since 1.0.0 of librdkafka
  */
 const RD_KAFKA_OFFSET_BEGINNING = -2;
 /**
+ * #define
  * @since 1.0.0 of librdkafka
  */
 const RD_KAFKA_OFFSET_END = -1;
 /**
+ * #define
  * @since 1.0.0 of librdkafka
  */
 const RD_KAFKA_OFFSET_STORED = -1000;
 /**
+ * #define
  * @since 1.0.0 of librdkafka
  */
 const RD_KAFKA_OFFSET_INVALID = -1001;
 /**
+ * #define
  * @since 1.0.0 of librdkafka
  */
 const RD_KAFKA_OFFSET_TAIL_BASE = -2000;
 /**
+ * #define
  * @since 1.0.0 of librdkafka
  */
 const RD_KAFKA_MSG_F_FREE = 1;
 /**
+ * #define
  * @since 1.0.0 of librdkafka
  */
 const RD_KAFKA_MSG_F_COPY = 2;
 /**
+ * #define
  * @since 1.0.0 of librdkafka
  */
 const RD_KAFKA_MSG_F_BLOCK = 4;
 /**
+ * #define
  * @since 1.0.0 of librdkafka
  */
 const RD_KAFKA_MSG_F_PARTITION = 8;
 /**
+ * #define
  * @since 1.0.0 of librdkafka
  */
 const RD_KAFKA_PURGE_F_QUEUE = 1;
 /**
+ * #define
  * @since 1.0.0 of librdkafka
  */
 const RD_KAFKA_PURGE_F_INFLIGHT = 2;
 /**
+ * #define
  * @since 1.0.0 of librdkafka
  */
 const RD_KAFKA_PURGE_F_NON_BLOCKING = 4;
 /**
+ * #define
  * @since 1.0.0 of librdkafka
  */
 const RD_KAFKA_EVENT_NONE = 0;
 /**
+ * #define
  * @since 1.0.0 of librdkafka
  */
 const RD_KAFKA_EVENT_DR = 1;
 /**
+ * #define
  * @since 1.0.0 of librdkafka
  */
 const RD_KAFKA_EVENT_FETCH = 2;
 /**
+ * #define
  * @since 1.0.0 of librdkafka
  */
 const RD_KAFKA_EVENT_LOG = 4;
 /**
+ * #define
  * @since 1.0.0 of librdkafka
  */
 const RD_KAFKA_EVENT_ERROR = 8;
 /**
+ * #define
  * @since 1.0.0 of librdkafka
  */
 const RD_KAFKA_EVENT_REBALANCE = 16;
 /**
+ * #define
  * @since 1.0.0 of librdkafka
  */
 const RD_KAFKA_EVENT_OFFSET_COMMIT = 32;
 /**
+ * #define
  * @since 1.0.0 of librdkafka
  */
 const RD_KAFKA_EVENT_STATS = 64;
 /**
+ * #define
  * @since 1.0.0 of librdkafka
  */
 const RD_KAFKA_EVENT_CREATETOPICS_RESULT = 100;
 /**
+ * #define
  * @since 1.0.0 of librdkafka
  */
 const RD_KAFKA_EVENT_DELETETOPICS_RESULT = 101;
 /**
+ * #define
  * @since 1.0.0 of librdkafka
  */
 const RD_KAFKA_EVENT_CREATEPARTITIONS_RESULT = 102;
 /**
+ * #define
  * @since 1.0.0 of librdkafka
  */
 const RD_KAFKA_EVENT_ALTERCONFIGS_RESULT = 103;
 /**
+ * #define
  * @since 1.0.0 of librdkafka
  */
 const RD_KAFKA_EVENT_DESCRIBECONFIGS_RESULT = 104;
@@ -500,14 +552,17 @@ const RD_KAFKA_RESP_ERR_OFFSET_METADATA_TOO_LARGE = 12;
  */
 const RD_KAFKA_RESP_ERR_NETWORK_EXCEPTION = 13;
 /**
+ * typedefenum rd_kafka_resp_err_t
  * @since 1.0.0 of librdkafka
  */
 const RD_KAFKA_RESP_ERR_GROUP_LOAD_IN_PROGRESS = 14;
 /**
+ * typedefenum rd_kafka_resp_err_t
  * @since 1.0.0 of librdkafka
  */
 const RD_KAFKA_RESP_ERR_GROUP_COORDINATOR_NOT_AVAILABLE = 15;
 /**
+ * typedefenum rd_kafka_resp_err_t
  * @since 1.0.0 of librdkafka
  */
 const RD_KAFKA_RESP_ERR_NOT_COORDINATOR_FOR_GROUP = 16;
@@ -1017,6 +1072,7 @@ const RD_KAFKA_RESP_ERR_PREFERRED_LEADER_NOT_AVAILABLE = 80;
  */
 const RD_KAFKA_RESP_ERR_GROUP_MAX_SIZE_REACHED = 81;
 /**
+ * #define
  * @since 1.1.0 of librdkafka
  */
 const RD_KAFKA_EVENT_OAUTHBEARER_TOKEN_REFRESH = 256;
