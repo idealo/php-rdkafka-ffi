@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace FFI\Generator;
 
+use FFI\Generator\Types\PhpType;
 use LogicException;
 use ParseError;
 use PHPCParser\Context;
@@ -16,57 +17,14 @@ use RuntimeException;
 
 class ConstantsCollector
 {
-    private const CAST_TYPE_MAP = [
-        'bool' => 'bool',
-        'char' => 'int',
-        'int' => 'int',
-        'long' => 'int',
-        'long long' => 'int',
-        'long int' => 'int',
-        'long long int' => 'int',
-        'int8_t' => 'int',
-        'uint8_t' => 'int',
-        'int16_t' => 'int',
-        'uint16_t' => 'int',
-        'int32_t' => 'int',
-        'uint32_t' => 'int',
-        'int64_t' => 'int',
-        'uint64_t' => 'int',
-        'unsigned' => 'int',
-        'unsigned char' => 'int',
-        'unsigned int' => 'int',
-        'unsigned long' => 'int',
-        'unsigned long int' => 'int',
-        'unsigned long long' => 'int',
-        'unsigned long long int' => 'int',
-        'size_t' => 'float',
-        'float' => 'float',
-        'double' => 'float',
-        'long double' => 'float',
-    ];
-
     private array $constants = [];
-
-    public function __construct($compiler = null)
-    {
-        // compiler > todo: move compile* to compiler?
-        $this->compiler = $compiler;
-    }
 
     public function collect(Context $context, TranslationUnitDecl $ast)
     {
         $this->constant = [];
 
         $this->collectFromContext($context);
-        $this->collectFromAst($ast);
-    }
-
-    /**
-     * @return Constant_[]
-     */
-    public function getAll(): array
-    {
-        return $this->constants;
+        $this->collectFromDeclarations(...$ast->declarations);
     }
 
     private function collectFromContext(Context $context)
@@ -78,8 +36,8 @@ class ConstantsCollector
             do {
                 if ($next instanceof Token && $next->type === Token::IDENTIFIER) {
                     // cast basic types, eg ((int32_t)-1) => ((int)-1)
-                    if (array_key_exists($next->value, self::CAST_TYPE_MAP)) {
-                        $value .= self::CAST_TYPE_MAP[$next->value];
+                    if ($mapped = PhpType::map($next->value)) {
+                        $value .= $mapped;
                         continue;
                     }
                     $skip = true;
@@ -104,41 +62,6 @@ class ConstantsCollector
         }
     }
 
-    private function collectFromAst(TranslationUnitDecl $ast)
-    {
-        foreach ($ast->declarations as $declaration) {
-            $this->collectFromEnumDeclarations($declaration);
-        }
-    }
-
-    private function collectFromEnumDeclarations(Decl $declaration)
-    {
-        if ($declaration instanceof Decl\NamedDecl\TypeDecl\TagDecl\EnumDecl) {
-            $this->collectFromEnumDeclarationFields($declaration->fields ?? [], "enum {$declaration->name}");
-        } elseif ($declaration instanceof Decl\NamedDecl\TypeDecl\TypedefNameDecl && $declaration->type instanceof Type\TagType\EnumType) {
-            $this->collectFromEnumDeclarationFields($declaration->type->decl->fields ?? [], "typedefenum {$declaration->name}");
-        }
-    }
-
-    private function collectFromEnumDeclarationFields(array $fields, string $type)
-    {
-        $id = 0;
-        $lastValue = 0;
-        foreach ($fields as $field) {
-            // do not override #define constants
-            if (isset($this->constants[$field->name])) {
-                $id++;
-                continue;
-            }
-            if ($field->value !== null) {
-                $lastValue = $this->compileExpr($field->value);
-                $id = 0;
-            }
-            $this->constants[$field->name] = new Constant_($field->name, $this->analyzeValue("($lastValue) + $id"), $type);
-            $id++;
-        }
-    }
-
     /**
      * @param string $value
      * @return string|int|array|float|null
@@ -154,7 +77,38 @@ class ConstantsCollector
         return $value;
     }
 
-    // FFIMe Compiler
+    private function collectFromDeclarations(Decl ...$declarations)
+    {
+        foreach ($declarations as $declaration) {
+            if ($declaration instanceof Decl\NamedDecl\TypeDecl\TagDecl\EnumDecl) {
+                $this->collectFromEnumDeclarationFields($declaration->fields ?? [], "enum {$declaration->name}");
+            } elseif ($declaration instanceof Decl\NamedDecl\TypeDecl\TypedefNameDecl && $declaration->type instanceof Type\TagType\EnumType) {
+                $this->collectFromEnumDeclarationFields($declaration->type->decl->fields ?? [], "typedefenum {$declaration->name}");
+            }
+        }
+    }
+
+    // based on FFIMe
+    private function collectFromEnumDeclarationFields(array $fields, string $description)
+    {
+        $id = 0;
+        $lastValue = 0;
+        foreach ($fields as $field) {
+            // do not override #define constants
+            if (isset($this->constants[$field->name])) {
+                $id++;
+                continue;
+            }
+            if ($field->value !== null) {
+                $lastValue = $this->compileExpr($field->value);
+                $id = 0;
+            }
+            $this->constants[$field->name] = new Constant_($field->name, $this->analyzeValue("($lastValue) + $id"), $description);
+            $id++;
+        }
+    }
+
+    // based on FFIMe
     private function compileExpr(Expr $expr): string
     {
         if ($expr instanceof Expr\IntegerLiteral) {
@@ -227,5 +181,13 @@ class ConstantsCollector
 //            return 'self::' . $expr->name;
 //        }
         throw new RuntimeException(sprintf('Expression type %s not supported', $expr->getType()));
+    }
+
+    /**
+     * @return Constant_[]
+     */
+    public function getAll(): array
+    {
+        return $this->constants;
     }
 }

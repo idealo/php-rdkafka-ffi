@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace FFI\Generator;
 
+use FFI\Generator\Types\Type;
 
 class Param
 {
-    private array $types;
+    private ?Type $type;
 
     /**
      * @var string
@@ -23,9 +24,9 @@ class Param
      */
     private bool $isVariadic;
 
-    public function __construct(array $types, ?string $name, string $description, bool $isVariadic = false)
+    public function __construct(?Type $type, ?string $name, string $description, bool $isVariadic = false)
     {
-        $this->types = array_combine(array_values($types), array_values($types));
+        $this->type = $type;
         $this->name = $name;
         $this->description = $description;
         $this->isVariadic = $isVariadic;
@@ -54,28 +55,21 @@ class Param
         return $code;
     }
 
-    public function isVoid(): bool
-    {
-        return $this->getPhpCodeType() === 'void';
-    }
-
     public function getPhpCodeType(): string
     {
-        $types = $this->types;
-        $typeCount = count($types);
-        if ($typeCount === 1) {
-            return implode('', $types);
-        }
-        if ($typeCount === 2 && array_key_exists('null', $types)) {
-            unset($types['null']);
-            return '?' . implode('', $types);
-        }
-        return '';
+        return $this->type !== null
+            ? $this->type->getPhpTypes()
+            : '';
     }
 
     public function getPhpVar(): string
     {
         return sprintf('%s$%s', $this->isVariadic ? '...' : '', $this->name);
+    }
+
+    public function isVoid(): bool
+    {
+        return $this->type !== null && $this->type->getCName() === 'void';
     }
 
     public function getDocBlock(string $ident = ''): string
@@ -89,10 +83,8 @@ class Param
 
     public function getDocBlockType(): string
     {
-        if (count($this->types) === 0) {
-            return 'mixed';
-        }
-
-        return implode('|', $this->types);
+        return $this->type !== null
+            ? $this->type->getPhpDocTypes()
+            : 'mixed';
     }
 }

@@ -64,24 +64,14 @@ class Method
             $this->name,
             implode(
                 ', ',
-                array_map(
-                    function (Param $param) {
-                        return $param->getPhpCode();
-                    },
-                    $this->params
-                )
+                array_map(fn(Param $param) => $param->getPhpCode(), $this->params),
             ),
-            $this->return->isVoid() ? '' : $this->return->getPhpCode(),
+            $this->return->getPhpCode(),
             $this->return->isVoid() ? '' : 'return ',
             $this->name,
             implode(
                 ', ',
-                array_map(
-                    function (Param $param) {
-                        return $param->getPhpVar();
-                    },
-                    $this->params
-                )
+                array_map(fn(Param $param) => $param->getPhpVar(), $this->params),
             )
         );
 

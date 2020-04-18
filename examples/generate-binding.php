@@ -17,6 +17,7 @@ use FFI\Generator\Constant_;
 use FFI\Generator\ConstantsCollector;
 use FFI\Generator\Method;
 use FFI\Generator\MethodsCollector;
+use FFI\Generator\TypeCompilerFactory;
 use PHPCParser\Context;
 use PHPCParser\CParser;
 
@@ -236,7 +237,7 @@ class MultiVersionGenerator
         $constantsCollector->collect($context, $ast);
         $consts = $constantsCollector->getAll();
 
-        $methodCollector = new MethodsCollector();
+        $methodCollector = new MethodsCollector(new TypeCompilerFactory());
         $methodCollector->collect($ast);
         $methods = $methodCollector->getAll();
 
@@ -302,12 +303,7 @@ class MultiVersionGenerator
                     self::TEMPLATE_CONST_VERSION,
                     implode(
                         "\n",
-                        array_map(
-                            function (Constant_ $const) {
-                                return $const->getPhpCode();
-                            },
-                            $versionRelatedConstants[$version]
-                        )
+                        array_map(fn(Constant_ $constant) => $constant->getPhpCode(), $versionRelatedConstants[$version]),
                     )
                 )
             );
@@ -319,12 +315,7 @@ class MultiVersionGenerator
                 self::TEMPLATE_CONST_OVERALL,
                 implode(
                     "\n",
-                    array_map(
-                        function (Constant_ $const) {
-                            return $const->getPhpCode();
-                        },
-                        $overAllConstants
-                    )
+                    array_map(fn(Constant_ $constant) => $constant->getPhpCode(), $overAllConstants),
                 )
             )
         );
@@ -338,12 +329,7 @@ class MultiVersionGenerator
                 self::TEMPLATE_METHODS,
                 implode(
                     "\n",
-                    array_map(
-                        function (Method $method) {
-                            return $method->getPhpCode('    ');
-                        },
-                        $this->overAllMethods
-                    )
+                    array_map(fn(Method $method) => $method->getPhpCode('    '), $this->overAllMethods),
                 )
             )
         );

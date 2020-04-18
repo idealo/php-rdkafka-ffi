@@ -7,17 +7,11 @@ namespace FFI\Generator;
 
 class Constant_
 {
-    /**
-     * @var string
-     */
     private string $name;
     /**
      * @var int|string|array
      */
     private $value;
-    /**
-     * @var string
-     */
     private string $description;
     private array $docBlockTags;
 
