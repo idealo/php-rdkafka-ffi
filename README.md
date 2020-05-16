@@ -38,6 +38,8 @@ Checkout this repo and have some fun playing around with:
 * __/resources__
   * __/docker__
     * __/php74-librdkafka-ffi__ - dockerfile for PHP 7.4 image with librdkafka and ffi & rdkafka ext (based on [php:7.4-cli](https://hub.docker.com/_/php) )
+  * __/ffigen__ - rebuild stuff low level library bindings
+  * __/phpunit__ - bootstrap and config for phpunit tests
   * __/test-extension__ - base dir for rdkafka ext compatibility tests
 * __/src__ - source dir
 * __/tests__ - tests dir
@@ -237,7 +239,7 @@ Shutdown and remove volumes:
 * [x] Benchmarking against rdkafka extension
 * [x] Provide ffi preload
 * [x] Compatible to rdkafka extension ^4.0
-* [ ] Add version specific binding for librdkafka to handle (changed) const values correctly and provide support for new features
+* [x] Add version specific binding for librdkafka to handle (changed) const values correctly and provide support for new features
 * [ ] Sig Handling & destruct (expect seg faults & lost msgs & shutdown hangs)
 * [ ] Documentation
 * [ ] Prepare for composer & first release
