@@ -153,7 +153,7 @@ class MultiVersionGenerator
         $hFileContent = file_get_contents($hFileUrl);
         $this->filesystem->dumpFile($hFileOrig, $hFileContent);
 
-        echo "  Save as ${hFileOrig}" . PHP_EOL;
+        echo "  Save as ${hFileOrig} and parse" . PHP_EOL;
 
         $config = new Config(
             [
