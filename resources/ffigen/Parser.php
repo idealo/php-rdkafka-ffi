@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace RdKafka\FFIGen;
 
-use Klitsche\FFIGen\Config;
+use Klitsche\FFIGen\ConfigInterface;
 use RuntimeException;
 
 class Parser extends \Klitsche\FFIGen\Adapter\PHPCParser\Parser
 {
-    public function __construct(Config $config)
+    public function __construct(ConfigInterface $config)
     {
         parent::__construct($config);
 

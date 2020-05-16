@@ -5,17 +5,19 @@ declare(strict_types=1);
 namespace RdKafka\FFIGen;
 
 use Composer\Semver\Comparator;
-use Klitsche\FFIGen\Config;
+use Klitsche\FFIGen\ConfigInterface;
 use Klitsche\FFIGen\Constant;
 use Klitsche\FFIGen\ConstantsCollection;
 use Klitsche\FFIGen\ConstantsCollector;
 use Klitsche\FFIGen\ConstantsPrinter;
+use Klitsche\FFIGen\GeneratorInterface;
 use Klitsche\FFIGen\MethodsCollection;
 use Klitsche\FFIGen\MethodsCollector;
 use Klitsche\FFIGen\MethodsPrinter;
+use Klitsche\FFIGen\ParserInterface;
 use Symfony\Component\Filesystem\Filesystem;
 
-class MultiVersionGenerator
+class MultiVersionGenerator implements GeneratorInterface
 {
     private const RELEASE_URL = 'https://api.github.com/repos/edenhill/librdkafka/releases';
 
@@ -79,13 +81,17 @@ class MultiVersionGenerator
     private array $allConstants;
 
     private Filesystem $filesystem;
+    private ConfigInterface $config;
+    private ParserInterface $parser;
 
-    public function __construct()
+    public function __construct(ConfigInterface $config, ParserInterface $parser)
     {
+        $this->config = $config;
+        $this->parser = $parser;
+        $this->filesystem = new Filesystem();
         $this->overAllMethods = [];
         $this->supportedMethods = [];
         $this->allConstants = [];
-        $this->filesystem = new Filesystem();
     }
 
     public function generate(): void
@@ -133,7 +139,7 @@ class MultiVersionGenerator
                 $version = str_replace('v', '', $release->tag_name);
                 if (Comparator::greaterThanOrEqualTo($version, '1.0.0')) {
                     $supportedVersions[$version] = sprintf(
-                        'https://raw.githubusercontent.com/edenhill/librdkafka/%s/src/rdkafka.h',
+                        'https://raw.githubusercontent.com/edenhill/librdkafka/%s/src',
                         $release->tag_name
                     );
                 }
@@ -143,41 +149,31 @@ class MultiVersionGenerator
         return $supportedVersions;
     }
 
-    private function parse($version, $hFileUrl): void
+    private function parse(string $version, string $baseUrl): void
     {
         // download header files and parse
-        $hFileOrig = __DIR__ . '/tmp/rdkafka.h';
+        foreach ($this->config->getHeaderFiles() as $fileName) {
+            $file = $this->config->getOutputPath() . '/' . $fileName;
+            $url = $baseUrl . '/' . $fileName;
+            echo "  Download ${url}" . PHP_EOL;
 
-        echo "  Download ${hFileUrl}" . PHP_EOL;
+            $content = file_get_contents($url);
+            $this->filesystem->dumpFile($file, $content);
 
-        $hFileContent = file_get_contents($hFileUrl);
-        $this->filesystem->dumpFile($hFileOrig, $hFileContent);
+            echo "  Save as ${file}" . PHP_EOL;
+        }
 
-        echo "  Save as ${hFileOrig} and parse" . PHP_EOL;
+        echo "  Parse ..." . PHP_EOL;
 
-        $config = new Config(
-            [
-                'headerFiles' => [
-                    $hFileOrig,
-                ],
-                'libraryFile' => '',
-                'parserClass' => Parser::class,
-                'outputPath' => __DIR__ . '/tmp',
-                'excludeConstants' => [
-                    '/^(?!(FFI|RD)_).*/',
-                ],
-                'excludeMethods' => [],
-                'namespace' => 'RdKafka\\FFI',
-            ]
-        );
-        $parser = new Parser($config);
+        // reset parser state
+        $this->parser = new Parser($this->config);
 
         // collect constants
         $constantsCollector = new ConstantsCollector();
         $constants = $constantsCollector
-            ->collect($parser->getDefines(), $parser->getTypes())
-            ->filter($config->getExcludeConstants());
-        $constants->add(new Constant('RD_KAFKA_CDEF', $parser->getCDef(), implode(', ', $config->getHeaderFiles())));
+            ->collect($this->parser->getDefines(), $this->parser->getTypes())
+            ->filter($this->config->getExcludeConstants());
+        $constants->add(new Constant('RD_KAFKA_CDEF', $this->parser->getCDef(), implode(', ', $this->config->getHeaderFiles())));
 
         // add to overall consts
         foreach ($constants as $name => $const) {
@@ -188,8 +184,8 @@ class MultiVersionGenerator
         // collect methods
         $methodsCollector = new MethodsCollector();
         $methods = $methodsCollector
-            ->collect($parser->getTypes())
-            ->filter($config->getExcludeMethods());
+            ->collect($this->parser->getTypes())
+            ->filter($this->config->getExcludeMethods());
 
         // add to overall & supported methods
         foreach ($methods as $name => $method) {

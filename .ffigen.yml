@@ -1,0 +1,12 @@
+headerFiles:
+  - rdkafka.h
+headerSearchPaths:
+  - resources/ffigen/tmp
+libraryFile: librdkafka.so.1
+parserClass: RdKafka\FFIGen\Parser
+generatorClass: RdKafka\FFIGen\MultiVersionGenerator
+outputPath: resources/ffigen/tmp
+excludeConstants:
+  - /^(?!(FFI|RD)_).*/
+excludeMethods:
+namespace: RdKafka\FFI
