@@ -8,7 +8,6 @@ use FFI;
 use FFI\CData;
 use FFI\CType;
 use FFI\Exception as FFIException;
-use InvalidArgumentException;
 use RdKafka\Exception as RdKafkaException;
 use RuntimeException;
 

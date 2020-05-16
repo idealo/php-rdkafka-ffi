@@ -6,7 +6,6 @@ namespace RdKafka\FFI;
 
 use FFI;
 use PHPUnit\Framework\TestCase;
-use RdKafka\FFI\Library;
 
 /**
  * @covers \RdKafka\FFI\Library

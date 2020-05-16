@@ -163,7 +163,7 @@ class MultiVersionGenerator implements GeneratorInterface
             echo "  Save as ${file}" . PHP_EOL;
         }
 
-        echo "  Parse ..." . PHP_EOL;
+        echo '  Parse ...' . PHP_EOL;
 
         // reset parser state
         $this->parser = new Parser($this->config);
