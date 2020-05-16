@@ -26,5 +26,11 @@
         "ircmaxell/php-c-parser": "master-dev",
         "symplify/easy-coding-standard": "^7.2",
         "klitsche/ffigen": "^0.3"
+    },
+    "scripts": {
+        "test" : "vendor/bin/phpunit",
+        "test-coverage" : "vendor/bin/phpunit --coverage-text --coverage-clover=clover.xml",
+        "cs" : "vendor/bin/ecs check src tests examples resources/ffigen --ansi",
+        "cs-fix" : "vendor/bin/ecs check src tests examples resources/ffigen --ansi --fix"
     }
 }

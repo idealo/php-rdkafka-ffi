@@ -16,3 +16,9 @@ parameters:
     PhpCsFixer\Fixer\ClassNotation\OrderedClassElementsFixer: ~
     PhpCsFixer\Fixer\Strict\StrictComparisonFixer: ~
       - 'src/RdKafka.php'
+services:
+  PhpCsFixer\Fixer\Import\OrderedImportsFixer:
+    imports_order:
+      - class
+      - const
+      - function
