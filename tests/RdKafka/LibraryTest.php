@@ -15,12 +15,20 @@ use RdKafka\FFI\Library;
  */
 class LibraryTest extends TestCase
 {
+    use \RequireRdKafkaVersionTrait;
+
     public function testGetFFI(): void
     {
         $ffi = Library::getFFI();
 
         $this->assertInstanceOf(FFI::class, $ffi);
         $this->assertMatchesRegularExpression('/^\d+\.\d+\./', $ffi->rd_kafka_version_str());
+    }
+
+    public function testPreloadWithInvalidCdef(): void
+    {
+        $this->expectException(\FFI\Exception::class);
+        Library::preload('', 'Any', null, 'invalid');
     }
 
     public function testPreload(): void
@@ -31,9 +39,45 @@ class LibraryTest extends TestCase
         $this->assertMatchesRegularExpression('/^\d+\.\d+\./', $ffi->rd_kafka_version_str());
     }
 
-    public function testPreloadWithInvalidCdef(): void
+    public function testHasMethodWithValidMethod(): void
     {
-        $this->expectException(\FFI\Exception::class);
-        Library::preload('', 'Any', null, 'invalid');
+        $this->assertTrue(Library::hasMethod('rd_kafka_version'));
+    }
+
+    public function testHasMethodWithUnknownMethod(): void
+    {
+        $this->assertFalse(Library::hasMethod('unknown'));
+    }
+
+    public function testHasMethodWithNotSupportedMethod(): void
+    {
+        $this->requiresRdKafkaVersion('<', '1.4.0');
+
+        $this->assertFalse(Library::hasMethod('rd_kafka_msg_partitioner_fnv1a_random'));
+    }
+
+    public function testRequireMethodWithUnknownMethod(): void
+    {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessageMatches('/unknown/');
+        Library::requireMethod('unknown');
+    }
+
+    public function testRequireMethodWithNotSupportedMethod(): void
+    {
+        $this->requiresRdKafkaVersion('<', '1.4.0');
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessageMatches('/rd_kafka_msg_partitioner_fnv1a_random/');
+        Library::requireMethod('rd_kafka_msg_partitioner_fnv1a_random');
+    }
+
+    public function testRequireVersion(): void
+    {
+        $this->requiresRdKafkaVersion('>', '1.0.0');
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessageMatches('/<= 1\.1\.0/');
+        Library::requireVersion('<=', '1.1.0');
     }
 }

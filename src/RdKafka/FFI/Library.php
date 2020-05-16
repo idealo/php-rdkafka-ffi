@@ -7,8 +7,9 @@ namespace RdKafka\FFI;
 use FFI;
 use FFI\CData;
 use FFI\CType;
-use FFI\Exception;
+use FFI\Exception as FFIException;
 use InvalidArgumentException;
+use RdKafka\Exception as RdKafkaException;
 use RuntimeException;
 
 use function file_put_contents;
@@ -87,7 +88,7 @@ class Library
 
         try {
             self::$ffi = FFI::scope(self::$scope);
-        } catch (Exception $exception) {
+        } catch (FFIException $exception) {
             if (ini_get('ffi.enable') === 'preload' && PHP_SAPI !== 'cli') {
                 throw new RuntimeException(
                     sprintf(
@@ -153,13 +154,13 @@ class Library
         self::chooseVersion();
 
         return array_key_exists($name, RD_KAFKA_SUPPORTED_METHODS)
-            && version_compare(self::$version, RD_KAFKA_SUPPORTED_METHODS[$name], '>=') === false;
+            && version_compare(self::$version, RD_KAFKA_SUPPORTED_METHODS[$name], '<=') === false;
     }
 
     public static function requireMethod(string $name): void
     {
         if (self::hasMethod($name) === false) {
-            throw new \RdKafka\Exception(
+            throw new RdKafkaException(
                 sprintf(
                     'Method %s not supported by librdkafka version %s',
                     $name,
@@ -171,8 +172,10 @@ class Library
 
     public static function requireVersion(string $operator, string $version): void
     {
+        self::chooseVersion();
+
         if (version_compare(self::$version, $version, $operator) === false) {
-            throw new \RdKafka\Exception(
+            throw new RdKafkaException(
                 sprintf(
                     'Requires librdkafka %s %s. Binding version is %s, library version is %s.',
                     $operator,
