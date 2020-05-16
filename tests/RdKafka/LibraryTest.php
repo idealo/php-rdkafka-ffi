@@ -25,20 +25,6 @@ class LibraryTest extends TestCase
         $this->assertMatchesRegularExpression('/^\d+\.\d+\./', $ffi->rd_kafka_version_str());
     }
 
-    public function testPreloadWithInvalidCdef(): void
-    {
-        $this->expectException(\FFI\Exception::class);
-        Library::preload('', 'Any', null, 'invalid');
-    }
-
-    public function testPreload(): void
-    {
-        $ffi = Library::preload();
-
-        $this->assertInstanceOf(FFI::class, $ffi);
-        $this->assertMatchesRegularExpression('/^\d+\.\d+\./', $ffi->rd_kafka_version_str());
-    }
-
     public function testHasMethodWithValidMethod(): void
     {
         $this->assertTrue(Library::hasMethod('rd_kafka_version'));
@@ -77,7 +63,7 @@ class LibraryTest extends TestCase
         $this->requiresRdKafkaVersion('>', '1.0.0');
 
         $this->expectException(Exception::class);
-        $this->expectExceptionMessageMatches('/<= 1\.1\.0/');
-        Library::requireVersion('<=', '1.1.0');
+        $this->expectExceptionMessageMatches('/<= 1\.0\.0/');
+        Library::requireVersion('<=', '1.0.0');
     }
 }
