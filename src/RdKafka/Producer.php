@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace RdKafka;
 
 use RdKafka;
-use RdKafka\FFI\Api;
+use RdKafka\FFI\Library;
 
 class Producer extends RdKafka
 {
@@ -19,7 +19,7 @@ class Producer extends RdKafka
 
     public function addBrokers(string $broker_list): int
     {
-        return Api::rd_kafka_brokers_add($this->kafka, $broker_list);
+        return Library::rd_kafka_brokers_add($this->kafka, $broker_list);
     }
 
     public function poll(int $timeout_ms): int
@@ -43,11 +43,11 @@ class Producer extends RdKafka
     public function purge(int $purge_flags): int
     {
         // todo: handle binding for different librdkafka versions
-        return (int) Api::rd_kafka_purge($this->kafka, $purge_flags);
+        return (int) Library::rd_kafka_purge($this->kafka, $purge_flags);
     }
 
     public function flush(int $timeout_ms): int
     {
-        return (int) Api::rd_kafka_flush($this->kafka, $timeout_ms);
+        return (int) Library::rd_kafka_flush($this->kafka, $timeout_ms);
     }
 }

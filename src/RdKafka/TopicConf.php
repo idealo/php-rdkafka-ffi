@@ -7,7 +7,7 @@ namespace RdKafka;
 use FFI;
 use FFI\CData;
 use InvalidArgumentException;
-use RdKafka\FFI\Api;
+use RdKafka\FFI\Library;
 use RdKafka\FFI\NativePartitionerCallbackProxy;
 use RdKafka\FFI\PartitionerCallbackProxy;
 
@@ -20,12 +20,12 @@ class TopicConf
 
     public function __construct()
     {
-        $this->topicConf = Api::rd_kafka_topic_conf_new();
+        $this->topicConf = Library::rd_kafka_topic_conf_new();
     }
 
     public function __destruct()
     {
-        Api::rd_kafka_topic_conf_destroy($this->topicConf);
+        Library::rd_kafka_topic_conf_destroy($this->topicConf);
     }
 
     public function getCData(): CData
@@ -35,8 +35,8 @@ class TopicConf
 
     public function dump(): array
     {
-        $count = FFI::new('size_t');
-        $dump = Api::rd_kafka_topic_conf_dump($this->topicConf, FFI::addr($count));
+        $count = Library::new('size_t');
+        $dump = Library::rd_kafka_topic_conf_dump($this->topicConf, FFI::addr($count));
         $count = (int) $count->cdata;
 
         $result = [];
@@ -46,7 +46,7 @@ class TopicConf
             $result[$key] = $val;
         }
 
-        Api::rd_kafka_conf_dump_free($dump, $count);
+        Library::rd_kafka_conf_dump_free($dump, $count);
 
         return $result;
     }
@@ -56,9 +56,9 @@ class TopicConf
      */
     public function set(string $name, string $value): void
     {
-        $errstr = FFI::new('char[512]');
+        $errstr = Library::new('char[512]');
 
-        $result = Api::rd_kafka_topic_conf_set(
+        $result = Library::rd_kafka_topic_conf_set(
             $this->topicConf,
             $name,
             $value,
@@ -101,7 +101,7 @@ class TopicConf
                 break;
         }
 
-        Api::rd_kafka_topic_conf_set_partitioner_cb(
+        Library::rd_kafka_topic_conf_set_partitioner_cb(
             $this->topicConf,
             NativePartitionerCallbackProxy::create($partitionerMethod)
         );
@@ -109,7 +109,7 @@ class TopicConf
 
     public function setPartitionerCb(callable $callback): void
     {
-        Api::rd_kafka_topic_conf_set_partitioner_cb(
+        Library::rd_kafka_topic_conf_set_partitioner_cb(
             $this->topicConf,
             PartitionerCallbackProxy::create($callback)
         );

@@ -8,7 +8,10 @@ use Assert\Assert;
 use FFI;
 use FFI\CData;
 use RdKafka\Exception;
-use RdKafka\FFI\Api;
+use RdKafka\FFI\Library;
+
+use function array_values;
+use function count;
 
 class NewPartitions
 {
@@ -16,8 +19,8 @@ class NewPartitions
 
     public function __construct(string $topicName, int $new_total_cnt)
     {
-        $errstr = FFI::new('char[512]');
-        $this->partitions = Api::rd_kafka_NewPartitions_new(
+        $errstr = Library::new('char[512]');
+        $this->partitions = Library::rd_kafka_NewPartitions_new(
             $topicName,
             $new_total_cnt,
             $errstr,
@@ -35,7 +38,7 @@ class NewPartitions
             return;
         }
 
-        Api::rd_kafka_NewPartitions_destroy($this->partitions);
+        Library::rd_kafka_NewPartitions_destroy($this->partitions);
     }
 
     public function getCData(): CData
@@ -51,16 +54,16 @@ class NewPartitions
     {
         Assert::that($broker_ids)->notEmpty()->all()->integer();
 
-        $brokerIdsCount = \count($broker_ids);
-        $brokerIds = FFI::new('int*[' . $brokerIdsCount . ']');
-        foreach (\array_values($broker_ids) as $i => $broker_id) {
-            $int = FFI::new('int');
+        $brokerIdsCount = count($broker_ids);
+        $brokerIds = Library::new('int*[' . $brokerIdsCount . ']');
+        foreach (array_values($broker_ids) as $i => $broker_id) {
+            $int = Library::new('int');
             $int->cdata = $broker_id;
             $brokerIds[$i] = FFI::addr($int);
         }
 
-        $errstr = FFI::new('char[512]');
-        $err = (int) Api::rd_kafka_NewPartitions_set_replica_assignment(
+        $errstr = Library::new('char[512]');
+        $err = (int) Library::rd_kafka_NewPartitions_set_replica_assignment(
             $this->partitions,
             $new_partition_id,
             $brokerIds[0],

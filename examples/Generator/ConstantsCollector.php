@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace FFI\Generator;
 
-use FFI\Generator\Types\PhpType;
+use FFI\Generator\Types\BuiltinType;
 use LogicException;
 use ParseError;
 use PHPCParser\Context;
@@ -36,7 +36,7 @@ class ConstantsCollector
             do {
                 if ($next instanceof Token && $next->type === Token::IDENTIFIER) {
                     // cast basic types, eg ((int32_t)-1) => ((int)-1)
-                    if ($mapped = PhpType::map($next->value)) {
+                    if ($mapped = BuiltinType::map($next->value)) {
                         $value .= $mapped;
                         continue;
                     }

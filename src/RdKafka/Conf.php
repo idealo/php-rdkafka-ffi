@@ -6,7 +6,7 @@ namespace RdKafka;
 
 use FFI;
 use FFI\CData;
-use RdKafka\FFI\Api;
+use RdKafka\FFI\Library;
 use RdKafka\FFI\DrMsgCallbackProxy;
 use RdKafka\FFI\ErrorCallbackProxy;
 use RdKafka\FFI\LogCallbackProxy;
@@ -23,12 +23,12 @@ class Conf
 
     public function __construct()
     {
-        $this->conf = Api::rd_kafka_conf_new();
+        $this->conf = Library::rd_kafka_conf_new();
     }
 
     public function __destruct()
     {
-        Api::rd_kafka_conf_destroy($this->conf);
+        Library::rd_kafka_conf_destroy($this->conf);
     }
 
     public function getCData(): CData
@@ -38,8 +38,8 @@ class Conf
 
     public function dump(): array
     {
-        $count = FFI::new('size_t');
-        $dump = Api::rd_kafka_conf_dump($this->conf, FFI::addr($count));
+        $count = Library::new('size_t');
+        $dump = Library::rd_kafka_conf_dump($this->conf, FFI::addr($count));
         $count = (int) $count->cdata;
 
         $result = [];
@@ -49,22 +49,28 @@ class Conf
             $result[$key] = $val;
         }
 
-        Api::rd_kafka_conf_dump_free($dump, $count);
+        Library::rd_kafka_conf_dump_free($dump, $count);
 
         return $result;
     }
 
     /**
-     * Setting non string values like callbacks or default_topic_conf TopicConf objects is not supported.
-     * For callbacks use corresponding methods directly. For default_topic_conf use custom Topic in newTopic calls
-     * or set default topic conf properties directly via Conf.
+     * Setting non string values like callbacks or `default_topic_conf` TopicConf objects is not supported.
+     * For callbacks and `default_topic_conf` use corresponding methods directly.
      *
      * @throws Exception
+     * @see Conf::setLogCb()
+     * @see Conf::setErrorCb()
+     * @see Conf::setOffsetCommitCb()
+     * @see Conf::setRebalanceCb()
+     * @see Conf::setStatsCb()
+     * @see Conf::setDrMsgCb()
+     * @see Conf::setDefaultTopicConf()
      */
     public function set(string $name, string $value): void
     {
-        $errstr = FFI::new('char[512]');
-        $result = Api::rd_kafka_conf_set($this->conf, $name, $value, $errstr, FFI::sizeOf($errstr));
+        $errstr = Library::new('char[512]');
+        $result = Library::rd_kafka_conf_set($this->conf, $name, $value, $errstr, FFI::sizeOf($errstr));
 
         switch ($result) {
             case RD_KAFKA_CONF_UNKNOWN:
@@ -83,10 +89,10 @@ class Conf
      */
     public function get(string $name): string
     {
-        $value = FFI::new('char[512]');
-        $valueSize = FFI::new('size_t');
+        $value = Library::new('char[512]');
+        $valueSize = Library::new('size_t');
 
-        $result = Api::rd_kafka_conf_get($this->conf, $name, $value, FFI::addr($valueSize));
+        $result = Library::rd_kafka_conf_get($this->conf, $name, $value, FFI::addr($valueSize));
         if ($result === RD_KAFKA_CONF_UNKNOWN) {
             throw new Exception('Unknown property name.', $result);
         }
@@ -95,13 +101,17 @@ class Conf
     }
 
     /**
-     * @deprecated Use a custom TopicConf directly in newTopics calls. You also can set topic config properties directly via Conf as default TopicConf properties.
+     * @deprecated Set custom TopicConf explicitly in `Producer::newTopic()`, `Consumer::newTopic()` or `KafkaConsumer::newTopic()`.
+     * Note: Topic config properties can be also set directly via Conf.
+     * @see Producer::newTopic()
+     * @see Consumer::newTopic()
+     * @see KafkaConsumer::newTopic()
      */
     public function setDefaultTopicConf(TopicConf $topic_conf): void
     {
-        $topic_conf_dup = Api::rd_kafka_topic_conf_dup($topic_conf->getCData());
+        $topic_conf_dup = Library::rd_kafka_topic_conf_dup($topic_conf->getCData());
 
-        Api::rd_kafka_conf_set_default_topic_conf($this->conf, $topic_conf_dup);
+        Library::rd_kafka_conf_set_default_topic_conf($this->conf, $topic_conf_dup);
     }
 
     /**
@@ -110,7 +120,7 @@ class Conf
      */
     public function setDrMsgCb(callable $callback): void
     {
-        Api::rd_kafka_conf_set_dr_msg_cb(
+        Library::rd_kafka_conf_set_dr_msg_cb(
             $this->conf,
             DrMsgCallbackProxy::create($callback)
         );
@@ -124,7 +134,7 @@ class Conf
     {
         $this->set('log.queue', 'true');
 
-        Api::rd_kafka_conf_set_log_cb(
+        Library::rd_kafka_conf_set_log_cb(
             $this->conf,
             LogCallbackProxy::create($callback)
         );
@@ -135,7 +145,7 @@ class Conf
      */
     public function setErrorCb(callable $callback): void
     {
-        Api::rd_kafka_conf_set_error_cb(
+        Library::rd_kafka_conf_set_error_cb(
             $this->conf,
             ErrorCallbackProxy::create($callback)
         );
@@ -146,7 +156,7 @@ class Conf
      */
     public function setRebalanceCb(callable $callback): void
     {
-        Api::rd_kafka_conf_set_rebalance_cb(
+        Library::rd_kafka_conf_set_rebalance_cb(
             $this->conf,
             RebalanceCallbackProxy::create($callback)
         );
@@ -157,7 +167,7 @@ class Conf
      */
     public function setStatsCb(callable $callback): void
     {
-        Api::rd_kafka_conf_set_stats_cb(
+        Library::rd_kafka_conf_set_stats_cb(
             $this->conf,
             StatsCallbackProxy::create($callback)
         );
@@ -168,7 +178,7 @@ class Conf
      */
     public function setOffsetCommitCb(callable $callback): void
     {
-        Api::rd_kafka_conf_set_offset_commit_cb(
+        Library::rd_kafka_conf_set_offset_commit_cb(
             $this->conf,
             OffsetCommitCallbackProxy::create($callback)
         );

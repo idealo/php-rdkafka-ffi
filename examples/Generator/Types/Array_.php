@@ -16,9 +16,14 @@ class Array_ extends CType
         $this->size = $size;
     }
 
-    public function getCName(): string
+    // array of numbers: int (* ptr)[5] = NULL; data type (*var name)[size of array];
+    //  array to pointers: int *ptr[3]; int *var_name[array_size];
+    public function getCType(string $ptr = ''): string
     {
-        return $this->type->getCName() . '[' . (string) $this->size . ']';
+        if ($ptr === '') {
+            return $this->type->getCType() . '[' . (string) $this->size . ']';
+        }
+        return $ptr . '(' . $this->type->getCType() . ')' . '[' . (string) $this->size . ']';
     }
 
     public function getPhpTypes(): string

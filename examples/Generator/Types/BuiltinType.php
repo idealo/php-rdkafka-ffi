@@ -6,9 +6,10 @@ namespace FFI\Generator\Types;
 
 use Exception;
 
-class PhpType extends Type
+// todo: or better PhpType
+class BuiltinType extends Type
 {
-    private const CTYPE_MAP = [
+    private const MAP = [
         'bool' => 'int',
         'char' => 'int',
         'int' => 'int',
@@ -24,6 +25,13 @@ class PhpType extends Type
         'uint32_t' => 'int',
         'int64_t' => 'int',
         'uint64_t' => 'int',
+        'signed' => 'int',
+        'signed char' => 'int',
+        'signed int' => 'int',
+        'signed long' => 'int',
+        'signed long int' => 'int',
+        'signed long long' => 'int',
+        'signed long long int' => 'int',
         'unsigned' => 'int',
         'unsigned char' => 'int',
         'unsigned int' => 'int',
@@ -35,7 +43,6 @@ class PhpType extends Type
         'float' => 'float',
         'double' => 'float',
         'long double' => 'float',
-        'char*' => 'string', // immutable string: const char*
         'void' => 'void', // return type only
     ];
 
@@ -48,25 +55,30 @@ class PhpType extends Type
     public function __construct(string $cName)
     {
         if (self::isMappable($cName) === false) {
-            throw new Exception(sprintf('Cannot map ctype %s to native php type', $cName));
+            throw new Exception(sprintf('Can not map ctype %s to native php type', $cName));
         }
         $this->cName = $cName;
-        $this->name = self::CTYPE_MAP[$cName];
+        $this->name = self::MAP[$cName];
     }
 
     public static function isMappable(string $cName): bool
     {
-        return isset(self::CTYPE_MAP[$cName]);
+        return isset(self::MAP[$cName]);
     }
 
     public static function map(string $cName): ?string
     {
-        return self::CTYPE_MAP[$cName] ?? null;
+        return self::MAP[$cName] ?? null;
     }
 
     public function getCName(): string
     {
         return $this->cName;
+    }
+
+    public function getCType(string $ptr = ''): string
+    {
+        return ($this->const ? 'const ' : '') . $this->getCName() . $ptr;
     }
 
     public function getPhpTypes(): string

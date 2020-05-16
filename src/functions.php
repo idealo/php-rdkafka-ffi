@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use RdKafka\FFI\Api;
+use RdKafka\FFI\Library;
 
 /**
  * @param int $err Error code
@@ -11,7 +11,7 @@ use RdKafka\FFI\Api;
  */
 function rd_kafka_err2str(int $err): string
 {
-    return Api::rd_kafka_err2str($err);
+    return Library::rd_kafka_err2str($err);
 }
 
 /**
@@ -22,7 +22,7 @@ function rd_kafka_err2str(int $err): string
  */
 function rd_kafka_errno2err(int $errnox): int
 {
-    return (int) Api::rd_kafka_errno2err($errnox);
+    return (int) Library::rd_kafka_errno2err($errnox);
 }
 
 /**
@@ -31,7 +31,7 @@ function rd_kafka_errno2err(int $errnox): int
  */
 function rd_kafka_errno(): int
 {
-    return (int) Api::rd_kafka_errno();
+    return (int) Library::rd_kafka_errno();
 }
 
 /**
@@ -47,7 +47,7 @@ function rd_kafka_offset_tail(int $cnt): int
  */
 function rd_kafka_thread_cnt(): int
 {
-    return (int) Api::rd_kafka_thread_cnt();
+    return (int) Library::rd_kafka_thread_cnt();
 }
 
 /**
@@ -55,5 +55,5 @@ function rd_kafka_thread_cnt(): int
  */
 function rd_kafka_version(): string
 {
-    return Api::getLibraryVersion();
+    return Library::getLibraryVersion();
 }

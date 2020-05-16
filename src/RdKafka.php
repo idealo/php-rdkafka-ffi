@@ -5,7 +5,7 @@ declare(strict_types=1);
 use FFI\CData;
 use RdKafka\Conf;
 use RdKafka\Exception;
-use RdKafka\FFI\Api;
+use RdKafka\FFI\Library;
 use RdKafka\Metadata;
 use RdKafka\Topic;
 
@@ -37,9 +37,9 @@ abstract class RdKafka
 
     public function __construct(int $type, ?Conf $conf = null)
     {
-        $errstr = FFI::new('char[512]');
+        $errstr = Library::new('char[512]');
 
-        $this->kafka = Api::rd_kafka_new(
+        $this->kafka = Library::rd_kafka_new(
             $type,
             $this->duplicateConfCData($conf),
             $errstr,
@@ -61,7 +61,7 @@ abstract class RdKafka
             return null;
         }
 
-        return Api::rd_kafka_conf_dup($conf->getCData());
+        return Library::rd_kafka_conf_dup($conf->getCData());
     }
 
     private function initLogQueue(?Conf $conf): void
@@ -70,7 +70,8 @@ abstract class RdKafka
             return;
         }
 
-        $err = Api::rd_kafka_set_log_queue($this->kafka, null);
+        // todo: check does this mess with messages > requires rd_kafka_queue_poll_callback support in queue
+        $err = Library::rd_kafka_set_log_queue($this->kafka, null);
 
         if ($err !== RD_KAFKA_RESP_ERR_NO_ERROR) {
             throw Exception::fromError($err);
@@ -83,7 +84,7 @@ abstract class RdKafka
             return;
         }
 
-        Api::rd_kafka_destroy($this->kafka);
+        Library::rd_kafka_destroy($this->kafka);
 
         // clean up reference
         foreach (self::$instances as $i => $reference) {
@@ -113,12 +114,12 @@ abstract class RdKafka
      */
     protected function poll(int $timeout_ms): int
     {
-        return Api::rd_kafka_poll($this->kafka, $timeout_ms);
+        return Library::rd_kafka_poll($this->kafka, $timeout_ms);
     }
 
     protected function getOutQLen(): int
     {
-        return Api::rd_kafka_outq_len($this->kafka);
+        return Library::rd_kafka_outq_len($this->kafka);
     }
 
     /**
@@ -126,7 +127,7 @@ abstract class RdKafka
      */
     public function setLogLevel(int $level): void
     {
-        Api::rd_kafka_set_log_level($this->kafka, $level);
+        Library::rd_kafka_set_log_level($this->kafka, $level);
     }
 
     /**
@@ -140,10 +141,10 @@ abstract class RdKafka
 
     public function queryWatermarkOffsets(string $topic, int $partition, int &$low, int &$high, int $timeout_ms): void
     {
-        $lowResult = FFI::new('int64_t');
-        $highResult = FFI::new('int64_t');
+        $lowResult = Library::new('int64_t');
+        $highResult = Library::new('int64_t');
 
-        $err = Api::rd_kafka_query_watermark_offsets(
+        $err = Library::rd_kafka_query_watermark_offsets(
             $this->kafka,
             $topic,
             $partition,

@@ -5,7 +5,10 @@ declare(strict_types=1);
 namespace RdKafka;
 
 use InvalidArgumentException;
-use RdKafka\FFI\Api;
+use RdKafka\FFI\Library;
+
+use function sprintf;
+use function strlen;
 
 class ProducerTopic extends Topic
 {
@@ -29,19 +32,19 @@ class ProducerTopic extends Topic
         $this->assertPartition($partition);
         $this->assertMsgflags($msgflags);
 
-        $ret = Api::rd_kafka_produce(
+        $ret = Library::rd_kafka_produce(
             $this->topic,
             $partition,
             $msgflags | RD_KAFKA_MSG_F_COPY,
             $payload,
-            $payload === null ? null : \strlen($payload),
+            $payload === null ? null : strlen($payload),
             $key,
-            $key === null ? null : \strlen($key),
+            $key === null ? null : strlen($key),
             null
         );
 
         if ($ret === -1) {
-            $err = (int) Api::rd_kafka_last_error();
+            $err = (int) Library::rd_kafka_last_error();
             throw Exception::fromError($err);
         }
     }
@@ -69,10 +72,10 @@ class ProducerTopic extends Topic
             $msgflags | RD_KAFKA_MSG_F_COPY,
             RD_KAFKA_VTYPE_VALUE,
             $payload,
-            $payload === null ? null : \strlen($payload),
+            $payload === null ? null : strlen($payload),
             RD_KAFKA_VTYPE_KEY,
             $key,
-            $key === null ? null : \strlen($key),
+            $key === null ? null : strlen($key),
             RD_KAFKA_VTYPE_TIMESTAMP,
             $timestamp_ms === null ? 0 : $timestamp_ms,
         ];
@@ -82,19 +85,19 @@ class ProducerTopic extends Topic
                 $args[] = RD_KAFKA_VTYPE_HEADER;
                 $args[] = $headerName;
                 $args[] = $headerValue;
-                $args[] = \strlen($headerValue);
+                $args[] = strlen($headerValue);
             }
         }
 
         $args[] = RD_KAFKA_VTYPE_END;
 
-        $ret = Api::rd_kafka_producev(
+        $ret = Library::rd_kafka_producev(
             $this->kafka->getCData(),
             ...$args
         );
 
         if ($ret === -1) {
-            $err = (int) Api::rd_kafka_last_error();
+            $err = (int) Library::rd_kafka_last_error();
             throw Exception::fromError($err);
         }
     }
@@ -102,14 +105,14 @@ class ProducerTopic extends Topic
     private function assertPartition(int $partition): void
     {
         if ($partition !== RD_KAFKA_PARTITION_UA && ($partition < 0 || $partition > 0x7FFFFFFF)) {
-            throw new InvalidArgumentException(\sprintf("Out of range value '%d' for partition", $partition));
+            throw new InvalidArgumentException(sprintf("Out of range value '%d' for partition", $partition));
         }
     }
 
     private function assertMsgflags(int $msgflags): void
     {
         if ($msgflags !== 0 && $msgflags !== RD_KAFKA_MSG_F_BLOCK) {
-            throw new InvalidArgumentException(\sprintf("Invalid value '%d' for msgflags", $msgflags));
+            throw new InvalidArgumentException(sprintf("Invalid value '%d' for msgflags", $msgflags));
         }
     }
 }

@@ -11,18 +11,18 @@ class FunctionPointer extends Pointer
         parent::__construct($type);
     }
 
-    public function getCName(): string
+    public function getCType(string $ptr = ''): string
     {
-        return $this->type->getCName() . '*';
+        return $this->type->getCType($ptr . '*');
     }
 
     public function getPhpTypes(): string
     {
-        return $this->getPhpTypes();
+        return $this->type->getPhpTypes();
     }
 
     public function getPhpDocTypes(): string
     {
-        return $this->getPhpDocTypes();
+        return $this->type->getPhpDocTypes();
     }
 }

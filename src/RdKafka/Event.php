@@ -6,7 +6,7 @@ namespace RdKafka;
 
 use FFI;
 use FFI\CData;
-use RdKafka\FFI\Api;
+use RdKafka\FFI\Library;
 
 class Event
 {
@@ -19,7 +19,7 @@ class Event
 
     public function __destruct()
     {
-        Api::rd_kafka_event_destroy($this->event);
+        Library::rd_kafka_event_destroy($this->event);
     }
 
     public function getCData()
@@ -29,22 +29,22 @@ class Event
 
     public function type(): int
     {
-        return (int) Api::rd_kafka_event_type($this->event);
+        return (int) Library::rd_kafka_event_type($this->event);
     }
 
     public function name(): string
     {
-        return Api::rd_kafka_event_name($this->event);
+        return Library::rd_kafka_event_name($this->event);
     }
 
     public function error(): int
     {
-        return (int) Api::rd_kafka_event_error($this->event);
+        return (int) Library::rd_kafka_event_error($this->event);
     }
 
     public function errorString(): string
     {
-        return Api::rd_kafka_event_error_string($this->event);
+        return Library::rd_kafka_event_error_string($this->event);
     }
 
     public function errorIsFatal(): bool
@@ -53,6 +53,6 @@ class Event
             return false;
         }
 
-        return (bool) Api::rd_kafka_event_error_is_fatal($this->event);
+        return (bool) Library::rd_kafka_event_error_is_fatal($this->event);
     }
 }

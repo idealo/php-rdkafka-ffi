@@ -9,28 +9,19 @@ use PHPCParser\Node\TranslationUnitDecl;
 
 class MethodsCollector
 {
-    /**
-     * @var TypeCompiler
-     */
-    private TypeCompiler $typeCompiler;
-    /**
-     * @var TypeCompilerFactory
-     */
-    private TypeCompilerFactory $typeCompilerFactory;
-
+    private TypesCollector $typesCollector;
     /**
      * @var Method[]
      */
     private array $methods;
 
-    public function __construct(TypeCompilerFactory $typeCompilerFactory)
+    public function __construct(TypesCollector $typesCollector)
     {
-        $this->typeCompilerFactory = $typeCompilerFactory;
+        $this->typesCollector = $typesCollector;
     }
 
     public function collect(TranslationUnitDecl $ast)
     {
-        $this->typeCompiler = $this->typeCompilerFactory->create(...$ast->declarations);
         $this->methods = [];
 
         foreach ($ast->declarations as $declaration) {
@@ -42,15 +33,16 @@ class MethodsCollector
 
     private function compileMethod(FunctionDecl $declaration)
     {
-        $returnParamType = $this->typeCompiler->compile($declaration->type->return);
-        $returnParam = new Param($returnParamType, null, $returnParamType->getCName());
+        $returnParamType = $this->typesCollector->compileType($declaration->type->return);
+        $returnParam = new Param($returnParamType, null, $returnParamType->getCType());
+
         $params = [];
         foreach ($declaration->type->params as $i => $type) {
-            $paramType = $this->typeCompiler->compile($type);
-            if ($paramType->getCName() === 'void') {
+            $paramType = $this->typesCollector->compileType($type);
+            if ($i === 0 && $paramType->getCName() === 'void') {
                 break;
             }
-            $params[] = new Param($paramType, $declaration->type->paramNames[$i] ?: 'arg' . ($i + 1), $paramType->getCName());
+            $params[] = new Param($paramType, $declaration->type->paramNames[$i] ?: 'arg' . ($i + 1), $paramType->getCType());
         }
 
         if ($declaration->type->isVariadic === true) {

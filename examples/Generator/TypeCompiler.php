@@ -9,7 +9,7 @@ use FFI\Generator\Types\CharPointer;
 use FFI\Generator\Types\CType;
 use FFI\Generator\Types\Function_;
 use FFI\Generator\Types\FunctionPointer;
-use FFI\Generator\Types\PhpType;
+use FFI\Generator\Types\BuiltinType;
 use FFI\Generator\Types\Pointer;
 use FFI\Generator\Types\Struct;
 use PHPCParser\Node\Decl;
@@ -27,6 +27,75 @@ class TypeCompiler
     public function __construct(Decl ...$declarations)
     {
         $this->resolver = $this->buildResolver(...$declarations);
+        print_r($this->resolver);
+        $this->collect(...$declarations);
+
+        print_r($this->types);
+        print_r($this->typeDefs);
+        exit();
+    }
+
+    // collect all types first
+
+    /**
+     * @var Type[]
+     */
+    private array $types;
+    /**
+     * @var Type[]
+     */
+    private array $typeDefs;
+
+    // TODO: clean up resolver, what about built in types? what about enums (out of scope here > const?
+    public function collect(Decl ...$declarations)
+    {
+        /*
+// resolved types
+[ssize_t] => long int
+[mode_t] => long int
+[int16_t] => signed int
+[int32_t] => signed int
+[int64_t] => signed long int
+[rd_kafka_type_t] => int
+[rd_kafka_timestamp_type_t] => int
+[rd_kafka_resp_err_t] => int
+[rd_kafka_vtype_t] => int
+[rd_kafka_msg_status_t] => int
+[rd_kafka_conf_res_t] => int
+[rd_kafka_event_type_t] => int
+[rd_kafka_admin_op_t] => int
+[rd_kafka_ConfigSource_t] => int
+[rd_kafka_ResourceType_t] => int
+         */
+        foreach ($declarations as $decl) {
+            if ($decl instanceof Decl\NamedDecl\TypeDecl\TypedefNameDecl\TypedefDecl) {
+                $type = $this->compile($decl->type); //, $decl->name);
+                $this->types[$type->getCName()] = $type;
+                $this->typeDefs[$decl->name] = $type;
+//                if ($decl->type instanceof Type\TypedefType) {
+//                    $this->types[$decl->name] = $type;
+//                } elseif ($decl->type instanceof Type\BuiltinType) {
+//                    $this->types[$type->getCName()] = $type;
+//                } elseif ($decl->type instanceof Type\TagType\EnumType) {
+////                    $result[$decl->name] = 'int';
+//                }
+            }
+        }
+//        print_r($this->types);
+//        exit();
+    }
+
+    public function resolveType(Type $type):?Types\Type
+    {
+        if (isset($this->types[$type->decl->name])){
+            return $this->types[$type->decl->name];
+        }
+        if (isset($this->typeDefs[$type->decl->name])){
+            print_r($type->decl->name);
+            return $this->typeDefs[$type->decl->name];
+        }
+
+        return null;
     }
 
     private function buildResolver(Decl ...$declarations): array
@@ -78,23 +147,31 @@ class TypeCompiler
         return $result;
     }
 
+    // todo: what about functionproto & name?
+    // todo: cleanup resolver based mapping
     public function compile(Type $type): Types\Type
     {
         if ($type instanceof Type\TypedefType) {
             $name = $type->name;
-            restart:
-            if (PhpType::isMappable($name)) {
-                return new PhpType($name);
+//            restart:
+            if (BuiltinType::isMappable($name)) {
+                return new BuiltinType($name);
             }
-            if (isset($this->resolver[$name])) {
-                $name = $this->resolver[$name];
-                goto restart;
+//            if (isset($this->types[$name])){
+//                return $this->types[$name];
+//            }
+            if (isset($this->typeDefs[$name])){
+                return $this->typeDefs[$name];
             }
+//            if (isset($this->resolver[$name])) {
+//                $name = $this->resolver[$name];
+//                goto restart;
+//            }
             return new CType($name);
-        } elseif ($type instanceof Type\BuiltinType && PhpType::isMappable($type->name)) {
-            return new PhpType($type->name); //  void, int, float
+        } elseif ($type instanceof Type\BuiltinType && BuiltinType::isMappable($type->name)) {
+            return new BuiltinType($type->name); //  void, int, float
         } elseif ($type instanceof Type\TagType\EnumType) {
-            return new PhpType('int'); // int
+            return new BuiltinType('int'); // int
         } elseif ($type instanceof Type\PointerType) {
             // special case
             if ($type->parent instanceof Type\BuiltinType && $type->parent->name === 'char') {
@@ -105,7 +182,7 @@ class TypeCompiler
                 && $type->parent->parent instanceof Type\BuiltinType
                 && $type->parent->parent->name === 'char') {
                 // const char* - it´s an immutable string
-                return new PhpType('char*'); // string
+                return new BuiltinType('char*'); // string
             } elseif ($type->parent instanceof Type\FunctionType) {
                 // it's function pointer
                 /** @var Function_ $pointer */
@@ -119,7 +196,7 @@ class TypeCompiler
             if ($type->kind === Type\AttributedType::KIND_CONST) {
                 // special case const char* - it´s string
                 if ($type->parent instanceof Type\PointerType && $type->parent->parent instanceof Type\BuiltinType && $type->parent->parent->name === 'char') {
-                    return new PhpType('char*'); // string
+                    return new BuiltinType('char*'); // string
                 }
                 // we can omit const from our compilation
                 return $this->compile($type->parent);
@@ -127,13 +204,26 @@ class TypeCompiler
                 return $this->compile($type->parent);
             }
         } elseif ($type instanceof Type\TagType\RecordType) {
+
+            if (isset($this->types[$type->decl->name])){
+                print_r($type->decl->name);
+                return $this->types[$type->decl->name];
+            }
+            if (isset($this->typeDefs[$type->decl->name])){
+                print_r($type->decl->name);
+                return $this->typeDefs[$type->decl->name];
+            }
+//            if (empty($type->decl->fields)) {
+//                print_r($type);
+//                exit();
+//            }
             if ($type->decl->name !== null) {
                 $struct = new Struct(
                     $type->decl->name,
                     $type->decl->kind === Decl\NamedDecl\TypeDecl\TagDecl\RecordDecl::KIND_UNION
                 );
                 foreach ((array) $type->decl->fields as $field) {
-                    $struct->add($field->name, $this->compile($field));
+                    $struct->add($field->name, $this->compile($field->type));
                 }
                 return $struct;
             }
