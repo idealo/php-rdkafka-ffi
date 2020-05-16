@@ -2,11 +2,12 @@
 
 declare(strict_types=1);
 
-namespace RdKafka;
+namespace RdKafka\FFI;
 
 use FFI;
 use PHPUnit\Framework\TestCase;
-use RdKafka\FFI\Library;
+use RdKafka\Exception;
+use RuntimeException;
 
 /**
  * @covers \RdKafka\FFI\Library
@@ -65,5 +66,12 @@ class LibraryTest extends TestCase
         $this->expectException(Exception::class);
         $this->expectExceptionMessageMatches('/<= 1\.0\.0/');
         Library::requireVersion('<=', '1.0.0');
+    }
+
+    public function testInit(): void
+    {
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessageMatches('/1\.999\.0\-pre1/');
+        Library::init('1.999.0-pre1');
     }
 }

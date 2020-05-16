@@ -204,7 +204,7 @@ class Library
 
         $constantsFile = __DIR__ . '/Versions/' . self::$version . '.php';
         if (file_exists($constantsFile) === false) {
-            throw new InvalidArgumentException(sprintf('Version %s not support', self::$version));
+            throw new RuntimeException(sprintf('Version %s not support', self::$version));
         }
 
         require_once($constantsFile);

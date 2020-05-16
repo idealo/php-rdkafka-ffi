@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace RdKafka;
+namespace RdKafka\FFI;
 
 use FFI;
 use PHPUnit\Framework\TestCase;
