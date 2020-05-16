@@ -14,7 +14,7 @@ jobs:
     - name: "librdkafka master"
     - name: "librdkafka latest osx"
     - name: "librdkafka latest windows"
-    - name: "rdkafka ext, librdkafka v1.4.0"
+    - name: "rdkafka ext, librdkafka v1.4.2"
   include:
     - &STANDARD_TEST_JOB
       stage: Test
@@ -59,16 +59,16 @@ jobs:
       name: "librdkafka v1.3.0"
 
     - <<: *STANDARD_TEST_JOB
-      env: LIBRDKAFKA_VERSION=v1.4.0
-      name: "librdkafka v1.4.0"
+      env: LIBRDKAFKA_VERSION=v1.4.2
+      name: "librdkafka v1.4.2"
 
     - <<: *STANDARD_TEST_JOB
       env: LIBRDKAFKA_VERSION=master
       name: "librdkafka master"
 
-    - env: LIBRDKAFKA_VERSION=v1.4.0
+    - env: LIBRDKAFKA_VERSION=v1.4.2
       stage: Test
-      name: "rdkafka ext, librdkafka v1.4.0"
+      name: "rdkafka ext, librdkafka v1.4.2"
       os: linux
       dist: xenial
       language: minimal
@@ -132,8 +132,8 @@ jobs:
           composer global require hirak/prestissimo;
         - |
           choco install nuget.commandline;
-          nuget install librdkafka.redist -Version 1.4.0;
-          export PATH=$PWD/librdkafka.redist.1.4.0/runtimes/win-x64/native:$PATH;
+          nuget install librdkafka.redist -Version 1.4.2;
+          export PATH=$PWD/librdkafka.redist.1.4.2/runtimes/win-x64/native:$PATH;
         - |
           choco install adoptopenjdk8 --version 8.242.8;
           export JAVA_HOME=/c/Program\ Files/AdoptOpenJDK/jdk-8.0.242.08-hotspot;
