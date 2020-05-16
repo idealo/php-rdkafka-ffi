@@ -14,7 +14,7 @@ parameters:
   skip:
     PhpCsFixer\Fixer\ClassNotation\ClassAttributesSeparationFixer: ~
     PhpCsFixer\Fixer\ClassNotation\OrderedClassElementsFixer: ~
-    PhpCsFixer\Fixer\Strict\StrictComparisonFixer: ~
+    PhpCsFixer\Fixer\Strict\StrictComparisonFixer:
       - 'src/RdKafka.php'
 services:
   PhpCsFixer\Fixer\Import\OrderedImportsFixer:
