@@ -11,7 +11,7 @@
     "autoload-dev": {
         "psr-4": {
             "": "tests/",
-            "RdKafka\\FFIGen\\": "tools/ffigen"
+            "RdKafka\\FFIGen\\": "resources/ffigen"
         }
     },
     "require": {
