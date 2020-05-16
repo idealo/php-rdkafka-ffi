@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace RdKafka\Admin;
 
-use FFI;
 use FFI\CData;
 use RdKafka\FFI\Library;
 

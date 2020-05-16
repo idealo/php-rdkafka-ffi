@@ -6,8 +6,8 @@ namespace RdKafka;
 
 use FFI\CData;
 use InvalidArgumentException;
-use RdKafka\FFI\Library;
 use RdKafka\FFI\ConsumeCallbackProxy;
+use RdKafka\FFI\Library;
 
 use function array_key_exists;
 use function array_keys;
@@ -15,9 +15,6 @@ use function sprintf;
 
 class ConsumerTopic extends Topic
 {
-    /**
-     * @var array
-     */
     private array $consuming = [];
 
     /**

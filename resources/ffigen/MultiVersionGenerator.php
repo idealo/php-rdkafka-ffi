@@ -88,10 +88,10 @@ class MultiVersionGenerator
         $this->filesystem = new Filesystem();
     }
 
-    public function generate()
+    public function generate(): void
     {
         $supportedVersions = $this->getSupportedVersions();
-        echo "Found " . count($supportedVersions) . ' librdkafka releases' . PHP_EOL;
+        echo 'Found ' . count($supportedVersions) . ' librdkafka releases' . PHP_EOL;
         print_r($supportedVersions);
 
         foreach ($supportedVersions as $version => $hFileUrl) {
@@ -143,7 +143,7 @@ class MultiVersionGenerator
         return $supportedVersions;
     }
 
-    private function parse($version, $hFileUrl)
+    private function parse($version, $hFileUrl): void
     {
         // download header files and parse
         $hFileOrig = __DIR__ . '/tmp/rdkafka.h';
@@ -204,7 +204,7 @@ class MultiVersionGenerator
         }
     }
 
-    private function generateConstantsFiles()
+    private function generateConstantsFiles(): void
     {
         $versionRelatedConstants = [];
         $overAllConstants = [];
@@ -250,7 +250,7 @@ class MultiVersionGenerator
         );
     }
 
-    private function generateMethodsTraitFile()
+    private function generateMethodsTraitFile(): void
     {
         $printer = new MethodsPrinter(new MethodsCollection(...array_values($this->overAllMethods)));
         $this->filesystem->dumpFile(
