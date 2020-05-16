@@ -199,8 +199,7 @@ class Library
         }
 
         if (self::$version === self::VERSION_AUTODETECT) {
-            $ffi = FFI::cdef('const char * rd_kafka_version_str(void);', self::getLibrary());
-            self::$version = $ffi->rd_kafka_version_str();
+            self::$version = self::autoDetectVersion();
         }
 
         $constantsFile = __DIR__ . '/Versions/' . self::$version . '.php';
@@ -211,6 +210,18 @@ class Library
         require_once($constantsFile);
 
         self::$cdef = RD_KAFKA_CDEF;
+    }
+
+    private static function autoDetectVersion(): string
+    {
+        $ffi = FFI::cdef('const char *rd_kafka_version_str(void);', self::getLibrary());
+        $version = $ffi->rd_kafka_version_str();
+
+        if (version_compare($version, self::VERSION_LATEST, '>') === true) {
+            return self::VERSION_LATEST;
+        }
+
+        return $version;
     }
 
     public static function getVersion(): string
