@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace RdKafka;
 
 use PHPUnit\Framework\TestCase;
-use RdKafka\FFI\Api;
+use RdKafka\FFI\Library;
 
 /**
  * @covers \RdKafka\Queue
@@ -47,7 +47,7 @@ class QueueTest extends TestCase
 
         $consumer = new Consumer($conf);
 
-        $mainQueue = new Queue(Api::getFFI()->rd_kafka_queue_get_main($consumer->getCData()));
+        $mainQueue = new Queue(Library::getFFI()->rd_kafka_queue_get_main($consumer->getCData()));
 
         $event = $mainQueue->poll(KAFKA_TEST_TIMEOUT_MS);
 

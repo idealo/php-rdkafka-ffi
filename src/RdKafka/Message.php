@@ -6,7 +6,7 @@ namespace RdKafka;
 
 use FFI;
 use FFI\CData;
-use RdKafka\FFI\Api;
+use RdKafka\FFI\Library;
 
 class Message
 {
@@ -39,14 +39,14 @@ class Message
 
     public function __construct(CData $nativeMessage)
     {
-        $timestampType = Api::new('rd_kafka_timestamp_type_t');
-        $this->timestamp = (int) Api::rd_kafka_message_timestamp($nativeMessage, FFI::addr($timestampType));
+        $timestampType = Library::new('rd_kafka_timestamp_type_t');
+        $this->timestamp = (int) Library::rd_kafka_message_timestamp($nativeMessage, FFI::addr($timestampType));
         $this->timestampType = (int) $timestampType->cdata;
 
         $this->err = (int) $nativeMessage->err;
 
         if ($nativeMessage->rkt !== null) {
-            $this->topic_name = Api::rd_kafka_topic_name($nativeMessage->rkt);
+            $this->topic_name = Library::rd_kafka_topic_name($nativeMessage->rkt);
         } else {
             $this->topic_name = null;
         }
@@ -71,9 +71,9 @@ class Message
 
         $this->headers = $this->parseHeaders($nativeMessage);
 
-        $this->latency = (int) Api::rd_kafka_message_latency($nativeMessage);
+        $this->latency = (int) Library::rd_kafka_message_latency($nativeMessage);
 
-        $this->status = (int) Api::rd_kafka_message_status($nativeMessage);
+        $this->status = (int) Library::rd_kafka_message_status($nativeMessage);
     }
 
     public function errstr(): string
@@ -89,9 +89,9 @@ class Message
             return null;
         }
 
-        $message_headers = Api::rd_kafka_headers_new(0);
+        $message_headers = Library::rd_kafka_headers_new(0);
 
-        $resp = (int) Api::rd_kafka_message_headers($nativeMessage, FFI::addr($message_headers));
+        $resp = (int) Library::rd_kafka_message_headers($nativeMessage, FFI::addr($message_headers));
         if ($resp === RD_KAFKA_RESP_ERR__NOENT) {
             return null;
         }
@@ -102,16 +102,16 @@ class Message
         }
 
         if ($message_headers !== null) {
-            $header_count = (int) Api::rd_kafka_header_cnt($message_headers);
-            $header_name = FFI::new('char*');
+            $header_count = (int) Library::rd_kafka_header_cnt($message_headers);
+            $header_name = Library::new('char*');
             $header_name_ptr = FFI::addr($header_name);
-            $header_value = FFI::new('char*');
+            $header_value = Library::new('char*');
             $header_value_ptr = FFI::addr($header_value);
-            $header_size = FFI::new('size_t');
+            $header_size = Library::new('size_t');
             $header_size_ptr = FFI::addr($header_size);
 
             for ($i = 0; $i < $header_count; $i++) {
-                $header_response = (int) Api::rd_kafka_header_get_all(
+                $header_response = (int) Library::rd_kafka_header_get_all(
                     $message_headers,
                     $i,
                     $header_name_ptr,

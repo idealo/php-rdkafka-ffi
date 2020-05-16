@@ -18,6 +18,11 @@ class CType extends Type
         return $this->cName;
     }
 
+    public function getCType(string $ptr = ''): string
+    {
+        return ($this->const ? 'const ' : '') . $this->getName() . $ptr;
+    }
+
     public function getPhpTypes(): string
     {
         return 'object';

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace RdKafka;
 
 use RdKafka;
-use RdKafka\FFI\Api;
+use RdKafka\FFI\Library;
 
 class Consumer extends RdKafka
 {
@@ -19,7 +19,7 @@ class Consumer extends RdKafka
 
     public function addBrokers(string $broker_list): int
     {
-        return Api::rd_kafka_brokers_add($this->kafka, $broker_list);
+        return Library::rd_kafka_brokers_add($this->kafka, $broker_list);
     }
 
     public function poll(int $timeout_ms): int

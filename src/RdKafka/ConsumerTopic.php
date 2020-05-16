@@ -6,8 +6,12 @@ namespace RdKafka;
 
 use FFI\CData;
 use InvalidArgumentException;
-use RdKafka\FFI\Api;
+use RdKafka\FFI\Library;
 use RdKafka\FFI\ConsumeCallbackProxy;
+
+use function array_key_exists;
+use function array_keys;
+use function sprintf;
 
 class ConsumerTopic extends Topic
 {
@@ -27,7 +31,7 @@ class ConsumerTopic extends Topic
 
     public function __destruct()
     {
-        foreach (\array_keys($this->consuming) as $partition) {
+        foreach (array_keys($this->consuming) as $partition) {
             $this->consumeStop($partition);
         }
 
@@ -41,14 +45,14 @@ class ConsumerTopic extends Topic
     {
         $this->assertPartition($partition);
 
-        $nativeMessage = Api::rd_kafka_consume(
+        $nativeMessage = Library::rd_kafka_consume(
             $this->topic,
             $partition,
             $timeout_ms
         );
 
         if ($nativeMessage === null) {
-            $err = (int) Api::rd_kafka_last_error();
+            $err = (int) Library::rd_kafka_last_error();
 
             if ($err === RD_KAFKA_RESP_ERR__TIMED_OUT) {
                 return null;
@@ -59,7 +63,7 @@ class ConsumerTopic extends Topic
 
         $message = new Message($nativeMessage);
 
-        Api::rd_kafka_message_destroy($nativeMessage);
+        Library::rd_kafka_message_destroy($nativeMessage);
 
         return $message;
     }
@@ -71,14 +75,14 @@ class ConsumerTopic extends Topic
     public function consumeBatch(int $partition, int $timeout_ms, int $batch_size): array
     {
         if ($batch_size <= 0) {
-            throw new InvalidArgumentException(\sprintf("Out of range value '%d' for batch_size", $batch_size));
+            throw new InvalidArgumentException(sprintf("Out of range value '%d' for batch_size", $batch_size));
         }
 
         $this->assertPartition($partition);
 
-        $nativeMessages = Api::new('rd_kafka_message_t*[' . $batch_size . ']');
+        $nativeMessages = Library::new('rd_kafka_message_t*[' . $batch_size . ']');
 
-        $result = (int) Api::rd_kafka_consume_batch(
+        $result = (int) Library::rd_kafka_consume_batch(
             $this->topic,
             $partition,
             $timeout_ms,
@@ -87,7 +91,7 @@ class ConsumerTopic extends Topic
         );
 
         if ($result === -1) {
-            $err = (int) Api::rd_kafka_last_error();
+            $err = (int) Library::rd_kafka_last_error();
             throw Exception::fromError($err);
         }
 
@@ -102,7 +106,7 @@ class ConsumerTopic extends Topic
                 $messages[] = new Message($nativeMessages[$i]);
             }
             for ($i = 0; $i < $size; $i++) {
-                Api::rd_kafka_message_destroy($nativeMessages[$i]);
+                Library::rd_kafka_message_destroy($nativeMessages[$i]);
             }
         }
         return $messages;
@@ -115,9 +119,9 @@ class ConsumerTopic extends Topic
     {
         $this->assertPartition($partition);
 
-        if (\array_key_exists($partition, $this->consuming)) {
+        if (array_key_exists($partition, $this->consuming)) {
             throw new Exception(
-                \sprintf(
+                sprintf(
                     '%s:%d is already being consumed by the same Consumer instance',
                     $this->getName(),
                     $partition
@@ -125,7 +129,7 @@ class ConsumerTopic extends Topic
             );
         }
 
-        $ret = Api::rd_kafka_consume_start_queue(
+        $ret = Library::rd_kafka_consume_start_queue(
             $this->topic,
             $partition,
             $offset,
@@ -133,7 +137,7 @@ class ConsumerTopic extends Topic
         );
 
         if ($ret === -1) {
-            $err = (int) Api::rd_kafka_last_error();
+            $err = (int) Library::rd_kafka_last_error();
             throw Exception::fromError($err);
         }
 
@@ -147,9 +151,9 @@ class ConsumerTopic extends Topic
     {
         $this->assertPartition($partition);
 
-        if (\array_key_exists($partition, $this->consuming)) {
+        if (array_key_exists($partition, $this->consuming)) {
             throw new Exception(
-                \sprintf(
+                sprintf(
                     '%s:%d is already being consumed by the same Consumer instance',
                     $this->getName(),
                     $partition
@@ -157,14 +161,14 @@ class ConsumerTopic extends Topic
             );
         }
 
-        $ret = Api::rd_kafka_consume_start(
+        $ret = Library::rd_kafka_consume_start(
             $this->topic,
             $partition,
             $offset
         );
 
         if ($ret === -1) {
-            $err = (int) Api::rd_kafka_last_error();
+            $err = (int) Library::rd_kafka_last_error();
             throw Exception::fromError($err);
         }
 
@@ -178,13 +182,13 @@ class ConsumerTopic extends Topic
     {
         $this->assertPartition($partition);
 
-        $ret = Api::rd_kafka_consume_stop(
+        $ret = Library::rd_kafka_consume_stop(
             $this->topic,
             $partition
         );
 
         if ($ret === -1) {
-            $err = (int) Api::rd_kafka_last_error();
+            $err = (int) Library::rd_kafka_last_error();
             throw Exception::fromError($err);
         }
 
@@ -198,7 +202,7 @@ class ConsumerTopic extends Topic
     {
         $this->assertPartition($partition);
 
-        $err = Api::rd_kafka_offset_store(
+        $err = Library::rd_kafka_offset_store(
             $this->topic,
             $partition,
             $offset
@@ -213,7 +217,7 @@ class ConsumerTopic extends Topic
     {
         $this->assertPartition($partition);
 
-        $result = (int) Api::rd_kafka_consume_callback(
+        $result = (int) Library::rd_kafka_consume_callback(
             $this->topic,
             $partition,
             $timeout_ms,
@@ -222,7 +226,7 @@ class ConsumerTopic extends Topic
         );
 
         if ($result === -1) {
-            $err = (int) Api::rd_kafka_last_error();
+            $err = (int) Library::rd_kafka_last_error();
 
             throw Exception::fromError($err);
         }
@@ -233,7 +237,7 @@ class ConsumerTopic extends Topic
     private function assertPartition(int $partition): void
     {
         if ($partition !== RD_KAFKA_PARTITION_UA && ($partition < 0 || $partition > 0x7FFFFFFF)) {
-            throw new InvalidArgumentException(\sprintf("Out of range value '%d' for partition", $partition));
+            throw new InvalidArgumentException(sprintf("Out of range value '%d' for partition", $partition));
         }
     }
 }

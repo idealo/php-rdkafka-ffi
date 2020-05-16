@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace RdKafka\FFI;
 
+use Closure;
 use FFI\CData;
 
 class NativePartitionerCallbackProxy
@@ -23,7 +24,7 @@ class NativePartitionerCallbackProxy
         ?object $topic_opaque = null,
         ?object $msg_opaque = null
     ): int {
-        return (int) Api::{$this->partitionerMethod}(
+        return (int) Library::{$this->partitionerMethod}(
             $topic,
             $keydata,
             $keylen,
@@ -33,8 +34,8 @@ class NativePartitionerCallbackProxy
         );
     }
 
-    public static function create(string $partitionerMethod): \Closure
+    public static function create(string $partitionerMethod): Closure
     {
-        return \Closure::fromCallable(new static($partitionerMethod));
+        return Closure::fromCallable(new static($partitionerMethod));
     }
 }

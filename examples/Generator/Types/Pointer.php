@@ -17,7 +17,12 @@ class Pointer extends CType
 
     public function getCName(): string
     {
-        return $this->type->getCName() . '*';
+        return $this->type->getCName();
+    }
+
+    public function getCType(string $ptr = ''): string
+    {
+        return $this->type->getCType($ptr . '*');
     }
 
     public function getPhpTypes(): string
@@ -35,4 +40,9 @@ class Pointer extends CType
         }
         return '\\' . CData::class . '|null';
     }
+
+//    public function getDeclarationName(): string
+//    {
+//        return $this->type->getDeclarationName() . '*';
+//    }
 }

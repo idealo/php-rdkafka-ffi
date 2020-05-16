@@ -7,7 +7,7 @@ namespace RdKafka;
 use FFI;
 use FFI\CData;
 use RdKafka;
-use RdKafka\FFI\Api;
+use RdKafka\FFI\Library;
 use RdKafka\Metadata\Collection;
 
 class Metadata
@@ -16,9 +16,9 @@ class Metadata
 
     public function __construct(RdKafka $kafka, bool $all_topics, ?Topic $only_topic, int $timeout_ms)
     {
-        $this->metadata = Api::new('struct rd_kafka_metadata*');
+        $this->metadata = Library::new('struct rd_kafka_metadata*');
 
-        $err = (int) Api::rd_kafka_metadata(
+        $err = (int) Library::rd_kafka_metadata(
             $kafka->getCData(),
             (int) $all_topics,
             $only_topic ? $only_topic->getCData() : null,
@@ -33,7 +33,7 @@ class Metadata
 
     public function __destruct()
     {
-        Api::rd_kafka_metadata_destroy($this->metadata);
+        Library::rd_kafka_metadata_destroy($this->metadata);
     }
 
     /**

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use RdKafka\FFI\Api;
+use RdKafka\FFI\Library;
 
 /**
  * @Groups({"Api", "ffi"})
@@ -15,8 +15,8 @@ class ApiBench
      */
     public function benchVersionAutoDetection(): void
     {
-        Api::init();
-        Api::rd_kafka_version();
+        Library::init();
+        Library::rd_kafka_version();
     }
 
     /**
@@ -25,7 +25,7 @@ class ApiBench
      */
     public function benchVersionFix(): void
     {
-        Api::init('1.0.0');
-        Api::rd_kafka_version();
+        Library::init('1.0.0');
+        Library::rd_kafka_version();
     }
 }

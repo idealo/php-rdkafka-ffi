@@ -6,7 +6,7 @@ namespace RdKafka;
 
 use FFI\CData;
 use RdKafka;
-use RdKafka\FFI\Api;
+use RdKafka\FFI\Library;
 
 abstract class Topic
 {
@@ -21,21 +21,21 @@ abstract class Topic
         $this->name = $name;
         $this->kafka = $kafka;
 
-        $this->topic = Api::rd_kafka_topic_new(
+        $this->topic = Library::rd_kafka_topic_new(
             $kafka->getCData(),
             $name,
             $this->duplicateConfCData($conf)
         );
 
         if ($this->topic === null) {
-            $err = (int) Api::rd_kafka_last_error();
+            $err = (int) Library::rd_kafka_last_error();
             throw Exception::fromError($err);
         }
     }
 
     public function __destruct()
     {
-        Api::rd_kafka_topic_destroy($this->topic);
+        Library::rd_kafka_topic_destroy($this->topic);
     }
 
     private function duplicateConfCData(?TopicConf $conf = null): ?CData
@@ -44,7 +44,7 @@ abstract class Topic
             return null;
         }
 
-        return Api::rd_kafka_topic_conf_dup($conf->getCData());
+        return Library::rd_kafka_topic_conf_dup($conf->getCData());
     }
 
     public function getCData(): CData

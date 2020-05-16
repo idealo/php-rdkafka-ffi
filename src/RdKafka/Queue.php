@@ -6,7 +6,7 @@ namespace RdKafka;
 
 use FFI\CData;
 use RdKafka;
-use RdKafka\FFI\Api;
+use RdKafka\FFI\Library;
 
 class Queue
 {
@@ -22,7 +22,7 @@ class Queue
      */
     public static function fromRdKafka(RdKafka $kafka): self
     {
-        $queue = Api::rd_kafka_queue_new($kafka->getCData());
+        $queue = Library::rd_kafka_queue_new($kafka->getCData());
 
         if ($queue === null) {
             throw new Exception('Failed to create new queue.');
@@ -33,7 +33,7 @@ class Queue
 
     public function __destruct()
     {
-        Api::rd_kafka_queue_destroy($this->queue);
+        Library::rd_kafka_queue_destroy($this->queue);
     }
 
     public function getCData(): CData
@@ -46,13 +46,13 @@ class Queue
      */
     public function consume(int $timeout_ms): ?Message
     {
-        $nativeMessage = Api::rd_kafka_consume_queue(
+        $nativeMessage = Library::rd_kafka_consume_queue(
             $this->queue,
             $timeout_ms
         );
 
         if ($nativeMessage === null) {
-            $err = (int) Api::rd_kafka_last_error();
+            $err = (int) Library::rd_kafka_last_error();
 
             if ($err === RD_KAFKA_RESP_ERR__TIMED_OUT) {
                 return null;
@@ -63,14 +63,14 @@ class Queue
 
         $message = new Message($nativeMessage);
 
-        Api::rd_kafka_message_destroy($nativeMessage);
+        Library::rd_kafka_message_destroy($nativeMessage);
 
         return $message;
     }
 
     public function poll(int $timeout_ms): ?Event
     {
-        $nativeEvent = Api::rd_kafka_queue_poll(
+        $nativeEvent = Library::rd_kafka_queue_poll(
             $this->queue,
             $timeout_ms
         );

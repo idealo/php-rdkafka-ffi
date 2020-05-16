@@ -6,7 +6,7 @@ namespace RdKafka\Admin;
 
 use FFI;
 use FFI\CData;
-use RdKafka\FFI\Api;
+use RdKafka\FFI\Library;
 
 class TopicResult
 {
@@ -16,8 +16,8 @@ class TopicResult
 
     public function __construct(CData $result)
     {
-        $this->error = (int) Api::rd_kafka_topic_result_error($result);
-        $this->errorString = Api::rd_kafka_topic_result_error_string($result);
-        $this->name = Api::rd_kafka_topic_result_name($result);
+        $this->error = (int) Library::rd_kafka_topic_result_error($result);
+        $this->errorString = Library::rd_kafka_topic_result_error_string($result);
+        $this->name = Library::rd_kafka_topic_result_name($result);
     }
 }

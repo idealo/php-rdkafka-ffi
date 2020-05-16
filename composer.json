@@ -10,7 +10,8 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "": "tests/"
+            "": "tests/",
+            "RdKafka\\FFIGen\\": "tools/ffigen"
         }
     },
     "require": {
@@ -23,6 +24,7 @@
         "phpunit/phpunit": "^9",
         "ircmaxell/ffime": "master-dev",
         "ircmaxell/php-c-parser": "master-dev",
-        "symplify/easy-coding-standard": "^7.2"
+        "symplify/easy-coding-standard": "^7.2",
+        "klitsche/ffigen": "^0.3"
     }
 }

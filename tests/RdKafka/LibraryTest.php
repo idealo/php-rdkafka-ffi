@@ -6,18 +6,18 @@ namespace RdKafka;
 
 use FFI;
 use PHPUnit\Framework\TestCase;
-use RdKafka\FFI\Api;
+use RdKafka\FFI\Library;
 
 /**
- * @covers \RdKafka\FFI\Api
+ * @covers \RdKafka\FFI\Library
  *
  * @group ffiOnly
  */
-class ApiTest extends TestCase
+class LibraryTest extends TestCase
 {
     public function testGetFFI(): void
     {
-        $ffi = Api::getFFI();
+        $ffi = Library::getFFI();
 
         $this->assertInstanceOf(FFI::class, $ffi);
         $this->assertMatchesRegularExpression('/^\d+\.\d+\./', $ffi->rd_kafka_version_str());
@@ -25,7 +25,7 @@ class ApiTest extends TestCase
 
     public function testPreload(): void
     {
-        $ffi = Api::preload();
+        $ffi = Library::preload();
 
         $this->assertInstanceOf(FFI::class, $ffi);
         $this->assertMatchesRegularExpression('/^\d+\.\d+\./', $ffi->rd_kafka_version_str());
@@ -34,6 +34,6 @@ class ApiTest extends TestCase
     public function testPreloadWithInvalidCdef(): void
     {
         $this->expectException(\FFI\Exception::class);
-        Api::preload('', 'Any', null, 'invalid');
+        Library::preload('', 'Any', null, 'invalid');
     }
 }

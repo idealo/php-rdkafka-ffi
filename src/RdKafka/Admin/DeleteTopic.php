@@ -6,7 +6,7 @@ namespace RdKafka\Admin;
 
 use FFI\CData;
 use RdKafka\Exception;
-use RdKafka\FFI\Api;
+use RdKafka\FFI\Library;
 
 class DeleteTopic
 {
@@ -14,10 +14,10 @@ class DeleteTopic
 
     public function __construct(string $name)
     {
-        $this->topic = Api::rd_kafka_DeleteTopic_new($name);
+        $this->topic = Library::rd_kafka_DeleteTopic_new($name);
 
         if ($this->topic === null) {
-            $err = (int) Api::rd_kafka_last_error();
+            $err = (int) Library::rd_kafka_last_error();
             throw Exception::fromError($err);
         }
     }
@@ -28,7 +28,7 @@ class DeleteTopic
             return;
         }
 
-        Api::rd_kafka_DeleteTopic_destroy($this->topic);
+        Library::rd_kafka_DeleteTopic_destroy($this->topic);
     }
 
     public function getCData(): CData

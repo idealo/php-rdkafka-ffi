@@ -10,18 +10,12 @@ class Struct extends CType
 {
     private array $layout;
     private bool $isUnion;
-    private string $name;
 
-    public function __construct(string $name, bool $isUnion)
+    public function __construct(string $cName, bool $isUnion)
     {
-        $this->name = $name;
+        parent::__construct($cName);
         $this->isUnion = $isUnion;
         $this->layout = [];
-    }
-
-    public function getCName(): string
-    {
-        return $this->name;
     }
 
     public function getPhpTypes(): string

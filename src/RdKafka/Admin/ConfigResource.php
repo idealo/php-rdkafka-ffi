@@ -6,7 +6,7 @@ namespace RdKafka\Admin;
 
 use FFI\CData;
 use RdKafka\Exception;
-use RdKafka\FFI\Api;
+use RdKafka\FFI\Library;
 
 class ConfigResource
 {
@@ -14,7 +14,7 @@ class ConfigResource
 
     public function __construct(int $type, string $name)
     {
-        $this->resource = Api::rd_kafka_ConfigResource_new(
+        $this->resource = Library::rd_kafka_ConfigResource_new(
             $type,
             $name
         );
@@ -22,7 +22,7 @@ class ConfigResource
 
     public function __destruct()
     {
-        Api::rd_kafka_ConfigResource_destroy($this->resource);
+        Library::rd_kafka_ConfigResource_destroy($this->resource);
     }
 
     public function getCData(): CData
@@ -35,7 +35,7 @@ class ConfigResource
      */
     public function setConfig(string $name, string $value): void
     {
-        $err = (int) Api::rd_kafka_ConfigResource_set_config(
+        $err = (int) Library::rd_kafka_ConfigResource_set_config(
             $this->resource,
             $name,
             $value

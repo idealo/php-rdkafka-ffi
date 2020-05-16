@@ -7,8 +7,14 @@ namespace RdKafka;
 use FFI;
 use InvalidArgumentException;
 use RdKafka;
-use RdKafka\FFI\Api;
+use RdKafka\FFI\Library;
 use TypeError;
+
+use function count;
+use function is_array;
+use function is_int;
+use function is_string;
+use function sprintf;
 
 class KafkaConsumer extends RdKafka
 {
@@ -26,7 +32,7 @@ class KafkaConsumer extends RdKafka
 
         parent::__construct(RD_KAFKA_CONSUMER, $conf);
 
-        Api::rd_kafka_poll_set_consumer($this->kafka);
+        Library::rd_kafka_poll_set_consumer($this->kafka);
     }
 
     public function __destruct()
@@ -42,7 +48,7 @@ class KafkaConsumer extends RdKafka
             return;
         }
 
-        $err = (int) Api::rd_kafka_consumer_close($this->kafka);
+        $err = (int) Library::rd_kafka_consumer_close($this->kafka);
 
         if ($err !== RD_KAFKA_RESP_ERR_NO_ERROR) {
             trigger_error(sprintf('rd_kafka_consumer_close failed: %s', rd_kafka_err2str($err)), E_USER_WARNING);
@@ -65,10 +71,10 @@ class KafkaConsumer extends RdKafka
             $nativeTopicPartitionList = $topicPartitionList->getCData();
         }
 
-        $err = Api::rd_kafka_assign($this->kafka, $nativeTopicPartitionList);
+        $err = Library::rd_kafka_assign($this->kafka, $nativeTopicPartitionList);
 
         if ($nativeTopicPartitionList !== null) {
-            Api::rd_kafka_topic_partition_list_destroy($nativeTopicPartitionList);
+            Library::rd_kafka_topic_partition_list_destroy($nativeTopicPartitionList);
         }
 
         if ($err !== RD_KAFKA_RESP_ERR_NO_ERROR) {
@@ -81,13 +87,13 @@ class KafkaConsumer extends RdKafka
      */
     public function getAssignment(): array
     {
-        $nativeTopicPartitionList = Api::rd_kafka_topic_partition_list_new(0);
+        $nativeTopicPartitionList = Library::rd_kafka_topic_partition_list_new(0);
 
-        Api::rd_kafka_assignment($this->kafka, FFI::addr($nativeTopicPartitionList));
+        Library::rd_kafka_assignment($this->kafka, FFI::addr($nativeTopicPartitionList));
 
         $topicPartitionList = TopicPartitionList::fromCData($nativeTopicPartitionList);
 
-        Api::rd_kafka_topic_partition_list_destroy($nativeTopicPartitionList);
+        Library::rd_kafka_topic_partition_list_destroy($nativeTopicPartitionList);
 
         return $topicPartitionList->asArray();
     }
@@ -103,7 +109,7 @@ class KafkaConsumer extends RdKafka
             $topicPartitionList = $this->createTopicPartitionList($message_or_offsets);
         } catch (TypeError $exception) {
             throw new InvalidArgumentException(
-                \sprintf(
+                sprintf(
                     '%s expects parameter %d to be %s, %s given',
                     __METHOD__,
                     1,
@@ -128,7 +134,7 @@ class KafkaConsumer extends RdKafka
             $topicPartitionList = $this->createTopicPartitionList($message_or_offsets);
         } catch (TypeError $exception) {
             throw new InvalidArgumentException(
-                \sprintf(
+                sprintf(
                     '%s expects parameter %d to be %s, %s given',
                     __METHOD__,
                     1,
@@ -149,10 +155,10 @@ class KafkaConsumer extends RdKafka
             $nativeTopicPartitionList = $topicPartitionList->getCData();
         }
 
-        $err = Api::rd_kafka_commit($this->kafka, $nativeTopicPartitionList, $isAsync ? 1 : 0);
+        $err = Library::rd_kafka_commit($this->kafka, $nativeTopicPartitionList, $isAsync ? 1 : 0);
 
         if ($nativeTopicPartitionList !== null) {
-            Api::rd_kafka_topic_partition_list_destroy($nativeTopicPartitionList);
+            Library::rd_kafka_topic_partition_list_destroy($nativeTopicPartitionList);
         }
 
         if ($err !== RD_KAFKA_RESP_ERR_NO_ERROR) {
@@ -168,12 +174,12 @@ class KafkaConsumer extends RdKafka
         if ($message_or_offsets instanceof Message) {
             return $this->createTopicPartitionListFromMessage($message_or_offsets);
         }
-        if (\is_array($message_or_offsets) === true) {
+        if (is_array($message_or_offsets) === true) {
             return new TopicPartitionList(...$message_or_offsets);
         }
 
         throw new TypeError(
-            \sprintf(
+            sprintf(
                 'Argument 1 passed to %s must be an instance of RdKafka\\Message, an array of RdKafka\\TopicPartition or null',
                 __METHOD__
             )
@@ -185,13 +191,13 @@ class KafkaConsumer extends RdKafka
         if ($message->err !== RD_KAFKA_RESP_ERR_NO_ERROR) {
             throw new Exception('Invalid argument: Specified Message has an error');
         }
-        if (\is_string($message->topic_name) === false) {
+        if (is_string($message->topic_name) === false) {
             throw new Exception('Invalid argument: Specified Message\'s topic_name is not a string');
         }
-        if (\is_int($message->partition) === false) {
+        if (is_int($message->partition) === false) {
             throw new Exception('Invalid argument: Specified Message\'s partition is not an int');
         }
-        if (\is_int($message->offset) === false) {
+        if (is_int($message->offset) === false) {
             throw new Exception('Invalid argument: Specified Message\'s offset is not an int');
         }
 
@@ -205,17 +211,17 @@ class KafkaConsumer extends RdKafka
      */
     public function consume(int $timeout_ms): Message
     {
-        $nativeMessage = Api::rd_kafka_consumer_poll($this->kafka, $timeout_ms);
+        $nativeMessage = Library::rd_kafka_consumer_poll($this->kafka, $timeout_ms);
 
         if ($nativeMessage === null) {
-            $nativeMessage = Api::new('rd_kafka_message_t');
+            $nativeMessage = Library::new('rd_kafka_message_t');
             $nativeMessage->err = RD_KAFKA_RESP_ERR__TIMED_OUT;
 
             $message = new Message(FFI::addr($nativeMessage));
         } else {
             $message = new Message($nativeMessage);
 
-            Api::rd_kafka_message_destroy($nativeMessage);
+            Library::rd_kafka_message_destroy($nativeMessage);
         }
 
         return $message;
@@ -226,19 +232,19 @@ class KafkaConsumer extends RdKafka
      */
     public function subscribe(array $topics): void
     {
-        $nativeTopicPartitionList = Api::rd_kafka_topic_partition_list_new(\count($topics));
+        $nativeTopicPartitionList = Library::rd_kafka_topic_partition_list_new(count($topics));
 
         foreach ($topics as $topic) {
-            Api::rd_kafka_topic_partition_list_add(
+            Library::rd_kafka_topic_partition_list_add(
                 $nativeTopicPartitionList,
                 (string) $topic,
                 RD_KAFKA_PARTITION_UA
             );
         }
 
-        $err = Api::rd_kafka_subscribe($this->kafka, $nativeTopicPartitionList);
+        $err = Library::rd_kafka_subscribe($this->kafka, $nativeTopicPartitionList);
 
-        Api::rd_kafka_topic_partition_list_destroy($nativeTopicPartitionList);
+        Library::rd_kafka_topic_partition_list_destroy($nativeTopicPartitionList);
 
         if ($err !== RD_KAFKA_RESP_ERR_NO_ERROR) {
             throw Exception::fromError($err);
@@ -250,7 +256,7 @@ class KafkaConsumer extends RdKafka
      */
     public function unsubscribe(): void
     {
-        $err = Api::rd_kafka_unsubscribe($this->kafka);
+        $err = Library::rd_kafka_unsubscribe($this->kafka);
 
         if ($err !== RD_KAFKA_RESP_ERR_NO_ERROR) {
             throw Exception::fromError($err);
@@ -262,18 +268,18 @@ class KafkaConsumer extends RdKafka
      */
     public function getSubscription(): array
     {
-        $nativeTopicPartitionList = Api::rd_kafka_topic_partition_list_new(0);
+        $nativeTopicPartitionList = Library::rd_kafka_topic_partition_list_new(0);
 
-        $err = Api::rd_kafka_subscription($this->kafka, FFI::addr($nativeTopicPartitionList));
+        $err = Library::rd_kafka_subscription($this->kafka, FFI::addr($nativeTopicPartitionList));
 
         if ($err !== RD_KAFKA_RESP_ERR_NO_ERROR) {
-            Api::rd_kafka_topic_partition_list_destroy($nativeTopicPartitionList);
+            Library::rd_kafka_topic_partition_list_destroy($nativeTopicPartitionList);
             throw Exception::fromError($err);
         }
 
         $topicPartitionList = TopicPartitionList::fromCData($nativeTopicPartitionList);
 
-        Api::rd_kafka_topic_partition_list_destroy($nativeTopicPartitionList);
+        Library::rd_kafka_topic_partition_list_destroy($nativeTopicPartitionList);
 
         $topics = [];
         foreach ($topicPartitionList as $topicPartition) {
@@ -301,17 +307,17 @@ class KafkaConsumer extends RdKafka
         $topicPartitionList = new TopicPartitionList(...$topics);
         $nativeTopicPartitionList = $topicPartitionList->getCData();
 
-        $err = Api::rd_kafka_committed($this->kafka, $nativeTopicPartitionList, $timeout_ms);
+        $err = Library::rd_kafka_committed($this->kafka, $nativeTopicPartitionList, $timeout_ms);
 
         if ($err !== RD_KAFKA_RESP_ERR_NO_ERROR) {
-            Api::rd_kafka_topic_partition_list_destroy($nativeTopicPartitionList);
+            Library::rd_kafka_topic_partition_list_destroy($nativeTopicPartitionList);
             throw Exception::fromError($err);
         }
 
         $topicPartitionList = TopicPartitionList::fromCData($nativeTopicPartitionList);
 
         if ($nativeTopicPartitionList !== null) {
-            Api::rd_kafka_topic_partition_list_destroy($nativeTopicPartitionList);
+            Library::rd_kafka_topic_partition_list_destroy($nativeTopicPartitionList);
         }
 
         return $topicPartitionList->asArray();
@@ -327,17 +333,17 @@ class KafkaConsumer extends RdKafka
         $topicPartitionList = new TopicPartitionList(...$topicPartitions);
         $nativeTopicPartitionList = $topicPartitionList->getCData();
 
-        $err = Api::rd_kafka_offsets_for_times($this->kafka, $nativeTopicPartitionList, $timeout_ms);
+        $err = Library::rd_kafka_offsets_for_times($this->kafka, $nativeTopicPartitionList, $timeout_ms);
 
         if ($err !== RD_KAFKA_RESP_ERR_NO_ERROR) {
-            Api::rd_kafka_topic_partition_list_destroy($nativeTopicPartitionList);
+            Library::rd_kafka_topic_partition_list_destroy($nativeTopicPartitionList);
             throw Exception::fromError($err);
         }
 
         $topicPartitionList = TopicPartitionList::fromCData($nativeTopicPartitionList);
 
         if ($nativeTopicPartitionList !== null) {
-            Api::rd_kafka_topic_partition_list_destroy($nativeTopicPartitionList);
+            Library::rd_kafka_topic_partition_list_destroy($nativeTopicPartitionList);
         }
 
         return $topicPartitionList->asArray();

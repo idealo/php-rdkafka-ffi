@@ -9,7 +9,6 @@ use FFI\CData;
 use FFI\CType;
 use FFI\Exception;
 use InvalidArgumentException;
-
 use RuntimeException;
 
 use function file_put_contents;
@@ -19,12 +18,12 @@ use function sys_get_temp_dir;
 use function tempnam;
 use function unlink;
 
-class Api
+class Library
 {
     use Methods;
 
     public const VERSION_AUTODETECT = '';
-    public const VERSION_LATEST = '1.4.0';
+    public const VERSION_LATEST = '1.4.2';
 
     /**
      * @var FFI librdkafka binding - see https://docs.confluent.io/current/clients/librdkafka/rdkafka_8h.html
@@ -55,7 +54,10 @@ class Api
     }
 
     /**
-     * @param string|CType $type
+     * @param $type
+     * @param bool $owned
+     * @param bool $persistent
+     * @return CData
      */
     public static function new($type, bool $owned = true, bool $persistent = false): CData
     {
@@ -63,7 +65,9 @@ class Api
     }
 
     /**
-     * @param string|CType $type
+     * @param $type
+     * @param CData $ptr
+     * @return CData
      */
     public static function cast($type, CData $ptr): CData
     {
@@ -72,6 +76,7 @@ class Api
 
     /**
      * @param string|CType $type
+     * @return CType
      */
     public static function type($type): CType
     {
@@ -153,7 +158,8 @@ class Api
     {
         self::chooseVersion();
 
-        return array_key_exists($name, RD_KAFKA_SUPPORTED_METHODS);
+        return array_key_exists($name, RD_KAFKA_SUPPORTED_METHODS)
+            && version_compare(self::$version, RD_KAFKA_SUPPORTED_METHODS[$name], '>=') === false;
     }
 
     public static function requireMethod(string $name): void
@@ -184,7 +190,7 @@ class Api
         }
     }
 
-    public static function getLibraryVersion():string
+    public static function getLibraryVersion(): string
     {
         return self::rd_kafka_version_str();
     }

@@ -10,6 +10,6 @@ class TypeCompilerFactory
 {
     public function create(Decl ...$declarations)
     {
-        return new TypeCompiler(...$declarations);
+        return new Type(...$declarations);
     }
 }

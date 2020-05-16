@@ -8,25 +8,25 @@ declare(strict_types=1);
 // version specific constants
 /**
  * #define
- * @since 1.2.1 of librdkafka
+ * @since 1.4.2 of librdkafka
  */
-const RD_KAFKA_VERSION = 16908799;
+const RD_KAFKA_VERSION = 17040127;
 
 /**
  * enum rd_kafka_resp_err_t
- * @since 1.2.1 of librdkafka
+ * @since 1.4.2 of librdkafka
  */
 const RD_KAFKA_RESP_ERR_UNSUPPORTED_COMPRESSION_TYPE = 76;
 
 /**
  * enum rd_kafka_resp_err_t
- * @since 1.2.1 of librdkafka
+ * @since 1.4.2 of librdkafka
  */
-const RD_KAFKA_RESP_ERR_END_ALL = 82;
+const RD_KAFKA_RESP_ERR_END_ALL = 83;
 
 /**
  * /app/resources/ffigen/tmp/rdkafka.h
- * @since 1.2.1 of librdkafka
+ * @since 1.4.2 of librdkafka
  */
 const RD_KAFKA_CDEF = 'typedef long int ssize_t;
 typedef struct _IO_FILE FILE;
@@ -53,6 +53,8 @@ typedef struct rd_kafka_topic_conf_s rd_kafka_topic_conf_t;
 typedef struct rd_kafka_queue_s rd_kafka_queue_t;
 typedef struct rd_kafka_op_s rd_kafka_event_t;
 typedef struct rd_kafka_topic_result_s rd_kafka_topic_result_t;
+typedef struct rd_kafka_consumer_group_metadata_s rd_kafka_consumer_group_metadata_t;
+typedef struct rd_kafka_error_s rd_kafka_error_t;
 typedef enum {
   RD_KAFKA_RESP_ERR__BEGIN = (- 200),
   RD_KAFKA_RESP_ERR__BAD_MSG = (- 199),
@@ -108,6 +110,10 @@ typedef enum {
   RD_KAFKA_RESP_ERR__INCONSISTENT = (- 149),
   RD_KAFKA_RESP_ERR__GAPLESS_GUARANTEE = (- 148),
   RD_KAFKA_RESP_ERR__MAX_POLL_EXCEEDED = (- 147),
+  RD_KAFKA_RESP_ERR__UNKNOWN_BROKER = (- 146),
+  RD_KAFKA_RESP_ERR__NOT_CONFIGURED = (- 145),
+  RD_KAFKA_RESP_ERR__FENCED = (- 144),
+  RD_KAFKA_RESP_ERR__APPLICATION = (- 143),
   RD_KAFKA_RESP_ERR__END = (- 100),
   RD_KAFKA_RESP_ERR_UNKNOWN = (- 1),
   RD_KAFKA_RESP_ERR_NO_ERROR = 0,
@@ -124,9 +130,9 @@ typedef enum {
   RD_KAFKA_RESP_ERR_STALE_CTRL_EPOCH = 11,
   RD_KAFKA_RESP_ERR_OFFSET_METADATA_TOO_LARGE = 12,
   RD_KAFKA_RESP_ERR_NETWORK_EXCEPTION = 13,
-  RD_KAFKA_RESP_ERR_GROUP_LOAD_IN_PROGRESS = 14,
-  RD_KAFKA_RESP_ERR_GROUP_COORDINATOR_NOT_AVAILABLE = 15,
-  RD_KAFKA_RESP_ERR_NOT_COORDINATOR_FOR_GROUP = 16,
+  RD_KAFKA_RESP_ERR_COORDINATOR_LOAD_IN_PROGRESS = 14,
+  RD_KAFKA_RESP_ERR_COORDINATOR_NOT_AVAILABLE = 15,
+  RD_KAFKA_RESP_ERR_NOT_COORDINATOR = 16,
   RD_KAFKA_RESP_ERR_TOPIC_EXCEPTION = 17,
   RD_KAFKA_RESP_ERR_RECORD_LIST_TOO_LARGE = 18,
   RD_KAFKA_RESP_ERR_NOT_ENOUGH_REPLICAS = 19,
@@ -192,6 +198,7 @@ typedef enum {
   RD_KAFKA_RESP_ERR_MEMBER_ID_REQUIRED = 79,
   RD_KAFKA_RESP_ERR_PREFERRED_LEADER_NOT_AVAILABLE = 80,
   RD_KAFKA_RESP_ERR_GROUP_MAX_SIZE_REACHED = 81,
+  RD_KAFKA_RESP_ERR_FENCED_INSTANCE_ID = 82,
   RD_KAFKA_RESP_ERR_END_ALL,
 } rd_kafka_resp_err_t;
 struct rd_kafka_err_desc {
@@ -207,6 +214,14 @@ rd_kafka_resp_err_t rd_kafka_errno2err(int errnox);
 int rd_kafka_errno(void);
 rd_kafka_resp_err_t rd_kafka_fatal_error(rd_kafka_t *rk, char *errstr, size_t errstr_size);
 rd_kafka_resp_err_t rd_kafka_test_fatal_error(rd_kafka_t *rk, rd_kafka_resp_err_t err, const char *reason);
+rd_kafka_resp_err_t rd_kafka_error_code(const rd_kafka_error_t *error);
+const char *rd_kafka_error_name(const rd_kafka_error_t *error);
+const char *rd_kafka_error_string(const rd_kafka_error_t *error);
+int rd_kafka_error_is_fatal(const rd_kafka_error_t *error);
+int rd_kafka_error_is_retriable(const rd_kafka_error_t *error);
+int rd_kafka_error_txn_requires_abort(const rd_kafka_error_t *error);
+void rd_kafka_error_destroy(rd_kafka_error_t *error);
+rd_kafka_error_t *rd_kafka_error_new(rd_kafka_resp_err_t code, const char *fmt, ...);
 typedef struct rd_kafka_topic_partition_s {
   char *topic;
   int32_t partition;
@@ -343,6 +358,8 @@ int32_t rd_kafka_msg_partitioner_consistent(const rd_kafka_topic_t *rkt, const v
 int32_t rd_kafka_msg_partitioner_consistent_random(const rd_kafka_topic_t *rkt, const void *key, size_t keylen, int32_t partition_cnt, void *rkt_opaque, void *msg_opaque);
 int32_t rd_kafka_msg_partitioner_murmur2(const rd_kafka_topic_t *rkt, const void *key, size_t keylen, int32_t partition_cnt, void *rkt_opaque, void *msg_opaque);
 int32_t rd_kafka_msg_partitioner_murmur2_random(const rd_kafka_topic_t *rkt, const void *key, size_t keylen, int32_t partition_cnt, void *rkt_opaque, void *msg_opaque);
+int32_t rd_kafka_msg_partitioner_fnv1a(const rd_kafka_topic_t *rkt, const void *key, size_t keylen, int32_t partition_cnt, void *rkt_opaque, void *msg_opaque);
+int32_t rd_kafka_msg_partitioner_fnv1a_random(const rd_kafka_topic_t *rkt, const void *key, size_t keylen, int32_t partition_cnt, void *rkt_opaque, void *msg_opaque);
 rd_kafka_t *rd_kafka_new(rd_kafka_type_t type, rd_kafka_conf_t *conf, char *errstr, size_t errstr_size);
 void rd_kafka_destroy(rd_kafka_t *rk);
 void rd_kafka_destroy_flags(rd_kafka_t *rk, int flags);
@@ -398,6 +415,11 @@ rd_kafka_resp_err_t rd_kafka_commit_message(rd_kafka_t *rk, const rd_kafka_messa
 rd_kafka_resp_err_t rd_kafka_commit_queue(rd_kafka_t *rk, const rd_kafka_topic_partition_list_t *offsets, rd_kafka_queue_t *rkqu, void (*cb)(rd_kafka_t *rk, rd_kafka_resp_err_t err, rd_kafka_topic_partition_list_t *offsets, void *commit_opaque), void *commit_opaque);
 rd_kafka_resp_err_t rd_kafka_committed(rd_kafka_t *rk, rd_kafka_topic_partition_list_t *partitions, int timeout_ms);
 rd_kafka_resp_err_t rd_kafka_position(rd_kafka_t *rk, rd_kafka_topic_partition_list_t *partitions);
+rd_kafka_consumer_group_metadata_t *rd_kafka_consumer_group_metadata(rd_kafka_t *rk);
+rd_kafka_consumer_group_metadata_t *rd_kafka_consumer_group_metadata_new(const char *group_id);
+void rd_kafka_consumer_group_metadata_destroy(rd_kafka_consumer_group_metadata_t *);
+rd_kafka_error_t *rd_kafka_consumer_group_metadata_write(const rd_kafka_consumer_group_metadata_t *cgmd, void **bufferp, size_t *sizep);
+rd_kafka_error_t *rd_kafka_consumer_group_metadata_read(rd_kafka_consumer_group_metadata_t **cgmdp, const void *buffer, size_t size);
 int rd_kafka_produce(rd_kafka_topic_t *rkt, int32_t partition, int msgflags, void *payload, size_t len, const void *key, size_t keylen, void *msg_opaque);
 rd_kafka_resp_err_t rd_kafka_producev(rd_kafka_t *rk, ...);
 int rd_kafka_produce_batch(rd_kafka_topic_t *rkt, int32_t partition, int msgflags, rd_kafka_message_t *rkmessages, int message_cnt);
@@ -612,4 +634,9 @@ void rd_kafka_DescribeConfigs(rd_kafka_t *rk, rd_kafka_ConfigResource_t **config
 const rd_kafka_ConfigResource_t **rd_kafka_DescribeConfigs_result_resources(const rd_kafka_DescribeConfigs_result_t *result, size_t *cntp);
 rd_kafka_resp_err_t rd_kafka_oauthbearer_set_token(rd_kafka_t *rk, const char *token_value, int64_t md_lifetime_ms, const char *md_principal_name, const char **extensions, size_t extension_size, char *errstr, size_t errstr_size);
 rd_kafka_resp_err_t rd_kafka_oauthbearer_set_token_failure(rd_kafka_t *rk, const char *errstr);
+rd_kafka_error_t *rd_kafka_init_transactions(rd_kafka_t *rk, int timeout_ms);
+rd_kafka_error_t *rd_kafka_begin_transaction(rd_kafka_t *rk);
+rd_kafka_error_t *rd_kafka_send_offsets_to_transaction(rd_kafka_t *rk, const rd_kafka_topic_partition_list_t *offsets, const rd_kafka_consumer_group_metadata_t *cgmetadata, int timeout_ms);
+rd_kafka_error_t *rd_kafka_commit_transaction(rd_kafka_t *rk, int timeout_ms);
+rd_kafka_error_t *rd_kafka_abort_transaction(rd_kafka_t *rk, int timeout_ms);
 ';

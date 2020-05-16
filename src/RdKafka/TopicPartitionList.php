@@ -5,9 +5,17 @@ declare(strict_types=1);
 namespace RdKafka;
 
 use Countable;
+use FFI;
 use FFI\CData;
 use Iterator;
-use RdKafka\FFI\Api;
+use RdKafka\FFI\Library;
+
+use function array_key_exists;
+use function count;
+use function current;
+use function key;
+use function next;
+use function reset;
 
 class TopicPartitionList implements Iterator, Countable
 {
@@ -33,10 +41,10 @@ class TopicPartitionList implements Iterator, Countable
 
     public function getCData(): CData
     {
-        $nativeTopicPartitionList = Api::rd_kafka_topic_partition_list_new($this->count());
+        $nativeTopicPartitionList = Library::rd_kafka_topic_partition_list_new($this->count());
 
         foreach ($this->items as $item) {
-            $nativeTopicPartition = Api::rd_kafka_topic_partition_list_add(
+            $nativeTopicPartition = Library::rd_kafka_topic_partition_list_add(
                 $nativeTopicPartitionList,
                 $item->getTopic(),
                 $item->getPartition()
@@ -44,9 +52,9 @@ class TopicPartitionList implements Iterator, Countable
             $nativeTopicPartition->offset = $item->getOffset();
             if ($item->getMetadata() !== null) {
                 $metadataSize = strlen($item->getMetadata());
-                $metadata = \FFI::new('char[' . $metadataSize . ']', false, true);
-                \FFI::memcpy($metadata, $item->getMetadata(), $metadataSize);
-                $nativeTopicPartition->metadata = \FFI::cast('char*', $metadata);
+                $metadata = Library::new('char[' . $metadataSize . ']', false, true);
+                FFI::memcpy($metadata, $item->getMetadata(), $metadataSize);
+                $nativeTopicPartition->metadata = FFI::cast('char*', $metadata);
                 $nativeTopicPartition->metadata_size = $metadataSize;
             }
         }
@@ -56,32 +64,32 @@ class TopicPartitionList implements Iterator, Countable
 
     public function current(): TopicPartition
     {
-        return \current($this->items);
+        return current($this->items);
     }
 
     public function next(): void
     {
-        \next($this->items);
+        next($this->items);
     }
 
     public function key(): int
     {
-        return \key($this->items);
+        return key($this->items);
     }
 
     public function valid(): bool
     {
-        return \array_key_exists(\key($this->items), $this->items);
+        return array_key_exists(key($this->items), $this->items);
     }
 
     public function rewind(): void
     {
-        \reset($this->items);
+        reset($this->items);
     }
 
     public function count(): int
     {
-        return \count($this->items);
+        return count($this->items);
     }
 
     /**
