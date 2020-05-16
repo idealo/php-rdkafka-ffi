@@ -8,12 +8,9 @@ declare(strict_types=1);
  * (Windows is not supported)
  */
 
-use Composer\Autoload\ClassLoader;
 use RdKafka\FFIGen\MultiVersionGenerator;
 
-/** @var ClassLoader $composerLoader */
-$composerLoader = require_once dirname(__DIR__, 2) . '/vendor/autoload.php';
-$composerLoader->addPsr4('RdKafka\\FFIGen\\', __DIR__);
+require_once dirname(__DIR__, 2) . '/vendor/autoload.php';
 
 $generator = new MultiVersionGenerator();
 $generator->generate();
