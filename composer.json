@@ -8,7 +8,7 @@
         "kafka",
         "client"
     ],
-    "license": "Apache License 2.0",
+    "license": "Apache-2.0",
     "authors": [
         {
             "name": "Dirk Adler",
