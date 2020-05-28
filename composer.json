@@ -1,4 +1,20 @@
 {
+    "name": "idealo/php-rdkafka-ffi",
+    "description": "PHP Kafka client - binding librdkafka via FFI",
+    "keywords": [
+        "php",
+        "ffi",
+        "librdkafka",
+        "kafka",
+        "client"
+    ],
+    "license": "Apache License 2.0",
+    "authors": [
+        {
+            "name": "Dirk Adler",
+            "email": "dirk.adler@idealo.de"
+        }
+    ],
     "autoload": {
         "psr-4": {
             "": "src/"
