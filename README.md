@@ -2,9 +2,9 @@
 
 __WIP__
 
-[![Build Status](https://travis-ci.org/dirx/php-ffi-librdkafka.svg?branch=master)](https://travis-ci.org/dirx/php-ffi-librdkafka)
-[![Test Coverage](https://api.codeclimate.com/v1/badges/e60645b9d6d8fa9dd9d6/test_coverage)](https://codeclimate.com/github/dirx/php-ffi-librdkafka/test_coverage)
-[![Maintainability](https://api.codeclimate.com/v1/badges/e60645b9d6d8fa9dd9d6/maintainability)](https://codeclimate.com/github/dirx/php-ffi-librdkafka/maintainability)
+[![Build Status](https://travis-ci.org/idealo/php-rdkafka-ffi.svg?branch=master)](https://travis-ci.org/idealo/php-rdkafka-ffi)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/e60645b9d6d8fa9dd9d6/test_coverage)](https://codeclimate.com/github/idealo/php-rdkafka-ffi/test_coverage)
+[![Maintainability](https://api.codeclimate.com/v1/badges/e60645b9d6d8fa9dd9d6/maintainability)](https://codeclimate.com/github/idealo/php-rdkafka-ffi/maintainability)
 
 This is a Kafka client library for PHP ^7.4 with a slim [librdkafka](https://github.com/edenhill/librdkafka) binding via FFI.
 It is intended as a replacement for the [PHP RdKafka extension](https://github.com/arnaud-lb/php-rdkafka).
