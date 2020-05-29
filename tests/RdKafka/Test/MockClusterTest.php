@@ -274,7 +274,9 @@ class MockClusterTest extends TestCase
         $producerConfig->set('batch.num.messages', (string) 1);
         $producerConfig->setDrMsgCb(
             function (Producer $producer, Message $message, $opaque = null) use (&$errorStack): void {
-                $errorStack[] = $message->err;
+                if ($message->err) {
+                    $errorStack[] = $message->err;
+                }
             }
         );
         $producer = new Producer($producerConfig);
