@@ -34,7 +34,7 @@ class MockCluster
             $this->producer->flush(0);
         }
     }
-    
+
     public static function create(int $brokerCount): self
     {
         Library::requireVersion('>=', '1.3.0');
