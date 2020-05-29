@@ -30,7 +30,6 @@ class MockClusterTest extends TestCase
     public function testCreateWithProducingAndConsuming(): void
     {
         $cluster = MockCluster::create(1);
-        $cluster->createTopic(KAFKA_TEST_TOPIC, 1, 1);
 
         $producerConfig = new Conf();
         $producerConfig->set('metadata.broker.list', $cluster->getBootstraps());
@@ -72,6 +71,8 @@ class MockClusterTest extends TestCase
 
     public function testFromProducerWithMissingConfigShouldFail(): void
     {
+        $this->requiresRdKafkaVersion('>=', '1.4.0');
+
         $producer = new Producer();
 
         $this->expectException(Exception::class);
@@ -126,39 +127,33 @@ class MockClusterTest extends TestCase
     public function testSetPartitionFollowerAndLeader(): void
     {
         $cluster = MockCluster::create(2);
-        $cluster->createTopic(KAFKA_TEST_TOPIC, 2, 1);
+
+        $producerConfig = new Conf();
+        $producerConfig->set('metadata.broker.list', $cluster->getBootstraps());
+        $producerConfig->set('topic.metadata.refresh.interval.ms', (string) 50);
+        $producer = new Producer($producerConfig);
+        $producerTopic = $producer->newTopic(KAFKA_TEST_TOPIC);
 
         $cluster->setPartitionLeader(KAFKA_TEST_TOPIC, 0, 2);
         $cluster->setPartitionFollower(KAFKA_TEST_TOPIC, 0, 1);
 
-        $cluster->setPartitionLeader(KAFKA_TEST_TOPIC, 1, 1);
-        $cluster->setPartitionFollower(KAFKA_TEST_TOPIC, 1, 2);
-
-        $producerConfig = new Conf();
-        $producerConfig->set('metadata.broker.list', $cluster->getBootstraps());
-        $producer = new Producer($producerConfig);
-        $producerTopic = $producer->newTopic(KAFKA_TEST_TOPIC);
         $metadata = $producer->getMetadata(false, $producerTopic, KAFKA_TEST_TIMEOUT_MS);
+        $leader = $metadata->getTopics()->current()->getPartitions()->current()->getLeader();
 
-        $partitions = $metadata->getTopics()->current()->getPartitions();
-        $partitionLeader = [];
-        foreach ($partitions as $partition) {
-            $partitionLeader[$partition->getId()] = $partition->getLeader();
-        }
+        $this->assertSame(2, $leader);
 
-        $this->assertSame(
-            [
-                0 => 2,
-                1 => 1,
-            ],
-            $partitionLeader
-        );
+        $cluster->setPartitionLeader(KAFKA_TEST_TOPIC, 0, 1);
+        $cluster->setPartitionFollower(KAFKA_TEST_TOPIC, 0, 2);
+
+        $metadata = $producer->getMetadata(false, $producerTopic, KAFKA_TEST_TIMEOUT_MS);
+        $leader = $metadata->getTopics()->current()->getPartitions()->current()->getLeader();
+
+        $this->assertSame(1, $leader);
     }
 
     public function testSetPartitionFollowerWatermarks(): void
     {
         $cluster = MockCluster::create(3);
-        $cluster->createTopic(KAFKA_TEST_TOPIC, 1, 1);
         $cluster->setPartitionLeader(KAFKA_TEST_TOPIC, 0, 1);
         $cluster->setPartitionFollower(KAFKA_TEST_TOPIC, 0, 2);
 
