@@ -25,7 +25,7 @@ const RD_KAFKA_RESP_ERR_UNSUPPORTED_COMPRESSION_TYPE = 76;
 const RD_KAFKA_RESP_ERR_END_ALL = 82;
 
 /**
- * rdkafka.h
+ * rdkafka.h, rdkafka_mock.h
  * @since 1.3.0 of librdkafka
  */
 const RD_KAFKA_CDEF = 'typedef long int ssize_t;
@@ -613,4 +613,15 @@ void rd_kafka_DescribeConfigs(rd_kafka_t *rk, rd_kafka_ConfigResource_t **config
 const rd_kafka_ConfigResource_t **rd_kafka_DescribeConfigs_result_resources(const rd_kafka_DescribeConfigs_result_t *result, size_t *cntp);
 rd_kafka_resp_err_t rd_kafka_oauthbearer_set_token(rd_kafka_t *rk, const char *token_value, int64_t md_lifetime_ms, const char *md_principal_name, const char **extensions, size_t extension_size, char *errstr, size_t errstr_size);
 rd_kafka_resp_err_t rd_kafka_oauthbearer_set_token_failure(rd_kafka_t *rk, const char *errstr);
+typedef struct rd_kafka_mock_cluster_s rd_kafka_mock_cluster_t;
+rd_kafka_mock_cluster_t *rd_kafka_mock_cluster_new(rd_kafka_t *rk, int broker_cnt);
+void rd_kafka_mock_cluster_destroy(rd_kafka_mock_cluster_t *mcluster);
+rd_kafka_t *rd_kafka_mock_cluster_handle(const rd_kafka_mock_cluster_t *mcluster);
+const char *rd_kafka_mock_cluster_bootstraps(const rd_kafka_mock_cluster_t *mcluster);
+void rd_kafka_mock_push_request_errors(rd_kafka_mock_cluster_t *mcluster, int16_t ApiKey, size_t cnt, ...);
+void rd_kafka_mock_topic_set_error(rd_kafka_mock_cluster_t *mcluster, const char *topic, rd_kafka_resp_err_t err);
+rd_kafka_resp_err_t rd_kafka_mock_partition_set_leader(rd_kafka_mock_cluster_t *mcluster, const char *topic, int32_t partition, int32_t broker_id);
+rd_kafka_resp_err_t rd_kafka_mock_partition_set_follower(rd_kafka_mock_cluster_t *mcluster, const char *topic, int32_t partition, int32_t broker_id);
+rd_kafka_resp_err_t rd_kafka_mock_partition_set_follower_wmarks(rd_kafka_mock_cluster_t *mcluster, const char *topic, int32_t partition, int64_t lo, int64_t hi);
+rd_kafka_resp_err_t rd_kafka_mock_broker_set_rack(rd_kafka_mock_cluster_t *mcluster, int32_t broker_id, const char *rack);
 ';

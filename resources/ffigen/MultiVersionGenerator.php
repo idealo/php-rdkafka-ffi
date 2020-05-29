@@ -151,13 +151,19 @@ class MultiVersionGenerator implements GeneratorInterface
 
     private function parse(string $version, string $baseUrl): void
     {
+        $headerFiles = $this->config->getHeaderFiles();
+
         // download header files and parse
-        foreach ($this->config->getHeaderFiles() as $fileName) {
+        foreach ($headerFiles as $fileName) {
             $file = $this->config->getOutputPath() . '/' . $fileName;
             $url = $baseUrl . '/' . $fileName;
             echo "  Download ${url}" . PHP_EOL;
 
-            $content = file_get_contents($url);
+            $content = @file_get_contents($url);
+            if ($content === false) {
+                echo '  Not found - skip' . PHP_EOL;
+                continue;
+            }
             $this->filesystem->dumpFile($file, $content);
 
             echo "  Save as ${file}" . PHP_EOL;

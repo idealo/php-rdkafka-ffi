@@ -7,23 +7,28 @@
 declare(strict_types=1);
 
 use RdKafka\Conf;
-use RdKafka\Consumer;
+use RdKafka\KafkaConsumer;
 use RdKafka\Producer;
+use RdKafka\Test\MockCluster;
+use RdKafka\TopicPartition;
 
 require_once dirname(__DIR__) . '/vendor/autoload.php';
 
-if (version_compare(rd_kafka_version(), '1.3.0', '<')) {
-    echo sprintf('Requires stable librdkafka ^1.3.0, currently running with %s', rd_kafka_version()) . PHP_EOL;
+try {
+    $cluster = MockCluster::create(3);
+} catch (RuntimeException $exception) {
+    echo $exception->getMessage() . PHP_EOL;
+    exit();
 }
 
 // produce messages
 $producerConf = new Conf();
-$producerConf->set('test.mock.num.brokers', '3');
+$producerConf->set('metadata.broker.list', $cluster->getBootstraps());
 $producerConf->set('log_level', (string) LOG_DEBUG);
 $producerConf->set('debug', 'all');
 $producerConf->setLogCb(
-    function ($rdkafka, $level, $fac, $buf): void {
-        echo "log: ${level} ${fac} ${buf}" . PHP_EOL;
+    function (Producer $rdkafka, int $level, string $fac, string $buf): void {
+        echo sprintf('  log: %d %s %s', $level, $fac, $buf) . PHP_EOL;
     }
 );
 
@@ -40,40 +45,40 @@ for ($i = 0; $i < 1000; $i++) {
     echo sprintf('polling triggered %d events', $events) . PHP_EOL;
 }
 
-// read metadata to extract broker list & topic partitions count
-$metadata = $producer->getMetadata(true, null, 10000);
-//var_export($metadata->getBrokers());
-//var_export($metadata->getTopics());
-$brokerList = [];
-foreach ($metadata->getBrokers() as $broker) {
-    $brokerList[] = $broker->getHost() . ':' . $broker->getPort();
-}
+// read metadata to topic partitions count
+$metadata = $producer->getMetadata(false, $topic, 10000);
 $partitions = $metadata->getTopics()->current()->getPartitions();
+
+$producer->flush(1000);
 
 // consume messages
 $consumerConf = new Conf();
-$consumerConf->set('metadata.broker.list', implode(',', $brokerList));
+$consumerConf->set('group.id', 'mock-cluster-example');
+$consumerConf->set('metadata.broker.list', $cluster->getBootstraps());
 $consumerConf->set('log_level', (string) LOG_DEBUG);
 $consumerConf->set('debug', 'all');
 $consumerConf->set('enable.partition.eof', 'true');
 $consumerConf->set('auto.offset.reset', 'earliest');
 $consumerConf->setLogCb(
-    function ($rdkafka, $level, $fac, $buf): void {
-        echo "log: ${level} ${fac} ${buf}" . PHP_EOL;
+    function (KafkaConsumer $rdkafka, int $level, string $fac, string $buf): void {
+        echo sprintf('  log: %d %s %s', $level, $fac, $buf) . PHP_EOL;
     }
 );
 
-$consumer = new Consumer($consumerConf);
-$topic = $consumer->newTopic('playground');
-$queue = $consumer->newQueue();
+$consumer = new KafkaConsumer($consumerConf);
+$toppar = [];
 foreach ($partitions as $partition) {
-    $topic->consumeQueueStart($partition->getId(), 0, $queue);
+    $toppar[] = new TopicPartition('playground', $partition->getId());
 }
-while ($message = $queue->consume(1000)) {
-    echo sprintf('consume msg: %s, ts: %s', $message->payload, $message->timestamp) . PHP_EOL;
-    $events = $consumer->poll(1); // triggers log output
-    echo sprintf('polling triggered %d events', $events) . PHP_EOL;
-}
-foreach ($partitions as $partition) {
-    $topic->consumeStop($partition->getId());
+$consumer->assign($toppar);
+
+$eofPartitions = [];
+while ($message = $consumer->consume(1000)) {
+    if ($message->err === RD_KAFKA_RESP_ERR__PARTITION_EOF) {
+        $eofPartitions[$message->partition] = true;
+        if (count($eofPartitions) === count($partitions)) {
+            break;
+        }
+    }
+    echo sprintf('consume msg: %s, ts: %s, p: %s', $message->payload, $message->timestamp, $message->partition) . PHP_EOL;
 }

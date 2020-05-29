@@ -22,7 +22,10 @@ class Parser extends \Klitsche\FFIGen\Adapter\PHPCParser\Parser
     protected function parseHeaderFile(string $file): array
     {
         if (strpos($file, 'rdkafka.h') === false) {
-            return parent::parseHeaderFile($file);
+            if ($this->headerFilePathExists($file)) {
+                return parent::parseHeaderFile($file);
+            }
+            return [];
         }
 
         $file = $this->searchHeaderFilePath($file);
@@ -67,7 +70,7 @@ class Parser extends \Klitsche\FFIGen\Adapter\PHPCParser\Parser
         return $declarations;
     }
 
-    private function searchHeaderFilePath(string $file): string
+    private function searchHeaderFilePath(string $file): ?string
     {
         if (file_exists($file)) {
             return $file;
@@ -79,5 +82,15 @@ class Parser extends \Klitsche\FFIGen\Adapter\PHPCParser\Parser
         }
 
         throw new RuntimeException(sprintf('File not found: %s', $file));
+    }
+
+    private function headerFilePathExists(string $file): bool
+    {
+        try {
+            $this->searchHeaderFilePath($file);
+        } catch (RuntimeException $exception) {
+            return false;
+        }
+        return true;
     }
 }

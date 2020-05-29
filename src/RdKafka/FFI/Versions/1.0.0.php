@@ -25,7 +25,7 @@ const RD_KAFKA_RESP_ERR_UNSUPPORTED_COMPRESSION_TYPE = 74;
 const RD_KAFKA_RESP_ERR_END_ALL = 75;
 
 /**
- * rdkafka.h
+ * rdkafka.h, rdkafka_mock.h
  * @since 1.0.0 of librdkafka
  */
 const RD_KAFKA_CDEF = 'typedef long int ssize_t;

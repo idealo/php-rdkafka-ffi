@@ -8,7 +8,6 @@ use FFI;
 use FFI\CData;
 use FFI\CType;
 use FFI\Exception as FFIException;
-use RdKafka\Exception as RdKafkaException;
 use RuntimeException;
 
 use function file_put_contents;
@@ -159,7 +158,7 @@ class Library
     public static function requireMethod(string $name): void
     {
         if (self::hasMethod($name) === false) {
-            throw new RdKafkaException(
+            throw new RuntimeException(
                 sprintf(
                     'Method %s not supported by librdkafka version %s',
                     $name,
@@ -174,7 +173,7 @@ class Library
         self::chooseVersion();
 
         if (version_compare(self::$version, $version, $operator) === false) {
-            throw new RdKafkaException(
+            throw new RuntimeException(
                 sprintf(
                     'Requires librdkafka %s %s. Binding version is %s, library version is %s.',
                     $operator,

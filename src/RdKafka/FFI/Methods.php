@@ -2917,6 +2917,121 @@ trait Methods
     }
 
     /**
+     * @since 1.3.0 of librdkafka
+     * @param \FFI\CData|null $rk rd_kafka_t*
+     * @param int|null $broker_cnt int
+     * @return \FFI\CData|null rd_kafka_mock_cluster_t*
+     */
+    public static function rd_kafka_mock_cluster_new(?\FFI\CData $rk, ?int $broker_cnt): ?\FFI\CData
+    {
+        return static::getFFI()->rd_kafka_mock_cluster_new($rk, $broker_cnt);
+    }
+
+    /**
+     * @since 1.3.0 of librdkafka
+     * @param \FFI\CData|null $mcluster rd_kafka_mock_cluster_t*
+     */
+    public static function rd_kafka_mock_cluster_destroy(?\FFI\CData $mcluster): void
+    {
+        static::getFFI()->rd_kafka_mock_cluster_destroy($mcluster);
+    }
+
+    /**
+     * @since 1.3.0 of librdkafka
+     * @param \FFI\CData|null $mcluster rd_kafka_mock_cluster_t*
+     * @return \FFI\CData|null rd_kafka_t*
+     */
+    public static function rd_kafka_mock_cluster_handle(?\FFI\CData $mcluster): ?\FFI\CData
+    {
+        return static::getFFI()->rd_kafka_mock_cluster_handle($mcluster);
+    }
+
+    /**
+     * @since 1.3.0 of librdkafka
+     * @param \FFI\CData|null $mcluster rd_kafka_mock_cluster_t*
+     * @return string|null const char*
+     */
+    public static function rd_kafka_mock_cluster_bootstraps(?\FFI\CData $mcluster): ?string
+    {
+        return static::getFFI()->rd_kafka_mock_cluster_bootstraps($mcluster);
+    }
+
+    /**
+     * @since 1.3.0 of librdkafka
+     * @param \FFI\CData|null $mcluster rd_kafka_mock_cluster_t*
+     * @param int|null $ApiKey int16_t
+     * @param int|null $cnt size_t
+     * @param mixed ...$args
+     */
+    public static function rd_kafka_mock_push_request_errors(?\FFI\CData $mcluster, ?int $ApiKey, ?int $cnt, ...$args): void
+    {
+        static::getFFI()->rd_kafka_mock_push_request_errors($mcluster, $ApiKey, $cnt, ...$args);
+    }
+
+    /**
+     * @since 1.3.0 of librdkafka
+     * @param \FFI\CData|null $mcluster rd_kafka_mock_cluster_t*
+     * @param string|null $topic const char*
+     * @param int $err rd_kafka_resp_err_t
+     */
+    public static function rd_kafka_mock_topic_set_error(?\FFI\CData $mcluster, ?string $topic, int $err): void
+    {
+        static::getFFI()->rd_kafka_mock_topic_set_error($mcluster, $topic, $err);
+    }
+
+    /**
+     * @since 1.3.0 of librdkafka
+     * @param \FFI\CData|null $mcluster rd_kafka_mock_cluster_t*
+     * @param string|null $topic const char*
+     * @param int|null $partition int32_t
+     * @param int|null $broker_id int32_t
+     * @return int rd_kafka_resp_err_t
+     */
+    public static function rd_kafka_mock_partition_set_leader(?\FFI\CData $mcluster, ?string $topic, ?int $partition, ?int $broker_id): int
+    {
+        return static::getFFI()->rd_kafka_mock_partition_set_leader($mcluster, $topic, $partition, $broker_id);
+    }
+
+    /**
+     * @since 1.3.0 of librdkafka
+     * @param \FFI\CData|null $mcluster rd_kafka_mock_cluster_t*
+     * @param string|null $topic const char*
+     * @param int|null $partition int32_t
+     * @param int|null $broker_id int32_t
+     * @return int rd_kafka_resp_err_t
+     */
+    public static function rd_kafka_mock_partition_set_follower(?\FFI\CData $mcluster, ?string $topic, ?int $partition, ?int $broker_id): int
+    {
+        return static::getFFI()->rd_kafka_mock_partition_set_follower($mcluster, $topic, $partition, $broker_id);
+    }
+
+    /**
+     * @since 1.3.0 of librdkafka
+     * @param \FFI\CData|null $mcluster rd_kafka_mock_cluster_t*
+     * @param string|null $topic const char*
+     * @param int|null $partition int32_t
+     * @param int|null $lo int64_t
+     * @param int|null $hi int64_t
+     * @return int rd_kafka_resp_err_t
+     */
+    public static function rd_kafka_mock_partition_set_follower_wmarks(?\FFI\CData $mcluster, ?string $topic, ?int $partition, ?int $lo, ?int $hi): int
+    {
+        return static::getFFI()->rd_kafka_mock_partition_set_follower_wmarks($mcluster, $topic, $partition, $lo, $hi);
+    }
+
+    /**
+     * @since 1.3.0 of librdkafka
+     * @param \FFI\CData|null $mcluster rd_kafka_mock_cluster_t*
+     * @param int|null $broker_id int32_t
+     * @param string|null $rack const char*
+     * @return int rd_kafka_resp_err_t
+     */
+    public static function rd_kafka_mock_broker_set_rack(?\FFI\CData $mcluster, ?int $broker_id, ?string $rack): int
+    {
+        return static::getFFI()->rd_kafka_mock_broker_set_rack($mcluster, $broker_id, $rack);
+    }
+
+    /**
      * @since 1.4.0 of librdkafka
      * @param \FFI\CData|null $error rd_kafka_error_t*
      * @return int rd_kafka_resp_err_t
@@ -3134,5 +3249,76 @@ trait Methods
     public static function rd_kafka_abort_transaction(?\FFI\CData $rk, ?int $timeout_ms): ?\FFI\CData
     {
         return static::getFFI()->rd_kafka_abort_transaction($rk, $timeout_ms);
+    }
+
+    /**
+     * @since 1.4.0 of librdkafka
+     * @param \FFI\CData|null $rk rd_kafka_t*
+     * @return \FFI\CData|null rd_kafka_mock_cluster_t*
+     */
+    public static function rd_kafka_handle_mock_cluster(?\FFI\CData $rk): ?\FFI\CData
+    {
+        return static::getFFI()->rd_kafka_handle_mock_cluster($rk);
+    }
+
+    /**
+     * @since 1.4.0 of librdkafka
+     * @param \FFI\CData|null $mcluster rd_kafka_mock_cluster_t*
+     * @param string|null $topic const char*
+     * @param int|null $partition_cnt int
+     * @param int|null $replication_factor int
+     * @return int rd_kafka_resp_err_t
+     */
+    public static function rd_kafka_mock_topic_create(?\FFI\CData $mcluster, ?string $topic, ?int $partition_cnt, ?int $replication_factor): int
+    {
+        return static::getFFI()->rd_kafka_mock_topic_create($mcluster, $topic, $partition_cnt, $replication_factor);
+    }
+
+    /**
+     * @since 1.4.0 of librdkafka
+     * @param \FFI\CData|null $mcluster rd_kafka_mock_cluster_t*
+     * @param int|null $broker_id int32_t
+     * @return int rd_kafka_resp_err_t
+     */
+    public static function rd_kafka_mock_broker_set_down(?\FFI\CData $mcluster, ?int $broker_id): int
+    {
+        return static::getFFI()->rd_kafka_mock_broker_set_down($mcluster, $broker_id);
+    }
+
+    /**
+     * @since 1.4.0 of librdkafka
+     * @param \FFI\CData|null $mcluster rd_kafka_mock_cluster_t*
+     * @param int|null $broker_id int32_t
+     * @return int rd_kafka_resp_err_t
+     */
+    public static function rd_kafka_mock_broker_set_up(?\FFI\CData $mcluster, ?int $broker_id): int
+    {
+        return static::getFFI()->rd_kafka_mock_broker_set_up($mcluster, $broker_id);
+    }
+
+    /**
+     * @since 1.4.0 of librdkafka
+     * @param \FFI\CData|null $mcluster rd_kafka_mock_cluster_t*
+     * @param string|null $key_type const char*
+     * @param string|null $key const char*
+     * @param int|null $broker_id int32_t
+     * @return int rd_kafka_resp_err_t
+     */
+    public static function rd_kafka_mock_coordinator_set(?\FFI\CData $mcluster, ?string $key_type, ?string $key, ?int $broker_id): int
+    {
+        return static::getFFI()->rd_kafka_mock_coordinator_set($mcluster, $key_type, $key, $broker_id);
+    }
+
+    /**
+     * @since 1.4.0 of librdkafka
+     * @param \FFI\CData|null $mcluster rd_kafka_mock_cluster_t*
+     * @param int|null $ApiKey int16_t
+     * @param int|null $MinVersion int16_t
+     * @param int|null $MaxVersion int16_t
+     * @return int rd_kafka_resp_err_t
+     */
+    public static function rd_kafka_mock_set_apiversion(?\FFI\CData $mcluster, ?int $ApiKey, ?int $MinVersion, ?int $MaxVersion): int
+    {
+        return static::getFFI()->rd_kafka_mock_set_apiversion($mcluster, $ApiKey, $MinVersion, $MaxVersion);
     }
 }

@@ -25,7 +25,7 @@ const RD_KAFKA_RESP_ERR_UNSUPPORTED_COMPRESSION_TYPE = 76;
 const RD_KAFKA_RESP_ERR_END_ALL = 83;
 
 /**
- * rdkafka.h
+ * rdkafka.h, rdkafka_mock.h
  * @since 1.4.2 of librdkafka
  */
 const RD_KAFKA_CDEF = 'typedef long int ssize_t;
@@ -639,4 +639,21 @@ rd_kafka_error_t *rd_kafka_begin_transaction(rd_kafka_t *rk);
 rd_kafka_error_t *rd_kafka_send_offsets_to_transaction(rd_kafka_t *rk, const rd_kafka_topic_partition_list_t *offsets, const rd_kafka_consumer_group_metadata_t *cgmetadata, int timeout_ms);
 rd_kafka_error_t *rd_kafka_commit_transaction(rd_kafka_t *rk, int timeout_ms);
 rd_kafka_error_t *rd_kafka_abort_transaction(rd_kafka_t *rk, int timeout_ms);
+typedef struct rd_kafka_mock_cluster_s rd_kafka_mock_cluster_t;
+rd_kafka_mock_cluster_t *rd_kafka_mock_cluster_new(rd_kafka_t *rk, int broker_cnt);
+void rd_kafka_mock_cluster_destroy(rd_kafka_mock_cluster_t *mcluster);
+rd_kafka_t *rd_kafka_mock_cluster_handle(const rd_kafka_mock_cluster_t *mcluster);
+rd_kafka_mock_cluster_t *rd_kafka_handle_mock_cluster(const rd_kafka_t *rk);
+const char *rd_kafka_mock_cluster_bootstraps(const rd_kafka_mock_cluster_t *mcluster);
+void rd_kafka_mock_push_request_errors(rd_kafka_mock_cluster_t *mcluster, int16_t ApiKey, size_t cnt, ...);
+void rd_kafka_mock_topic_set_error(rd_kafka_mock_cluster_t *mcluster, const char *topic, rd_kafka_resp_err_t err);
+rd_kafka_resp_err_t rd_kafka_mock_topic_create(rd_kafka_mock_cluster_t *mcluster, const char *topic, int partition_cnt, int replication_factor);
+rd_kafka_resp_err_t rd_kafka_mock_partition_set_leader(rd_kafka_mock_cluster_t *mcluster, const char *topic, int32_t partition, int32_t broker_id);
+rd_kafka_resp_err_t rd_kafka_mock_partition_set_follower(rd_kafka_mock_cluster_t *mcluster, const char *topic, int32_t partition, int32_t broker_id);
+rd_kafka_resp_err_t rd_kafka_mock_partition_set_follower_wmarks(rd_kafka_mock_cluster_t *mcluster, const char *topic, int32_t partition, int64_t lo, int64_t hi);
+rd_kafka_resp_err_t rd_kafka_mock_broker_set_down(rd_kafka_mock_cluster_t *mcluster, int32_t broker_id);
+rd_kafka_resp_err_t rd_kafka_mock_broker_set_up(rd_kafka_mock_cluster_t *mcluster, int32_t broker_id);
+rd_kafka_resp_err_t rd_kafka_mock_broker_set_rack(rd_kafka_mock_cluster_t *mcluster, int32_t broker_id, const char *rack);
+rd_kafka_resp_err_t rd_kafka_mock_coordinator_set(rd_kafka_mock_cluster_t *mcluster, const char *key_type, const char *key, int32_t broker_id);
+rd_kafka_resp_err_t rd_kafka_mock_set_apiversion(rd_kafka_mock_cluster_t *mcluster, int16_t ApiKey, int16_t MinVersion, int16_t MaxVersion);
 ';

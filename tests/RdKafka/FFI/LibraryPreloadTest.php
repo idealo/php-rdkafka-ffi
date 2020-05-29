@@ -18,7 +18,7 @@ class LibraryPreloadTest extends TestCase
 
     protected function tearDown(): void
     {
-        Library::preload();
+        Library::init();
     }
 
     public function testPreloadWithInvalidCdef(): void

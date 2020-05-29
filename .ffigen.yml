@@ -1,5 +1,6 @@
 headerFiles:
   - rdkafka.h
+  - rdkafka_mock.h
 headerSearchPaths:
   - resources/ffigen/tmp
 libraryFile: librdkafka.so.1

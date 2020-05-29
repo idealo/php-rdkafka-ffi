@@ -42,7 +42,6 @@ class ProducerTopic extends Topic
             $key === null ? null : strlen($key),
             null
         );
-
         if ($ret === -1) {
             $err = (int) Library::rd_kafka_last_error();
             throw Exception::fromError($err);

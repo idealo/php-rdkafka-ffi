@@ -6,7 +6,6 @@ namespace RdKafka\FFI;
 
 use FFI;
 use PHPUnit\Framework\TestCase;
-use RdKafka\Exception;
 use RuntimeException;
 
 /**
@@ -17,6 +16,11 @@ use RuntimeException;
 class LibraryTest extends TestCase
 {
     use \RequireRdKafkaVersionTrait;
+
+    protected function tearDown(): void
+    {
+        Library::init();
+    }
 
     public function testGetFFI(): void
     {
@@ -45,7 +49,7 @@ class LibraryTest extends TestCase
 
     public function testRequireMethodWithUnknownMethod(): void
     {
-        $this->expectException(Exception::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessageMatches('/unknown/');
         Library::requireMethod('unknown');
     }
@@ -54,7 +58,7 @@ class LibraryTest extends TestCase
     {
         $this->requiresRdKafkaVersion('<', '1.4.0');
 
-        $this->expectException(Exception::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessageMatches('/rd_kafka_msg_partitioner_fnv1a_random/');
         Library::requireMethod('rd_kafka_msg_partitioner_fnv1a_random');
     }
@@ -63,7 +67,7 @@ class LibraryTest extends TestCase
     {
         $this->requiresRdKafkaVersion('>', '1.0.0');
 
-        $this->expectException(Exception::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessageMatches('/<= 1\.0\.0/');
         Library::requireVersion('<=', '1.0.0');
     }
