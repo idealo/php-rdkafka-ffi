@@ -279,16 +279,16 @@ class MockClusterTest extends TestCase
         $producer = new Producer($producerConfig);
         $producerTopic = $producer->newTopic(KAFKA_TEST_TOPIC);
 
-        // first error is retryable, second permanent
-        $cluster->pushRequestErrors(ApiKey::Produce, 2, RD_KAFKA_RESP_ERR_NOT_ENOUGH_REPLICAS, RD_KAFKA_RESP_ERR__AUTHENTICATION);
+        // first error is retriable, second fatal
+        $cluster->pushRequestErrors(ApiKey::Produce, 2, RD_KAFKA_RESP_ERR_NOT_ENOUGH_REPLICAS, RD_KAFKA_RESP_ERR__ALL_BROKERS_DOWN);
 
         $producerTopic->produce(0, 0, __METHOD__, __METHOD__);
         do {
-            $producer->poll(9);
+            $producer->poll(0);
         } while (empty($errorStack));
         $producer->flush(KAFKA_TEST_TIMEOUT_MS);
 
-        $this->assertSame([RD_KAFKA_RESP_ERR__AUTHENTICATION], $errorStack);
+        $this->assertSame([RD_KAFKA_RESP_ERR__ALL_BROKERS_DOWN], $errorStack);
     }
 
     public function testCreateTopic(): void
