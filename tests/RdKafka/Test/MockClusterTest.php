@@ -271,6 +271,7 @@ class MockClusterTest extends TestCase
         $producerConfig = new Conf();
         // $producerConfig->set('debug', 'msg');
         $producerConfig->set('metadata.broker.list', $cluster->getBootstraps());
+        $producerConfig->set('batch.num.messages', (string) 1);
         $producerConfig->setDrMsgCb(
             function (Producer $producer, Message $message, $opaque = null) use (&$errorStack): void {
                 $errorStack[] = $message->err;
