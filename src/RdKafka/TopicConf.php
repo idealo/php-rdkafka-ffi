@@ -95,6 +95,12 @@ class TopicConf
             case RD_KAFKA_MSG_PARTITIONER_MURMUR2_RANDOM:
                 $partitionerMethod = 'rd_kafka_msg_partitioner_murmur2_random';
                 break;
+            case RD_KAFKA_MSG_PARTITIONER_FNV1A:
+                $partitionerMethod = 'rd_kafka_msg_partitioner_fnv1a';
+                break;
+            case RD_KAFKA_MSG_PARTITIONER_FNV1A_RANDOM:
+                $partitionerMethod = 'rd_kafka_msg_partitioner_fnv1a_random';
+                break;
 
             default:
                 throw new InvalidArgumentException('Invalid partitioner');

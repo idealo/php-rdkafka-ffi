@@ -13,6 +13,7 @@ class NativePartitionerCallbackProxy
 
     public function __construct(string $partitionerMethod)
     {
+        Library::requireMethod($partitionerMethod);
         $this->partitionerMethod = $partitionerMethod;
     }
 

@@ -51,6 +51,8 @@ class MultiVersionGenerator implements GeneratorInterface
     const RD_KAFKA_MSG_PARTITIONER_CONSISTENT_RANDOM = 4;
     const RD_KAFKA_MSG_PARTITIONER_MURMUR2 = 5;
     const RD_KAFKA_MSG_PARTITIONER_MURMUR2_RANDOM = 6;
+    const RD_KAFKA_MSG_PARTITIONER_FNV1A = 7;
+    const RD_KAFKA_MSG_PARTITIONER_FNV1A_RANDOM = 8;
     
     // librdkafka overall constants
     {{constants}}
@@ -156,6 +158,8 @@ class MultiVersionGenerator implements GeneratorInterface
         // download header files and parse
         foreach ($headerFiles as $fileName) {
             $file = $this->config->getOutputPath() . '/' . $fileName;
+            $this->filesystem->remove($file);
+
             $url = $baseUrl . '/' . $fileName;
             echo "  Download ${url}" . PHP_EOL;
 
