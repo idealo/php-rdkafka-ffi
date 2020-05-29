@@ -21,16 +21,18 @@ abstract class Topic
         $this->name = $name;
         $this->kafka = $kafka;
 
-        $this->topic = Library::rd_kafka_topic_new(
+        $topic = Library::rd_kafka_topic_new(
             $kafka->getCData(),
             $name,
             $this->duplicateConfCData($conf)
         );
 
-        if ($this->topic === null) {
+        if ($topic === null) {
             $err = (int) Library::rd_kafka_last_error();
             throw Exception::fromError($err);
         }
+
+        $this->topic = $topic;
     }
 
     public function __destruct()
