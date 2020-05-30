@@ -16,7 +16,6 @@ class KafkaError extends Exception
         Library::requireVersion('>=', '1.4.0');
 
         $error = Library::rd_kafka_error_new($code, $message);
-        print_r($error);
         if ($error === null) {
             throw new Exception(sprintf('Failed to create with code %d and message %s', $code, $message));
         }
@@ -71,7 +70,6 @@ class KafkaError extends Exception
 
     public function isRetriable(): bool
     {
-        var_dump(Library::rd_kafka_error_is_retriable($this->error));
         return Library::rd_kafka_error_is_retriable($this->error) === 1;
     }
 
