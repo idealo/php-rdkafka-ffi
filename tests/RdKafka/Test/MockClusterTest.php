@@ -8,7 +8,6 @@ use PHPUnit\Framework\TestCase;
 use RdKafka\Conf;
 use RdKafka\Exception;
 use RdKafka\KafkaConsumer;
-use RdKafka\Message;
 use RdKafka\Metadata;
 use RdKafka\Producer;
 use RdKafka\TopicPartition;
@@ -264,34 +263,38 @@ class MockClusterTest extends TestCase
 
     public function testPushRequestErrors(): void
     {
-        $errorStack = [];
-
         $cluster = MockCluster::create(1);
 
+        // produce msg
         $producerConfig = new Conf();
-        // $producerConfig->set('debug', 'msg');
         $producerConfig->set('metadata.broker.list', $cluster->getBootstraps());
-        $producerConfig->set('batch.num.messages', (string) 1);
-        $producerConfig->setDrMsgCb(
-            function (Producer $producer, Message $message, $opaque = null) use (&$errorStack): void {
-                if ($message->err) {
-                    $errorStack[] = $message->err;
-                }
-            }
-        );
         $producer = new Producer($producerConfig);
         $producerTopic = $producer->newTopic(KAFKA_TEST_TOPIC);
-
-        // first error is retriable, second fatal
-        $cluster->pushRequestErrors(ApiKey::Produce, 2, RD_KAFKA_RESP_ERR_NOT_ENOUGH_REPLICAS, RD_KAFKA_RESP_ERR__ALL_BROKERS_DOWN);
-
-        $producerTopic->produce(0, 0, __METHOD__, __METHOD__);
-        do {
-            $producer->poll(0);
-        } while (empty($errorStack));
+        $producerTopic->produce(0, 0, __METHOD__);
         $producer->flush(KAFKA_TEST_TIMEOUT_MS);
 
-        $this->assertSame([RD_KAFKA_RESP_ERR__ALL_BROKERS_DOWN], $errorStack);
+        // first error is retriable, second fatal
+        $cluster->pushRequestErrors(
+            ApiKey::Fetch,
+            2,
+            RD_KAFKA_RESP_ERR_BROKER_NOT_AVAILABLE,
+            RD_KAFKA_RESP_ERR__AUTHENTICATION
+        );
+
+        // try to consume msg
+        $consumerConfig = new Conf();
+        $consumerConfig->set('group.id', __METHOD__);
+//        $consumerConfig->set('debug', 'fetch');
+        $consumerConfig->set('metadata.broker.list', $cluster->getBootstraps());
+        $consumer = new KafkaConsumer($consumerConfig);
+        $consumer->assign([new TopicPartition(KAFKA_TEST_TOPIC, 0, rd_kafka_offset_tail(1))]);
+
+        // try to consume msg
+        $message1 = $consumer->consume(KAFKA_TEST_TIMEOUT_MS);
+        $message2 = $consumer->consume(KAFKA_TEST_TIMEOUT_MS);
+
+        $this->assertSame(RD_KAFKA_RESP_ERR__AUTHENTICATION, $message1->err);
+        $this->assertSame(__METHOD__, $message2->payload);
     }
 
     public function testCreateTopic(): void

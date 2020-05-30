@@ -85,13 +85,15 @@ class MockCluster
     /**
      * Push cnt errors onto the cluster's error stack for the given apiKey.
      *
-     * ApiKey is the Kafka protocol request type, e.g., ProduceRequest (0).
+     * ApiKey is the Kafka protocol request type, e.g., Produce (0).
      *
      * The following cnt protocol requests matching apiKey will fail with the
      * provided error code and removed from the stack, starting with
      * the first error code, then the second, etc.
      *
      * @param int ...$errorCodes
+     * @since 1.3.0 librdkafka
+     * @since 1.4.0 librdkafka - adds support for Produce request types
      */
     public function pushRequestErrors(int $apiKey, int $count, int ...$errorCodes): void
     {
