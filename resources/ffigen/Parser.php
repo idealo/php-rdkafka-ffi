@@ -21,53 +21,11 @@ class Parser extends \Klitsche\FFIGen\Adapter\PHPCParser\Parser
 
     protected function parseHeaderFile(string $file): array
     {
-        if (strpos($file, 'rdkafka.h') === false) {
-            if ($this->headerFilePathExists($file)) {
-                return parent::parseHeaderFile($file);
-            }
-            return [];
+        if ($this->headerFilePathExists($file)) {
+            $file = $this->searchHeaderFilePath($file);
+            return parent::parseHeaderFile($file);
         }
-
-        $file = $this->searchHeaderFilePath($file);
-
-        // prefilter header file content - not supported by cparser
-        $tmpFileContent = file_get_contents($file);
-        $tmpFileContent = preg_replace_callback(
-            '/static RD_INLINE.+?rd_kafka_message_errstr[^}]+?}/si',
-            function ($matches) {
-                return '//' . str_replace("\n", "\n//", $matches[0]);
-            },
-            $tmpFileContent,
-            1
-        );
-        $tmpFileContent = preg_replace_callback(
-            '/(#define.+RD_.[\w_]+)\s+__attribute__.+/i',
-            function ($matches) {
-                return '' . $matches[1];
-            },
-            $tmpFileContent
-        );
-
-        $prependHeaderFile = <<<CDEF
-        typedef long int ssize_t;
-        typedef struct _IO_FILE FILE;
-        typedef long int mode_t;
-        typedef signed int int16_t;
-        typedef signed int int32_t;
-        typedef signed long int int64_t;
-        
-        CDEF;
-
-        $tmpfile = tempnam(sys_get_temp_dir(), 'ffigen');
-        file_put_contents($tmpfile, $prependHeaderFile . $tmpFileContent);
-
-        try {
-            $declarations = parent::parseHeaderFile($tmpfile);
-        } finally {
-            unlink($tmpfile);
-        }
-
-        return $declarations;
+        return [];
     }
 
     private function searchHeaderFilePath(string $file): ?string

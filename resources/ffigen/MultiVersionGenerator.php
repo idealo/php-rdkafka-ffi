@@ -14,7 +14,6 @@ use Klitsche\FFIGen\GeneratorInterface;
 use Klitsche\FFIGen\MethodsCollection;
 use Klitsche\FFIGen\MethodsCollector;
 use Klitsche\FFIGen\MethodsPrinter;
-use Klitsche\FFIGen\ParserInterface;
 use Symfony\Component\Filesystem\Filesystem;
 
 class MultiVersionGenerator implements GeneratorInterface
@@ -84,12 +83,10 @@ class MultiVersionGenerator implements GeneratorInterface
 
     private Filesystem $filesystem;
     private ConfigInterface $config;
-    private ParserInterface $parser;
 
-    public function __construct(ConfigInterface $config, ParserInterface $parser)
+    public function __construct(ConfigInterface $config)
     {
         $this->config = $config;
-        $this->parser = $parser;
         $this->filesystem = new Filesystem();
         $this->overAllMethods = [];
         $this->supportedMethods = [];
@@ -168,22 +165,22 @@ class MultiVersionGenerator implements GeneratorInterface
                 echo '  Not found - skip' . PHP_EOL;
                 continue;
             }
+
+            $content = $this->prepareFileContent($file, $content, $version);
             $this->filesystem->dumpFile($file, $content);
 
             echo "  Save as ${file}" . PHP_EOL;
         }
 
         echo '  Parse ...' . PHP_EOL;
-
-        // reset parser state
-        $this->parser = new Parser($this->config);
+        $parser = new Parser($this->config);
 
         // collect constants
         $constantsCollector = new ConstantsCollector();
         $constants = $constantsCollector
-            ->collect($this->parser->getDefines(), $this->parser->getTypes())
+            ->collect($parser->getDefines(), $parser->getTypes())
             ->filter($this->config->getExcludeConstants());
-        $constants->add(new Constant('RD_KAFKA_CDEF', $this->parser->getCDef(), implode(', ', $this->config->getHeaderFiles())));
+        $constants->add(new Constant('RD_KAFKA_CDEF', $parser->getCDef(), implode(', ', $this->config->getHeaderFiles())));
 
         // add to overall consts
         foreach ($constants as $name => $const) {
@@ -194,7 +191,7 @@ class MultiVersionGenerator implements GeneratorInterface
         // collect methods
         $methodsCollector = new MethodsCollector();
         $methods = $methodsCollector
-            ->collect($this->parser->getTypes())
+            ->collect($parser->getTypes())
             ->filter($this->config->getExcludeMethods());
 
         // add to overall & supported methods
@@ -263,5 +260,57 @@ class MultiVersionGenerator implements GeneratorInterface
             dirname(__DIR__, 2) . '/src/RdKafka/FFI/Methods.php',
             $printer->print('', self::TEMPLATE_METHODS)
         );
+    }
+
+    private function prepareFileContent(string $file, string $content, string $version): string
+    {
+        if (strpos($file, 'rdkafka.h') !== false) {
+            // prefilter header file content - not supported by cparser
+            $content = preg_replace_callback(
+                '/static RD_INLINE.+?rd_kafka_message_errstr[^}]+?}/si',
+                function ($matches) {
+                    return '//' . str_replace("\n", "\n//", $matches[0]);
+                },
+                $content,
+                1
+            );
+            $content = preg_replace_callback(
+                '/(#define.+RD_.[\w_]+)\s+__attribute__.+/i',
+                function ($matches) {
+                    return '' . $matches[1];
+                },
+                $content
+            );
+            // use typdef from rdkafka_error.h for KafkaError class
+            $content = preg_replace_callback(
+                '/typedef struct rd_kafka_error_s/i',
+                function ($matches) {
+                    return <<<CDEF
+                    typedef struct rd_kafka_error_s {
+                        unsigned int code;
+                        char *errstr;
+                        unsigned char fatal;
+                        unsigned char retriable;
+                        unsigned char txn_requires_abort;
+                    }
+                    CDEF;
+                },
+                $content
+            );
+
+            // prepend
+            $prepend = <<<CDEF
+            typedef long int ssize_t;
+            typedef struct _IO_FILE FILE;
+            typedef long int mode_t;
+            typedef signed int int16_t;
+            typedef signed int int32_t;
+            typedef signed long int int64_t;
+            
+            CDEF;
+            $content = $prepend . $content;
+        }
+
+        return $content;
     }
 }

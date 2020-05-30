@@ -50,4 +50,43 @@ class Producer extends RdKafka
     {
         return (int) Library::rd_kafka_flush($this->kafka, $timeout_ms);
     }
+
+    /**
+     * Initializing transactions must be done before producing and starting a transaction
+     */
+    public function initTransactions(int $timeout_ms): void
+    {
+        $error = Library::rd_kafka_init_transactions($this->kafka, $timeout_ms);
+
+        if ($error !== null) {
+            throw new KafkaError($error);
+        }
+    }
+
+    public function beginTransaction(): void
+    {
+        $error = Library::rd_kafka_begin_transaction($this->kafka);
+
+        if ($error !== null) {
+            throw new KafkaError($error);
+        }
+    }
+
+    public function commitTransaction(int $timeout_ms): void
+    {
+        $error = Library::rd_kafka_commit_transaction($this->kafka, $timeout_ms);
+
+        if ($error !== null) {
+            throw new KafkaError($error);
+        }
+    }
+
+    public function abortTransaction(int $timeout_ms): void
+    {
+        $error = Library::rd_kafka_abort_transaction($this->kafka, $timeout_ms);
+
+        if ($error !== null) {
+            throw new KafkaError($error);
+        }
+    }
 }

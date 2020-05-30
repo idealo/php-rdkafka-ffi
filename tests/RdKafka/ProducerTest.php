@@ -6,6 +6,7 @@ namespace RdKafka;
 
 use PHPUnit\Framework\TestCase;
 use RdKafka;
+use RequireRdKafkaVersionTrait;
 
 /**
  * @covers \RdKafka\Producer
@@ -13,6 +14,8 @@ use RdKafka;
  */
 class ProducerTest extends TestCase
 {
+    use RequireRdKafkaVersionTrait;
+
     private Producer $producer;
 
     private string $callbackPayload;
@@ -96,5 +99,64 @@ class ProducerTest extends TestCase
         $res = $producer->flush(KAFKA_TEST_TIMEOUT_MS);
 
         $this->assertSame(0, $res);
+    }
+
+    /**
+     * @group ffiOnly
+     */
+    public function testTransaction(): void
+    {
+        $this->requiresRdKafkaVersion('>=', '1.4.0');
+
+        $producerConf = new Conf();
+        $producerConf->set('metadata.broker.list', KAFKA_BROKERS);
+        $producerConf->set('transactional.id', __METHOD__);
+
+        $producer = new Producer($producerConf);
+
+        $producer->initTransactions(KAFKA_TEST_TIMEOUT_MS);
+
+        // produce and commit
+        $producer->beginTransaction();
+
+        $topic = $producer->newTopic(KAFKA_TEST_TOPIC);
+        $topic->produce(0, 0, __METHOD__ . '1');
+        $topic->produce(0, 0, __METHOD__ . '2');
+        $topic->produce(0, 0, __METHOD__ . '3');
+
+        $producer->commitTransaction(KAFKA_TEST_TIMEOUT_MS);
+
+        // produce and abort
+        $producer->beginTransaction();
+
+        $topic->produce(0, 0, __METHOD__ . '4');
+        $topic->produce(0, 0, __METHOD__ . '5');
+        $topic->produce(0, 0, __METHOD__ . '6');
+
+        $producer->abortTransaction(KAFKA_TEST_TIMEOUT_MS);
+
+        $producer->flush(KAFKA_TEST_TIMEOUT_MS);
+
+        $consumerConf = new Conf();
+        $consumerConf->set('metadata.broker.list', KAFKA_BROKERS);
+        $consumer = new Consumer($consumerConf);
+        $consumerTopic = $consumer->newTopic(KAFKA_TEST_TOPIC);
+        $consumerTopic->consumeStart(0, rd_kafka_offset_tail(4));
+
+        $messages = [];
+        do {
+            $message = $consumerTopic->consume(0, KAFKA_TEST_TIMEOUT_MS);
+            if ($message === null) {
+                break;
+            }
+            $messages[] = $message;
+        } while (true);
+
+        $consumerTopic->consumeStop(0);
+
+        $this->assertCount(3, $messages);
+        $this->assertSame(__METHOD__ . '1', $messages[0]->payload);
+        $this->assertSame(__METHOD__ . '2', $messages[1]->payload);
+        $this->assertSame(__METHOD__ . '3', $messages[2]->payload);
     }
 }

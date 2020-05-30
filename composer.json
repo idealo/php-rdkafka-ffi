@@ -40,7 +40,7 @@
         "phpunit/phpunit": "^9",
         "ircmaxell/php-c-parser": "dev-master",
         "symplify/easy-coding-standard": "^7.2",
-        "klitsche/ffigen": "^0.4"
+        "klitsche/ffigen": "0.5"
     },
     "scripts": {
         "test" : "vendor/bin/phpunit",

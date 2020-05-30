@@ -54,7 +54,13 @@ typedef struct rd_kafka_queue_s rd_kafka_queue_t;
 typedef struct rd_kafka_op_s rd_kafka_event_t;
 typedef struct rd_kafka_topic_result_s rd_kafka_topic_result_t;
 typedef struct rd_kafka_consumer_group_metadata_s rd_kafka_consumer_group_metadata_t;
-typedef struct rd_kafka_error_s rd_kafka_error_t;
+typedef struct rd_kafka_error_s {
+  unsigned int code;
+  char *errstr;
+  unsigned char fatal;
+  unsigned char retriable;
+  unsigned char txn_requires_abort;
+} rd_kafka_error_t;
 typedef enum {
   RD_KAFKA_RESP_ERR__BEGIN = (- 200),
   RD_KAFKA_RESP_ERR__BAD_MSG = (- 199),
