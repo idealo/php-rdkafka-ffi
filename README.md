@@ -54,9 +54,9 @@ Alternative: build the image individually
 
     docker-compose build --no-cache --pull php74
 
-Alternative: build the image individually and set optional build args (LIBRDKAFKA_VERSION default = v1.0.0, RDKAFKA_EXT_VERSION default = master)
+Alternative: build the image individually and set optional build args (LIBRDKAFKA_VERSION default = v1.4.4, RDKAFKA_EXT_VERSION default = master)
 
-    docker-compose build --no-cache --pull --build-arg LIBRDKAFKA_VERSION="v1.4.0" --build-arg RDKAFKA_EXT_VERSION="4.0.3" php74
+    docker-compose build --no-cache --pull --build-arg LIBRDKAFKA_VERSION="v1.4.4" --build-arg RDKAFKA_EXT_VERSION="4.0.3" php74
 
 Test - should show latest 7.4 version
 

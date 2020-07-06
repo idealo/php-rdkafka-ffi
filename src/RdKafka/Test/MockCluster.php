@@ -40,7 +40,9 @@ class MockCluster
         Library::requireVersion('>=', '1.3.0');
 
         if ($brokerCount < 1) {
-            throw new \InvalidArgumentException(sprintf('Invalid value %s for brokerCount. Must be 1 or greater', $brokerCount));
+            throw new \InvalidArgumentException(
+                sprintf('Invalid value %s for brokerCount. Must be 1 or greater', $brokerCount)
+            );
         }
 
         $producer = new Producer();
@@ -170,7 +172,13 @@ class MockCluster
      */
     public function setPartitionFollowerWatermarks(string $topic, int $partition, int $low, int $high): void
     {
-        $errorCode = Library::rd_kafka_mock_partition_set_follower_wmarks($this->cluster, $topic, $partition, $low, $high);
+        $errorCode = Library::rd_kafka_mock_partition_set_follower_wmarks(
+            $this->cluster,
+            $topic,
+            $partition,
+            $low,
+            $high
+        );
         if ($errorCode !== RD_KAFKA_RESP_ERR_NO_ERROR) {
             throw RdKafka\Exception::fromError($errorCode);
         }
@@ -261,6 +269,22 @@ class MockCluster
         Library::requireVersion('>=', '1.4.0');
 
         $errorCode = Library::rd_kafka_mock_set_apiversion($this->cluster, $apiKey, $minVersion, $maxVersion);
+        if ($errorCode !== RD_KAFKA_RESP_ERR_NO_ERROR) {
+            throw RdKafka\Exception::fromError($errorCode);
+        }
+    }
+
+    /**
+     * Set broker round-trip-time delay in milliseconds.
+     *
+     * @throws RdKafka\Exception
+     * @since librdkafka 1.4.4
+     */
+    public function setBroker(int $brokerId, int $roundTripTimeDelayMs): void
+    {
+        Library::requireVersion('>=', '1.4.4');
+
+        $errorCode = Library::rd_kafka_mock_broker_set_rtt($this->cluster, $brokerId, $roundTripTimeDelayMs);
         if ($errorCode !== RD_KAFKA_RESP_ERR_NO_ERROR) {
             throw RdKafka\Exception::fromError($errorCode);
         }

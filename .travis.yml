@@ -14,7 +14,7 @@ jobs:
     - name: "librdkafka master"
     - name: "librdkafka latest osx"
     - name: "librdkafka latest windows"
-    - name: "rdkafka ext, librdkafka v1.4.2"
+    - name: "rdkafka ext, librdkafka v1.4.4"
   include:
     - &STANDARD_TEST_JOB
       stage: Test
@@ -29,7 +29,7 @@ jobs:
         - |
           curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter;
           chmod +x ./cc-test-reporter;
-          if [ "$LIBRDKAFKA_VERSION" = "v1.4.2" ]; then ./cc-test-reporter before-build; fi;
+          if [ "$LIBRDKAFKA_VERSION" = "v1.4.4" ]; then ./cc-test-reporter before-build; fi;
       script:
         - |
           set -e;
@@ -44,7 +44,7 @@ jobs:
         - |
           docker-compose down;
           sed -i "s|/app/|`pwd`/|g" clover.xml;
-          if [ "$LIBRDKAFKA_VERSION" = "v1.4.2" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT; fi;
+          if [ "$LIBRDKAFKA_VERSION" = "v1.4.4" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT; fi;
 
     - <<: *STANDARD_TEST_JOB
       env: LIBRDKAFKA_VERSION=v1.1.0
@@ -59,16 +59,16 @@ jobs:
       name: "librdkafka v1.3.0"
 
     - <<: *STANDARD_TEST_JOB
-      env: LIBRDKAFKA_VERSION=v1.4.2
-      name: "librdkafka v1.4.2"
+      env: LIBRDKAFKA_VERSION=v1.4.4
+      name: "librdkafka v1.4.4"
 
     - <<: *STANDARD_TEST_JOB
       env: LIBRDKAFKA_VERSION=master
       name: "librdkafka master"
 
-    - env: LIBRDKAFKA_VERSION=v1.4.2
+    - env: LIBRDKAFKA_VERSION=v1.4.4
       stage: Test
-      name: "rdkafka ext, librdkafka v1.4.2"
+      name: "rdkafka ext, librdkafka v1.4.4"
       os: linux
       dist: xenial
       language: minimal
@@ -121,7 +121,7 @@ jobs:
       language: bash
       before_script:
         - |
-          choco install php --version 7.4.3 --package-parameters='"/InstallDir:C:\PHP"';
+          choco install php --version 7.4.7 --package-parameters='"/InstallDir:C:\PHP"';
           sed -i 's/;extension=ffi/extension=ffi/g' /c/PHP/php.ini;
           export PATH=/c/PHP:$PATH;
           php -i;
@@ -132,11 +132,11 @@ jobs:
           composer global require hirak/prestissimo;
         - |
           choco install nuget.commandline;
-          nuget install librdkafka.redist -Version 1.4.2;
-          export PATH=$PWD/librdkafka.redist.1.4.2/runtimes/win-x64/native:$PATH;
+          nuget install librdkafka.redist -Version 1.4.4;
+          export PATH=$PWD/librdkafka.redist.1.4.4/runtimes/win-x64/native:$PATH;
         - |
-          choco install adoptopenjdk8 --version 8.242.8;
-          export JAVA_HOME=/c/Program\ Files/AdoptOpenJDK/jdk-8.0.242.08-hotspot;
+          choco install adoptopenjdk8 --version 8.252.9;
+          export JAVA_HOME=/c/Program\ Files/AdoptOpenJDK/jdk-8.0.252.09-hotspot;
           wget -O kafka_2.13-2.4.1.tgz http://ftp.fau.de/apache/kafka/2.4.1/kafka_2.13-2.4.1.tgz;
           tar -xzf kafka_2.13-2.4.1.tgz;
           cp -pr kafka_2.13-2.4.1 /c/kafka;

@@ -1672,5 +1672,6 @@ const RD_KAFKA_SUPPORTED_METHODS = [
     'rd_kafka_mock_broker_set_down' => '1.4.0',
     'rd_kafka_mock_broker_set_up' => '1.4.0',
     'rd_kafka_mock_coordinator_set' => '1.4.0',
-    'rd_kafka_mock_set_apiversion' => '1.4.0'
+    'rd_kafka_mock_set_apiversion' => '1.4.0',
+    'rd_kafka_mock_broker_set_rtt' => '1.4.4'
 ];

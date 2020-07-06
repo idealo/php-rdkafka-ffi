@@ -3321,4 +3321,16 @@ trait Methods
     {
         return static::getFFI()->rd_kafka_mock_set_apiversion($mcluster, $ApiKey, $MinVersion, $MaxVersion);
     }
+
+    /**
+     * @since 1.4.4 of librdkafka
+     * @param \FFI\CData|null $mcluster rd_kafka_mock_cluster_t*
+     * @param int|null $broker_id int32_t
+     * @param int|null $rtt_ms int
+     * @return int rd_kafka_resp_err_t
+     */
+    public static function rd_kafka_mock_broker_set_rtt(?\FFI\CData $mcluster, ?int $broker_id, ?int $rtt_ms): int
+    {
+        return static::getFFI()->rd_kafka_mock_broker_set_rtt($mcluster, $broker_id, $rtt_ms);
+    }
 }
