@@ -243,6 +243,7 @@ class MockClusterTest extends TestCase
 
         $producerConfig = new Conf();
         $producerConfig->set('metadata.broker.list', $cluster->getBootstraps());
+        $producerConfig->set('reconnect.backoff.max.ms', (string) 1000);
         $producer = new Producer($producerConfig);
 
         $cluster->setBrokerDown(1);
