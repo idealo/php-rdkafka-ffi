@@ -21,6 +21,7 @@ class MessageKeyParser extends Parser
     public function __construct(string $data)
     {
         parent::__construct($data);
+
         $this->version = -1;
         $this->parsed = [];
         $this->parse();

@@ -22,6 +22,7 @@ class OffsetCommitValueParser extends Parser
     public function __construct(string $data)
     {
         parent::__construct($data);
+
         $this->parsed = [];
         $this->version = -1;
         $this->parse();

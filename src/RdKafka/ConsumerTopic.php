@@ -219,7 +219,8 @@ class ConsumerTopic extends Topic
             $partition,
             $timeout_ms,
             ConsumeCallbackProxy::create($callback),
-            null // opaque
+            // opaque
+            null
         );
 
         if ($result === -1) {

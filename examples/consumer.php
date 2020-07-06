@@ -51,7 +51,8 @@ $topic->consumeQueueStart(1, RD_KAFKA_OFFSET_BEGINNING, $queue);
 $topic->consumeQueueStart(2, RD_KAFKA_OFFSET_BEGINNING, $queue);
 while ($message = $queue->consume(1000)) {
     echo sprintf('consume msg: %s, ts: %s', $message->payload, $message->timestamp) . PHP_EOL;
-    $events = $consumer->poll(1); // triggers log output
+    // triggers log output
+    $events = $consumer->poll(1);
     echo sprintf('polling triggered %d events', $events) . PHP_EOL;
 }
 $topic->consumeStop(0);

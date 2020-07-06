@@ -70,7 +70,8 @@ for ($i = 0; $i < 1000; $i++) {
     $payload = "payload-${i}-key-${key}";
     echo sprintf('produce msg: %s', $payload) . PHP_EOL;
     $topic->produce(RD_KAFKA_PARTITION_UA, 0, $payload, (string) $key);
-    $events = $producer->poll(1); // triggers log output
+    // triggers log output
+    $events = $producer->poll(1);
     echo sprintf('polling triggered %d events', $events) . PHP_EOL;
 }
 

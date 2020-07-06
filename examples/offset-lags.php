@@ -41,7 +41,8 @@ $conf->set('metadata.broker.list', 'kafka:9092');
 $conf->set('group.id', 'consumer-offsets.dev');
 //$conf->set('log_level', (string)LOG_DEBUG);
 //$conf->set('debug', 'all');
-$conf->set('enable.auto.commit', 'false'); // do not commit when reading from __consumer_offsets
+// do not commit when reading from __consumer_offsets
+$conf->set('enable.auto.commit', 'false');
 $conf->set('auto.offset.reset', 'earliest');
 $conf->set('enable.partition.eof', 'true');
 $conf->setLogCb(
@@ -120,7 +121,7 @@ foreach ($compactedMessages as $key => $payload) {
 //            var_dump($payloadParser->getVersion());
 //            var_export($parsed);
             break;
-        case  MessageKeyParser::V2_GROUP_METADATA_KEY:
+        case MessageKeyParser::V2_GROUP_METADATA_KEY:
             $payloadParser = new GroupMetadataValueParser($payload);
             $parsed = $payloadParser->getParsed();
 //            var_dump($payloadParser->getVersion());

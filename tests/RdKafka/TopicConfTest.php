@@ -79,10 +79,14 @@ class TopicConfTest extends TestCase
         $producer->addBrokers(KAFKA_BROKERS);
         $topic = $producer->newTopic(KAFKA_TEST_TOPIC_PARTITIONS, $conf);
 
-        $topic->produce(RD_KAFKA_PARTITION_UA, 0, 'test1', '1'); // crc32 % 3 = 2
-        $topic->produce(RD_KAFKA_PARTITION_UA, 0, 'test2', '2'); // crc32 % 3 = 1
-        $topic->produce(RD_KAFKA_PARTITION_UA, 0, 'test3', '3'); // crc32 % 3 = 1
-        $topic->produce(RD_KAFKA_PARTITION_UA, 0, 'test4', '1'); // crc32 % 3 = 2
+        // crc32 % 3 = 2
+        $topic->produce(RD_KAFKA_PARTITION_UA, 0, 'test1', '1');
+        // crc32 % 3 = 1
+        $topic->produce(RD_KAFKA_PARTITION_UA, 0, 'test2', '2');
+        // crc32 % 3 = 1
+        $topic->produce(RD_KAFKA_PARTITION_UA, 0, 'test3', '3');
+        // crc32 % 3 = 2
+        $topic->produce(RD_KAFKA_PARTITION_UA, 0, 'test4', '1');
         $producer->flush(KAFKA_TEST_TIMEOUT_MS);
 
         $consumer = new Consumer();
@@ -121,7 +125,8 @@ class TopicConfTest extends TestCase
         $conf = new TopicConf();
         $conf->setPartitionerCb(
             function ($key, $partitionCount) {
-                return 2; // force partition 2
+                // force partition 2
+                return 2;
             }
         );
 

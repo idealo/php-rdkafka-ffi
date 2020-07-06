@@ -71,7 +71,8 @@ class Parser
     protected function parseInt16(): int
     {
         $value = current(unpack('n1', $this->data, $this->offset));
-        $value = $value << 48 >> 48; // sign
+        // sign
+        $value = $value << 48 >> 48;
         $this->offset += 2;
         return $value;
     }
@@ -79,7 +80,8 @@ class Parser
     protected function parseInt32(): int
     {
         $value = current(unpack('N1', $this->data, $this->offset));
-        $value = $value << 32 >> 32; // sign
+        // sign
+        $value = $value << 32 >> 32;
         $this->offset += 4;
         return $value;
     }

@@ -280,7 +280,7 @@ class MockCluster
      * @throws RdKafka\Exception
      * @since librdkafka 1.4.4
      */
-    public function setBroker(int $brokerId, int $roundTripTimeDelayMs): void
+    public function setRtt(int $brokerId, int $roundTripTimeDelayMs): void
     {
         Library::requireVersion('>=', '1.4.4');
 

@@ -41,7 +41,8 @@ class QueueTest extends TestCase
     public function testPoll(): void
     {
         $conf = new Conf();
-        $conf->set('log.queue', 'true');  // route log events to main queue
+        // route log events to main queue
+        $conf->set('log.queue', 'true');
         $conf->set('debug', 'consumer');
         $conf->set('log_level', (string) LOG_DEBUG);
 
