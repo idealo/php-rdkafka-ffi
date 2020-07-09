@@ -43,3 +43,14 @@ services:
       - kafka
     networks:
       - php-rdkafka-ffi
+
+  php80:
+    build:
+      context: resources/docker/php80-librdkafka-ffi
+    image: php80-librdkafka-ffi
+    volumes:
+      - .:/app
+    depends_on:
+      - kafka
+    networks:
+      - php-rdkafka-ffi

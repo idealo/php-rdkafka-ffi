@@ -11,20 +11,23 @@ env:
 
 jobs:
   allow_failures:
-    - name: "librdkafka master"
-    - name: "librdkafka latest osx"
-    - name: "librdkafka latest windows"
-    - name: "rdkafka ext, librdkafka v1.4.4"
+    - name: "librdkafka master, php 7.4"
+    - name: "librdkafka latest osx, php 7.4"
+    - name: "librdkafka latest windows, php 7.4"
+    - name: "rdkafka ext, librdkafka v1.4.4, php 7.4"
+    - name: "librdkafka v1.4.4, php 8.0"
   include:
     - &STANDARD_TEST_JOB
       stage: Test
-      name: "librdkafka v1.0.1"
+      name: "librdkafka v1.0.1, php 7.4"
       os: linux
       dist: xenial
       language: minimal
       services:
         - docker
-      env: LIBRDKAFKA_VERSION=v1.0.1
+      env:
+        - LIBRDKAFKA_VERSION=v1.0.1
+        - PHP_VERSION=74
       before_script:
         - |
           curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter;
@@ -33,7 +36,7 @@ jobs:
       script:
         - |
           set -e;
-          docker-compose build --pull --parallel --build-arg LIBRDKAFKA_VERSION="$LIBRDKAFKA_VERSION";
+          docker-compose build --pull --parallel --build-arg LIBRDKAFKA_VERSION="$LIBRDKAFKA_VERSION" php$PHP_VERSION;
           docker-compose up -d kafka;
           sleep 10s;
           docker-compose run --user $(id -u):$(id -g) --rm --no-deps -v $HOME/.composer/cache:/tmp/.composer php74 composer update --prefer-stable --no-interaction --no-suggest;
@@ -47,26 +50,44 @@ jobs:
           if [ "$LIBRDKAFKA_VERSION" = "v1.4.4" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT; fi;
 
     - <<: *STANDARD_TEST_JOB
-      env: LIBRDKAFKA_VERSION=v1.1.0
-      name: "librdkafka v1.1.0"
+      env:
+        - LIBRDKAFKA_VERSION=v1.1.0
+        - PHP_VERSION=74
+      name: "librdkafka v1.1.0, php 7.4"
 
     - <<: *STANDARD_TEST_JOB
-      env: LIBRDKAFKA_VERSION=v1.2.2
-      name: "librdkafka v1.2.2"
+      env:
+        - LIBRDKAFKA_VERSION=v1.2.2
+        - PHP_VERSION=74
+      name: "librdkafka v1.2.2, php 7.4"
 
     - <<: *STANDARD_TEST_JOB
-      env: LIBRDKAFKA_VERSION=v1.3.0
-      name: "librdkafka v1.3.0"
+      env:
+        - LIBRDKAFKA_VERSION=v1.3.0
+        - PHP_VERSION=74
+      name: "librdkafka v1.3.0, php 7.4"
 
     - <<: *STANDARD_TEST_JOB
-      env: LIBRDKAFKA_VERSION=v1.4.4
-      name: "librdkafka v1.4.4"
+      env:
+        - LIBRDKAFKA_VERSION=v1.4.4
+        - PHP_VERSION=74
+      name: "librdkafka v1.4.4, php 7.4"
 
     - <<: *STANDARD_TEST_JOB
-      env: LIBRDKAFKA_VERSION=master
-      name: "librdkafka master"
+      env:
+        - LIBRDKAFKA_VERSION=master
+        - PHP_VERSION=74
+      name: "librdkafka master, php 7.4"
 
-    - env: LIBRDKAFKA_VERSION=v1.4.4
+    - <<: *STANDARD_TEST_JOB
+      env:
+        - LIBRDKAFKA_VERSION=v1.4.4
+        - PHP_VERSION=80
+      name: "librdkafka v1.4.4, php 8.0"
+
+    - env:
+        - LIBRDKAFKA_VERSION=v1.4.4
+        - PHP_VERSION=74
       stage: Test
       name: "rdkafka ext, librdkafka v1.4.4"
       os: linux
@@ -77,7 +98,7 @@ jobs:
       script:
         - |
           set -e;
-          docker-compose build --pull --parallel --build-arg LIBRDKAFKA_VERSION="$LIBRDKAFKA_VERSION";
+          docker-compose build --pull --parallel --build-arg LIBRDKAFKA_VERSION="$LIBRDKAFKA_VERSION" php$PHP_VERSION;
           docker-compose up -d kafka;
           sleep 10s;
           docker-compose run --user $(id -u):$(id -g) --rm --no-deps -v $HOME/.composer/cache:/tmp/.composer php74 composer update -d /app/resources/test-extension --ignore-platform-reqs;
@@ -90,7 +111,7 @@ jobs:
 
     - env: KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092
       stage: Test
-      name: "librdkafka latest osx"
+      name: "librdkafka latest osx, php 7.4"
       os: osx
       before_script:
         - |
@@ -116,7 +137,7 @@ jobs:
 
     - env: KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092
       stage: Test
-      name: "librdkafka latest windows"
+      name: "librdkafka latest windows, php 7.4"
       os: windows
       language: bash
       before_script:
