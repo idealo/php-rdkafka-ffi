@@ -1,7 +1,7 @@
 FROM php:8.0-rc-cli
 
 # enable ffi and install librdkafka
-ARG LIBRDKAFKA_VERSION=v1.4.4
+ARG LIBRDKAFKA_VERSION=v1.5.0
 ENV LIBRDKAFKA_VERSION=$LIBRDKAFKA_VERSION
 RUN set -e; \
     apt-get update; \
@@ -45,10 +45,11 @@ RUN curl -o phpbench.phar https://phpbench.github.io/phpbench/phpbench.phar; \
     mv phpbench.phar /usr/local/bin/phpbench; \
     mv phpbench.phar.pubkey /usr/local/bin/phpbench.pubkey;
 
+RUN mkdir /tmp/.composer;
 ENV COMPOSER_HOME /tmp/.composer
 ENV COMPOSER_ALLOW_SUPERUSER 1
 COPY --from=composer /usr/bin/composer /usr/bin/composer
-RUN composer global require hirak/prestissimo;
+# RUN composer global require hirak/prestissimo;
 
 RUN useradd -Ms /bin/bash --user-group --uid 2000 phpdev; \
     mkdir /app; \

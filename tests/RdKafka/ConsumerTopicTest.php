@@ -20,8 +20,9 @@ class ConsumerTopicTest extends TestCase
      */
     public function testGetCData(): void
     {
-        $consumer = new Consumer();
-        $consumer->addBrokers(KAFKA_BROKERS);
+        $conf = new Conf();
+        $conf->set('bootstrap.servers', KAFKA_BROKERS);
+        $consumer = new Consumer($conf);
 
         $topic = $consumer->newTopic(KAFKA_TEST_TOPIC);
 
@@ -32,8 +33,9 @@ class ConsumerTopicTest extends TestCase
 
     public function testGetName(): void
     {
-        $consumer = new Consumer();
-        $consumer->addBrokers(KAFKA_BROKERS);
+        $conf = new Conf();
+        $conf->set('bootstrap.servers', KAFKA_BROKERS);
+        $consumer = new Consumer($conf);
 
         $topic = $consumer->newTopic(KAFKA_TEST_TOPIC);
 
@@ -44,14 +46,16 @@ class ConsumerTopicTest extends TestCase
 
     public function testConsume(): void
     {
-        $producer = new Producer();
-        $producer->addBrokers(KAFKA_BROKERS);
+        $conf = new Conf();
+        $conf->set('bootstrap.servers', KAFKA_BROKERS);
+        $producer = new Producer($conf);
         $producerTopic = $producer->newTopic(KAFKA_TEST_TOPIC);
         $producerTopic->produce(0, 0, __METHOD__);
         $producer->flush(KAFKA_TEST_TIMEOUT_MS);
 
-        $consumer = new Consumer();
-        $consumer->addBrokers(KAFKA_BROKERS);
+        $consumerConf = new Conf();
+        $consumerConf->set('bootstrap.servers', KAFKA_BROKERS);
+        $consumer = new Consumer($consumerConf);
         $consumerTopic = $consumer->newTopic(KAFKA_TEST_TOPIC);
         $consumerTopic->consumeStart(0, rd_kafka_offset_tail(1));
 
@@ -64,8 +68,9 @@ class ConsumerTopicTest extends TestCase
 
     public function testConsumeWithInvalidPartitionShouldFail(): void
     {
-        $consumer = new Consumer();
-        $consumer->addBrokers(KAFKA_BROKERS);
+        $conf = new Conf();
+        $conf->set('bootstrap.servers', KAFKA_BROKERS);
+        $consumer = new Consumer($conf);
         $consumerTopic = $consumer->newTopic(KAFKA_TEST_TOPIC);
 
         $this->expectException(InvalidArgumentException::class);
@@ -78,7 +83,7 @@ class ConsumerTopicTest extends TestCase
         $consumedMessage = null;
 
         $conf = new Conf();
-        $conf->set('metadata.broker.list', KAFKA_BROKERS);
+        $conf->set('bootstrap.servers', KAFKA_BROKERS);
         $conf->set('consume.callback.max.messages', (string) 1);
 
         $producer = new Producer($conf);
@@ -105,16 +110,16 @@ class ConsumerTopicTest extends TestCase
     {
         $batchSize = 1000;
 
-        $producer = new Producer();
-        $producer->addBrokers(KAFKA_BROKERS);
+        $conf = new Conf();
+        $conf->set('bootstrap.servers', KAFKA_BROKERS);
+        $producer = new Producer($conf);
         $producerTopic = $producer->newTopic(KAFKA_TEST_TOPIC);
         for ($i = 0; $i < $batchSize; $i++) {
             $producerTopic->produce(0, 0, __METHOD__ . $i);
         }
         $producer->flush(KAFKA_TEST_TIMEOUT_MS);
 
-        $consumer = new Consumer();
-        $consumer->addBrokers(KAFKA_BROKERS);
+        $consumer = new Consumer($conf);
         $consumerTopic = $consumer->newTopic(KAFKA_TEST_TOPIC);
         $consumerTopic->consumeStart(0, rd_kafka_offset_tail($batchSize));
 
@@ -133,8 +138,9 @@ class ConsumerTopicTest extends TestCase
 
     public function testConsumeBatchWithInvalidPartitionShouldFail(): void
     {
-        $consumer = new Consumer();
-        $consumer->addBrokers(KAFKA_BROKERS);
+        $conf = new Conf();
+        $conf->set('bootstrap.servers', KAFKA_BROKERS);
+        $consumer = new Consumer($conf);
         $consumerTopic = $consumer->newTopic(KAFKA_TEST_TOPIC);
 
         $this->expectException(InvalidArgumentException::class);
@@ -144,8 +150,9 @@ class ConsumerTopicTest extends TestCase
 
     public function testConsumeBatchWithInvalidBatchSizeShouldFail(): void
     {
-        $consumer = new Consumer();
-        $consumer->addBrokers(KAFKA_BROKERS);
+        $conf = new Conf();
+        $conf->set('bootstrap.servers', KAFKA_BROKERS);
+        $consumer = new Consumer($conf);
         $consumerTopic = $consumer->newTopic(KAFKA_TEST_TOPIC);
 
         $this->expectException(InvalidArgumentException::class);
@@ -155,14 +162,14 @@ class ConsumerTopicTest extends TestCase
 
     public function testConsumeQueueStart(): void
     {
-        $producer = new Producer();
-        $producer->addBrokers(KAFKA_BROKERS);
+        $conf = new Conf();
+        $conf->set('bootstrap.servers', KAFKA_BROKERS);
+        $producer = new Producer($conf);
         $producerTopic = $producer->newTopic(KAFKA_TEST_TOPIC);
         $producerTopic->produce(0, 0, __METHOD__);
         $producer->flush(KAFKA_TEST_TIMEOUT_MS);
 
-        $consumer = new Consumer();
-        $consumer->addBrokers(KAFKA_BROKERS);
+        $consumer = new Consumer($conf);
         $queue = $consumer->newQueue();
         $consumerTopic = $consumer->newTopic(KAFKA_TEST_TOPIC);
 
@@ -175,8 +182,9 @@ class ConsumerTopicTest extends TestCase
 
     public function testConsumeStartWithInvalidPartitionShouldFail(): void
     {
-        $consumer = new Consumer();
-        $consumer->addBrokers(KAFKA_BROKERS);
+        $conf = new Conf();
+        $conf->set('bootstrap.servers', KAFKA_BROKERS);
+        $consumer = new Consumer($conf);
         $queue = $consumer->newQueue();
         $consumerTopic = $consumer->newTopic(KAFKA_TEST_TOPIC);
 
@@ -189,7 +197,7 @@ class ConsumerTopicTest extends TestCase
     {
         $conf = new Conf();
         $conf->set('group.id', __METHOD__ . random_int(0, 99999999));
-        $conf->set('metadata.broker.list', KAFKA_BROKERS);
+        $conf->set('bootstrap.servers', KAFKA_BROKERS);
         $conf->set('enable.auto.offset.store', 'false');
         $conf->set('enable.auto.commit', 'true');
         $conf->set('auto.commit.interval.ms', '50');

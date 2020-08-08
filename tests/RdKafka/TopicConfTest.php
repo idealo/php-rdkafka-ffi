@@ -72,12 +72,13 @@ class TopicConfTest extends TestCase
 
     public function testSetPartitioner(): void
     {
-        $conf = new TopicConf();
-        $conf->setPartitioner(RD_KAFKA_MSG_PARTITIONER_CONSISTENT);
+        $topicConf = new TopicConf();
+        $topicConf->setPartitioner(RD_KAFKA_MSG_PARTITIONER_CONSISTENT);
 
-        $producer = new Producer();
-        $producer->addBrokers(KAFKA_BROKERS);
-        $topic = $producer->newTopic(KAFKA_TEST_TOPIC_PARTITIONS, $conf);
+        $conf = new Conf();
+        $conf->set('bootstrap.servers', KAFKA_BROKERS);
+        $producer = new Producer($conf);
+        $topic = $producer->newTopic(KAFKA_TEST_TOPIC_PARTITIONS, $topicConf);
 
         // crc32 % 3 = 2
         $topic->produce(RD_KAFKA_PARTITION_UA, 0, 'test1', '1');
@@ -89,9 +90,8 @@ class TopicConfTest extends TestCase
         $topic->produce(RD_KAFKA_PARTITION_UA, 0, 'test4', '1');
         $producer->flush(KAFKA_TEST_TIMEOUT_MS);
 
-        $consumer = new Consumer();
-        $consumer->addBrokers(KAFKA_BROKERS);
-        $consumerTopic = $consumer->newTopic(KAFKA_TEST_TOPIC_PARTITIONS, $conf);
+        $consumer = new Consumer($conf);
+        $consumerTopic = $consumer->newTopic(KAFKA_TEST_TOPIC_PARTITIONS, $topicConf);
 
         $consumerTopic->consumeStart(1, rd_kafka_offset_tail(2));
         $msg2 = $consumerTopic->consume(1, KAFKA_TEST_TIMEOUT_MS);
@@ -122,17 +122,18 @@ class TopicConfTest extends TestCase
      */
     public function testSetPartitionerCb(): void
     {
-        $conf = new TopicConf();
-        $conf->setPartitionerCb(
+        $topicConf = new TopicConf();
+        $topicConf->setPartitionerCb(
             function ($key, $partitionCount) {
                 // force partition 2
                 return 2;
             }
         );
 
-        $producer = new Producer();
-        $producer->addBrokers(KAFKA_BROKERS);
-        $topic = $producer->newTopic(KAFKA_TEST_TOPIC_PARTITIONS, $conf);
+        $conf = new Conf();
+        $conf->set('bootstrap.servers', KAFKA_BROKERS);
+        $producer = new Producer($conf);
+        $topic = $producer->newTopic(KAFKA_TEST_TOPIC_PARTITIONS, $topicConf);
 
         $topic->produce(RD_KAFKA_PARTITION_UA, 0, 'test1', '1');
         $topic->produce(RD_KAFKA_PARTITION_UA, 0, 'test2', '2');
@@ -140,9 +141,8 @@ class TopicConfTest extends TestCase
         $topic->produce(RD_KAFKA_PARTITION_UA, 0, 'test4', '1');
         $producer->flush(KAFKA_TEST_TIMEOUT_MS);
 
-        $consumer = new Consumer();
-        $consumer->addBrokers(KAFKA_BROKERS);
-        $consumerTopic = $consumer->newTopic(KAFKA_TEST_TOPIC_PARTITIONS, $conf);
+        $consumer = new Consumer($conf);
+        $consumerTopic = $consumer->newTopic(KAFKA_TEST_TOPIC_PARTITIONS, $topicConf);
 
         $consumerTopic->consumeStart(2, rd_kafka_offset_tail(4));
         $msg1 = $consumerTopic->consume(2, KAFKA_TEST_TIMEOUT_MS);

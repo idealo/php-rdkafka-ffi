@@ -23,8 +23,9 @@ class KafkaConsumerTest extends TestCase
     public static function setUpBeforeClass(): void
     {
         // produce two messages
-        $producer = new Producer();
-        $producer->addBrokers(KAFKA_BROKERS);
+        $conf = new Conf();
+        $conf->set('bootstrap.servers', KAFKA_BROKERS);
+        $producer = new Producer($conf);
         $producerTopic = $producer->newTopic(KAFKA_TEST_TOPIC);
         $producerTopic->produce(RD_KAFKA_PARTITION_UA, 0, 'payload-kafka-consumer-1');
         $producerTopic->produce(RD_KAFKA_PARTITION_UA, 0, 'payload-kafka-consumer-2');
@@ -126,7 +127,7 @@ class KafkaConsumerTest extends TestCase
     {
         $conf = new Conf();
         $conf->set('group.id', __METHOD__ . random_int(0, 999999999));
-        $conf->set('metadata.broker.list', KAFKA_BROKERS);
+        $conf->set('bootstrap.servers', KAFKA_BROKERS);
         $conf->set('auto.offset.reset', 'earliest');
 
         $consumer = new KafkaConsumer($conf);
@@ -196,7 +197,7 @@ class KafkaConsumerTest extends TestCase
         $conf = new Conf();
         $conf->set('group.id', __METHOD__ . random_int(0, 999999999));
         $conf->set('enable.auto.commit', 'false');
-        $conf->set('metadata.broker.list', KAFKA_BROKERS);
+        $conf->set('bootstrap.servers', KAFKA_BROKERS);
         $conf->set('auto.offset.reset', 'earliest');
 
         $offset = 0;
@@ -239,15 +240,16 @@ class KafkaConsumerTest extends TestCase
     {
         $conf = new Conf();
         $conf->set('group.id', __METHOD__ . random_int(0, 999999999));
+        $conf->set('session.timeout.ms', (string) 500);
         $conf->set('enable.auto.commit', 'false');
-        $conf->set('metadata.broker.list', KAFKA_BROKERS);
+        $conf->set('bootstrap.servers', KAFKA_BROKERS);
         $conf->set('auto.offset.reset', 'earliest');
 
         $consumer = new KafkaConsumer($conf);
         $consumer->subscribe([KAFKA_TEST_TOPIC]);
 
         // wait for partition assignment
-        sleep(1);
+        sleep(2);
 
         $consumer->commit([new TopicPartition(KAFKA_TEST_TOPIC, 0, 1)]);
 
@@ -273,8 +275,9 @@ class KafkaConsumerTest extends TestCase
 
         $conf = new Conf();
         $conf->set('group.id', __METHOD__ . random_int(0, 999999999));
+        $conf->set('session.timeout.ms', (string) 500);
         $conf->set('enable.auto.commit', 'false');
-        $conf->set('metadata.broker.list', KAFKA_BROKERS);
+        $conf->set('bootstrap.servers', KAFKA_BROKERS);
         $conf->set('auto.offset.reset', 'earliest');
 
         $consumer = new KafkaConsumer($conf);
@@ -303,7 +306,7 @@ class KafkaConsumerTest extends TestCase
     {
         $conf = new Conf();
         $conf->set('group.id', __METHOD__);
-        $conf->set('metadata.broker.list', KAFKA_BROKERS);
+        $conf->set('bootstrap.servers', KAFKA_BROKERS);
         $conf->set('enable.auto.commit', 'false');
 
         $consumer = new KafkaConsumer($conf);
@@ -326,7 +329,7 @@ class KafkaConsumerTest extends TestCase
     {
         $conf = new Conf();
         $conf->set('group.id', __METHOD__ . random_int(0, 999999999));
-        $conf->set('metadata.broker.list', KAFKA_BROKERS);
+        $conf->set('bootstrap.servers', KAFKA_BROKERS);
         $conf->set('auto.offset.reset', 'earliest');
 
         $consumer = new KafkaConsumer($conf);
@@ -367,7 +370,7 @@ class KafkaConsumerTest extends TestCase
     {
         $conf = new Conf();
         $conf->set('group.id', __METHOD__ . random_int(0, 999999999));
-        $conf->set('metadata.broker.list', KAFKA_BROKERS);
+        $conf->set('bootstrap.servers', KAFKA_BROKERS);
 
         $future = (int) (time() + 3600) * 1000;
 
@@ -387,13 +390,14 @@ class KafkaConsumerTest extends TestCase
     {
         $conf = new Conf();
         $conf->set('group.id', __METHOD__ . random_int(0, 999999999));
-        $conf->set('metadata.broker.list', KAFKA_BROKERS);
+        $conf->set('bootstrap.servers', KAFKA_BROKERS);
 
         $nearNow = (int) (time()) * 1000;
 
         // produce two messages
-        $producer = new Producer();
-        $producer->addBrokers(KAFKA_BROKERS);
+        $producerConf = new Conf();
+        $producerConf->set('bootstrap.servers', KAFKA_BROKERS);
+        $producer = new Producer($producerConf);
         $producerTopic = $producer->newTopic(KAFKA_TEST_TOPIC);
         $producerTopic->produce(RD_KAFKA_PARTITION_UA, 0, 'offsetsForTimes1');
         $producerTopic->produce(RD_KAFKA_PARTITION_UA, 0, 'offsetsForTimes2');
@@ -415,7 +419,7 @@ class KafkaConsumerTest extends TestCase
     {
         $conf = new Conf();
         $conf->set('group.id', __METHOD__ . random_int(0, 999999999));
-        $conf->set('metadata.broker.list', KAFKA_BROKERS);
+        $conf->set('bootstrap.servers', KAFKA_BROKERS);
 
         $past = 0;
 
@@ -435,7 +439,7 @@ class KafkaConsumerTest extends TestCase
     {
         $conf = new Conf();
         $conf->set('group.id', __METHOD__);
-        $conf->set('metadata.broker.list', KAFKA_BROKERS);
+        $conf->set('bootstrap.servers', KAFKA_BROKERS);
 
         $consumer = new KafkaConsumer($conf);
 
@@ -448,7 +452,7 @@ class KafkaConsumerTest extends TestCase
     {
         $conf = new Conf();
         $conf->set('group.id', __METHOD__);
-        $conf->set('metadata.broker.list', KAFKA_BROKERS);
+        $conf->set('bootstrap.servers', KAFKA_BROKERS);
 
         $consumer = new KafkaConsumer($conf);
         $consumer->subscribe([KAFKA_TEST_TOPIC]);

@@ -37,6 +37,11 @@ class Message
 
     public int $status;
 
+    /**
+     * @since 1.5.0 of librdkafka
+     */
+    public int $brokerId;
+
     public function __construct(CData $nativeMessage)
     {
         $timestampType = Library::new('rd_kafka_timestamp_type_t');
@@ -74,6 +79,12 @@ class Message
         $this->latency = (int) Library::rd_kafka_message_latency($nativeMessage);
 
         $this->status = (int) Library::rd_kafka_message_status($nativeMessage);
+
+        if (Library::hasMethod('rd_kafka_message_broker_id') === true) {
+            $this->brokerId = (int) Library::rd_kafka_message_broker_id($nativeMessage);
+        } else {
+            $this->brokerId = -1;
+        }
     }
 
     public function errstr(): string

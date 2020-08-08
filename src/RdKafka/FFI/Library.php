@@ -22,7 +22,7 @@ class Library
     use Methods;
 
     public const VERSION_AUTODETECT = '';
-    public const VERSION_LATEST = '1.4.4';
+    public const VERSION_LATEST = '1.5.0';
 
     /**
      * @var FFI librdkafka binding - see https://docs.confluent.io/current/clients/librdkafka/rdkafka_8h.html
@@ -53,7 +53,7 @@ class Library
     }
 
     /**
-     * @param $type
+     * @param string|CData|mixed $type
      */
     public static function new($type, bool $owned = true, bool $persistent = false): CData
     {
@@ -61,7 +61,7 @@ class Library
     }
 
     /**
-     * @param $type
+     * @param mixed $type
      */
     public static function cast($type, CData $ptr): CData
     {
@@ -152,7 +152,7 @@ class Library
         self::chooseVersion();
 
         return array_key_exists($name, RD_KAFKA_SUPPORTED_METHODS)
-            && version_compare(self::$version, RD_KAFKA_SUPPORTED_METHODS[$name], '<=') === false;
+            && version_compare(self::$version, RD_KAFKA_SUPPORTED_METHODS[$name], '<') === false;
     }
 
     public static function requireMethod(string $name): void

@@ -8,7 +8,7 @@ use RdKafka\KafkaConsumer;
 require_once dirname(__DIR__) . '/vendor/autoload.php';
 
 $conf = new Conf();
-$conf->set('metadata.broker.list', 'kafka:9092');
+$conf->set('bootstrap.servers', 'kafka:9092');
 $conf->set('group.id', 'consumer-highlevel');
 //$conf->set('log_level', (string)LOG_DEBUG);
 //$conf->set('debug', 'consumer,cgrp');

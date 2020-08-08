@@ -33,6 +33,11 @@ class TopicPartition
         return $topar;
     }
 
+    /**
+     * @param string|null $metadata requires librdkafka >= 1.2.0
+     *
+     * @since 1.2.0 of librdkafka - support for metadata was added for offset commits
+     */
     public function __construct(string $topic, int $partition, int $offset = 0, ?string $metadata = null)
     {
         $this->topic = $topic;

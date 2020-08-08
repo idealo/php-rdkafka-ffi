@@ -9,7 +9,7 @@ use RdKafka\TopicConf;
 require_once dirname(__DIR__) . '/vendor/autoload.php';
 
 $conf = new Conf();
-$conf->set('metadata.broker.list', 'kafka:9092');
+$conf->set('bootstrap.servers', 'kafka:9092');
 $conf->set('group.id', 'test');
 $conf->set('log_level', (string) LOG_DEBUG);
 $conf->set('debug', 'all');
@@ -50,7 +50,7 @@ $topic->consumeQueueStart(0, RD_KAFKA_OFFSET_BEGINNING, $queue);
 $topic->consumeQueueStart(1, RD_KAFKA_OFFSET_BEGINNING, $queue);
 $topic->consumeQueueStart(2, RD_KAFKA_OFFSET_BEGINNING, $queue);
 while ($message = $queue->consume(1000)) {
-    echo sprintf('consume msg: %s, ts: %s', $message->payload, $message->timestamp) . PHP_EOL;
+    echo sprintf('consume msg: %s, timestamp: %s, brokerId: %s', $message->payload, $message->timestamp, $message->brokerId) . PHP_EOL;
     // triggers log output
     $events = $consumer->poll(1);
     echo sprintf('polling triggered %d events', $events) . PHP_EOL;

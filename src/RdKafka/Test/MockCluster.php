@@ -13,7 +13,7 @@ use RdKafka\Producer;
  * Note: MockCluster is experimental - even in librdkafka!
  * Expect breaking changes within minor versions of this library.
  *
- * @since librdkafka 1.3.0
+ * @since 1.3.0 of librdkafka
  */
 class MockCluster
 {
@@ -58,7 +58,7 @@ class MockCluster
      * the `test.mock.num.brokers` configuration property.
      *
      * @throws RdKafka\Exception
-     * @since librdkafka 1.4.0
+     * @since 1.4.0 of librdkafka
      */
     public static function fromProducer(Producer $producer): self
     {
@@ -120,7 +120,7 @@ class MockCluster
      * The Topic Admin API (CreateTopics) is not supported by the
      * mock broker.
      *
-     * @since librdkafka 1.4.0
+     * @since 1.4.0 of librdkafka
      */
     public function createTopic(string $topic, int $partitionCount, int $replicationFactor): void
     {
@@ -189,7 +189,7 @@ class MockCluster
      * This does NOT trigger leader change.
      *
      * @throws RdKafka\Exception
-     * @since librdkafka 1.4.0
+     * @since 1.4.0 of librdkafka
      */
     public function setBrokerDown(int $brokerId): void
     {
@@ -206,7 +206,7 @@ class MockCluster
      * This does NOT trigger leader change.
      *
      * @throws RdKafka\Exception
-     * @since librdkafka 1.4.0
+     * @since 1.4.0 of librdkafka
      */
     public function setBrokerUp(int $brokerId): void
     {
@@ -240,7 +240,7 @@ class MockCluster
      * @param string $key The transactional.id or group.id
      * @param int $brokerId The new coordinator, does not have to be a valid broker.
      * @throws RdKafka\Exception
-     * @since librdkafka 1.4.0
+     * @since 1.4.0 of librdkafka
      */
     public function setCoordinator(string $keyType, string $key, int $brokerId): void
     {
@@ -262,7 +262,7 @@ class MockCluster
      * @param int $minVersion Minimum version supported (or -1 to disable).
      * @param int $maxVersion Maximum version supported (or -1 to disable).
      * @throws RdKafka\Exception
-     * @since librdkafka 1.4.0
+     * @since 1.4.0 of librdkafka
      */
     public function setApiVersion(int $apiKey, int $minVersion, int $maxVersion): void
     {
@@ -278,13 +278,31 @@ class MockCluster
      * Set broker round-trip-time delay in milliseconds.
      *
      * @throws RdKafka\Exception
-     * @since librdkafka 1.4.4
+     * @since 1.4.4 of librdkafka
      */
     public function setRtt(int $brokerId, int $roundTripTimeDelayMs): void
     {
         Library::requireVersion('>=', '1.4.4');
 
         $errorCode = Library::rd_kafka_mock_broker_set_rtt($this->cluster, $brokerId, $roundTripTimeDelayMs);
+        if ($errorCode !== RD_KAFKA_RESP_ERR_NO_ERROR) {
+            throw RdKafka\Exception::fromError($errorCode);
+        }
+    }
+
+    /**
+     * Same as {@link MockCluster::pushRequestErrors()} but for a specific broker.
+     * The broker errors take precedence over the cluster errors.
+     *
+     * @param int ...$errorCodes
+     * @throws RdKafka\Exception
+     * @since 1.5.0 of librdkafka
+     */
+    public function pushBrokerRequestErrors(int $brokerId, int $apiKey, int $count, int ...$errorCodes): void
+    {
+        Library::requireVersion('>=', '1.5.0');
+
+        $errorCode = Library::rd_kafka_mock_broker_push_request_errors($this->cluster, $brokerId, $apiKey, $count, ...$errorCodes);
         if ($errorCode !== RD_KAFKA_RESP_ERR_NO_ERROR) {
             throw RdKafka\Exception::fromError($errorCode);
         }

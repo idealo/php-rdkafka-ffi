@@ -9,7 +9,7 @@ require_once dirname(__DIR__) . '/vendor/autoload.php';
 
 $conf = new Conf();
 $conf->set('group.id', 'metadata');
-$conf->set('metadata.broker.list', 'kafka:9092');
+$conf->set('bootstrap.servers', 'kafka:9092');
 //$conf->set('debug', 'all');
 var_dump($conf->dump());
 

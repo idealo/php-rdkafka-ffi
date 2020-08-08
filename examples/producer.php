@@ -12,7 +12,7 @@ require_once dirname(__DIR__) . '/vendor/autoload.php';
 error_reporting(E_ALL);
 
 $conf = new Conf();
-$conf->set('metadata.broker.list', 'kafka:9092');
+$conf->set('bootstrap.servers', 'kafka:9092');
 $conf->set('socket.timeout.ms', (string) 50);
 $conf->set('queue.buffering.max.messages', (string) 1000);
 $conf->set('max.in.flight.requests.per.connection', (string) 1);

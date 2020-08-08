@@ -11,7 +11,9 @@ use PHPUnit\Framework\TestCase;
  */
 class MessageTest extends TestCase
 {
-    private Message $message;
+    use \RequireRdKafkaVersionTrait;
+
+    private ?Message $message;
     private Message $producedMessage;
     private float $expectedLatencyInSeconds;
     private int $beforeProducingTimestamp;
@@ -21,26 +23,27 @@ class MessageTest extends TestCase
         $this->beforeProducingTimestamp = time();
 
         $context = $this;
-        $conf = new Conf();
-        $conf->set('metadata.broker.list', KAFKA_BROKERS);
-        $conf->setDrMsgCb(
+        $producerConf = new Conf();
+        $producerConf->set('bootstrap.servers', KAFKA_BROKERS);
+        $producerConf->setDrMsgCb(
             function ($producer, $message) use ($context): void {
                 $context->producedMessage = $message;
                 $context->expectedLatencyInSeconds = microtime(true) - $context->expectedLatencyInSeconds;
             }
         );
-        $producer = new Producer($conf);
+        $producer = new Producer($producerConf);
         $producerTopic = $producer->newTopic(KAFKA_TEST_TOPIC);
         $this->expectedLatencyInSeconds = microtime(true);
         $producerTopic->producev(...$params);
         $producer->flush(KAFKA_TEST_TIMEOUT_MS);
 
-        $consumer = new Consumer();
-        $consumer->addBrokers(KAFKA_BROKERS);
+        $consumerConf = new Conf();
+        $consumerConf->set('bootstrap.servers', KAFKA_BROKERS);
+        $consumer = new Consumer($consumerConf);
         $consumerTopic = $consumer->newTopic(KAFKA_TEST_TOPIC);
         $consumerTopic->consumeStart(0, rd_kafka_offset_tail(1));
 
-        $this->message = $consumerTopic->consume(0, KAFKA_TEST_TIMEOUT_MS);
+        $this->message = $consumerTopic->consume(0, (int) KAFKA_TEST_TIMEOUT_MS);
 
         $consumerTopic->consumeStop(0);
     }
@@ -113,5 +116,15 @@ class MessageTest extends TestCase
 
         $this->assertSame(__METHOD__, $this->message->payload);
         $this->assertSame('Success', $this->message->errstr());
+    }
+
+    public function testBrokerId(): void
+    {
+        $this->requiresRdKafkaVersion('>=', '1.5.0');
+
+        $this->prepareMessage(0, 0, __METHOD__);
+
+        $this->assertSame(__METHOD__, $this->message->payload);
+        $this->assertSame(KAFKA_BROKER_ID, $this->message->brokerId);
     }
 }

@@ -27,8 +27,9 @@ class ConsumerTest extends TestCase
      */
     public function testGetCData(): void
     {
-        $consumer = new Consumer();
-        $consumer->addBrokers(KAFKA_BROKERS);
+        $conf = new Conf();
+        $conf->set('bootstrap.servers', KAFKA_BROKERS);
+        $consumer = new Consumer($conf);
 
         $cData = $consumer->getCData();
 
@@ -37,8 +38,9 @@ class ConsumerTest extends TestCase
 
     public function testGetMetadata(): void
     {
-        $consumer = new Consumer();
-        $consumer->addBrokers(KAFKA_BROKERS);
+        $conf = new Conf();
+        $conf->set('bootstrap.servers', KAFKA_BROKERS);
+        $consumer = new Consumer($conf);
 
         $metadata = $consumer->getMetadata(true, null, KAFKA_TEST_TIMEOUT_MS);
 
@@ -52,6 +54,7 @@ class ConsumerTest extends TestCase
     {
         $conf = new Conf();
         $conf->set('debug', 'consumer');
+        $conf->set('bootstrap.servers', KAFKA_BROKERS);
         $conf->setLogCb(
             function ($consumer, $level, $fac, $buf): void {
 //            echo "log: $level $fac $buf" . PHP_EOL;
@@ -88,6 +91,7 @@ class ConsumerTest extends TestCase
     {
         $conf = new Conf();
         $conf->set('debug', 'consumer');
+        $conf->set('bootstrap.servers', KAFKA_BROKERS);
         $conf->setLogCb(
             function (Consumer $consumer, int $level, string $fac, string $buf): void {
 //            echo "log: $level $fac $buf" . PHP_EOL;
@@ -109,6 +113,7 @@ class ConsumerTest extends TestCase
 
         $conf = new Conf();
         $conf->set('debug', 'consumer');
+        $conf->set('bootstrap.servers', KAFKA_BROKERS);
         $conf->setLogCb(
             function (Consumer $consumer, int $level, string $fac, string $buf) use (&$loggerCallbacks): void {
 //            echo "log: $level $fac $buf" . PHP_EOL;
@@ -133,6 +138,7 @@ class ConsumerTest extends TestCase
 
         $conf = new Conf();
         $conf->set('debug', 'consumer');
+        $conf->set('bootstrap.servers', KAFKA_BROKERS);
         $conf->setLogCb(
             function (Consumer $consumer, int $level, string $fac, string $buf) use (&$loggerCallbacks): void {
 //            echo "log: $level $fac $buf" . PHP_EOL;
@@ -150,8 +156,9 @@ class ConsumerTest extends TestCase
 
     public function testQueryWatermarkOffsets(): void
     {
-        $consumer = new Consumer();
-        $consumer->addBrokers(KAFKA_BROKERS);
+        $conf = new Conf();
+        $conf->set('bootstrap.servers', KAFKA_BROKERS);
+        $consumer = new Consumer($conf);
 
         $lowWatermarkOffset1 = 0;
         $highWatermarkOffset1 = 0;
@@ -166,8 +173,9 @@ class ConsumerTest extends TestCase
 
         $this->assertSame(0, $lowWatermarkOffset1);
 
-        $producer = new Producer();
-        $producer->addBrokers(KAFKA_BROKERS);
+        $producerConf = new Conf();
+        $producerConf->set('bootstrap.servers', KAFKA_BROKERS);
+        $producer = new Producer($producerConf);
         $producerTopic = $producer->newTopic(KAFKA_TEST_TOPIC);
         $producerTopic->produce(0, 0, __METHOD__);
         $producer->flush(KAFKA_TEST_TIMEOUT_MS);

@@ -36,7 +36,7 @@ class ClientTest extends TestCase
     public static function setUpBeforeClass(): void
     {
         $conf = new Conf();
-        $conf->set('metadata.broker.list', KAFKA_BROKERS);
+        $conf->set('bootstrap.servers', KAFKA_BROKERS);
         $client = Client::fromConf($conf);
         $client->deleteTopics(
             [
@@ -52,7 +52,7 @@ class ClientTest extends TestCase
     public function testCreateTopics(): void
     {
         $conf = new Conf();
-        $conf->set('metadata.broker.list', KAFKA_BROKERS);
+        $conf->set('bootstrap.servers', KAFKA_BROKERS);
         $client = Client::fromConf($conf);
         $client->setWaitForResultEventTimeout(KAFKA_TEST_TIMEOUT_MS);
 
@@ -90,7 +90,7 @@ class ClientTest extends TestCase
     public function testCreatePartitions(): void
     {
         $conf = new Conf();
-        $conf->set('metadata.broker.list', KAFKA_BROKERS);
+        $conf->set('bootstrap.servers', KAFKA_BROKERS);
         $client = Client::fromConf($conf);
         $client->setWaitForResultEventTimeout(KAFKA_TEST_TIMEOUT_MS);
 
@@ -128,7 +128,7 @@ class ClientTest extends TestCase
     public function testDeleteTopics(): void
     {
         $conf = new Conf();
-        $conf->set('metadata.broker.list', KAFKA_BROKERS);
+        $conf->set('bootstrap.servers', KAFKA_BROKERS);
         $client = Client::fromConf($conf);
         $client->setWaitForResultEventTimeout(KAFKA_TEST_TIMEOUT_MS);
 
@@ -166,7 +166,7 @@ class ClientTest extends TestCase
     public function testCreateTopicsWithReplicaAssignment(): void
     {
         $conf = new Conf();
-        $conf->set('metadata.broker.list', KAFKA_BROKERS);
+        $conf->set('bootstrap.servers', KAFKA_BROKERS);
         $client = Client::fromConf($conf);
         $client->setWaitForResultEventTimeout(KAFKA_TEST_TIMEOUT_MS);
 
@@ -203,7 +203,7 @@ class ClientTest extends TestCase
     public function testCreatePartitionsWithReplicaAssignment(): void
     {
         $conf = new Conf();
-        $conf->set('metadata.broker.list', KAFKA_BROKERS);
+        $conf->set('bootstrap.servers', KAFKA_BROKERS);
         $client = Client::fromConf($conf);
         $client->setWaitForResultEventTimeout(KAFKA_TEST_TIMEOUT_MS);
 
@@ -237,7 +237,7 @@ class ClientTest extends TestCase
     private function getFilteredMetaTopics(array $topicNames): array
     {
         $conf = new Conf();
-        $conf->set('metadata.broker.list', KAFKA_BROKERS);
+        $conf->set('bootstrap.servers', KAFKA_BROKERS);
         $producer = new Producer($conf);
         $metaTopics = [];
         $metadata = $producer->getMetadata(true, null, KAFKA_TEST_TIMEOUT_MS);
@@ -257,7 +257,7 @@ class ClientTest extends TestCase
     public function testDescribeConfigs(): void
     {
         $conf = new Conf();
-        $conf->set('metadata.broker.list', KAFKA_BROKERS);
+        $conf->set('bootstrap.servers', KAFKA_BROKERS);
         $client = Client::fromConf($conf);
         $client->setWaitForResultEventTimeout(KAFKA_TEST_TIMEOUT_MS);
 
@@ -284,7 +284,7 @@ class ClientTest extends TestCase
     {
         // prepare
         $conf = new Conf();
-        $conf->set('metadata.broker.list', KAFKA_BROKERS);
+        $conf->set('bootstrap.servers', KAFKA_BROKERS);
         $conf->set('broker.version.fallback', '2.0.0');
         $client = Client::fromConf($conf);
         $client->setWaitForResultEventTimeout(KAFKA_TEST_TIMEOUT_MS);

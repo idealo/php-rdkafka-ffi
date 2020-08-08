@@ -17,8 +17,9 @@ class ProducerTopicTest extends TestCase
 {
     public function testGetName(): void
     {
-        $producer = new Producer();
-        $producer->addBrokers(KAFKA_BROKERS);
+        $conf = new Conf();
+        $conf->set('bootstrap.servers', KAFKA_BROKERS);
+        $producer = new Producer($conf);
 
         $topic = $producer->newTopic(KAFKA_TEST_TOPIC);
         $topicName = $topic->getName();
@@ -31,8 +32,9 @@ class ProducerTopicTest extends TestCase
      */
     public function testGetCData(): void
     {
-        $producer = new Producer();
-        $producer->addBrokers(KAFKA_BROKERS);
+        $conf = new Conf();
+        $conf->set('bootstrap.servers', KAFKA_BROKERS);
+        $producer = new Producer($conf);
 
         $cData = $producer->getCData();
 
@@ -44,13 +46,13 @@ class ProducerTopicTest extends TestCase
         $payload = '';
 
         $conf = new Conf();
+        $conf->set('bootstrap.servers', KAFKA_BROKERS);
         $conf->setDrMsgCb(
             function (RdKafka $kafka, Message $message) use (&$payload): void {
                 $payload = $message->payload;
             }
         );
         $producer = new Producer($conf);
-        $producer->addBrokers(KAFKA_BROKERS);
         $topic = $producer->newTopic(KAFKA_TEST_TOPIC);
 
         $topic->produce(RD_KAFKA_PARTITION_UA, 0, __METHOD__, 'key-topic-produce');
@@ -65,13 +67,13 @@ class ProducerTopicTest extends TestCase
         $payload = '';
 
         $conf = new Conf();
+        $conf->set('bootstrap.servers', KAFKA_BROKERS);
         $conf->setDrMsgCb(
             function (RdKafka $kafka, Message $message) use (&$payload): void {
                 $payload = $message->payload;
             }
         );
         $producer = new Producer($conf);
-        $producer->addBrokers(KAFKA_BROKERS);
         $topic = $producer->newTopic(KAFKA_TEST_TOPIC);
 
         $topic->produce(RD_KAFKA_PARTITION_UA, 0, null, 'key-topic-produce');
@@ -83,8 +85,9 @@ class ProducerTopicTest extends TestCase
 
     public function testProduceWithInvalidPartitionShouldFail(): void
     {
-        $producer = new Producer();
-        $producer->addBrokers(KAFKA_BROKERS);
+        $conf = new Conf();
+        $conf->set('bootstrap.servers', KAFKA_BROKERS);
+        $producer = new Producer($conf);
         $topic = $producer->newTopic(KAFKA_TEST_TOPIC);
 
         $this->expectException(InvalidArgumentException::class);
@@ -94,8 +97,9 @@ class ProducerTopicTest extends TestCase
 
     public function testProduceWithInvalidMsgFlagsShouldFail(): void
     {
-        $producer = new Producer();
-        $producer->addBrokers(KAFKA_BROKERS);
+        $conf = new Conf();
+        $conf->set('bootstrap.servers', KAFKA_BROKERS);
+        $producer = new Producer($conf);
         $topic = $producer->newTopic(KAFKA_TEST_TOPIC);
 
         $this->expectException(InvalidArgumentException::class);
@@ -108,13 +112,13 @@ class ProducerTopicTest extends TestCase
         $payload = '';
 
         $conf = new Conf();
+        $conf->set('bootstrap.servers', KAFKA_BROKERS);
         $conf->setDrMsgCb(
             function (RdKafka $kafka, Message $message) use (&$payload): void {
                 $payload = $message->payload;
             }
         );
         $producer = new Producer($conf);
-        $producer->addBrokers(KAFKA_BROKERS);
         $topic = $producer->newTopic(KAFKA_TEST_TOPIC);
 
         $topic->producev(RD_KAFKA_PARTITION_UA, 0, __METHOD__, 'key-topic-produce');
@@ -129,13 +133,13 @@ class ProducerTopicTest extends TestCase
         $payload = '';
 
         $conf = new Conf();
+        $conf->set('bootstrap.servers', KAFKA_BROKERS);
         $conf->setDrMsgCb(
             function (RdKafka $kafka, Message $message) use (&$payload): void {
                 $payload = $message->payload;
             }
         );
         $producer = new Producer($conf);
-        $producer->addBrokers(KAFKA_BROKERS);
         $topic = $producer->newTopic(KAFKA_TEST_TOPIC);
 
         $topic->producev(RD_KAFKA_PARTITION_UA, 0, null, 'key-topic-produce');
@@ -151,6 +155,7 @@ class ProducerTopicTest extends TestCase
         $headers = [];
 
         $conf = new Conf();
+        $conf->set('bootstrap.servers', KAFKA_BROKERS);
         $conf->setDrMsgCb(
             function (RdKafka $kafka, Message $message) use (&$payload, &$headers): void {
                 $payload = $message->payload;
@@ -158,7 +163,6 @@ class ProducerTopicTest extends TestCase
             }
         );
         $producer = new Producer($conf);
-        $producer->addBrokers(KAFKA_BROKERS);
         $topic = $producer->newTopic(KAFKA_TEST_TOPIC);
         $topic->producev(
             RD_KAFKA_PARTITION_UA,
@@ -180,6 +184,7 @@ class ProducerTopicTest extends TestCase
         $timestamp = -1;
 
         $conf = new Conf();
+        $conf->set('bootstrap.servers', KAFKA_BROKERS);
         $conf->setDrMsgCb(
             function (RdKafka $kafka, Message $message) use (&$payload, &$timestamp): void {
                 $payload = $message->payload;
@@ -187,7 +192,6 @@ class ProducerTopicTest extends TestCase
             }
         );
         $producer = new Producer($conf);
-        $producer->addBrokers(KAFKA_BROKERS);
         $topic = $producer->newTopic(KAFKA_TEST_TOPIC);
         $topic->producev(
             RD_KAFKA_PARTITION_UA,
@@ -206,8 +210,9 @@ class ProducerTopicTest extends TestCase
 
     public function testProducevWithInvalidPartitionShouldFail(): void
     {
-        $producer = new Producer();
-        $producer->addBrokers(KAFKA_BROKERS);
+        $conf = new Conf();
+        $conf->set('bootstrap.servers', KAFKA_BROKERS);
+        $producer = new Producer($conf);
         $topic = $producer->newTopic(KAFKA_TEST_TOPIC);
 
         $this->expectException(InvalidArgumentException::class);
@@ -217,8 +222,9 @@ class ProducerTopicTest extends TestCase
 
     public function testProducevWithInvalidMsgFlagsShouldFail(): void
     {
-        $producer = new Producer();
-        $producer->addBrokers(KAFKA_BROKERS);
+        $conf = new Conf();
+        $conf->set('bootstrap.servers', KAFKA_BROKERS);
+        $producer = new Producer($conf);
         $topic = $producer->newTopic(KAFKA_TEST_TOPIC);
 
         $this->expectException(InvalidArgumentException::class);

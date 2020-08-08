@@ -1673,5 +1673,10 @@ const RD_KAFKA_SUPPORTED_METHODS = [
     'rd_kafka_mock_broker_set_up' => '1.4.0',
     'rd_kafka_mock_coordinator_set' => '1.4.0',
     'rd_kafka_mock_set_apiversion' => '1.4.0',
-    'rd_kafka_mock_broker_set_rtt' => '1.4.4'
+    'rd_kafka_mock_broker_set_rtt' => '1.4.4',
+    'rd_kafka_message_errstr' => '1.5.0',
+    'rd_kafka_message_broker_id' => '1.5.0',
+    'rd_kafka_produceva' => '1.5.0',
+    'rd_kafka_event_debug_contexts' => '1.5.0',
+    'rd_kafka_mock_broker_push_request_errors' => '1.5.0'
 ];

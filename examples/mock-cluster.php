@@ -23,7 +23,7 @@ try {
 
 // produce messages
 $producerConf = new Conf();
-$producerConf->set('metadata.broker.list', $cluster->getBootstraps());
+$producerConf->set('bootstrap.servers', $cluster->getBootstraps());
 $producerConf->set('log_level', (string) LOG_DEBUG);
 $producerConf->set('debug', 'all');
 $producerConf->setLogCb(
@@ -55,7 +55,7 @@ $producer->flush(1000);
 // consume messages
 $consumerConf = new Conf();
 $consumerConf->set('group.id', 'mock-cluster-example');
-$consumerConf->set('metadata.broker.list', $cluster->getBootstraps());
+$consumerConf->set('bootstrap.servers', $cluster->getBootstraps());
 $consumerConf->set('log_level', (string) LOG_DEBUG);
 $consumerConf->set('debug', 'all');
 $consumerConf->set('enable.partition.eof', 'true');

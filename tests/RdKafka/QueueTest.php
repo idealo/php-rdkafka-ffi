@@ -15,14 +15,14 @@ class QueueTest extends TestCase
 {
     public function testConsumeViaQueue(): void
     {
-        $producer = new Producer();
-        $producer->addBrokers(KAFKA_BROKERS);
+        $conf = new Conf();
+        $conf->set('bootstrap.servers', KAFKA_BROKERS);
+        $producer = new Producer($conf);
         $producerTopic = $producer->newTopic(KAFKA_TEST_TOPIC);
         $producerTopic->produce(0, 0, __METHOD__);
         $producer->flush(KAFKA_TEST_TIMEOUT_MS);
 
-        $consumer = new Consumer();
-        $consumer->addBrokers(KAFKA_BROKERS);
+        $consumer = new Consumer($conf);
 
         $queue = $consumer->newQueue();
 

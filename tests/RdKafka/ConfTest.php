@@ -166,9 +166,11 @@ class ConfTest extends TestCase
 
         $conf = new Conf();
         $conf->set('debug', 'consumer');
+        $conf->set('bootstrap.servers', KAFKA_BROKERS);
         $conf->set('log_level', (string) LOG_DEBUG);
         $conf->setLogCb(
             function (Consumer $consumer, int $level, string $fac, string $buf) use (&$loggerCallbacks): void {
+                var_dump($level, $fac, $buf);
                 $loggerCallbacks++;
             }
         );
@@ -186,6 +188,7 @@ class ConfTest extends TestCase
         $errorCallbackStack = [];
 
         $conf = new Conf();
+        $conf->set('bootstrap.servers', 'unknown');
         $conf->setErrorCb(
             function (Consumer $consumer, $err, $reason, $opaque = null) use (&$errorCallbackStack): void {
                 $errorCallbackStack[] = $err;
@@ -193,7 +196,6 @@ class ConfTest extends TestCase
         );
 
         $consumer = new Consumer($conf);
-        $consumer->addBrokers('unknown');
         do {
             $consumer->poll(0);
         } while (\count($errorCallbackStack) < 2);
@@ -207,7 +209,7 @@ class ConfTest extends TestCase
         $drMsgCallbackStack = [];
 
         $conf = new Conf();
-        $conf->set('metadata.broker.list', KAFKA_BROKERS);
+        $conf->set('bootstrap.servers', KAFKA_BROKERS);
         $conf->setDrMsgCb(
             function ($producer, $message) use (&$drMsgCallbackStack): void {
                 $drMsgCallbackStack[] = [
@@ -262,7 +264,7 @@ class ConfTest extends TestCase
 
         $conf = new Conf();
         $conf->set('group.id', __METHOD__ . random_int(0, 99999999));
-        $conf->set('metadata.broker.list', KAFKA_BROKERS);
+        $conf->set('bootstrap.servers', KAFKA_BROKERS);
         $conf->setRebalanceCb(
             function (KafkaConsumer $consumer, $err, $topicPartitions, $opaque = null) use (&$rebalanceCallbackStack): void {
                 $rebalanceCallbackStack[] = [
@@ -346,7 +348,7 @@ class ConfTest extends TestCase
 
         $conf = new Conf();
         $conf->set('group.id', __METHOD__ . random_int(0, 99999999));
-        $conf->set('metadata.broker.list', KAFKA_BROKERS);
+        $conf->set('bootstrap.servers', KAFKA_BROKERS);
         $conf->setOffsetCommitCb(
             function (KafkaConsumer $consumer, int $err, array $topicPartitions, $opaque = null) use (&$offsetCommitCallbackStack): void {
                 $offsetCommitCallbackStack[] = [

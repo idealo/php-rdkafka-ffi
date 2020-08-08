@@ -17,7 +17,7 @@ class KafkaConsumerTopicTest extends TestCase
     {
         $conf = new Conf();
         $conf->set('group.id', __METHOD__);
-        $conf->set('metadata.broker.list', KAFKA_BROKERS);
+        $conf->set('bootstrap.servers', KAFKA_BROKERS);
 
         $consumer = new KafkaConsumer($conf);
         $topic = $consumer->newTopic(KAFKA_TEST_TOPIC, new TopicConf());
@@ -31,7 +31,7 @@ class KafkaConsumerTopicTest extends TestCase
     {
         $conf = new Conf();
         $conf->set('group.id', __METHOD__ . random_int(0, 99999999));
-        $conf->set('metadata.broker.list', KAFKA_BROKERS);
+        $conf->set('bootstrap.servers', KAFKA_BROKERS);
         $conf->set('enable.auto.offset.store', 'false');
         $consumer = new KafkaConsumer($conf);
         $consumer->assign([new TopicPartition(KAFKA_TEST_TOPIC, 0)]);

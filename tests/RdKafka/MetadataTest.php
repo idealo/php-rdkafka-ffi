@@ -23,7 +23,7 @@ class MetadataTest extends TestCase
     protected function setUp(): void
     {
         $conf = new Conf();
-        $conf->set('metadata.broker.list', KAFKA_BROKERS);
+        $conf->set('bootstrap.servers', KAFKA_BROKERS);
         $conf->set('topic.metadata.refresh.interval.ms', (string) KAFKA_TEST_TIMEOUT_MS);
         $producer = new Producer($conf);
 

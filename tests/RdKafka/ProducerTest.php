@@ -24,6 +24,7 @@ class ProducerTest extends TestCase
     {
         $this->callbackPayload = '';
         $conf = new Conf();
+        $conf->set('bootstrap.servers', KAFKA_BROKERS);
         $conf->setDrMsgCb(
             function (RdKafka $kafka, Message $message, $opaque = null): void {
                 $this->callbackPayload = $message->payload;
@@ -31,7 +32,6 @@ class ProducerTest extends TestCase
         );
 
         $this->producer = new Producer($conf);
-        $this->producer->addBrokers(KAFKA_BROKERS);
     }
 
     public function testAddBrokers(): void
@@ -94,8 +94,9 @@ class ProducerTest extends TestCase
 
     public function testFlush(): void
     {
-        $producer = new Producer();
-        $producer->addBrokers(KAFKA_BROKERS);
+        $conf = new Conf();
+        $conf->set('bootstrap.servers', KAFKA_BROKERS);
+        $producer = new Producer($conf);
         $res = $producer->flush(KAFKA_TEST_TIMEOUT_MS);
 
         $this->assertSame(0, $res);
@@ -109,7 +110,7 @@ class ProducerTest extends TestCase
         $this->requiresRdKafkaVersion('>=', '1.4.0');
 
         $producerConf = new Conf();
-        $producerConf->set('metadata.broker.list', KAFKA_BROKERS);
+        $producerConf->set('bootstrap.servers', KAFKA_BROKERS);
         $producerConf->set('transactional.id', __METHOD__);
 
         $producer = new Producer($producerConf);
@@ -138,7 +139,7 @@ class ProducerTest extends TestCase
         $producer->flush(KAFKA_TEST_TIMEOUT_MS);
 
         $consumerConf = new Conf();
-        $consumerConf->set('metadata.broker.list', KAFKA_BROKERS);
+        $consumerConf->set('bootstrap.servers', KAFKA_BROKERS);
         $consumer = new Consumer($consumerConf);
         $consumerTopic = $consumer->newTopic(KAFKA_TEST_TOPIC);
         $consumerTopic->consumeStart(0, rd_kafka_offset_tail(4));
