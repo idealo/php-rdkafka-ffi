@@ -615,16 +615,6 @@ trait Methods
     /**
      * @since 1.0.0 of librdkafka
      * @param \FFI\CData|null $conf rd_kafka_conf_t*
-     * @param \FFI\CData|\Closure $open_cb int(*)(const char*, int, mode_t, void*)
-     */
-    public static function rd_kafka_conf_set_open_cb(?\FFI\CData $conf, $open_cb): void
-    {
-        static::getFFI()->rd_kafka_conf_set_open_cb($conf, $open_cb);
-    }
-
-    /**
-     * @since 1.0.0 of librdkafka
-     * @param \FFI\CData|null $conf rd_kafka_conf_t*
      * @param \FFI\CData|object|string|null $opaque void*
      */
     public static function rd_kafka_conf_set_opaque(?\FFI\CData $conf, $opaque): void

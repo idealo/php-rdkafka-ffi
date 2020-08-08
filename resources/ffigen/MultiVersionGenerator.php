@@ -281,6 +281,14 @@ class MultiVersionGenerator implements GeneratorInterface
                 },
                 $content
             );
+            // filter rd_kafka_conf_set_open_cb - not supported by windows
+            $content = preg_replace_callback(
+                '/RD_EXPORT[\s\w\n]+?void.+?rd_kafka_conf_set_open_cb[^;]+?;/i',
+                function ($matches) {
+                    return '//' . str_replace("\n", "\n//", $matches[0]);
+                },
+                $content
+            );
             // use typdef from rdkafka_error.h for KafkaError class
             $content = preg_replace_callback(
                 '/typedef struct rd_kafka_error_s/i',

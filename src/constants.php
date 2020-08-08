@@ -1434,7 +1434,6 @@ const RD_KAFKA_SUPPORTED_METHODS = [
     'rd_kafka_conf_set_socket_cb' => '1.0.0',
     'rd_kafka_conf_set_connect_cb' => '1.0.0',
     'rd_kafka_conf_set_closesocket_cb' => '1.0.0',
-    'rd_kafka_conf_set_open_cb' => '1.0.0',
     'rd_kafka_conf_set_opaque' => '1.0.0',
     'rd_kafka_opaque' => '1.0.0',
     'rd_kafka_conf_set_default_topic_conf' => '1.0.0',

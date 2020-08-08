@@ -148,6 +148,7 @@ jobs:
       language: bash
       before_script:
         - |
+          choco upgrade curl;
           choco install php --version 7.4.9 --package-parameters='"/InstallDir:C:\PHP"';
           sed -i 's/;extension=ffi/extension=ffi/g' /c/PHP/php.ini;
           export PATH=/c/PHP:$PATH;

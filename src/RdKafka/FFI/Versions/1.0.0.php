@@ -296,7 +296,6 @@ void rd_kafka_conf_set_stats_cb(rd_kafka_conf_t *conf, int (*stats_cb)(rd_kafka_
 void rd_kafka_conf_set_socket_cb(rd_kafka_conf_t *conf, int (*socket_cb)(int domain, int type, int protocol, void *opaque));
 void rd_kafka_conf_set_connect_cb(rd_kafka_conf_t *conf, int (*connect_cb)(int sockfd, const struct sockaddr *addr, int addrlen, const char *id, void *opaque));
 void rd_kafka_conf_set_closesocket_cb(rd_kafka_conf_t *conf, int (*closesocket_cb)(int sockfd, void *opaque));
-void rd_kafka_conf_set_open_cb(rd_kafka_conf_t *conf, int (*open_cb)(const char *pathname, int flags, mode_t mode, void *opaque));
 void rd_kafka_conf_set_opaque(rd_kafka_conf_t *conf, void *opaque);
 void *rd_kafka_opaque(const rd_kafka_t *rk);
 void rd_kafka_conf_set_default_topic_conf(rd_kafka_conf_t *conf, rd_kafka_topic_conf_t *tconf);
