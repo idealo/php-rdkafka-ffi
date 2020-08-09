@@ -170,7 +170,6 @@ class ConfTest extends TestCase
         $conf->set('log_level', (string) LOG_DEBUG);
         $conf->setLogCb(
             function (Consumer $consumer, int $level, string $fac, string $buf) use (&$loggerCallbacks): void {
-                var_dump($level, $fac, $buf);
                 $loggerCallbacks++;
             }
         );
