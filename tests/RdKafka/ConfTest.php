@@ -209,6 +209,7 @@ class ConfTest extends TestCase
 
         $conf = new Conf();
         $conf->set('bootstrap.servers', KAFKA_BROKERS);
+        $conf->set('batch.num.messages', (string) 1);
         $conf->setDrMsgCb(
             function ($producer, $message) use (&$drMsgCallbackStack): void {
                 $drMsgCallbackStack[] = [
@@ -220,6 +221,7 @@ class ConfTest extends TestCase
         $producer = new Producer($conf);
         $producerTopic = $producer->newTopic(KAFKA_TEST_TOPIC);
         $producerTopic->produce(0, 0, __METHOD__ . '1');
+        $producer->poll(KAFKA_TEST_TIMEOUT_MS);
         $producerTopic->produce(0, 0, __METHOD__ . '2');
         $producer->poll(KAFKA_TEST_TIMEOUT_MS);
 
