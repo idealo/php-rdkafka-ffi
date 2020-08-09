@@ -125,7 +125,7 @@ class ConsumerTest extends TestCase
         $consumer->setLogLevel(LOG_DEBUG);
 
         $triggeredEvents = $consumer->poll(0);
-        $this->assertSame(1, $triggeredEvents, 'Expected debug level log event init consumer');
+        $this->assertGreaterThan(0, $triggeredEvents, 'Expected debug level log events on consumer init');
         $this->assertSame(1, $loggerCallbacks, 'Expected debug level log callback');
     }
 
@@ -150,7 +150,7 @@ class ConsumerTest extends TestCase
         $consumer->setLogLevel(LOG_INFO);
         $triggeredEvents = $consumer->poll(0);
 
-        $this->assertSame(1, $triggeredEvents, 'Expected debug level log event init consumer');
+        $this->assertGreaterThan(0, $triggeredEvents, 'Expected debug level log events on consumer init');
         $this->assertSame(0, $loggerCallbacks, 'Expected no debug level log callback');
     }
 
