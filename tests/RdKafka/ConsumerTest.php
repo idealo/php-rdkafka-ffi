@@ -65,7 +65,7 @@ class ConsumerTest extends TestCase
         $outQLen = $consumer->getOutQLen();
 
         // expect init log msg
-        $this->assertSame(1, $outQLen, 'Expected log event init consumer');
+        $this->assertGreaterThan(0, $outQLen, 'Expected debug level log events on consumer init');
     }
 
     public function testNewQueue(): void
@@ -101,7 +101,7 @@ class ConsumerTest extends TestCase
         $consumer = new Consumer($conf);
         $triggeredEvents = $consumer->poll(0);
 
-        $this->assertSame(1, $triggeredEvents, 'Expected log event init consumer');
+        $this->assertGreaterThan(0, $triggeredEvents, 'Expected debug level log events on consumer init');
     }
 
     /**
@@ -116,7 +116,7 @@ class ConsumerTest extends TestCase
         $conf->set('bootstrap.servers', KAFKA_BROKERS);
         $conf->setLogCb(
             function (Consumer $consumer, int $level, string $fac, string $buf) use (&$loggerCallbacks): void {
-//            echo "log: $level $fac $buf" . PHP_EOL;
+//                echo "log: $level $fac $buf" . PHP_EOL;
                 $loggerCallbacks++;
             }
         );
@@ -126,7 +126,7 @@ class ConsumerTest extends TestCase
 
         $triggeredEvents = $consumer->poll(0);
         $this->assertGreaterThan(0, $triggeredEvents, 'Expected debug level log events on consumer init');
-        $this->assertSame(1, $loggerCallbacks, 'Expected debug level log callback');
+        $this->assertSame($triggeredEvents, $loggerCallbacks, 'Expected debug level log callback calls same as log events');
     }
 
     /**
