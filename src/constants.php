@@ -1375,6 +1375,42 @@ const RD_KAFKA_RESP_ERR__APPLICATION = -143;
 const RD_KAFKA_RESP_ERR_FENCED_INSTANCE_ID = 82;
 
 /**
+ * enum rd_kafka_resp_err_t
+ * @since 1.5.2 of librdkafka
+ */
+const RD_KAFKA_RESP_ERR_ELIGIBLE_LEADERS_NOT_AVAILABLE = 83;
+
+/**
+ * enum rd_kafka_resp_err_t
+ * @since 1.5.2 of librdkafka
+ */
+const RD_KAFKA_RESP_ERR_ELECTION_NOT_NEEDED = 84;
+
+/**
+ * enum rd_kafka_resp_err_t
+ * @since 1.5.2 of librdkafka
+ */
+const RD_KAFKA_RESP_ERR_NO_REASSIGNMENT_IN_PROGRESS = 85;
+
+/**
+ * enum rd_kafka_resp_err_t
+ * @since 1.5.2 of librdkafka
+ */
+const RD_KAFKA_RESP_ERR_GROUP_SUBSCRIBED_TO_TOPIC = 86;
+
+/**
+ * enum rd_kafka_resp_err_t
+ * @since 1.5.2 of librdkafka
+ */
+const RD_KAFKA_RESP_ERR_INVALID_RECORD = 87;
+
+/**
+ * enum rd_kafka_resp_err_t
+ * @since 1.5.2 of librdkafka
+ */
+const RD_KAFKA_RESP_ERR_UNSTABLE_OFFSET_COMMIT = 88;
+
+/**
  */
 const RD_KAFKA_SUPPORTED_METHODS = [
     'rd_kafka_version' => '1.0.0',

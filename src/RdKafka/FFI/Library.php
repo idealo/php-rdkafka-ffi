@@ -22,7 +22,7 @@ class Library
     use Methods;
 
     public const VERSION_AUTODETECT = '';
-    public const VERSION_LATEST = '1.5.0';
+    public const VERSION_LATEST = '1.5.2';
 
     /**
      * @var FFI librdkafka binding - see https://docs.confluent.io/current/clients/librdkafka/rdkafka_8h.html

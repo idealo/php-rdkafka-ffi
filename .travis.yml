@@ -15,7 +15,7 @@ jobs:
     - name: "librdkafka latest osx, php 7.4"
     - name: "librdkafka latest windows, php 7.4"
     - name: "rdkafka ext, librdkafka v1.4.4, php 7.4"
-    - name: "librdkafka v1.5.0, php 8.0"
+    - name: "librdkafka v1.5.2, php 8.0"
   include:
     - &STANDARD_TEST_JOB
       stage: Test
@@ -32,7 +32,7 @@ jobs:
         - |
           curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter;
           chmod +x ./cc-test-reporter;
-          if [ "$LIBRDKAFKA_VERSION" = "v1.5.0" ]; then ./cc-test-reporter before-build; fi;
+          if [ "$LIBRDKAFKA_VERSION" = "v1.5.2" ]; then ./cc-test-reporter before-build; fi;
       script:
         - |
           set -e;
@@ -47,7 +47,7 @@ jobs:
         - |
           docker-compose down;
           sed -i "s|/app/|`pwd`/|g" clover.xml;
-          if [ "$LIBRDKAFKA_VERSION" = "v1.5.0" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT; fi;
+          if [ "$LIBRDKAFKA_VERSION" = "v1.5.2" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT; fi;
 
     - <<: *STANDARD_TEST_JOB
       env:
@@ -75,9 +75,9 @@ jobs:
 
     - <<: *STANDARD_TEST_JOB
       env:
-        - LIBRDKAFKA_VERSION=v1.5.0
+        - LIBRDKAFKA_VERSION=v1.5.2
         - PHP_VERSION=74
-      name: "librdkafka v1.5.0, php 7.4"
+      name: "librdkafka v1.5.2, php 7.4"
 
     - <<: *STANDARD_TEST_JOB
       env:
@@ -87,9 +87,9 @@ jobs:
 
     - <<: *STANDARD_TEST_JOB
       env:
-        - LIBRDKAFKA_VERSION=v1.5.0
+        - LIBRDKAFKA_VERSION=v1.5.2
         - PHP_VERSION=80
-      name: "librdkafka v1.5.0, php 8.0"
+      name: "librdkafka v1.5.2, php 8.0"
 
     - env:
         - LIBRDKAFKA_VERSION=v1.4.4
@@ -160,8 +160,8 @@ jobs:
           composer global require hirak/prestissimo;
         - |
           choco install nuget.commandline;
-          nuget install librdkafka.redist -Version 1.5.0;
-          export PATH=$PWD/librdkafka.redist.1.5.0/runtimes/win-x64/native:$PATH;
+          nuget install librdkafka.redist -Version 1.5.2;
+          export PATH=$PWD/librdkafka.redist.1.5.2/runtimes/win-x64/native:$PATH;
         - |
           choco install adoptopenjdk8 --version 8.262.10;
           export JAVA_HOME=/c/Program\ Files/AdoptOpenJDK/jdk-8.0.262.10-hotspot;
