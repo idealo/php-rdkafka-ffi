@@ -40,15 +40,14 @@ RUN curl -o phpbench.phar https://phpbench.github.io/phpbench/phpbench.phar; \
     mv phpbench.phar /usr/local/bin/phpbench; \
     mv phpbench.phar.pubkey /usr/local/bin/phpbench.pubkey;
 
-ENV COMPOSER_HOME /tmp/.composer
+#ENV COMPOSER_HOME /tmp/.composer
 ENV COMPOSER_ALLOW_SUPERUSER 1
 COPY --from=composer /usr/bin/composer /usr/bin/composer
-RUN composer global require hirak/prestissimo;
 
 RUN useradd -Ms /bin/bash --user-group --uid 2000 phpdev; \
     mkdir /app; \
     chown phpdev -R /app; \
-    chown phpdev -R /tmp/.composer;
+    chown phpdev -R /tmp;
 
 USER phpdev
 
