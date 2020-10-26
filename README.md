@@ -54,9 +54,9 @@ Alternative: build the image individually
 
     docker-compose build --no-cache --pull php74
 
-Alternative: build the image individually and set optional build args (LIBRDKAFKA_VERSION default = v1.4.4, RDKAFKA_EXT_VERSION default = master)
+Alternative: build the image individually and set optional build args (LIBRDKAFKA_VERSION default = v1.5.2, RDKAFKA_EXT_VERSION default = master)
 
-    docker-compose build --no-cache --pull --build-arg LIBRDKAFKA_VERSION="v1.4.4" --build-arg RDKAFKA_EXT_VERSION="4.0.3" php74
+    docker-compose build --no-cache --pull --build-arg LIBRDKAFKA_VERSION="v1.5.2" --build-arg RDKAFKA_EXT_VERSION="4.0.4" php74
 
 Test - should show latest 7.4 version
 
@@ -228,6 +228,12 @@ See concrete [benchmarks details](./docs/benchmarks.md) for ffi & extension bind
 Shutdown and remove volumes:
 
     docker-compose down -v
+    
+### Work on the documentation
+
+Run mkdocs in server mode to see live changes in /docs
+
+    docker run --rm -it -p 8000:8000 -v ${PWD}:/docs squidfunk/mkdocs-material
 
 ### Todos
 
@@ -241,5 +247,6 @@ Shutdown and remove volumes:
 * [x] Compatible to rdkafka extension ^4.0
 * [x] Add version specific binding for librdkafka to handle (changed) const values correctly and provide support for new features
 * [ ] Sig Handling & destruct (expect seg faults & lost msgs & shutdown hangs)
+* [ ] Add support for https://github.com/edenhill/librdkafka/blob/master/INTRODUCTION.md#reporting-client-software-name-and-version-to-broker
 * [ ] Documentation
 * [ ] Prepare for composer & first release
