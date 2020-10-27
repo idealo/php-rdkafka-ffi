@@ -157,7 +157,6 @@ jobs:
           choco install composer;
           export PATH=/c/ProgramData/ComposerSetup/bin:$PATH;
           composer --version;
-          composer global require hirak/prestissimo;
         - |
           choco install nuget.commandline;
           nuget install librdkafka.redist -Version 1.5.2;
