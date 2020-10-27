@@ -119,6 +119,11 @@ jobs:
       stage: Test
       name: "librdkafka latest osx, php 7.4"
       os: osx
+      cache:
+        directories:
+          - $HOME/Library/Caches/Homebrew
+      before_cache:
+        - brew cleanup
       before_script:
         - |
           brew install php@7.4;
