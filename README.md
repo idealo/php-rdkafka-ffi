@@ -2,7 +2,7 @@
 
 __WIP__
 
-[![Build Status](https://travis-ci.org/idealo/php-rdkafka-ffi.svg?branch=master)](https://travis-ci.org/idealo/php-rdkafka-ffi)
+[![Build Status](https://travis-ci.org/idealo/php-rdkafka-ffi.svg?branch=main)](https://travis-ci.org/idealo/php-rdkafka-ffi)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/9ee55cb5587fbf64dea8/test_coverage)](https://codeclimate.com/github/idealo/php-rdkafka-ffi/test_coverage)
 [![Maintainability](https://api.codeclimate.com/v1/badges/9ee55cb5587fbf64dea8/maintainability)](https://codeclimate.com/github/idealo/php-rdkafka-ffi/maintainability)
 
