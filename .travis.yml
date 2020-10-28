@@ -7,7 +7,7 @@ addons:
     - kafka
 env:
   global:
-    - CC_TEST_REPORTER_ID=4b2573784478360dc28c9096b3647b805c3b0beb410ae19aaa68bc5e29f70c6b
+    - CC_TEST_REPORTER_ID=eb564d92dfc96475db45cfde2fda537cf54011b76cefd6d8ddbf9a009c0692d8
 
 jobs:
   allow_failures:
