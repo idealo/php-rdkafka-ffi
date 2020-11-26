@@ -10,7 +10,7 @@ use RdKafka;
 
 class StatsCallbackProxy extends CallbackProxy
 {
-    public function __invoke(CData $consumerOrProducer, CData $json, int $json_len, ?object $opaque = null): void
+    public function __invoke(CData $consumerOrProducer, CData $json, int $json_len, ?object $opaque = null): int
     {
         ($this->callback)(
             RdKafka::resolveFromCData($consumerOrProducer),
@@ -18,5 +18,7 @@ class StatsCallbackProxy extends CallbackProxy
             $json_len,
             $opaque
         );
+
+        return 0;
     }
 }
