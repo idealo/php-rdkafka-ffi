@@ -50,14 +50,18 @@ class MessageTest extends TestCase
 
     public function testProperties(): void
     {
-        $this->prepareMessage(0, 0, __METHOD__ . '1', 'key-üöäß-👻', ['name-üöäß-👻' => 'value-üöäß-👻']);
+        $this->prepareMessage(0, 0, __METHOD__ . '1', 'key-üöäß-👻', [
+            'name-üöäß-👻' => 'value-üöäß-👻',
+        ]);
 
         $this->assertSame(RD_KAFKA_RESP_ERR_NO_ERROR, $this->message->err);
         $this->assertSame(KAFKA_TEST_TOPIC, $this->message->topic_name);
         $this->assertSame(0, $this->message->partition);
         $this->assertSame(__METHOD__ . '1', $this->message->payload);
         $this->assertSame('key-üöäß-👻', $this->message->key);
-        $this->assertSame(['name-üöäß-👻' => 'value-üöäß-👻'], $this->message->headers);
+        $this->assertSame([
+            'name-üöäß-👻' => 'value-üöäß-👻',
+        ], $this->message->headers);
         $this->assertGreaterThan(0, $this->message->offset);
 
         $this->prepareMessage(0, 0, null);
@@ -66,11 +70,15 @@ class MessageTest extends TestCase
         $this->assertNull($this->message->key);
         $this->assertNull($this->message->headers);
 
-        $this->prepareMessage(0, 0, __METHOD__ . '3', gzencode('123'), ['no_null_byte' => gzencode('456')]);
+        $this->prepareMessage(0, 0, __METHOD__ . '3', gzencode('123'), [
+            'no_null_byte' => gzencode('456'),
+        ]);
 
         $this->assertSame(__METHOD__ . '3', $this->message->payload);
         $this->assertSame(gzencode('123'), $this->message->key);
-        $this->assertSame(['no_null_byte' => gzencode('456')], $this->message->headers);
+        $this->assertSame([
+            'no_null_byte' => gzencode('456'),
+        ], $this->message->headers);
     }
 
     /**

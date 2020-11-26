@@ -14,7 +14,11 @@ class CollectionTest extends TestCase
 {
     public function testRewind(): void
     {
-        $collection = new Collection([1 => 1, 2 => 2, 3 => 3]);
+        $collection = new Collection([
+            1 => 1,
+            2 => 2,
+            3 => 3,
+        ]);
 
         $collection->next();
         $collection->next();
@@ -29,7 +33,11 @@ class CollectionTest extends TestCase
 
     public function testKey(): void
     {
-        $collection = new Collection(['abc' => 1, 2 => 2, 3 => 3]);
+        $collection = new Collection([
+            'abc' => 1,
+            2 => 2,
+            3 => 3,
+        ]);
 
         $first = $collection->key();
 
@@ -38,7 +46,11 @@ class CollectionTest extends TestCase
 
     public function testCurrent(): void
     {
-        $collection = new Collection([1 => 'abc', 2 => 2, 3 => 3]);
+        $collection = new Collection([
+            1 => 'abc',
+            2 => 2,
+            3 => 3,
+        ]);
 
         $first = $collection->current();
 
@@ -47,7 +59,11 @@ class CollectionTest extends TestCase
 
     public function testNext(): void
     {
-        $collection = new Collection([1 => 1, 2 => 'abc', 3 => 3]);
+        $collection = new Collection([
+            1 => 1,
+            2 => 'abc',
+            3 => 3,
+        ]);
 
         $collection->next();
         $next = $collection->current();
@@ -57,7 +73,11 @@ class CollectionTest extends TestCase
 
     public function testValid(): void
     {
-        $collection = new Collection([1 => 1, 2 => 2, 3 => 3]);
+        $collection = new Collection([
+            1 => 1,
+            2 => 2,
+            3 => 3,
+        ]);
 
         $collection->next();
         $collection->next();
@@ -72,7 +92,11 @@ class CollectionTest extends TestCase
 
     public function testCount(): void
     {
-        $collection = new Collection([1 => 1, 2 => 2, 3 => 3]);
+        $collection = new Collection([
+            1 => 1,
+            2 => 2,
+            3 => 3,
+        ]);
 
         $this->assertSame(3, $collection->count());
     }

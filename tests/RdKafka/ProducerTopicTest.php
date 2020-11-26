@@ -169,13 +169,20 @@ class ProducerTopicTest extends TestCase
             0,
             __METHOD__,
             'key-topic-produce',
-            ['header-name-topic-produce' => 'header-value-topic-produce']
+            [
+                'header-name-topic-produce' => 'header-value-topic-produce',
+            ]
         );
 
         $producer->flush(KAFKA_TEST_TIMEOUT_MS);
 
         $this->assertSame(__METHOD__, $payload);
-        $this->assertSame(['header-name-topic-produce' => 'header-value-topic-produce'], $headers);
+        $this->assertSame(
+            [
+                'header-name-topic-produce' => 'header-value-topic-produce',
+            ],
+            $headers
+        );
     }
 
     public function testProducevWithTimestamp(): void
