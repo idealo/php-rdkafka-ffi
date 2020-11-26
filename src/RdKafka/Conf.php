@@ -24,6 +24,9 @@ class Conf
     public function __construct()
     {
         $this->conf = Library::rd_kafka_conf_new();
+
+        $this->set('client.software.name', 'php-rdkafka-ffi');
+        $this->set('client.software.version', sprintf('v%s-librdkafka-v%s', Library::getLibraryVersion(), Library::rd_kafka_version_str()));
     }
 
     public function __destruct()

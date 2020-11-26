@@ -135,6 +135,14 @@ class ConfTest extends TestCase
         $conf->set('debug', 'any.unknown');
     }
 
+    public function testClientSoftwareNameAndVersionForKIP511(): void
+    {
+        $conf = new Conf();
+
+        $this->assertSame('php-rdkafka-ffi', $conf->get('client.software.name'));
+        $this->assertMatchesRegularExpression('/\d+\.\d+\.\d+-librdkafka-v\d+\.\d+\.\d+/', $conf->get('client.software.version'));
+    }
+
     /**
      * @group ffiOnly
      */
