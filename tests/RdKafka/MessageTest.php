@@ -126,6 +126,9 @@ class MessageTest extends TestCase
         $this->assertSame('Success', $this->message->errstr());
     }
 
+    /**
+     * @group ffiOnly
+     */
     public function testBrokerId(): void
     {
         $this->requiresRdKafkaVersion('>=', '1.5.0');
