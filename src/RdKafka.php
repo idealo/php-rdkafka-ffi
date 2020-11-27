@@ -91,7 +91,6 @@ abstract class RdKafka
             $instance = $reference->get();
             if ($instance === null || $instance === $this) {
                 unset(self::$instances[$i]);
-                continue;
             }
         }
     }

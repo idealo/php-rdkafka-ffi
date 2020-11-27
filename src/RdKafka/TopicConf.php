@@ -12,7 +12,7 @@ use RdKafka\FFI\NativePartitionerCallbackProxy;
 use RdKafka\FFI\PartitionerCallbackProxy;
 
 /**
- * Configuration reference: https://github.com/edenhill/librdkafka/blob/master/CONFIGURATION.md
+ * @link https://github.com/edenhill/librdkafka/blob/master/CONFIGURATION.md Configuration reference for librdkafka
  */
 class TopicConf
 {
