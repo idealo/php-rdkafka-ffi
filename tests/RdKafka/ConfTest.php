@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace RdKafka;
 
 use PHPUnit\Framework\TestCase;
+use RequireRdKafkaVersionTrait;
 
 /**
  * @covers \RdKafka\Conf
@@ -18,6 +19,8 @@ use PHPUnit\Framework\TestCase;
  */
 class ConfTest extends TestCase
 {
+    use RequireRdKafkaVersionTrait;
+
     public function testDump(): void
     {
         $expectedProperties = [
@@ -137,6 +140,8 @@ class ConfTest extends TestCase
 
     public function testClientSoftwareNameAndVersionForKIP511(): void
     {
+        $this->requiresRdKafkaVersion('>=', '1.4.0');
+
         $conf = new Conf();
 
         $this->assertSame('php-rdkafka-ffi', $conf->get('client.software.name'));
@@ -187,10 +192,14 @@ class ConfTest extends TestCase
             $consumer->poll(0);
         } while ($loggerCallbacks === 0);
 
-        $this->assertSame('true', $conf->get('log.queue'));
+        $params = $conf->dump();
+        $this->assertSame('true', $params['log.queue']);
         $this->assertSame(1, $loggerCallbacks, 'Expected debug level log callback');
     }
 
+    /**
+     * @group ffiOnly
+     */
     public function testSetLogCbWithNullShouldDisableLogging(): void
     {
         $conf = new Conf();

@@ -72,6 +72,13 @@ class LibraryTest extends TestCase
         Library::requireVersion('<=', '1.0.0');
     }
 
+    public function testVersionMatches(): void
+    {
+        $this->requiresRdKafkaVersion('>', '1.0.0');
+
+        $this->assertFalse(Library::versionMatches('<=', '1.0.0'));
+    }
+
     public function testInit(): void
     {
         $this->expectException(RuntimeException::class);
