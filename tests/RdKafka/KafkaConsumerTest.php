@@ -126,6 +126,7 @@ class KafkaConsumerTest extends TestCase
     public function testConsume(): void
     {
         $conf = new Conf();
+        $conf->set('log_level', (string) LOG_EMERG);
         $conf->set('group.id', __METHOD__ . random_int(0, 999999999));
         $conf->set('bootstrap.servers', KAFKA_BROKERS);
         $conf->set('auto.offset.reset', 'earliest');
@@ -195,6 +196,7 @@ class KafkaConsumerTest extends TestCase
     public function testCommitWithMessage(): void
     {
         $conf = new Conf();
+        $conf->set('log_level', (string) LOG_EMERG);
         $conf->set('group.id', __METHOD__ . random_int(0, 999999999));
         $conf->set('enable.auto.commit', 'false');
         $conf->set('bootstrap.servers', KAFKA_BROKERS);
@@ -239,6 +241,7 @@ class KafkaConsumerTest extends TestCase
     public function testCommitWithOffset(): void
     {
         $conf = new Conf();
+        $conf->set('log_level', (string) LOG_EMERG);
         $conf->set('group.id', __METHOD__ . random_int(0, 999999999));
         $conf->set('session.timeout.ms', (string) 500);
         $conf->set('enable.auto.commit', 'false');
@@ -274,6 +277,7 @@ class KafkaConsumerTest extends TestCase
         $this->requiresRdKafkaVersion('>=', '1.2.0');
 
         $conf = new Conf();
+        $conf->set('log_level', (string) LOG_EMERG);
         $conf->set('group.id', __METHOD__ . random_int(0, 999999999));
         $conf->set('session.timeout.ms', (string) 500);
         $conf->set('enable.auto.commit', 'false');
@@ -389,6 +393,7 @@ class KafkaConsumerTest extends TestCase
     public function testOffsetsForTimesWithNearNowTimestamp(): void
     {
         $conf = new Conf();
+        $conf->set('log_level', (string) LOG_EMERG);
         $conf->set('group.id', __METHOD__ . random_int(0, 999999999));
         $conf->set('bootstrap.servers', KAFKA_BROKERS);
 

@@ -77,10 +77,13 @@ class ProducerTest extends TestCase
      */
     public function testResolveFromCData(): void
     {
-        $producer1 = new Producer();
+        $conf = new Conf();
+        $conf->set('log_level', (string) LOG_EMERG);
+
+        $producer1 = new Producer($conf);
         $cData1 = $producer1->getCData();
 
-        $producer2 = new Producer();
+        $producer2 = new Producer($conf);
         $cData2 = $producer2->getCData();
 
         $this->assertSame($producer1, Producer::resolveFromCData($cData1));

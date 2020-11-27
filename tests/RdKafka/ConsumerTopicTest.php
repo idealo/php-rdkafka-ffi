@@ -82,16 +82,19 @@ class ConsumerTopicTest extends TestCase
     {
         $consumedMessage = null;
 
-        $conf = new Conf();
-        $conf->set('bootstrap.servers', KAFKA_BROKERS);
-        $conf->set('consume.callback.max.messages', (string) 1);
+        $producerConf = new Conf();
+        $producerConf->set('bootstrap.servers', KAFKA_BROKERS);
 
-        $producer = new Producer($conf);
+        $consumerConf = new Conf();
+        $consumerConf->set('bootstrap.servers', KAFKA_BROKERS);
+        $consumerConf->set('consume.callback.max.messages', (string) 1);
+
+        $producer = new Producer($producerConf);
         $producerTopic = $producer->newTopic(KAFKA_TEST_TOPIC);
         $producerTopic->produce(0, 0, __METHOD__);
         $producer->flush(KAFKA_TEST_TIMEOUT_MS);
 
-        $consumer = new Consumer($conf);
+        $consumer = new Consumer($consumerConf);
         $consumerTopic = $consumer->newTopic(KAFKA_TEST_TOPIC);
         $consumerTopic->consumeStart(0, rd_kafka_offset_tail(1));
 
@@ -196,6 +199,7 @@ class ConsumerTopicTest extends TestCase
     public function testOffsetStore(): void
     {
         $conf = new Conf();
+        $conf->set('log_level', (string) LOG_EMERG);
         $conf->set('group.id', __METHOD__ . random_int(0, 99999999));
         $conf->set('bootstrap.servers', KAFKA_BROKERS);
         $conf->set('enable.auto.offset.store', 'false');

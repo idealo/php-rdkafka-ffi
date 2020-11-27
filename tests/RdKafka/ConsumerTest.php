@@ -16,7 +16,10 @@ class ConsumerTest extends TestCase
 {
     public function testAddBrokers(): void
     {
-        $consumer = new Consumer();
+        $conf = new Conf();
+        $conf->set('log_level', (string) LOG_EMERG);
+
+        $consumer = new Consumer($conf);
         $addedBrokersNumber = $consumer->addBrokers(KAFKA_BROKERS);
 
         $this->assertSame(1, $addedBrokersNumber);
@@ -70,7 +73,10 @@ class ConsumerTest extends TestCase
 
     public function testNewQueue(): void
     {
-        $consumer = new Consumer();
+        $conf = new Conf();
+        $conf->set('log_level', (string) LOG_EMERG);
+
+        $consumer = new Consumer($conf);
         $queue = $consumer->newQueue();
 
         $this->assertInstanceOf(Queue::class, $queue);
@@ -78,7 +84,10 @@ class ConsumerTest extends TestCase
 
     public function testNewTopic(): void
     {
-        $consumer = new Consumer();
+        $conf = new Conf();
+        $conf->set('log_level', (string) LOG_EMERG);
+
+        $consumer = new Consumer($conf);
         $topic = $consumer->newTopic(KAFKA_TEST_TOPIC);
 
         $this->assertInstanceOf(ConsumerTopic::class, $topic);
@@ -200,10 +209,13 @@ class ConsumerTest extends TestCase
      */
     public function testResolveFromCData(): void
     {
-        $consumer1 = new Consumer();
+        $conf = new Conf();
+        $conf->set('log_level', (string) LOG_EMERG);
+
+        $consumer1 = new Consumer($conf);
         $cData1 = $consumer1->getCData();
 
-        $consumer2 = new Consumer();
+        $consumer2 = new Consumer($conf);
         $cData2 = $consumer2->getCData();
 
         $this->assertSame($consumer1, Consumer::resolveFromCData($cData1));

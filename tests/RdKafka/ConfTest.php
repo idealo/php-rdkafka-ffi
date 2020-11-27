@@ -216,6 +216,7 @@ class ConfTest extends TestCase
         $errorCallbackStack = [];
 
         $conf = new Conf();
+        $conf->set('log_level', (string) LOG_EMERG);
         $conf->set('bootstrap.servers', 'unknown');
         $conf->setErrorCb(
             function (Consumer $consumer, $err, $reason, $opaque = null) use (&$errorCallbackStack): void {
@@ -268,6 +269,7 @@ class ConfTest extends TestCase
         $statsJson = '';
 
         $conf = new Conf();
+        $conf->set('log_level', (string) LOG_EMERG);
         $conf->set('client.id', 'some_id');
         $conf->set('statistics.interval.ms', (string) 1);
         $conf->setStatsCb(
@@ -293,6 +295,7 @@ class ConfTest extends TestCase
         $rebalanceCallbackStack = [];
 
         $conf = new Conf();
+        $conf->set('log_level', (string) LOG_EMERG);
         $conf->set('group.id', __METHOD__ . random_int(0, 99999999));
         $conf->set('bootstrap.servers', KAFKA_BROKERS);
         $conf->setRebalanceCb(

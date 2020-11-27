@@ -30,6 +30,7 @@ class KafkaConsumerTopicTest extends TestCase
     public function testOffsetStore(): void
     {
         $conf = new Conf();
+        $conf->set('log_level', (string) LOG_EMERG);
         $conf->set('group.id', __METHOD__ . random_int(0, 99999999));
         $conf->set('bootstrap.servers', KAFKA_BROKERS);
         $conf->set('enable.auto.offset.store', 'false');
