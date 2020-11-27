@@ -6,6 +6,7 @@ namespace RdKafka\Test;
 
 use FFI\CData;
 use RdKafka;
+use RdKafka\Conf;
 use RdKafka\FFI\Library;
 use RdKafka\Producer;
 
@@ -35,7 +36,7 @@ class MockCluster
         }
     }
 
-    public static function create(int $brokerCount): self
+    public static function create(int $brokerCount, ?Conf $conf = null): self
     {
         Library::requireVersion('>=', '1.3.0');
 
@@ -45,7 +46,7 @@ class MockCluster
             );
         }
 
-        $producer = new Producer();
+        $producer = new Producer($conf);
         $cluster = Library::rd_kafka_mock_cluster_new($producer->getCData(), $brokerCount);
 
         $instance = new static($producer, $cluster);
