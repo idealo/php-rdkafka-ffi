@@ -187,7 +187,19 @@ class ConfTest extends TestCase
             $consumer->poll(0);
         } while ($loggerCallbacks === 0);
 
+        $this->assertSame('true', $conf->get('log.queue'));
         $this->assertSame(1, $loggerCallbacks, 'Expected debug level log callback');
+    }
+
+    public function testSetLogCbWithNullShouldDisableLogging(): void
+    {
+        $conf = new Conf();
+        $conf->set('debug', 'consumer');
+        $conf->set('bootstrap.servers', KAFKA_BROKERS);
+        $conf->set('log_level', (string) LOG_DEBUG);
+        $conf->setLogCb(null);
+
+        $this->assertSame('false', $conf->get('log.queue'));
     }
 
     public function testSetErrorCb(): void

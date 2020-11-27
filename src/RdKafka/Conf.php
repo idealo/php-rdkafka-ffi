@@ -130,17 +130,21 @@ class Conf
     }
 
     /**
-     * @param callable $callback function($consumerOrProducer, int $level, string $fac, string $buf)
+     * @param ?callable $callback function($consumerOrProducer, int $level, string $facility, string $message) or null to disable logging
      * @throws Exception
      */
-    public function setLogCb(callable $callback): void
+    public function setLogCb(?callable $callback): void
     {
-        $this->set('log.queue', 'true');
-
-        Library::rd_kafka_conf_set_log_cb(
-            $this->conf,
-            LogCallbackProxy::create($callback)
-        );
+        if ($callback === null) {
+            $this->set('log.queue', 'false');
+            Library::rd_kafka_conf_set_log_cb($this->conf, null);
+        } else {
+            $this->set('log.queue', 'true');
+            Library::rd_kafka_conf_set_log_cb(
+                $this->conf,
+                LogCallbackProxy::create($callback)
+            );
+        }
     }
 
     /**
@@ -166,7 +170,7 @@ class Conf
     }
 
     /**
-     * @param callable $callback function($consumerOrProducer, string $json, int $json_len, ?object $opaque = null)
+     * @param callable $callback function($consumerOrProducer, string $json, int $jsonLength, ?object $opaque = null)
      */
     public function setStatsCb(callable $callback): void
     {
