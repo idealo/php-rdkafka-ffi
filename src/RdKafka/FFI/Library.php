@@ -170,7 +170,7 @@ class Library
 
     public static function requireVersion(string $operator, string $version): void
     {
-        if (self::versionMatches($version, $operator) === false) {
+        if (self::versionMatches($operator, $version) === false) {
             throw new RuntimeException(
                 sprintf(
                     'Requires librdkafka %s %s. Binding version is %s, library version is %s.',
