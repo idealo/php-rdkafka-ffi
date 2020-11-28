@@ -45,8 +45,7 @@ RUN curl -o phpbench.phar https://phpbench.github.io/phpbench/phpbench.phar; \
     mv phpbench.phar /usr/local/bin/phpbench; \
     mv phpbench.phar.pubkey /usr/local/bin/phpbench.pubkey;
 
-#RUN mkdir /tmp/.composer;
-#ENV COMPOSER_HOME /tmp/.composer
+ENV COMPOSER_HOME /tmp
 ENV COMPOSER_ALLOW_SUPERUSER 1
 COPY --from=composer /usr/bin/composer /usr/bin/composer
 

@@ -39,10 +39,10 @@ jobs:
           docker-compose build --pull --parallel --build-arg LIBRDKAFKA_VERSION="$LIBRDKAFKA_VERSION" php$PHP_VERSION;
           docker-compose up -d kafka;
           sleep 10s;
-          docker-compose run --user $(id -u):$(id -g) --rm --no-deps -v $HOME/.composer/cache:/.composer php74 composer update --prefer-stable --no-interaction;
+          docker-compose run --user $(id -u):$(id -g) --rm --no-deps -v $HOME/.composer:/tmp php74 composer update --prefer-stable --no-interaction;
           docker-compose run --user $(id -u):$(id -g) --rm php74 php examples/create-topic.php -ttest -p1 -r1;
           docker-compose run --user $(id -u):$(id -g) --rm php74 php examples/create-topic.php -ttest_partitions -p3 -r1;
-          docker-compose run --user $(id -u):$(id -g) --rm -e -XDEBUG_MODE=coverage php74 vendor/bin/phpunit --coverage-text --coverage-clover=clover.xml;
+          docker-compose run --user $(id -u):$(id -g) --rm -e XDEBUG_MODE=coverage php74 vendor/bin/phpunit --coverage-text --coverage-clover=clover.xml;
       after_script:
         - |
           docker-compose down;
@@ -107,7 +107,7 @@ jobs:
           docker-compose build --pull --parallel --build-arg LIBRDKAFKA_VERSION="$LIBRDKAFKA_VERSION" php$PHP_VERSION;
           docker-compose up -d kafka;
           sleep 10s;
-          docker-compose run --user $(id -u):$(id -g) --rm --no-deps -v $HOME/.composer/cache:/tmp/.composer php74 composer update -d /app/resources/test-extension --ignore-platform-reqs;
+          docker-compose run --user $(id -u):$(id -g) --rm --no-deps -v $HOME/.composer:/tmp/ php74 composer update -d /app/resources/test-extension --ignore-platform-reqs;
           docker-compose exec kafka sh -c '/usr/bin/kafka-topics --create --bootstrap-server localhost:9092 --topic test --partitions 1 --replication-factor 1';
           docker-compose exec kafka sh -c '/usr/bin/kafka-topics --create --bootstrap-server localhost:9092 --topic test_partitions --partitions 3 --replication-factor 1';
           docker-compose run --user $(id -u):$(id -g) --rm php74 php -dextension=rdkafka.so resources/test-extension/vendor/bin/phpunit -c resources/test-extension/phpunit.xml;
