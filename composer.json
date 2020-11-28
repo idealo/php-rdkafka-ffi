@@ -36,16 +36,36 @@
         "ext-pcntl": "*",
         "beberlei/assert": "^3.2"
     },
+    "suggest": {
+        "ext-zend opcache": "*"
+    },
+    "conflict": {
+        "ext-rdkafka": "*"
+    },
     "require-dev": {
         "phpunit/phpunit": "^9",
         "ircmaxell/php-c-parser": "dev-master",
         "symplify/easy-coding-standard": "^8.1",
-        "klitsche/ffigen": "0.5"
+        "klitsche/ffigen": "0.5",
+        "klitsche/dog": "^0.4"
     },
     "scripts": {
+        "test-init" : [
+            "php examples/delete-topic.php -ttest",
+            "php examples/delete-topic.php -ttest_partitions",
+            "php examples/create-topic.php -ttest -p1 -r1",
+            "php examples/create-topic.php -ttest_partitions -p3 -r1"
+        ],
         "test" : "vendor/bin/phpunit",
         "test-coverage" : "vendor/bin/phpunit --coverage-text --coverage-clover=clover.xml",
         "cs" : "vendor/bin/ecs check src tests examples resources/ffigen --ansi",
-        "cs-fix" : "vendor/bin/ecs check src tests examples resources/ffigen --ansi --fix"
+        "cs-fix" : "vendor/bin/ecs check src tests examples resources/ffigen --ansi --fix",
+        "prepare-docs": [
+            "echo '---\ntitle: Getting started\n---\n' > docs/index.md",
+            "sed 's/docs\\/img/img/g' README.md >> docs/index.md",
+            "sed 's/docs\\/try-out/try-out/g' CONTRIBUTING.md > docs/contributing.md",
+            "cp LICENSE docs/license.md",
+            "vendor/bin/dog"
+        ]
     }
 }

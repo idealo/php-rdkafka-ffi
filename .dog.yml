@@ -1,0 +1,17 @@
+title: 'Overview'
+srcPaths:
+  'src':
+    '/.*\.php$/': true
+printerClass: 'Klitsche\Dog\Printer\Markdown\Printer'
+outputDir: 'docs/api'
+debug: true
+enrichers:
+  clover:
+    class: \Klitsche\Dog\Enrichers\Clover\CloverEnricher
+    file: clover.xml
+  extendedBy:
+    class: \Klitsche\Dog\Enrichers\ExtendedBy\ExtendedByEnricher
+  implementedBy:
+    class: \Klitsche\Dog\Enrichers\ImplementedBy\ImplementedByEnricher
+  usedBy:
+    class: \Klitsche\Dog\Enrichers\UsedBy\UsedByEnricher

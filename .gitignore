@@ -1,2 +1,6 @@
 vendor
 composer.lock
+/docs/contributing.md
+/docs/index.md
+/docs/license.md
+/docs/api/

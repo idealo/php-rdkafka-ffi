@@ -36,7 +36,7 @@ services:
   php74:
     build:
       context: resources/docker/php74-librdkafka-ffi
-    image: php74-librdkafka-ffi
+    image: php74-librdkafka-ffi:latest
     volumes:
       - .:/app
     depends_on:
@@ -47,10 +47,21 @@ services:
   php80:
     build:
       context: resources/docker/php80-librdkafka-ffi
-    image: php80-librdkafka-ffi
+    image: php80-librdkafka-ffi:latest
     volumes:
       - .:/app
     depends_on:
       - kafka
     networks:
       - php-rdkafka-ffi
+
+  mkdocs:
+    build:
+      context: resources/docker/mkdocs-material
+    image: mkdocs-material
+    volumes:
+      - .:/docs
+    networks:
+      - php-rdkafka-ffi
+    ports:
+      - 127.0.0.1:8000:8000
