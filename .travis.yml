@@ -144,7 +144,8 @@ jobs:
       before_cache:
         - brew cleanup
       before_script:
-        - brew unlink php && brew link --overwrite --force php@7.4
+        - php -v
+        - brew link --overwrite --force php@7.4
         - php -v
       script:
         - |
