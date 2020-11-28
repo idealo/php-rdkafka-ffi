@@ -6,12 +6,20 @@ use RdKafka\FFI\Library;
 
 require_once dirname(__DIR__) . '/vendor/autoload.php';
 
-$directory = new RecursiveDirectoryIterator(dirname(__DIR__) . '/src');
-$iterator = new RecursiveIteratorIterator($directory);
-$files = new RegexIterator($iterator, '/^.+\/[A-Z][^\/]+?\.php$/', RecursiveRegexIterator::GET_MATCH);
+$files = new RegexIterator(
+    new RecursiveIteratorIterator(
+        new RecursiveDirectoryIterator(
+            dirname(__DIR__) . '/src'
+        )
+    ),
+    '/^.+\/[A-Z][^\/]+?\.php$/'
+);
 
 foreach ($files as $file) {
-    opcache_compile_file($file[0]);
+    if (! $file->isFile()) {
+        continue;
+    }
+    \opcache_compile_file($file->getPathName());
 }
 
 Library::preload();
