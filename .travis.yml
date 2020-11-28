@@ -119,18 +119,17 @@ jobs:
       stage: Test
       name: "librdkafka latest osx, php 7.4"
       os: osx
+      osx_image: xcode12
       cache:
         directories:
           - $HOME/Library/Caches/Homebrew
       before_cache:
         - brew cleanup
       before_script:
-        - |
-          brew install php@7.4;
-          brew install librdkafka;
-          brew install composer;
-          brew cask install homebrew/cask-versions/adoptopenjdk8;
-          brew install kafka;
+        - brew install php@7.4;
+        - brew install librdkafka;
+        - brew install composer;
+        - brew install kafka;
       script:
         - |
           set -e;
