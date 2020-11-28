@@ -40,11 +40,23 @@ jobs:
           docker-compose run --user $(id -u):$(id -g) --rm php74 php examples/create-topic.php -ttest -p1 -r1;
           docker-compose run --user $(id -u):$(id -g) --rm php74 php examples/create-topic.php -ttest_partitions -p3 -r1;
           docker-compose run --user $(id -u):$(id -g) --rm -e XDEBUG_MODE=coverage php74 vendor/bin/phpunit --coverage-text --coverage-clover=clover.xml;
+          if [ "$LIBRDKAFKA_VERSION" = "v1.5.2" ]; then docker-compose run --user $(id -u):$(id -g) --rm php74 composer prepare-docs; fi;
+          if [ "$LIBRDKAFKA_VERSION" = "v1.5.2" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then docker-compose run --user $(id -u):$(id -g) --rm mkdocs build; fi;
       after_script:
         - |
           docker-compose down;
           sed -i "s|/app/|`pwd`/|g" clover.xml;
           if [ "$LIBRDKAFKA_VERSION" = "v1.5.2" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT; fi;
+      deploy:
+        - provider: pages
+          local_dir: site
+          skip_cleanup: true
+          github_token: $GITHUB_TOKEN
+          keep_history: true
+          target_branch: gh-pages
+          on:
+            branch: main
+            condition: "$LIBRDKAFKA_VERSION" == "v1.5.2"
 
     - <<: *STANDARD_TEST_JOB
       env:
