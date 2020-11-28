@@ -29,7 +29,7 @@ class Conf
             $this->set('client.software.name', 'php-rdkafka-ffi');
             $this->set(
                 'client.software.version',
-                sprintf('v%s-librdkafka-v%s', Library::getLibraryVersion(), Library::rd_kafka_version_str())
+                sprintf('v%s-librdkafka-v%s', Library::getVersion(), Library::getLibraryVersion())
             );
         }
     }

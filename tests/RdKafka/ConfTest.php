@@ -149,7 +149,7 @@ class ConfTest extends TestCase
 
         $params = $conf->dump();
         $this->assertSame('php-rdkafka-ffi', $params['client.software.name']);
-        $this->assertMatchesRegularExpression('/\d+\.\d+\.\d+-librdkafka-v\d+\.\d+\.\d+/', $params['client.software.version']);
+        $this->assertMatchesRegularExpression('/v\d+\.\d+\.[\w\d\-]+?-librdkafka-v\d+\.\d+\.[\w\d\-]+/', $params['client.software.version']);
     }
 
     /**
