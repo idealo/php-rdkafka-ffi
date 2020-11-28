@@ -123,20 +123,24 @@ jobs:
       cache:
         directories:
           - $HOME/Library/Caches/Homebrew
+      addons:
+        homebrew:
+          packages:
+            - php@7.4
+            - librdkafka
+            - composer
+            - kafka
       before_cache:
         - brew cleanup
       before_script:
-        - brew install php@7.4;
-        - brew install librdkafka;
-        - brew install composer;
-        - brew install kafka;
+        - brew link php
       script:
         - |
           set -e;
           zookeeper-server-start -daemon /usr/local/etc/kafka/zookeeper.properties;
           kafka-server-start -daemon /usr/local/etc/kafka/server.properties --override broker.id=111 --override advertised.listeners=PLAINTEXT://kafka:9092;
           sleep 10s;
-          composer update --prefer-stable --no-interaction --no-suggest;
+          composer update --prefer-stable --no-interaction;
           php examples/create-topic.php -ttest -p1 -r1;
           php examples/create-topic.php -ttest_partitions -p3 -r1;
           php vendor/bin/phpunit --verbose --colors;
@@ -153,7 +157,7 @@ jobs:
       before_script:
         - |
           choco upgrade curl;
-          choco install php --version 7.4.9 --package-parameters='"/InstallDir:C:\PHP"';
+          choco install php --version 7.4.13 --package-parameters='"/InstallDir:C:\PHP"';
           sed -i 's/;extension=ffi/extension=ffi/g' /c/PHP/php.ini;
           export PATH=/c/PHP:$PATH;
           php -i;
@@ -166,8 +170,8 @@ jobs:
           nuget install librdkafka.redist -Version 1.5.2;
           export PATH=$PWD/librdkafka.redist.1.5.2/runtimes/win-x64/native:$PATH;
         - |
-          choco install adoptopenjdk8 --version 8.262.10;
-          export JAVA_HOME=/c/Program\ Files/AdoptOpenJDK/jdk-8.0.262.10-hotspot;
+          choco install adoptopenjdk8 --version 8.275.1;
+          export JAVA_HOME=/c/Program\ Files/AdoptOpenJDK/jdk-8.0.275.1-hotspot;
           wget -O kafka_2.13-2.6.0.tgz http://ftp.fau.de/apache/kafka/2.6.0/kafka_2.13-2.6.0.tgz;
           tar -xzf kafka_2.13-2.6.0.tgz;
           cp -pr kafka_2.13-2.6.0 /c/kafka;
@@ -188,7 +192,7 @@ jobs:
           nssm status kafka;
           sleep 10s;
         - |
-          composer update --prefer-stable --no-interaction --no-suggest --ignore-platform-reqs;
+          composer update --prefer-stable --no-interaction --ignore-platform-reqs;
           php examples/create-topic.php -ttest -p1 -r1 -b127.0.0.1:9092;
           php examples/create-topic.php -ttest_partitions -p3 -r1  -b127.0.0.1:9092;
         - |
