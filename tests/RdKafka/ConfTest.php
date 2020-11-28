@@ -294,9 +294,13 @@ class ConfTest extends TestCase
         $this->assertSame([], $stats['brokers']);
     }
 
+    /**
+     * Note: if this tests runs too long it will fail
+     */
     public function testSetRebalanceCb(): void
     {
         $rebalanceCallbackStack = [];
+        $failedTimeoutSec = 10;
 
         $conf = new Conf();
         $conf->set('log_level', (string) LOG_EMERG);
@@ -332,11 +336,15 @@ class ConfTest extends TestCase
         $consumer3 = new KafkaConsumer($conf);
         $consumer3->subscribe([KAFKA_TEST_TOPIC_PARTITIONS]);
 
+        $startTime = time();
         do {
             $consumer1->consume((int) 50);
             $consumer2->consume((int) 50);
             $consumer3->consume((int) 50);
-        } while (\count($rebalanceCallbackStack) < 3);
+            $durationSec = time() - $startTime;
+        } while (\count($rebalanceCallbackStack) < 3 && $durationSec < $failedTimeoutSec);
+
+        $this->assertLessThan($failedTimeoutSec, $durationSec, 'adding consumer took too long');
 
         $assignedConsumers = array_column($rebalanceCallbackStack, 'consumer');
         $this->assertContains($consumer1, $assignedConsumers);
@@ -360,9 +368,13 @@ class ConfTest extends TestCase
         $consumer2->close();
         $consumer3->close();
 
+        $startTime = time();
         do {
             usleep(50 * 1000);
-        } while (\count($rebalanceCallbackStack) < 3);
+            $durationSec = time() - $startTime;
+        } while (\count($rebalanceCallbackStack) < 3 && $durationSec < $failedTimeoutSec);
+
+        $this->assertLessThan($failedTimeoutSec, $durationSec, 'removing consumer took too long');
 
         $revokedConsumers = array_column($rebalanceCallbackStack, 'consumer');
         $this->assertContains($consumer1, $revokedConsumers);
