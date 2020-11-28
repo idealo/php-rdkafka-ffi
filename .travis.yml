@@ -5,9 +5,6 @@ cache:
 addons:
   hosts:
     - kafka
-env:
-  global:
-    - CC_TEST_REPORTER_ID=eb564d92dfc96475db45cfde2fda537cf54011b76cefd6d8ddbf9a009c0692d8
 
 jobs:
   allow_failures:
@@ -125,15 +122,18 @@ jobs:
           - $HOME/Library/Caches/Homebrew
       addons:
         homebrew:
+          taps:
+            - shivammathur/php
           packages:
-            - php@7.4
+            - shivammathur/php/php@7.4
             - librdkafka
             - composer
             - kafka
       before_cache:
         - brew cleanup
       before_script:
-        - brew link php
+        - brew unlink php && brew link --overwrite --force php@7.4
+        - php -v
       script:
         - |
           set -e;
