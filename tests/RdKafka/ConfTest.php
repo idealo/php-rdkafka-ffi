@@ -300,7 +300,7 @@ class ConfTest extends TestCase
     public function testSetRebalanceCb(): void
     {
         $rebalanceCallbackStack = [];
-        $failedTimeoutSec = 10;
+        $failedTimeoutSec = 30;
 
         $conf = new Conf();
         $conf->set('log_level', (string) LOG_EMERG);
