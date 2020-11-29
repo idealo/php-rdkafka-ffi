@@ -8,6 +8,7 @@ theme:
   palette:
     primary: 'white'
   logo: 'img/php-rdkafka.svg'
+  favicon: 'img/php-rdkafka.svg'
   features:
     - navigation.tabs
   include_sidebar: false
