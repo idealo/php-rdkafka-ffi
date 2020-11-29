@@ -61,7 +61,10 @@ foreach ($metadata->getTopics() as $metadataTopic) {
         $low = 0;
         $high = 0;
         $consumer->queryWatermarkOffsets($metadataTopic->getTopic(), $metadataPartition->getId(), $low, $high, 1000);
-        $topicWatermarks[$metadataTopic->getTopic()][$metadataPartition->getId()] = ['low' => $low, 'high' => $high];
+        $topicWatermarks[$metadataTopic->getTopic()][$metadataPartition->getId()] = [
+            'low' => $low,
+            'high' => $high,
+        ];
     }
 }
 //var_export($topicWatermarks);
