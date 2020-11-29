@@ -15,15 +15,15 @@ jobs:
   include:
     - &STANDARD_TEST_JOB
       stage: Test
-      name: "librdkafka v1.0.1, php 7.4"
       os: linux
       dist: xenial
       language: minimal
       services:
         - docker
       env:
-        - LIBRDKAFKA_VERSION=v1.0.1
+        - LIBRDKAFKA_VERSION=v1.5.2
         - PHP_VERSION=74
+      name: "librdkafka v1.5.2, php 7.4"
       before_script:
         - |
           curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter;
@@ -59,21 +59,9 @@ jobs:
 
     - <<: *STANDARD_TEST_JOB
       env:
-        - LIBRDKAFKA_VERSION=v1.1.0
-        - PHP_VERSION=74
-      name: "librdkafka v1.1.0, php 7.4"
-
-    - <<: *STANDARD_TEST_JOB
-      env:
-        - LIBRDKAFKA_VERSION=v1.2.2
-        - PHP_VERSION=74
-      name: "librdkafka v1.2.2, php 7.4"
-
-    - <<: *STANDARD_TEST_JOB
-      env:
-        - LIBRDKAFKA_VERSION=v1.3.0
-        - PHP_VERSION=74
-      name: "librdkafka v1.3.0, php 7.4"
+        - LIBRDKAFKA_VERSION=v1.5.2
+        - PHP_VERSION=80
+      name: "librdkafka v1.5.2, php 8.0"
 
     - <<: *STANDARD_TEST_JOB
       env:
@@ -83,21 +71,33 @@ jobs:
 
     - <<: *STANDARD_TEST_JOB
       env:
-        - LIBRDKAFKA_VERSION=v1.5.2
+        - LIBRDKAFKA_VERSION=v1.3.0
         - PHP_VERSION=74
-      name: "librdkafka v1.5.2, php 7.4"
+      name: "librdkafka v1.3.0, php 7.4"
+
+    - <<: *STANDARD_TEST_JOB
+      env:
+        - LIBRDKAFKA_VERSION=v1.2.2
+        - PHP_VERSION=74
+      name: "librdkafka v1.2.2, php 7.4"
+
+    - <<: *STANDARD_TEST_JOB
+      env:
+        - LIBRDKAFKA_VERSION=v1.1.0
+        - PHP_VERSION=74
+      name: "librdkafka v1.1.0, php 7.4"
+
+    - <<: *STANDARD_TEST_JOB
+      env:
+        - LIBRDKAFKA_VERSION=v1.0.1
+        - PHP_VERSION=74
+      name: "librdkafka v1.0.1, php 7.4"
 
     - <<: *STANDARD_TEST_JOB
       env:
         - LIBRDKAFKA_VERSION=master
         - PHP_VERSION=74
       name: "librdkafka master, php 7.4"
-
-    - <<: *STANDARD_TEST_JOB
-      env:
-        - LIBRDKAFKA_VERSION=v1.5.2
-        - PHP_VERSION=80
-      name: "librdkafka v1.5.2, php 8.0"
 
     - env:
         - LIBRDKAFKA_VERSION=v1.4.4
