@@ -34,7 +34,7 @@ You may look through the [GitHub issues](https://github.com/idealo/php-rdkafka-f
 
 * Make sure any new code you introduce has proper phpdoc. You may add extra usage documentation under /docs/usage
 
-See [work on documentation](docs/try-out.md#work-on-documentation) locally.
+See [work on the documentation](docs/try-out.md#work-on-the-documentation) locally.
 
 ## Testing
 
