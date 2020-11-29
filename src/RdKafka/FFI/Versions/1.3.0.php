@@ -1,14 +1,24 @@
 <?php
 /**
  * This file is generated! Do not edit directly.
+ *
+ * Description of librdkafka methods and constants is extracted from the official documentation.
+ * @link https://docs.confluent.io/current/clients/librdkafka/rdkafka_8h.html
  */
 
 declare(strict_types=1);
 
 // version specific constants
 /**
- * #define
+ * <p>librdkafka version </p>
+ * <p>Interpreted as hex <code>MM.mm.rr.xx</code>:</p><ul><li>MM = Major</li>
+ * <li>mm = minor</li>
+ * <li>rr = revision</li>
+ * <li>xx = pre-release id (0xff is the final release)</li>
+ * </ul><p>E.g.: <code>0x000801ff</code> = 0.8.1</p>
+ * <dl class="section remark"><dt>Remarks</dt><dd>This value should only be used during compile time, for runtime checks of version use rd_kafka_version() </dd></dl>
  * @since 1.3.0 of librdkafka
+ * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#aa2e242fb8620a32b650a40575bc7f98e
  */
 const RD_KAFKA_VERSION = 16974079;
 

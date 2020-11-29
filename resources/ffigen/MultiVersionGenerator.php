@@ -10,6 +10,7 @@ use Klitsche\FFIGen\Constant;
 use Klitsche\FFIGen\ConstantsCollection;
 use Klitsche\FFIGen\ConstantsCollector;
 use Klitsche\FFIGen\ConstantsPrinter;
+use Klitsche\FFIGen\DocBlockTag;
 use Klitsche\FFIGen\GeneratorInterface;
 use Klitsche\FFIGen\MethodsCollection;
 use Klitsche\FFIGen\MethodsCollector;
@@ -18,12 +19,13 @@ use Symfony\Component\Filesystem\Filesystem;
 
 class MultiVersionGenerator implements GeneratorInterface
 {
-    private const RELEASE_URL = 'https://api.github.com/repos/edenhill/librdkafka/releases';
-
     private const TEMPLATE_CONST_VERSION = <<<PHPTMP
     <?php
     /**
      * This file is generated! Do not edit directly.
+     *
+     * Description of librdkafka methods and constants is extracted from the official documentation.
+     * @link https://docs.confluent.io/current/clients/librdkafka/rdkafka_8h.html
      */
     
     declare(strict_types=1);
@@ -37,6 +39,9 @@ class MultiVersionGenerator implements GeneratorInterface
     <?php
     /**
      * This file is generated! Do not edit directly.
+     *
+     * Description of librdkafka methods and constants is extracted from the official documentation.
+     * @link https://docs.confluent.io/current/clients/librdkafka/rdkafka_8h.html
      */
     
     declare(strict_types=1);
@@ -68,6 +73,10 @@ class MultiVersionGenerator implements GeneratorInterface
     
     namespace RdKafka\FFI;
     
+    /**
+     * Description of librdkafka methods and constants is extracted from the official documentation.
+     * @link https://docs.confluent.io/current/clients/librdkafka/rdkafka_8h.html
+     */
     trait Methods 
     {
         abstract public static function getFFI():\FFI;
@@ -80,6 +89,8 @@ class MultiVersionGenerator implements GeneratorInterface
     private array $overAllMethods;
     private array $supportedMethods;
     private array $allConstants;
+    private LibrdkafkaDocumentation $documentation;
+    private LibrdkafkaHeaderFiles $headerFiles;
 
     private Filesystem $filesystem;
     private ConfigInterface $config;
@@ -91,16 +102,17 @@ class MultiVersionGenerator implements GeneratorInterface
         $this->overAllMethods = [];
         $this->supportedMethods = [];
         $this->allConstants = [];
+        $this->documentation = new LibrdkafkaDocumentation();
+        $this->headerFiles = new LibrdkafkaHeaderFiles($config);
     }
 
     public function generate(): void
     {
-        $supportedVersions = $this->getSupportedVersions();
-        echo 'Found ' . count($supportedVersions) . ' librdkafka releases' . PHP_EOL;
-        print_r($supportedVersions);
+        $this->documentation->extract();
 
-        foreach ($supportedVersions as $version => $hFileUrl) {
-            $this->parse($version, $hFileUrl);
+        foreach ($this->headerFiles->getSupportedVersions() as $version) {
+            $this->headerFiles->prepareVersion($version);
+            $this->parse($version);
         }
 
         echo 'Generate constants files' . PHP_EOL;
@@ -148,30 +160,8 @@ class MultiVersionGenerator implements GeneratorInterface
         return $supportedVersions;
     }
 
-    private function parse(string $version, string $baseUrl): void
+    private function parse(string $version): void
     {
-        $headerFiles = $this->config->getHeaderFiles();
-
-        // download header files and parse
-        foreach ($headerFiles as $fileName) {
-            $file = $this->config->getOutputPath() . '/' . $fileName;
-            $this->filesystem->remove($file);
-
-            $url = $baseUrl . '/' . $fileName;
-            echo "  Download ${url}" . PHP_EOL;
-
-            $content = @file_get_contents($url);
-            if ($content === false) {
-                echo '  Not found - skip' . PHP_EOL;
-                continue;
-            }
-
-            $content = $this->prepareFileContent($file, $content, $version);
-            $this->filesystem->dumpFile($file, $content);
-
-            echo "  Save as ${file}" . PHP_EOL;
-        }
-
         echo '  Parse ...' . PHP_EOL;
         $parser = new Parser($this->config);
 
@@ -184,7 +174,9 @@ class MultiVersionGenerator implements GeneratorInterface
 
         // add to overall consts
         foreach ($constants as $name => $const) {
-            $const->addDocBlockTag('since', $version . ' of librdkafka');
+            $const->getDocBlock()->addTag(new DocBlockTag('since', $version . ' of librdkafka'));
+
+            $this->documentation->enrich($const);
         }
         $this->allConstants[$version] = iterator_to_array($constants);
 
@@ -196,7 +188,8 @@ class MultiVersionGenerator implements GeneratorInterface
 
         // add to overall & supported methods
         foreach ($methods as $name => $method) {
-            $method->addDocBlockTag('since', $version . ' of librdkafka');
+            $method->getDocBlock()->addTag(new DocBlockTag('since', $version . ' of librdkafka'));
+            $this->documentation->enrich($method);
             if (array_key_exists($name, $this->overAllMethods) === false) {
                 $this->overAllMethods[$name] = $method;
                 $this->supportedMethods[$name] = $version;
@@ -260,65 +253,5 @@ class MultiVersionGenerator implements GeneratorInterface
             dirname(__DIR__, 2) . '/src/RdKafka/FFI/Methods.php',
             $printer->print('', self::TEMPLATE_METHODS)
         );
-    }
-
-    private function prepareFileContent(string $file, string $content, string $version): string
-    {
-        if (strpos($file, 'rdkafka.h') !== false) {
-            // prefilter header file content - not supported by cparser
-            $content = preg_replace_callback(
-                '/static RD_INLINE.+?rd_kafka_message_errstr[^}]+?}/si',
-                function ($matches) {
-                    return '//' . str_replace("\n", "\n//", $matches[0]);
-                },
-                $content,
-                1
-            );
-            $content = preg_replace_callback(
-                '/(#define.+RD_.[\w_]+)\s+__attribute__.+/i',
-                function ($matches) {
-                    return '' . $matches[1];
-                },
-                $content
-            );
-            // filter rd_kafka_conf_set_open_cb - not supported by windows
-            $content = preg_replace_callback(
-                '/RD_EXPORT[\s\w\n]+?void.+?rd_kafka_conf_set_open_cb[^;]+?;/i',
-                function ($matches) {
-                    return '//' . str_replace("\n", "\n//", $matches[0]);
-                },
-                $content
-            );
-            // use typdef from rdkafka_error.h for KafkaError class
-            $content = preg_replace_callback(
-                '/typedef struct rd_kafka_error_s/i',
-                function ($matches) {
-                    return <<<CDEF
-                    typedef struct rd_kafka_error_s {
-                        unsigned int code;
-                        char *errstr;
-                        unsigned char fatal;
-                        unsigned char retriable;
-                        unsigned char txn_requires_abort;
-                    }
-                    CDEF;
-                },
-                $content
-            );
-
-            // prepend
-            $prepend = <<<CDEF
-            typedef long int ssize_t;
-            typedef struct _IO_FILE FILE;
-            typedef long int mode_t;
-            typedef signed int int16_t;
-            typedef signed int int32_t;
-            typedef signed long int int64_t;
-            
-            CDEF;
-            $content = $prepend . $content;
-        }
-
-        return $content;
     }
 }
