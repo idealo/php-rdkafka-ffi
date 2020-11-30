@@ -36,18 +36,10 @@ This changes may depend on upcoming major releases of the RdKafka extension or i
 
 https://idealo.github.io/php-rdkafka-ffi/
 
-## Todos
+## Contributing
 
-* [x] Callbacks
-* [x] High Level KafkaConsumer
-* [x] Tests, tests, tests, ... and travis
-* [x] Support admin features
-* [x] Compatible to librdkafka ^1.0.0
-* [x] Benchmarking against rdkafka extension
-* [x] Provide ffi preload
-* [x] Compatible to rdkafka extension ^4.0
-* [x] Add version specific binding for librdkafka to handle (changed) const values correctly and provide support for new features
-* [x] Sig Handling & destruct (expect seg faults & lost msgs & shutdown hangs)
-* [x] Add support for https://github.com/edenhill/librdkafka/blob/master/INTRODUCTION.md#reporting-client-software-name-and-version-to-broker
-* [ ] Documentation
-* [ ] Prepare for composer & first release
+We welcome all kinds of contributions. See the [Contribution guide](CONTRIBUTING.md) for more details.
+
+## License
+
+See [License](LICENSE) for details.
