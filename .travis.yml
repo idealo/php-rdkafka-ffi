@@ -145,6 +145,8 @@ jobs:
       before_script:
         - php -v
         - brew link --overwrite --force php@7.4
+        - export PATH="/usr/local/opt/php@7.4/bin:$PATH"' >> /Users/travis/.bash_profile
+        - source /Users/travis/.bash_profile
         - php -v
       script:
         - |
