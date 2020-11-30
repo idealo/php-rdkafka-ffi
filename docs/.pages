@@ -3,5 +3,6 @@ arrange:
   - api
   - benchmarks.md
   - try-out.md
+  - changelog.md
   - contributing.md
   - license.md

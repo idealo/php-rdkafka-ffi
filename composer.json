@@ -66,6 +66,7 @@
             "echo '---\ntitle: Getting started\n---\n' > docs/index.md",
             "sed 's/docs\\/img/img/g' README.md >> docs/index.md",
             "sed 's/docs\\/try-out/try-out/g' CONTRIBUTING.md > docs/contributing.md",
+            "cp CHANGELOG.md docs/changelog.md",
             "cp LICENSE docs/license.md",
             "vendor/bin/dog"
         ]
