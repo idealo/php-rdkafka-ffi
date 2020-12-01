@@ -2,7 +2,8 @@
 
 ## 0.1.0
 
-Supports [librdkafka] v1.0.0 - v1.5.2. It is compatible with the [PHP RdKafka extension] 4.0.*.
+Supports PHP ^7.4 and ^8.0 with [librdkafka] v1.0.0 - v1.5.2.
+It is compatible with the [PHP RdKafka extension] 4.0.*.
 
 Note: features marked as experimental are stable, but the interface may change in future releases.
 
