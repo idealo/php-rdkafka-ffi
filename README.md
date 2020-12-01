@@ -18,7 +18,7 @@ It supports the same interfaces as the [PHP RdKafka extension](https://github.co
 
 ## Runtime Requirements
 
-* PHP ^7.4 with extensions FFI and pcntl
+* PHP ^7.4 or ^8.0 with extensions FFI and pcntl
 * librdkafka ^1.0.0
 * Conflicts: RdKafka extension
 * Suggested: zend opcache extension for preloading

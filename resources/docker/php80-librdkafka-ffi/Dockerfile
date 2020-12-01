@@ -1,4 +1,4 @@
-FROM php:8.0-rc-cli
+FROM php:8.0-cli
 
 # enable ffi and install librdkafka
 ARG LIBRDKAFKA_VERSION=v1.5.2
@@ -19,14 +19,9 @@ RUN set -e; \
     rm -rf /tmp/*;
 
 # install xdebug
-ARG XDEBUG_VERSION=master
-RUN cd /tmp; \
-    curl https://codeload.github.com/xdebug/xdebug/tar.gz/$XDEBUG_VERSION -o xdebug.tar.gz;\
-    tar -xzf xdebug.tar.gz; \
-    cd xdebug-master; \
-    sh rebuild.sh; \
-    docker-php-ext-enable xdebug; \
-    rm -rf /tmp/*;
+ARG XDEBUG_VERSION=stable
+RUN pecl install xdebug-${XDEBUG_VERSION}; \
+    docker-php-ext-enable xdebug;
 
 # install rdkafka master-dev
 #ARG RDKAFKA_EXT_VERSION=master
