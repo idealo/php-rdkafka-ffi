@@ -8,6 +8,8 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \RdKafka\Admin\NewTopic
+ *
+ * @group ffiOnly
  */
 class NewTopicsTest extends TestCase
 {

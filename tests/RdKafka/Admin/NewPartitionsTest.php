@@ -8,6 +8,8 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \RdKafka\Admin\NewPartitions
+ *
+ * @group ffiOnly
  */
 class NewPartitionsTest extends TestCase
 {
