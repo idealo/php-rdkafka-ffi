@@ -131,17 +131,11 @@ jobs:
       cache:
         directories:
           - $HOME/Library/Caches/Homebrew
-      addons:
-        homebrew:
-          taps:
-            - shivammathur/php
-          packages:
-            - shivammathur/php/php@7.4
-            - librdkafka
-            - composer
-            - kafka
+          - /usr/local/Homebrew
       before_cache:
         - brew cleanup
+        - brew install php@7.4
+        - brew install composer librdkafka kafka
       before_script:
         - php -v
         - brew link --overwrite --force php@7.4
@@ -162,6 +156,7 @@ jobs:
         - |
           kafka-server-stop;
           zookeeper-server-stop;
+          find /usr/local/Homebrew \! -regex ".+\.git.+" -delete;
 
     - env: KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092
       stage: Test
