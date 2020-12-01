@@ -134,10 +134,10 @@ jobs:
           - /usr/local/Homebrew
       before_cache:
         - brew cleanup
-        - brew install php@7.4
-        - brew install composer librdkafka kafka
       before_script:
         - php -v
+        - brew install php@7.4
+        - brew install composer librdkafka kafka
         - brew link --overwrite --force php@7.4
         - export PATH="/usr/local/opt/php@7.4/bin:$PATH" >> /Users/travis/.bash_profile
         - source /Users/travis/.bash_profile
