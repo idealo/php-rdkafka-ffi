@@ -317,7 +317,6 @@ class Client
     private function assertArray(array $var, string $varName, string $instanceOf): void
     {
         if (empty($var) === true) {
-            var_dump(sprintf('%s array must not be empty', $varName));
             throw new \InvalidArgumentException(sprintf('%s array must not be empty', $varName));
         }
 
