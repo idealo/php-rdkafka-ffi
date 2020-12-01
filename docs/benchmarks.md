@@ -19,8 +19,6 @@ Some benchmarks based on PHP 7.4.12, librdkafka v1.5.2 and librdkafka binding vi
 | ProducerBench | benchProduce100Messages                         | 0   | 100  | 7,908.822μs  | 7,849.658μs  |
 | ProducerBench | benchProduce100MessagesWithLogAndDrMsgCallbacks | 0   | 100  | 10,502.396μs | 8,361.642μs  |
 
-Benchmarks based on PHP 7.4.1, librdkafka v1.3.0, ext latest master (4.0.3-dev), ffi with preload enabled.
-
 ## Details FFI report (tag:ffi)
 
 | benchmark     | subject                                         | set | revs | iter | mem_peak | time_rev     | comp_z_value | comp_deviation |
