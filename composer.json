@@ -33,8 +33,7 @@
     "require": {
         "php" : "^7.4",
         "ext-ffi": "*",
-        "ext-pcntl": "*",
-        "beberlei/assert": "^3.2"
+        "ext-pcntl": "*"
     },
     "suggest": {
         "ext-zend opcache": "*"
@@ -49,7 +48,9 @@
         "klitsche/ffigen": "^0.6",
         "klitsche/dog": "^0.4",
         "symfony/dom-crawler": "^5.1",
-        "symfony/css-selector": "^5.1"
+        "symfony/css-selector": "^5.1",
+        "phly/keep-a-changelog": "^2.10",
+        "symplify/changelog-linker": "^8.3"
     },
     "scripts": {
         "test-init" : [

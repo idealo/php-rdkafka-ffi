@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace RdKafka\Admin;
 
-use Assert\Assert;
 use FFI;
 use RdKafka;
 use RdKafka\Conf;
@@ -58,7 +57,7 @@ class Client
      */
     public function alterConfigs(array $resources, ?AlterConfigsOptions $options = null): array
     {
-        Assert::that($resources)->notEmpty()->all()->isInstanceOf(ConfigResource::class);
+        $this->assertArray($resources, 'resources', ConfigResource::class);
 
         $queue = Queue::fromRdKafka($this->kafka);
 
@@ -99,7 +98,7 @@ class Client
      */
     public function describeConfigs(array $resources, ?DescribeConfigsOptions $options = null): array
     {
-        Assert::that($resources)->notEmpty()->all()->isInstanceOf(ConfigResource::class);
+        $this->assertArray($resources, 'resources', ConfigResource::class);
 
         $queue = Queue::fromRdKafka($this->kafka);
 
@@ -140,7 +139,7 @@ class Client
      */
     public function createPartitions(array $partitions, ?CreatePartitionsOptions $options = null): array
     {
-        Assert::that($partitions)->notEmpty()->all()->isInstanceOf(NewPartitions::class);
+        $this->assertArray($partitions, 'partitions', NewPartitions::class);
 
         $queue = Queue::fromRdKafka($this->kafka);
 
@@ -180,7 +179,7 @@ class Client
      */
     public function createTopics(array $topics, ?CreateTopicsOptions $options = null): array
     {
-        Assert::that($topics)->notEmpty()->all()->isInstanceOf(NewTopic::class);
+        $this->assertArray($topics, 'topics', NewTopic::class);
 
         $queue = Queue::fromRdKafka($this->kafka);
 
@@ -220,7 +219,7 @@ class Client
      */
     public function deleteTopics(array $topics, ?DeleteTopicsOptions $options = null): array
     {
-        Assert::that($topics)->notEmpty()->all()->isInstanceOf(DeleteTopic::class);
+        $this->assertArray($topics, 'topics', DeleteTopic::class);
 
         $queue = Queue::fromRdKafka($this->kafka);
 
@@ -313,5 +312,21 @@ class Client
     public function setWaitForResultEventTimeout(int $timeoutMs): void
     {
         $this->waitForResultEventTimeoutMs = $timeoutMs;
+    }
+
+    private function assertArray(array $var, string $varName, string $instanceOf): void
+    {
+        if (empty($var) === true) {
+            var_dump(sprintf('%s array must not be empty', $varName));
+            throw new \InvalidArgumentException(sprintf('%s array must not be empty', $varName));
+        }
+
+        foreach ($var as $key => $value) {
+            if (($value instanceof $instanceOf) === false) {
+                throw new \InvalidArgumentException(
+                    sprintf('%s array element %s must be instance of %s', $varName, $key, ConfigResource::class)
+                );
+            }
+        }
     }
 }

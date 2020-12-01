@@ -84,6 +84,30 @@ class ClientTest extends TestCase
         $this->assertCount(2, $metaTopics['test_admin_2']->getPartitions());
     }
 
+    public function createTopicsWithEmptyTopicsParameterShouldFail(): void
+    {
+        $conf = new Conf();
+        $conf->set('bootstrap.servers', KAFKA_BROKERS);
+        $client = Client::fromConf($conf);
+
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessageMatches('/empty/');
+        $this->expectExceptionMessageMatches('/topics/');
+        $client->createTopics([]);
+    }
+
+    public function createTopicsWithInvalidElementsInTopicsParameterShouldFail(): void
+    {
+        $conf = new Conf();
+        $conf->set('bootstrap.servers', KAFKA_BROKERS);
+        $client = Client::fromConf($conf);
+
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessageMatches(NewTopic::class);
+        $this->expectExceptionMessageMatches('/topics/');
+        $client->createTopics([new \stdClass()]);
+    }
+
     /**
      * @depends testCreateTopics
      */
@@ -122,6 +146,30 @@ class ClientTest extends TestCase
         $this->assertCount(6, $metaTopics['test_admin_2']->getPartitions());
     }
 
+    public function testCreatePartitionsWithEmptyParameterShouldFail(): void
+    {
+        $conf = new Conf();
+        $conf->set('bootstrap.servers', KAFKA_BROKERS);
+        $client = Client::fromConf($conf);
+
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessageMatches('/empty/');
+        $this->expectExceptionMessageMatches('/partitions/');
+        $client->createPartitions([]);
+    }
+
+    public function testCreatePartitionsWithInvalidParameterShouldFail(): void
+    {
+        $conf = new Conf();
+        $conf->set('bootstrap.servers', KAFKA_BROKERS);
+        $client = Client::fromConf($conf);
+
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessageMatches(NewPartitions::class);
+        $this->expectExceptionMessageMatches('/partitions/');
+        $client->createPartitions([new \stdClass()]);
+    }
+
     /**
      * @depends testCreatePartitions
      */
@@ -158,6 +206,30 @@ class ClientTest extends TestCase
 
         // wait after deletion
         self::waitAfterTopicDeletion();
+    }
+
+    public function testDeleteTopicsWithEmptyParameterShouldFail(): void
+    {
+        $conf = new Conf();
+        $conf->set('bootstrap.servers', KAFKA_BROKERS);
+        $client = Client::fromConf($conf);
+
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessageMatches('/empty/');
+        $this->expectExceptionMessageMatches('/topics/');
+        $client->deleteTopics([]);
+    }
+
+    public function testDeleteTopicsWithInvalidParameterShouldFail(): void
+    {
+        $conf = new Conf();
+        $conf->set('bootstrap.servers', KAFKA_BROKERS);
+        $client = Client::fromConf($conf);
+
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessageMatches(DeleteTopic::class);
+        $this->expectExceptionMessageMatches('/topics/');
+        $client->deleteTopics([new \stdClass()]);
     }
 
     /**
@@ -280,6 +352,30 @@ class ClientTest extends TestCase
         $this->assertTrue($configs['queued.max.requests']->isDefault);
     }
 
+    public function testDescribeConfigsWithEmptyParameterShouldFail(): void
+    {
+        $conf = new Conf();
+        $conf->set('bootstrap.servers', KAFKA_BROKERS);
+        $client = Client::fromConf($conf);
+
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessageMatches('/empty/');
+        $this->expectExceptionMessageMatches('/resources/');
+        $client->describeConfigs([]);
+    }
+
+    public function testDescribeConfigsWithInvalidParameterShouldFail(): void
+    {
+        $conf = new Conf();
+        $conf->set('bootstrap.servers', KAFKA_BROKERS);
+        $client = Client::fromConf($conf);
+
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessageMatches(ConfigResource::class);
+        $this->expectExceptionMessageMatches('/resources/');
+        $client->describeConfigs([new \stdClass()]);
+    }
+
     public function testAlterConfigs(): void
     {
         // prepare
@@ -331,6 +427,30 @@ class ClientTest extends TestCase
         $configs = $this->getIndexedConfigEntries($result[0]->configs);
 
         $this->assertSame('2147483647', $configs['max.connections.per.ip']->value);
+    }
+
+    public function testAlterConfigsWithEmptyParameterShouldFail(): void
+    {
+        $conf = new Conf();
+        $conf->set('bootstrap.servers', KAFKA_BROKERS);
+        $client = Client::fromConf($conf);
+
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessageMatches('/empty/');
+        $this->expectExceptionMessageMatches('/resources/');
+        $client->alterConfigs([]);
+    }
+
+    public function testAlterConfigsWithInvalidParameterShouldFail(): void
+    {
+        $conf = new Conf();
+        $conf->set('bootstrap.servers', KAFKA_BROKERS);
+        $client = Client::fromConf($conf);
+
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessageMatches(ConfigResource::class);
+        $this->expectExceptionMessageMatches('/resources/');
+        $client->alterConfigs([new \stdClass()]);
     }
 
     /**

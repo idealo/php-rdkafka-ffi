@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace RdKafka\Admin;
 
-use Assert\Assert;
 use FFI;
 use FFI\CData;
 use RdKafka\Exception;
@@ -52,7 +51,17 @@ class NewPartitions
      */
     public function setReplicaAssignment(int $new_partition_id, array $broker_ids): void
     {
-        Assert::that($broker_ids)->notEmpty()->all()->integer();
+        if (empty($broker_ids) === true) {
+            throw new \InvalidArgumentException('broker_ids array must not be empty');
+        }
+
+        foreach ($broker_ids as $key => $value) {
+            if (is_int($value) === false) {
+                throw new \InvalidArgumentException(
+                    sprintf('broker_ids array element %s must be int', $key)
+                );
+            }
+        }
 
         $brokerIdsCount = count($broker_ids);
         $brokerIds = Library::new('int*[' . $brokerIdsCount . ']');
