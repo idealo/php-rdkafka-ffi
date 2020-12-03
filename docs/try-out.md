@@ -110,7 +110,7 @@ Describe config values for a broker ...
 
 Test preload (should show current librdkafka version)
 
-    docker-compose run --rm php74 php \
+    docker-compose run --rm php80 php \
         -dffi.enable=preload \
         -dzend_extension=opcache \
         -dopcache.enable=true \
@@ -161,25 +161,38 @@ Run tests
 
 Benchmarks use topic ```benchmarks```.
 
-Run & store benchmarks for ffi based rdkafka binding
+Variations:
+
+* ffi based rdkafka binding with PHP 7.4
+* ffi based rdkafka binding with PHP 7.4 & preload
+* ffi based rdkafka binding with PHP 8.0
+* ffi based rdkafka binding with PHP 8.0 & preload
+* ffi based rdkafka binding with PHP 8.0 & preload & jit
+* extension based rdkafka binding with PHP 7.4
+
+Run Benchmarks:
 
     docker-compose down -v; \
     docker-compose up -d kafka; \
     sleep 10s; \
     docker-compose run --rm php74 php examples/create-topic.php -tbenchmarks -p1 -r1; \
-    docker-compose run --rm php74 phpbench run benchmarks --config=/app/benchmarks/ffi.json --report=default --store --tag=ffi --group=ffi
-
-Run & store benchmarks for extension based rdkafka binding
-
-    docker-compose down -v; \
-    docker-compose up -d kafka; \
-    sleep 10s; \
-    docker-compose run --rm php74 php examples/create-topic.php -tbenchmarks -p1 -r1; \
-    docker-compose run --rm php74 phpbench run benchmarks --config=/app/benchmarks/ext.json --report=default --store --tag=ext --group=ext
+    docker-compose run --rm php74 vendor/bin/phpbench run benchmarks --config=/app/benchmarks/ffi.json --report=default --store --tag=php74_ffi --group=ffi; \
+    docker-compose run --rm php74 vendor/bin/phpbench run benchmarks --config=/app/benchmarks/ffi_preload.json --report=default --store --tag=php74_ffi_preload --group=ffi; \
+    docker-compose run --rm php80 vendor/bin/phpbench run benchmarks --config=/app/benchmarks/ffi.json --report=default --store --tag=php80_ffi --group=ffi; \
+    docker-compose run --rm php80 vendor/bin/phpbench run benchmarks --config=/app/benchmarks/ffi_preload.json --report=default --store --tag=php80_ffi_preload --group=ffi; \
+    docker-compose run --rm php80 vendor/bin/phpbench run benchmarks --config=/app/benchmarks/ffi_jit.json --report=default --store --tag=php80_ffi_preload_jit --group=ffi; \
+    docker-compose run --rm php74 vendor/bin/phpbench run benchmarks --config=/app/benchmarks/ext.json --report=default --store --tag=php74_ext --group=ext
 
 Show comparison
 
-    docker-compose run --rm php74 phpbench report --uuid=tag:ffi --uuid=tag:ext --report='{extends: compare, compare: tag}'
+    docker-compose run --rm php74 phpbench report \
+        --uuid=tag:php74_ffi \
+        --uuid=tag:php74_ffi_preload \
+        --uuid=tag:php80_ffi \
+        --uuid=tag:php80_ffi_preload \
+        --uuid=tag:php80_ffi_preload_jit \
+        --uuid=tag:php74_ext \
+        --report='{extends: compare, compare: tag}'
 
 Run Api::init benchmark (fix vs auto detected version)
 

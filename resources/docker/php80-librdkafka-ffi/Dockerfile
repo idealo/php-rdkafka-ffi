@@ -33,13 +33,6 @@ RUN pecl install xdebug-${XDEBUG_VERSION}; \
 #    make install; \
 #    rm -rf /tmp/*;
 
-# install phpbench
-RUN curl -o phpbench.phar https://phpbench.github.io/phpbench/phpbench.phar; \
-    curl -o phpbench.phar.pubkey https://phpbench.github.io/phpbench/phpbench.phar.pubkey; \
-    chmod 0755 phpbench.phar; \
-    mv phpbench.phar /usr/local/bin/phpbench; \
-    mv phpbench.phar.pubkey /usr/local/bin/phpbench.pubkey;
-
 ENV COMPOSER_HOME /tmp
 ENV COMPOSER_ALLOW_SUPERUSER 1
 COPY --from=composer /usr/bin/composer /usr/bin/composer

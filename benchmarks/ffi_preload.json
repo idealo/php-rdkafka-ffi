@@ -1,0 +1,18 @@
+{
+  "bootstrap": "../vendor/autoload.php",
+  "path": "./",
+  "time_unit": "milliseconds",
+  "retry_threshold": 5,
+  "php_disable_ini": true,
+  "php_config": {
+    "extension": [
+      "ffi.so"
+    ],
+    "ffi.enable": "preload",
+    "zend_extension": "opcache",
+    "opcache.enable": "true",
+    "opcache.enable_cli": "true",
+    "opcache.preload_user": "phpdev",
+    "opcache.preload": "/app/examples/preload.php"
+  }
+}
