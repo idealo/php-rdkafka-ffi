@@ -67,14 +67,17 @@ class ConsumerBench
         $topic = $consumer->newTopic('benchmarks');
 
         $topic->consumeStart(0, 0);
-        $messages = 0;
-        $callback = function (Message $message, $opaque = null) use (&$messages): void {
-            $messages++;
+        $callback = new class() {
+            public int $messages = 0;
+            public function __invoke(Message $message, object $opaque = null)
+            {
+                $this->messages++;
+            }
         };
         $topic->consumeCallback(0, 500, $callback);
         $topic->consumeStop(0);
 
-        if ($messages < 1) {
+        if ($callback->messages < 1) {
             throw new Exception('failed to consume 1 messages');
         }
     }
@@ -172,14 +175,17 @@ class ConsumerBench
         $topic = $consumer->newTopic('benchmarks');
 
         $topic->consumeStart(0, 0);
-        $messages = 0;
-        $callback = function (Message $message, $opaque = null) use (&$messages): void {
-            $messages++;
+        $callback = new class() {
+            public int $messages = 0;
+            public function __invoke(Message $message, object $opaque = null)
+            {
+               $this->messages++;
+            }
         };
         $topic->consumeCallback(0, 500, $callback);
         $topic->consumeStop(0);
 
-        if ($messages < 100) {
+        if ($callback->messages < 100) {
             throw new Exception('failed to consume 100 messages');
         }
     }

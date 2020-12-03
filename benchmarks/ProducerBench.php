@@ -20,6 +20,7 @@ class ProducerBench
     {
         $conf = new Conf();
         $conf->set('metadata.broker.list', 'kafka:9092');
+        $conf->set('batch.num.messages', (string) 1);
         $producer = new Producer($conf);
         $topic = $producer->newTopic('benchmarks');
 
