@@ -16,10 +16,10 @@ $files = new RegexIterator(
 );
 
 foreach ($files as $file) {
-    if (! $file->isFile()) {
+    if ($file->isFile() === false) {
         continue;
     }
-    \opcache_compile_file($file->getPathName());
+    require_once($file->getPathName());
 }
 
 Library::preload();
