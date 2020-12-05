@@ -9,13 +9,13 @@ use RdKafka;
 
 class LogCallbackProxy extends CallbackProxy
 {
-    public function __invoke(CData $consumerOrProducer, int $level, string $fac, string $buf): void
+    public function __invoke(CData $rdkafka, int $level, string $facility, string $message): void
     {
         ($this->callback)(
-            RdKafka::resolveFromCData($consumerOrProducer),
+            RdKafka::resolveFromCData($rdkafka),
             $level,
-            $fac,
-            $buf
+            $facility,
+            $message
         );
     }
 }

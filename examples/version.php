@@ -13,4 +13,5 @@ Library::init($version);
 
 echo 'Binding Version (string): ' . Library::getVersion() . PHP_EOL;
 echo 'Library Version (int)   : ' . Library::rd_kafka_version() . PHP_EOL;
-echo 'Library Version (string): ' . Library::rd_kafka_version_str() . PHP_EOL;
+echo 'Library Version (const) : ' . RD_KAFKA_VERSION . PHP_EOL;
+echo 'Library Version (string): ' . Library::getLibraryVersion() . PHP_EOL;

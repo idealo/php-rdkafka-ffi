@@ -10,18 +10,13 @@ require_once dirname(__DIR__) . '/vendor/autoload.php';
 $conf = new Conf();
 $conf->set('bootstrap.servers', 'kafka:9092');
 $conf->set('group.id', 'consumer-highlevel');
-//$conf->set('log_level', (string)LOG_DEBUG);
-//$conf->set('debug', 'consumer,cgrp');
 $conf->set('enable.partition.eof', 'true');
-if (function_exists('pcntl_sigprocmask')) {
-    pcntl_sigprocmask(SIG_BLOCK, [SIGIO]);
-    $conf->set('internal.termination.signal', (string) SIGIO);
-} else {
-    $conf->set('queue.buffering.max.ms', (string) 1);
-}
+$conf->set('auto.offset.reset', 'earliest');
+//$conf->set('log_level', (string) LOG_DEBUG);
+//$conf->set('debug', 'all');
 $conf->setLogCb(
-    function ($consumer, $level, $fac, $buf): void {
-        echo "log: ${level} ${fac} ${buf}" . PHP_EOL;
+    function (KafkaConsumer $consumer, int $level, string $facility, string $message): void {
+        echo sprintf('  log: %d %s %s', $level, $facility, $message) . PHP_EOL;
     }
 );
 

@@ -108,7 +108,7 @@ Describe config values for a broker ...
 
     docker-compose run --rm php74 php examples/describe-config.php -t4 -v111
 
-Test preload (should show current librdkafka version)
+Test preload (shows current librdkafka version)
 
     docker-compose run --rm php80 php \
         -dffi.enable=preload \
@@ -185,7 +185,7 @@ Run Benchmarks:
 
 Show comparison
 
-    docker-compose run --rm php74 phpbench report \
+    docker-compose run --rm php74 vendor/bin/phpbench report \
         --uuid=tag:php74_ffi \
         --uuid=tag:php74_ffi_preload \
         --uuid=tag:php80_ffi \
@@ -196,7 +196,7 @@ Show comparison
 
 Run Api::init benchmark (fix vs auto detected version)
 
-    docker-compose run --rm php74 phpbench run benchmarks --config=/app/benchmarks/ffi.json --report=default --group=Api
+    docker-compose run --rm php74 vendor/bin/phpbench run benchmarks --config=/app/benchmarks/ffi.json --report=default --group=Api
 
 ## Work on the documentation
 

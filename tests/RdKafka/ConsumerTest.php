@@ -102,8 +102,8 @@ class ConsumerTest extends TestCase
         $conf->set('debug', 'consumer');
         $conf->set('bootstrap.servers', KAFKA_BROKERS);
         $conf->setLogCb(
-            function (Consumer $consumer, int $level, string $fac, string $buf): void {
-//            echo "log: $level $fac $buf" . PHP_EOL;
+            function (Consumer $consumer, int $level, string $facility, string $message): void {
+                // echo sprintf('log: %d %s %s', $level, $facility, $message) . PHP_EOL;
             }
         );
 
@@ -124,8 +124,8 @@ class ConsumerTest extends TestCase
         $conf->set('debug', 'consumer');
         $conf->set('bootstrap.servers', KAFKA_BROKERS);
         $conf->setLogCb(
-            function (Consumer $consumer, int $level, string $fac, string $buf) use (&$loggerCallbacks): void {
-//                echo "log: $level $fac $buf" . PHP_EOL;
+            function (Consumer $consumer, int $level, string $facility, string $message) use (&$loggerCallbacks): void {
+                // echo sprintf('log: %d %s %s', $level, $facility, $message) . PHP_EOL;
                 $loggerCallbacks++;
             }
         );
@@ -149,8 +149,8 @@ class ConsumerTest extends TestCase
         $conf->set('debug', 'consumer');
         $conf->set('bootstrap.servers', KAFKA_BROKERS);
         $conf->setLogCb(
-            function (Consumer $consumer, int $level, string $fac, string $buf) use (&$loggerCallbacks): void {
-//            echo "log: $level $fac $buf" . PHP_EOL;
+            function (Consumer $consumer, int $level, string $facility, string $message) use (&$loggerCallbacks): void {
+                // echo sprintf('log: %d %s %s', $level, $facility, $message) . PHP_EOL;
                 $loggerCallbacks++;
             }
         );

@@ -26,8 +26,8 @@ $result = $client->createTopics(
     [
         new NewTopic(
             (string) $options['t'],
-            (int) $options['p'] ?: 1,
-            (int) $options['r'] ?: 1
+            (int) $options['p'] ?? 1,
+            (int) $options['r'] ?? 1
         ),
     ]
 );

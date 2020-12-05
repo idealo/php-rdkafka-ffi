@@ -31,6 +31,7 @@ use RdKafka\Conf;
 use RdKafka\Examples\Protocol\GroupMetadataValueParser;
 use RdKafka\Examples\Protocol\MessageKeyParser;
 use RdKafka\Examples\Protocol\OffsetCommitValueParser;
+use RdKafka\KafkaConsumer;
 
 /** @var ClassLoader $composerLoader */
 $composerLoader = require_once dirname(__DIR__) . '/vendor/autoload.php';
@@ -50,7 +51,7 @@ $conf->setLogCb(
         //echo "log: $level $fac $buf" . PHP_EOL;
     }
 );
-$consumer = new \RdKafka\KafkaConsumer($conf);
+$consumer = new KafkaConsumer($conf);
 
 // collect watermarks for all topics per topic & partition
 $topicWatermarks = [];

@@ -14,8 +14,16 @@ use RdKafka\TopicPartition;
 
 require_once dirname(__DIR__) . '/vendor/autoload.php';
 
+$clusterConf = new Conf();
+$clusterConf->set('log_level', (string) LOG_DEBUG);
+$clusterConf->set('debug', 'all');
+$clusterConf->setLogCb(
+    function (RdKafka $rdkafka, int $level, string $facility, string $message): void {
+        echo sprintf('  log-cluster: %d %s %s', $level, $facility, $message) . PHP_EOL;
+    }
+);
 try {
-    $cluster = MockCluster::create(3);
+    $cluster = MockCluster::create(3, $clusterConf);
 } catch (RuntimeException $exception) {
     echo $exception->getMessage() . PHP_EOL;
     exit();
@@ -27,8 +35,8 @@ $producerConf->set('bootstrap.servers', $cluster->getBootstraps());
 $producerConf->set('log_level', (string) LOG_DEBUG);
 $producerConf->set('debug', 'all');
 $producerConf->setLogCb(
-    function (Producer $rdkafka, int $level, string $fac, string $buf): void {
-        echo sprintf('  log: %d %s %s', $level, $fac, $buf) . PHP_EOL;
+    function (Producer $rdkafka, int $level, string $facility, string $message): void {
+        echo sprintf('  log-produce: %d %s %s', $level, $facility, $message) . PHP_EOL;
     }
 );
 
@@ -56,13 +64,13 @@ $producer->flush(1000);
 $consumerConf = new Conf();
 $consumerConf->set('group.id', 'mock-cluster-example');
 $consumerConf->set('bootstrap.servers', $cluster->getBootstraps());
-$consumerConf->set('log_level', (string) LOG_DEBUG);
-$consumerConf->set('debug', 'all');
 $consumerConf->set('enable.partition.eof', 'true');
 $consumerConf->set('auto.offset.reset', 'earliest');
+$consumerConf->set('log_level', (string) LOG_DEBUG);
+$consumerConf->set('debug', 'all');
 $consumerConf->setLogCb(
-    function (KafkaConsumer $rdkafka, int $level, string $fac, string $buf): void {
-        echo sprintf('  log: %d %s %s', $level, $fac, $buf) . PHP_EOL;
+    function (KafkaConsumer $rdkafka, int $level, string $facility, string $message): void {
+        echo sprintf('  log-consume: %d %s %s', $level, $facility, $message) . PHP_EOL;
     }
 );
 
