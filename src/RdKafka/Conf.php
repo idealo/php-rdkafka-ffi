@@ -27,10 +27,7 @@ class Conf
 
         if (Library::versionMatches('>=', '1.4.0')) {
             $this->set('client.software.name', 'php-rdkafka-ffi');
-            $this->set(
-                'client.software.version',
-                sprintf('v%s-librdkafka-v%s', Library::getVersion(), Library::getLibraryVersion())
-            );
+            $this->set('client.software.version', Library::getClientVersion());
         }
     }
 

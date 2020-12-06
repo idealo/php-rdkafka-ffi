@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace RdKafka;
 
 use PHPUnit\Framework\TestCase;
+use RdKafka\FFI\Library;
 use RequireRdKafkaVersionTrait;
 
 /**
@@ -149,7 +150,7 @@ class ConfTest extends TestCase
 
         $params = $conf->dump();
         $this->assertSame('php-rdkafka-ffi', $params['client.software.name']);
-        $this->assertMatchesRegularExpression('/v\d+\.\d+\.[\w\d\-]+?-librdkafka-v\d+\.\d+\.[\w\d\-]+/', $params['client.software.version']);
+        $this->assertSame(Library::getClientVersion(), $params['client.software.version']);
     }
 
     /**

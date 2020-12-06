@@ -17,18 +17,21 @@ use function sys_get_temp_dir;
 use function tempnam;
 use function unlink;
 
+/**
+ * This class is for internal use. It provides access the low level interface to librdkafka.
+ * Best practise is to use high level interfaces like \RdKafka\Conf, RdKafka\Producer, ...
+ *
+ * @see https://docs.confluent.io/current/clients/librdkafka/rdkafka_8h.html
+ */
 class Library
 {
     use Methods;
 
     public const VERSION_AUTODETECT = '';
     public const VERSION_LATEST = '1.5.2';
+    public const PHP_LIBRARY_VERSION = '0.1.0-dev';
 
-    /**
-     * @var FFI librdkafka binding - see https://docs.confluent.io/current/clients/librdkafka/rdkafka_8h.html
-     */
     private static FFI $ffi;
-
     private static string $scope = 'RdKafka';
     private static ?string $library = null;
     private static ?string $cdef;
@@ -147,6 +150,9 @@ class Library
         return $ffi;
     }
 
+    /**
+     * Whether method is supported by current binding version.
+     */
     public static function hasMethod(string $name): bool
     {
         self::chooseVersion();
@@ -155,6 +161,10 @@ class Library
             && version_compare(self::$version, RD_KAFKA_SUPPORTED_METHODS[$name], '<') === false;
     }
 
+    /**
+     * Method must be supported by current binding version else an exception is thrown.
+     * @throws RuntimeException
+     */
     public static function requireMethod(string $name): void
     {
         if (self::hasMethod($name) === false) {
@@ -168,6 +178,10 @@ class Library
         }
     }
 
+    /**
+     * Version must match the current binding else an exception is thrown.
+     * @throws RuntimeException
+     */
     public static function requireVersion(string $operator, string $version): void
     {
         if (self::versionMatches($operator, $version) === false) {
@@ -183,13 +197,21 @@ class Library
         }
     }
 
+    /**
+     * Whether version matches the current binding version
+     */
     public static function versionMatches(string $operator, string $version): bool
     {
         self::chooseVersion();
 
+        $version = str_ireplace('pre', 'dev', $version);
+
         return version_compare(self::$version, $version, $operator);
     }
 
+    /**
+     * The version of librdkafka
+     */
     public static function getLibraryVersion(): string
     {
         return self::rd_kafka_version_str();
@@ -227,8 +249,26 @@ class Library
         return $version;
     }
 
+    /**
+     * The version of the current binding with librdkafka
+     */
     public static function getVersion(): string
     {
         return self::$version;
+    }
+
+    /**
+     * The client version exposed to the brokers.
+     *
+     * The version has the format v{phpLibraryVersion}-v{bindingVersion}-librdkafka-v{librdkafkaVersion} - e.g. v0.1.0-dev-v1.5.2-librdkafka-v1.5.2)
+     */
+    public static function getClientVersion(): string
+    {
+        return sprintf(
+            'v%s-v%s-librdkafka-v%s',
+            self::PHP_LIBRARY_VERSION,
+            self::getVersion(),
+            self::getLibraryVersion()
+        );
     }
 }

@@ -86,4 +86,16 @@ class LibraryTest extends TestCase
         $this->expectExceptionMessageMatches('/1\.999\.0\-pre1/');
         Library::init('1.999.0-pre1');
     }
+
+    public function testGetClientVersion(): void
+    {
+        $this->assertMatchesRegularExpression(
+            '/
+                v(?<phpLibVersion>\d+\.\d+\.[\w\d\-]+?)-
+                v(?<bindingVersion>\d+\.\d+\.[\w\d\-]+?)-
+                librdkafka-v(?<librdkafkaVersion>\d+\.\d+\.[\w\d\-]+)
+                /x',
+            Library::getClientVersion()
+        );
+    }
 }
