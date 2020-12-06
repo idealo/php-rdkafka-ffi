@@ -18,8 +18,8 @@ use function tempnam;
 use function unlink;
 
 /**
- * This class is for internal use. It provides access the low level interface to librdkafka.
- * Best practise is to use high level interfaces like \RdKafka\Conf, RdKafka\Producer, ...
+ * This class is for internal use. It provides access to the low level interface to librdkafka.
+ * Best practice is to use high level interfaces like \RdKafka\Conf, \RdKafka\Producer, ...
  *
  * @see https://docs.confluent.io/current/clients/librdkafka/rdkafka_8h.html
  */
@@ -162,7 +162,7 @@ class Library
     }
 
     /**
-     * Method must be supported by current binding version else an exception is thrown.
+     * Method must be supported by current binding version otherwise an exception is thrown.
      * @throws RuntimeException
      */
     public static function requireMethod(string $name): void
@@ -179,7 +179,7 @@ class Library
     }
 
     /**
-     * Version must match the current binding else an exception is thrown.
+     * Version must match the current binding otherwise an exception is thrown.
      * @throws RuntimeException
      */
     public static function requireVersion(string $operator, string $version): void
