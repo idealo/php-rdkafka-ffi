@@ -43,6 +43,6 @@ See https://github.com/idealo/php-rdkafka-ffi/tree/main/benchmarks/reports
 
 ## Run benchmarks
 
-See [running benchmarks in try out](try-out.md/#run-benchmarks).
+See [running benchmarks in try out](try-out.md#run-benchmarks).
 
 There are [ansible playbooks in resources](https://github.com/idealo/php-rdkafka-ffi/tree/main/resources/benchmarks) to setup and run benchmarks.
