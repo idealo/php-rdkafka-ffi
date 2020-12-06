@@ -105,9 +105,20 @@ class ProducerTest extends TestCase
         $this->assertSame(0, $res);
     }
 
-    /**
-     * @group ffiOnly
-     */
+    public function testTransactionNotConfiguresShouldFail(): void
+    {
+        $this->requiresRdKafkaVersion('>=', '1.4.0');
+
+        $producerConf = new Conf();
+        $producerConf->set('bootstrap.servers', KAFKA_BROKERS);
+
+        $producer = new Producer($producerConf);
+
+        $this->expectException(KafkaErrorException::class);
+        $this->expectExceptionCode(RD_KAFKA_RESP_ERR__NOT_CONFIGURED);
+        $producer->initTransactions(KAFKA_TEST_TIMEOUT_MS);
+    }
+
     public function testTransaction(): void
     {
         $this->requiresRdKafkaVersion('>=', '1.4.0');

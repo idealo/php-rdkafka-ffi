@@ -59,7 +59,7 @@ class Producer extends RdKafka
         $error = Library::rd_kafka_init_transactions($this->kafka, $timeout_ms);
 
         if ($error !== null) {
-            throw new KafkaError($error);
+            throw KafkaErrorException::fromCData($error);
         }
     }
 
@@ -68,7 +68,7 @@ class Producer extends RdKafka
         $error = Library::rd_kafka_begin_transaction($this->kafka);
 
         if ($error !== null) {
-            throw new KafkaError($error);
+            throw KafkaErrorException::fromCData($error);
         }
     }
 
@@ -77,7 +77,7 @@ class Producer extends RdKafka
         $error = Library::rd_kafka_commit_transaction($this->kafka, $timeout_ms);
 
         if ($error !== null) {
-            throw new KafkaError($error);
+            throw KafkaErrorException::fromCData($error);
         }
     }
 
@@ -86,7 +86,7 @@ class Producer extends RdKafka
         $error = Library::rd_kafka_abort_transaction($this->kafka, $timeout_ms);
 
         if ($error !== null) {
-            throw new KafkaError($error);
+            throw KafkaErrorException::fromCData($error);
         }
     }
 }
