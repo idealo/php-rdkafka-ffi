@@ -5,6 +5,10 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [Unreleased]
 
+### Changed
+
+- Rename KafkaError to KafkaErrorException and change its interface for extension compatibility with v4.1.0
+
 ## [0.1.0] - 2020-12-06
 
 This first pre-release supports PHP ^7.4 and ^8.0 and [librdkafka](https://github.com/edenhill/librdkafka) v1.0.0 - v1.5.2. 
@@ -25,4 +29,4 @@ Special thanks to [@siad007](https://github.com/siad007) and [@carusogabriel]( h
 - Add benchmarks
 
 [Unreleased]: https://github.com/idealo/php-rdkafka-ffi/compare/v0.1.0...HEAD
-[v0.1.0]: https://github.com/idealo/php-rdkafka-ffi/releases/tag/v0.1.0
+[0.1.0]: https://github.com/idealo/php-rdkafka-ffi/releases/tag/v0.1.0
