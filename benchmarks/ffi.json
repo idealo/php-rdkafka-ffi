@@ -8,6 +8,9 @@
     "extension": [
       "ffi.so"
     ],
-    "ffi.enable": "true"
+    "ffi.enable": "true",
+    "zend_extension": "opcache",
+    "opcache.enable": "true",
+    "opcache.enable_cli": "true"
   }
 }

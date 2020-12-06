@@ -9,11 +9,11 @@ use RdKafka\Producer;
 
 /**
  * @Groups({"Consumer", "ffi", "ext"})
- * @BeforeMethods({"produce10000Messages"})
+ * @BeforeClassMethods({"produce10000Messages"})
  */
 class ConsumerBench
 {
-    public function produce10000Messages(): void
+    public static function produce10000Messages(): void
     {
         $conf = new Conf();
         $conf->set('metadata.broker.list', 'kafka:9092');
@@ -36,19 +36,23 @@ class ConsumerBench
     {
         $conf = new Conf();
         $conf->set('metadata.broker.list', 'kafka:9092');
-        $conf->set('group.id', __METHOD__);
+        $conf->set('auto.offset.reset', 'earliest');
+        $conf->set('log_level', (string) 0);
         $consumer = new Consumer($conf);
         $topic = $consumer->newTopic('benchmarks');
 
         $topic->consumeStart(0, 0);
         $messages = 0;
-        while ($message = $topic->consume(0, 500) && $messages < 1) {
+        while (($message = $topic->consume(0, 500)) && $messages < 1) {
+            if ($message->err !== RD_KAFKA_RESP_ERR_NO_ERROR) {
+                continue;
+            }
             $messages++;
         }
         $topic->consumeStop(0);
 
         if ($messages < 1) {
-            throw new Exception('failed to consume 1 messages');
+            throw new Exception('failed to consume 1 message');
         }
     }
 
@@ -61,7 +65,8 @@ class ConsumerBench
     {
         $conf = new Conf();
         $conf->set('metadata.broker.list', 'kafka:9092');
-        $conf->set('group.id', __METHOD__);
+        $conf->set('auto.offset.reset', 'earliest');
+        $conf->set('log_level', (string) 0);
         $conf->set('consume.callback.max.messages', (string) 1);
         $consumer = new Consumer($conf);
         $topic = $consumer->newTopic('benchmarks');
@@ -69,7 +74,8 @@ class ConsumerBench
         $topic->consumeStart(0, 0);
         $callback = new class() {
             public int $messages = 0;
-            public function __invoke(Message $message, object $opaque = null)
+
+            public function __invoke(Message $message, ?object $opaque = null): void
             {
                 $this->messages++;
             }
@@ -78,7 +84,7 @@ class ConsumerBench
         $topic->consumeStop(0);
 
         if ($callback->messages < 1) {
-            throw new Exception('failed to consume 1 messages');
+            throw new Exception('failed to consume 1 message');
         }
     }
 
@@ -91,13 +97,17 @@ class ConsumerBench
     {
         $conf = new Conf();
         $conf->set('metadata.broker.list', 'kafka:9092');
-        $conf->set('group.id', __METHOD__);
+        $conf->set('auto.offset.reset', 'earliest');
+        $conf->set('log_level', (string) 0);
         $consumer = new Consumer($conf);
         $topic = $consumer->newTopic('benchmarks');
 
         $topic->consumeStart(0, 0);
         $messages = 0;
-        while ($message = $topic->consume(0, 500) && $messages < 100) {
+        while (($message = $topic->consume(0, 500)) && $messages < 100) {
+            if ($message->err !== RD_KAFKA_RESP_ERR_NO_ERROR) {
+                continue;
+            }
             $messages++;
         }
         $topic->consumeStop(0);
@@ -116,11 +126,12 @@ class ConsumerBench
     {
         $conf = new Conf();
         $conf->set('metadata.broker.list', 'kafka:9092');
-        $conf->set('group.id', __METHOD__);
-        $conf->set('debug', 'all');
+        $conf->set('auto.offset.reset', 'earliest');
+        $conf->set('log_level', (string) LOG_DEBUG);
+        $conf->set('debug', 'consumer,cgrp,topic,fetch');
         $conf->setLogCb(
-            function (Consumer $consumer, int $level, string $fac, string $buf): void {
-                // echo "log: $level $fac $buf" . PHP_EOL;
+            function (Consumer $consumer, int $level, string $facility, string $message): void {
+                // echo sprintf('log: %d %s %s', $level, $facility, $message) . PHP_EOL;
             }
         );
         $consumer = new Consumer($conf);
@@ -128,7 +139,10 @@ class ConsumerBench
 
         $topic->consumeStart(0, 0);
         $messages = 0;
-        while ($message = $topic->consume(0, 500) && $messages < 100) {
+        while (($message = $topic->consume(0, 500)) && $messages < 100) {
+            if ($message->err !== RD_KAFKA_RESP_ERR_NO_ERROR) {
+                continue;
+            }
             $messages++;
         }
         $topic->consumeStop(0);
@@ -147,7 +161,8 @@ class ConsumerBench
     {
         $conf = new Conf();
         $conf->set('metadata.broker.list', 'kafka:9092');
-        $conf->set('group.id', __METHOD__);
+        $conf->set('auto.offset.reset', 'earliest');
+        $conf->set('log_level', (string) 0);
         $consumer = new Consumer($conf);
         $topic = $consumer->newTopic('benchmarks');
 
@@ -169,7 +184,8 @@ class ConsumerBench
     {
         $conf = new Conf();
         $conf->set('metadata.broker.list', 'kafka:9092');
-        $conf->set('group.id', __METHOD__);
+        $conf->set('auto.offset.reset', 'earliest');
+        $conf->set('log_level', (string) 0);
         $conf->set('consume.callback.max.messages', (string) 100);
         $consumer = new Consumer($conf);
         $topic = $consumer->newTopic('benchmarks');
@@ -177,9 +193,10 @@ class ConsumerBench
         $topic->consumeStart(0, 0);
         $callback = new class() {
             public int $messages = 0;
-            public function __invoke(Message $message, object $opaque = null)
+
+            public function __invoke(Message $message, ?object $opaque = null): void
             {
-               $this->messages++;
+                $this->messages++;
             }
         };
         $topic->consumeCallback(0, 500, $callback);

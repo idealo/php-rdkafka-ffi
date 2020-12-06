@@ -21,6 +21,7 @@ class ProducerBench
         $conf = new Conf();
         $conf->set('metadata.broker.list', 'kafka:9092');
         $conf->set('batch.num.messages', (string) 1);
+        $conf->set('log_level', (string) 0);
         $producer = new Producer($conf);
         $topic = $producer->newTopic('benchmarks');
 
@@ -41,6 +42,7 @@ class ProducerBench
         $conf = new Conf();
         $conf->set('metadata.broker.list', 'kafka:9092');
         $conf->set('batch.num.messages', (string) 100);
+        $conf->set('log_level', (string) 0);
         $producer = new Producer($conf);
         $topic = $producer->newTopic('benchmarks');
 
@@ -63,17 +65,22 @@ class ProducerBench
         $conf = new Conf();
         $conf->set('metadata.broker.list', 'kafka:9092');
         $conf->set('batch.num.messages', (string) 100);
-        $conf->set('debug', 'all');
+        $conf->set('debug', 'broker,topic,msg');
+        $conf->set('log_level', (string) LOG_DEBUG);
         $conf->setLogCb(
-            function (Producer $producer, int $level, string $fac, string $buf): void {
-                // echo "log: $level $fac $buf" . PHP_EOL;
+            function (Producer $producer, int $level, string $facility, string $message): void {
+                // echo sprintf('log: %d %s %s', $level, $facility, $message) . PHP_EOL;
             }
         );
-        $conf->setDrMsgCb(
-            function (Producer $producer, Message $message, $opaque = null): void {
-                // do nothing
+        $deliveryCallback = new class() {
+            public int $messages = 0;
+
+            public function __invoke(Producer $producer, Message $message, ?object $opaque = null): void
+            {
+                $this->messages++;
             }
-        );
+        };
+        $conf->setDrMsgCb($deliveryCallback);
         $producer = new Producer($conf);
         $topic = $producer->newTopic('benchmarks');
 
@@ -81,7 +88,7 @@ class ProducerBench
             $topic->produce(0, 0, 'bench', 'mark');
         }
 
-        while ($producer->getOutQLen() > 0) {
+        while ($deliveryCallback->messages < 100) {
             $producer->poll(0);
         }
     }
