@@ -3,6 +3,7 @@
 [![Build Status](https://travis-ci.org/idealo/php-rdkafka-ffi.svg?branch=main)](https://travis-ci.org/idealo/php-rdkafka-ffi)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/9ee55cb5587fbf64dea8/test_coverage)](https://codeclimate.com/github/idealo/php-rdkafka-ffi/test_coverage)
 [![Maintainability](https://api.codeclimate.com/v1/badges/9ee55cb5587fbf64dea8/maintainability)](https://codeclimate.com/github/idealo/php-rdkafka-ffi/maintainability)
+[![Packagist](https://img.shields.io/packagist/v/idealo/php-rdkafka-ffi)](https://packagist.org/packages/idealo/php-rdkafka-ffi)
 
 This is a Kafka client library for PHP ^7.4 with a slim [librdkafka](https://github.com/edenhill/librdkafka) binding via  [FFI](https://www.php.net/manual/en/book.ffi.php).
 
