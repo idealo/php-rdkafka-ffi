@@ -1,0 +1,12 @@
+benchmark;subject;set;revs;tag:php74_ffi:mean;tag:php74_ffi_preload:mean;tag:php80_ffi:mean;tag:php80_ffi_preload:mean;tag:php80_ffi_preload_jit:mean;tag:php74_ext:mean
+ApiBench;benchVersionAutoDetection;0;100;55.328;6.496;58.542;5.88;6.058;
+ApiBench;benchVersionFix;0;100;47.846;4.138;51.51;4.214;4.414;
+ProducerBench;benchProduce1Message;0;100;1700.182;1786.154;1612.596;1783.174;1733.526;1663.576
+ProducerBench;benchProduce100Messages;0;100;1700.914;1917.102;1679.596;1825.734;1740.726;1629.894
+ProducerBench;benchProduce100MessagesWithLogAndDrMsgCallbacks;0;100;2762.806;2853.314;2650.37;2801.496;2690.342;1885.284
+ConsumerBench;benchConsume1Message;0;100;35965.44;35064.502;31521.248;34400.396;34785.1;34672.814
+ConsumerBench;benchConsumeCallback1Message;0;100;35283.48;35497.396;30236.684;35475.394;35271.384;35467.548
+ConsumerBench;benchConsume100Messages;0;100;58033.188;56214.322;51013.64;55754.688;57567.262;37759.594
+ConsumerBench;benchConsume100MessagesWithLogCallback;0;100;59452.334;59820.348;53263.108;57716.074;57791.02;40086.674
+ConsumerBench;benchConsumeBatch100Messages;0;100;57300.462;54133.744;49793.954;55180.756;52875.908;39471.31
+ConsumerBench;benchConsumeCallback100Message;0;100;54177.154;55903.926;50226.182;54359.826;55367.498;38207.558

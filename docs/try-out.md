@@ -14,6 +14,7 @@ Checkout this repo and have some fun playing around with:
 * __/docs__ - docs dir (markdown)
 * __/examples__ - example scripts
 * __/resources__
+    * __/benchmarks__ ansible playbooks setup and run benchmarks
     * __/docker__
        * __/php74-librdkafka-ffi__ - dockerfile for PHP 7.4 image with librdkafka and ffi & rdkafka ext (based on [php:7.4-cli](https://hub.docker.com/_/php) )
        * __/php80-librdkafka-ffi__ - dockerfile for PHP 8.0 image with librdkafka and ffi & rdkafka ext (based on [php:8.0-rc-cli](https://hub.docker.com/_/php) )
@@ -108,7 +109,7 @@ Describe config values for a broker ...
 
     docker-compose run --rm php74 php examples/describe-config.php -t4 -v111
 
-Test preload (shows current librdkafka version)
+Test preload (shows current librdkafka version & opcache status)
 
     docker-compose run --rm php80 php \
         -dffi.enable=preload \
@@ -117,6 +118,19 @@ Test preload (shows current librdkafka version)
         -dopcache.enable_cli=true \
         -dopcache.preload_user=phpdev \
         -dopcache.preload=/app/examples/preload.php \
+        examples/test-preload.php
+
+Test preload with jit (shows current librdkafka version & opcache status)
+
+    docker-compose run --rm php80 php \
+        -dffi.enable=preload \
+        -dzend_extension=opcache \
+        -dopcache.enable=true \
+        -dopcache.enable_cli=true \
+        -dopcache.preload_user=phpdev \
+        -dopcache.preload=/app/examples/preload.php \
+        -dopcache.jit_buffer_size=100M \
+        -dopcache.jit=function \
         examples/test-preload.php
 
 __Experimental__! Test mock cluster (producing and consuming) - requires librdkafka ^1.3.0
@@ -161,16 +175,7 @@ Run tests
 
 Benchmarks use topic ```benchmarks```.
 
-Variations:
-
-* ffi based rdkafka binding with PHP 7.4
-* ffi based rdkafka binding with PHP 7.4 & preload
-* ffi based rdkafka binding with PHP 8.0
-* ffi based rdkafka binding with PHP 8.0 & preload
-* ffi based rdkafka binding with PHP 8.0 & preload & jit
-* extension based rdkafka binding with PHP 7.4
-
-Run Benchmarks:
+Run Benchmarks
 
     docker-compose down -v; \
     docker-compose up -d kafka; \
@@ -183,7 +188,7 @@ Run Benchmarks:
     docker-compose run --rm php80 vendor/bin/phpbench run benchmarks --config=/app/benchmarks/ffi_jit.json --report=default --store --tag=php80_ffi_preload_jit --group=ffi; \
     docker-compose run --rm php74 vendor/bin/phpbench run benchmarks --config=/app/benchmarks/ext.json --report=default --store --tag=php74_ext --group=ext
 
-Show comparison
+Show comparison for runtime mean
 
     docker-compose run --rm php74 vendor/bin/phpbench report \
         --uuid=tag:php74_ffi \
@@ -192,7 +197,18 @@ Show comparison
         --uuid=tag:php80_ffi_preload \
         --uuid=tag:php80_ffi_preload_jit \
         --uuid=tag:php74_ext \
-        --report='{extends: compare, compare: tag}'
+        --report='{extends: compare, compare: tag, compare_fields: [mean]}'
+
+Show comparison for memory peak
+
+    docker-compose run --rm php74 vendor/bin/phpbench report \
+        --uuid=tag:php74_ffi \
+        --uuid=tag:php74_ffi_preload \
+        --uuid=tag:php80_ffi \
+        --uuid=tag:php80_ffi_preload \
+        --uuid=tag:php80_ffi_preload_jit \
+        --uuid=tag:php74_ext \
+        --report='{extends: compare, compare: tag, compare_fields: [mem_peak]}'
 
 Run Api::init benchmark (fix vs auto detected version)
 

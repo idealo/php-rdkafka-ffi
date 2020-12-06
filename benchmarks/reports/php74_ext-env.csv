@@ -1,0 +1,21 @@
+provider;key;value
+unameuname;os;Linux
+unameuname;host;a84caf4b0729
+unameuname;release;5.4.0-52-generic
+unameuname;version;"#57-Ubuntu SMP Thu Oct 15 10:57:00 UTC 2020"
+unameuname;machine;x86_64
+phpphp;xdebug;
+phpphp;version;7.4.13
+phpphp;ini;
+phpphp;extensions;"Core, date, libxml, openssl, pcre, sqlite3, zlib, ctype, curl, dom, fileinfo, filter, ftp, hash, iconv, json, mbstring, SPL, PDO, session, posix, readline, Reflection, standard, SimpleXML, pdo_sqlite, Phar, tokenizer, xml, xmlreader, xmlwriter, mysqlnd, rdkafka, Zend OPcache"
+opcacheopcache;extension_loaded;1
+opcacheopcache;enabled;1
+unix-sysloadunix-sysload;l1;1.18
+unix-sysloadunix-sysload;l5;1.1
+unix-sysloadunix-sysload;l15;0.81
+vcsvcs;system;git
+vcsvcs;branch;main
+vcsvcs;version;4d311d7884ba7aeb2a941a4de98c03ebdc984297
+baselinebaseline;nothing;0.026941299438477
+baselinebaseline;md5;0.38385391235352
+baselinebaseline;file_rw;2.5579929351807

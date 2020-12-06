@@ -1,0 +1,48 @@
+---
+- name: 'Hetzner Create Cloud Server'
+  hosts: all
+  connection: local
+  gather_facts: False
+  vars_files:
+    # provide var hcloud_token
+    - ../vars/vault.yml
+  vars:
+    ansible_python_interpreter: /usr/local/bin/python3
+  tasks:
+    - name: Prepare Info
+      debug:
+        msg:
+          - '{{ ansible_host }}'
+
+    - name: List Server
+      hcloud_server_info:
+        api_token: '{{ hcloud_token }}'
+        name: '{{ ansible_host }}'
+
+    - name: Create a production server
+      hcloud_server:
+        api_token: '{{ hcloud_token }}'
+        name: '{{ ansible_host }}'
+        server_type: ccx21
+        location: nbg1
+        image: ubuntu-20.04
+        ssh_keys:
+          - dirx@mac
+        state: present
+      register: server
+
+    - name: List Server
+      hcloud_server_info:
+        api_token: '{{ hcloud_token }}'
+        name: '{{ ansible_host }}'
+
+    - name: Print Status
+      debug:
+        msg:
+          - 'name: {{ server.hcloud_server.name }}'
+          - 'id: {{ server.hcloud_server.id }}'
+          - 'type: {{ server.hcloud_server.server_type }}'
+          - 'status: {{ server.hcloud_server.status }}'
+          - 'datacenter: {{ server.hcloud_server.datacenter }}'
+          - '{{ ansible_host }}  IN A     {{ server.hcloud_server.ipv4_address}}'
+          - '{{ ansible_host }}  IN AAAA  {{ server.hcloud_server.ipv6 }}'

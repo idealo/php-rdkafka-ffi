@@ -11,7 +11,9 @@ $version = ltrim($version, 'v');
 $version = $version === 'master' ? Library::VERSION_LATEST : $version;
 Library::init($version);
 
-echo 'Binding Version (string): ' . Library::getVersion() . PHP_EOL;
-echo 'Library Version (int)   : ' . Library::rd_kafka_version() . PHP_EOL;
-echo 'Library Version (const) : ' . RD_KAFKA_VERSION . PHP_EOL;
-echo 'Library Version (string): ' . Library::getLibraryVersion() . PHP_EOL;
+echo 'Binding version (string)    : ' . Library::getVersion() . PHP_EOL;
+echo 'librdkafka version (int)    : ' . Library::rd_kafka_version() . PHP_EOL;
+echo 'librdkafka version (const)  : ' . RD_KAFKA_VERSION . PHP_EOL;
+echo 'librdkafka version (string) : ' . Library::getLibraryVersion() . PHP_EOL;
+echo 'PHP Library version (string): ' . Library::PHP_LIBRARY_VERSION . PHP_EOL;
+echo 'Client version (string)     : ' . Library::getClientVersion() . PHP_EOL;

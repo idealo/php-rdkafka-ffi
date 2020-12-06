@@ -1,0 +1,12 @@
+benchmark;subject;set;revs;tag:php74_ffi:mem_peak;tag:php74_ffi_preload:mem_peak;tag:php80_ffi:mem_peak;tag:php80_ffi_preload:mem_peak;tag:php80_ffi_preload_jit:mem_peak;tag:php74_ext:mem_peak
+ApiBench;benchVersionAutoDetection;0;100;1753184;450736;1655512;450000;450032;
+ApiBench;benchVersionFix;0;100;1753120;530408;1655448;529864;529896;
+ProducerBench;benchProduce1Message;0;100;1751912;467320;1654368;465328;465360;1399272
+ProducerBench;benchProduce100Messages;0;100;1751912;467320;1654368;465328;465360;1399272
+ProducerBench;benchProduce100MessagesWithLogAndDrMsgCallbacks;0;100;1752040;592856;1654496;592408;594864;1399400
+ConsumerBench;benchConsume1Message;0;100;1752568;489880;1655024;484128;484160;1399272
+ConsumerBench;benchConsumeCallback1Message;0;100;1752600;491440;1655056;491008;492656;1399304
+ConsumerBench;benchConsume100Messages;0;100;1752568;489880;1655024;484128;484160;1399272
+ConsumerBench;benchConsume100MessagesWithLogCallback;0;100;1752632;489944;1655088;487232;488880;1399336
+ConsumerBench;benchConsumeBatch100Messages;0;100;1752600;489912;1655056;484160;484192;1399304
+ConsumerBench;benchConsumeCallback100Message;0;100;1752600;491440;1655056;491008;492656;1399304

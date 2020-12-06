@@ -5,3 +5,4 @@ composer.lock
 /docs/license.md
 /docs/api/
 /docs/changelog.md
+/resources/benchmarks/vars/vault.yml
