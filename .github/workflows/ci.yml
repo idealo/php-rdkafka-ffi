@@ -48,9 +48,6 @@ jobs:
         experimental:
           - false
 
-        publish:
-          - false
-
         include:
           - php: '7.4'
             librdkafka: 'v1.5.2'
@@ -65,6 +62,11 @@ jobs:
 #          - php: '8.1'
 #            librdkafka: 'master'
 #            experimental: true
+        exclude:
+          - php: '7.4'
+            librdkafka: 'v1.5.2'
+            experimental: false
+            publish: false
     services:
       zookeeper:
         image: confluentinc/cp-zookeeper:5.5.1
@@ -118,7 +120,8 @@ jobs:
           sudo make install DESTDIR=~/build-cache/librdkafka
       - name: Install librdkafka ${{ matrix.librdkafka }}
         run: |
-          sudo ldconfig ~/build-cache/librdkafka
+          sudo rsync -av ~/build-cache/librdkafka/ /
+          sudo ldconfig
 
       - name: Get composer cache directory
         id: composer-cache
