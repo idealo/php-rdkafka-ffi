@@ -20,7 +20,7 @@ if (empty($options)) {
 }
 
 $conf = new Conf();
-$conf->set('bootstrap.servers', $options['b'] ?? 'kafka:9092');
+$conf->set('bootstrap.servers', $options['b'] ?? getenv('KAFKA_BROKERS') ?: 'kafka:9092');
 $client = Client::fromConf($conf);
 $client->setWaitForResultEventTimeout(2000);
 
