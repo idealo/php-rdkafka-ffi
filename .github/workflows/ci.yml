@@ -48,6 +48,9 @@ jobs:
         experimental:
           - false
 
+        publish:
+          - false
+
         include:
           - php: '7.4'
             librdkafka: 'v1.5.2'
