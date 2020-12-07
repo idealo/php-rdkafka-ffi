@@ -140,27 +140,27 @@ jobs:
         run: |
           composer update --prefer-dist --prefer-stable --no-interaction --ignore-platform-req=php
 
-#      - name: Run tests
-#        run: |
-#          composer test-init
-#          composer test-coverage
-#
-#      - name: Publish code coverage to codeclimate
-#        if: matrix.publish == 'true' && github.event_name == 'push'
-#        uses: paambaati/codeclimate-action@v2.7.4
-#        env:
-#          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
-#
-#      - name: Prepare docs
-#        if: matrix.publish == 'true' && github.event_name == 'push'
-#        run: |
-#          composer prepare-docs
-#      - name: Generate docs
-#        if: matrix.publish == 'true' && github.event_name == 'push'
-#        run: |
-#          pip install mkdocs-material mkdocs-awesome-pages-plugin
-#          mkdocs build
-#      - name: Publish docs to github pages
-#        if: matrix.publish == 'true' && github.event_name == 'push'
-#        run: |
-#          echo "tbd"
+      - name: Run tests
+        run: |
+          composer test-init
+          composer test-coverage
+
+      - name: Publish code coverage to codeclimate
+        if: matrix.publish == 'true' && github.event_name == 'push'
+        uses: paambaati/codeclimate-action@v2.7.4
+        env:
+          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
+
+      - name: Prepare docs
+        if: matrix.publish == 'true' && github.event_name == 'push'
+        run: |
+          composer prepare-docs
+      - name: Generate docs
+        if: matrix.publish == 'true' && github.event_name == 'push'
+        run: |
+          pip install mkdocs-material mkdocs-awesome-pages-plugin
+          mkdocs build
+      - name: Publish docs to github pages
+        if: matrix.publish == 'true' && github.event_name == 'push'
+        run: |
+          echo "tbd"
