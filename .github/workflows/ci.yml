@@ -70,14 +70,14 @@ jobs:
         image: confluentinc/cp-zookeeper:5.5.1
         ports:
           - 2181:2181
-        environment:
+        env:
           ZOOKEEPER_CLIENT_PORT: 2181
           ZOOKEEPER_TICK_TIME: 2000
       kafka:
         image: confluentinc/cp-kafka:5.5.1
         ports:
           - 9092:9092
-        environment:
+        env:
           KAFKA_BROKER_ID: 111
           KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
           KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
