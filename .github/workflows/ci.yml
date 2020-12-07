@@ -1,0 +1,157 @@
+name: ci
+
+on:
+  push:
+    branches:
+      - main
+#    schedule:
+#      - cron:  '* * * * 1'
+
+jobs:
+
+  codestyle:
+    name: Codestyle
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Install PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 7.4
+          coverage: none
+      - name: Install dependencies
+        run: composer update --prefer-dist --ignore-platform-reqs
+      - name: Check style
+        run: composer cs
+
+  tests:
+    name: Tests
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        php:
+          - '7.4'
+#          - '8.0'
+#          - '8.1'
+
+        librdkafka:
+          - 'v1.5.2'
+#          - 'v1.4.4'
+#          - 'v1.3.0'
+#          - 'v1.2.2'
+#          - 'v1.1.0'
+#          - 'v1.0.1'
+#          - 'master'
+
+        experimental:
+          - false
+
+        publish:
+          - false
+
+        include:
+          - php: '7.4'
+            librdkafka: 'v1.5.2'
+            experimental: false
+            publish: true
+          - php: '7.4'
+            librdkafka: 'master'
+            experimental: true
+          - php: '8.0'
+            librdkafka: 'master'
+            experimental: true
+          - php: '8.1'
+            librdkafka: 'master'
+            experimental: true
+    services:
+      zookeeper:
+        image: confluentinc/cp-zookeeper:5.5.1
+        ports:
+          - 2181:2181
+        environment:
+          ZOOKEEPER_CLIENT_PORT: 2181
+          ZOOKEEPER_TICK_TIME: 2000
+      kafka:
+        image: confluentinc/cp-kafka:5.5.1
+        ports:
+          - 9092:9092
+        environment:
+          KAFKA_BROKER_ID: 111
+          KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+          KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+          KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT
+          KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+          KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+          KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+          KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+    env:
+      PHP_VERSION: ${{ matrix.php }}
+      LIBRDKAFKA_VERSION: ${{ matrix.librdkafka }}
+      KAFKA_BROKERS: kafka:9092
+      COMPOSER_AUTH: ${{ secrets.COMPOSER_AUTH }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Install PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{matrix.php }}
+          coverage: pcov
+          extensions: ffi, pcntl
+
+      - name: Cache librdkafka ${{ matrix.librdkafka }} build
+        id: librdkafka-build-cache
+        uses: actions/cache@v2
+        with:
+          path: ~/build-cache
+          key: ${{ runner.os }}-librdkafka-${{ matrix.librdkafka }}
+      - name: Build librdkafka ${{ matrix.librdkafka }}
+        if: ${{ steps.librdkafka-build-cache.outputs.cache-hit != 'true' }}
+        run: |
+          git clone --branch "${{ matrix.librdkafka }}" -c advice.detachedHead=false --depth 1 https://github.com/edenhill/librdkafka.git ~/build-cache/librdkafka; \
+          cd ~/build-cache/librdkafka
+          ./configure --install-deps
+          make
+          make install
+      - name: Install librdkafka ${{ matrix.librdkafka }}
+        run: ldconfig ~/build-cache/librdkafka
+
+      - name: Get Composer Cache Directory
+        id: composer-cache
+        run: |
+          echo "::set-output name=dir::$(composer config cache-files-dir)"
+      - uses: actions/cache@v2
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
+          restore-keys: ${{ runner.os }}-composer-
+      - name: Install dependencies
+        run: |
+          composer update --prefer-dist --prefer-stable --no-interaction --ignore-platform-req=php
+
+      - name: Run tests
+        run: |
+          composer test-init
+          composer test-coverage
+
+      - name: Publish code coverage to codeclimate
+        if: matrix.publish == 'true' && github.event_name == 'push'
+        uses: paambaati/codeclimate-action@v2.7.4
+        env:
+          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
+
+      - name: Prepare docs
+        if: matrix.publish == 'true' && github.event_name == 'push'
+        run: |
+          composer prepare-docs
+      - name: Generate docs
+        if: matrix.publish == 'true' && github.event_name == 'push'
+        run: |
+          pip install mkdocs-material mkdocs-awesome-pages-plugin
+          mkdocs build
+      - name: Publish docs to github pages
+        if: matrix.publish == 'true' && github.event_name == 'push'
+        run: |
+          echo "tbd"
