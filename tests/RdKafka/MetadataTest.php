@@ -44,8 +44,6 @@ class MetadataTest extends TestCase
         $broker = $brokers->current();
 
         $this->assertGreaterThan(0, $broker->getId());
-        $this->assertSame('kafka', $broker->getHost());
-        $this->assertSame(9092, $broker->getPort());
     }
 
     public function testGetTopics(): void
