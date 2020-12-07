@@ -94,7 +94,7 @@ jobs:
     env:
       PHP_VERSION: ${{ matrix.php }}
       LIBRDKAFKA_VERSION: ${{ matrix.librdkafka }}
-      KAFKA_BROKERS: kafka:9092
+      KAFKA_BROKERS: 127.0.0.1:9092
       COMPOSER_AUTH: ${{ secrets.COMPOSER_AUTH }}
     steps:
       - name: Checkout
