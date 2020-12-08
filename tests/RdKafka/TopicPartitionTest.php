@@ -81,9 +81,11 @@ class TopicPartitionTest extends TestCase
         $topicPartition = new TopicPartition(KAFKA_TEST_TOPIC, 0);
 
         $this->assertNull($topicPartition->getMetadata());
+        $this->assertSame(0, $topicPartition->getMetadataSize());
 
         $topicPartition->setMetadata('meta');
 
         $this->assertSame('meta', $topicPartition->getMetadata());
+        $this->assertSame(4, $topicPartition->getMetadataSize());
     }
 }

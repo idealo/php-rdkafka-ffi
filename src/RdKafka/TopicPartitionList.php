@@ -52,11 +52,10 @@ class TopicPartitionList implements Iterator, Countable
             $nativeTopicPartition->offset = $item->getOffset();
             if ($item->getMetadata() !== null) {
                 $metadata = $item->getMetadata();
-                $metadataSize = strlen($item->getMetadata());
-                $metadataNative = Library::new('char[' . $metadataSize . ']', false, true);
-                FFI::memcpy($metadataNative, $metadata, $metadataSize);
+                $metadataNative = Library::new('char[' . $item->getMetadataSize() . ']', false, true);
+                FFI::memcpy($metadataNative, $metadata, $item->getMetadataSize());
                 $nativeTopicPartition->metadata = FFI::cast('char*', $metadataNative);
-                $nativeTopicPartition->metadata_size = $metadataSize;
+                $nativeTopicPartition->metadata_size = $item->getMetadataSize();
             }
         }
 

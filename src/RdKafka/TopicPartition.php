@@ -25,12 +25,10 @@ class TopicPartition
             (int) $topicPartition->offset
         );
 
-        if ((int) $topicPartition->metadata_size > 0 && $topicPartition->metadata !== null) {
-            $topar->metadata = FFI::string($topicPartition->metadata, $topicPartition->metadata_size);
-            $topar->metadataSize = (int) $topicPartition->metadata_size;
+        if ((int) $topicPartition->metadata_size > 0) {
+            $topar->setMetadata(FFI::string($topicPartition->metadata, (int) $topicPartition->metadata_size));
         } else {
-            $topar->metadata = null;
-            $topar->metadataSize = 0;
+            $topar->setMetadata(null);
         }
         $topar->opaque = $topicPartition->opaque;
         $topar->err = (int) $topicPartition->err;
@@ -48,7 +46,7 @@ class TopicPartition
         $this->topic = $topic;
         $this->partition = $partition;
         $this->offset = $offset;
-        $this->metadata = $metadata;
+        $this->setMetadata($metadata);
     }
 
     public function getOffset(): int
@@ -69,7 +67,12 @@ class TopicPartition
     public function getMetadata(): ?string
     {
         return $this->metadata;
-    }π
+    }
+
+    public function getMetadataSize(): int
+    {
+        return $this->metadataSize;
+    }
 
     public function getOpqaque(): ?object
     {
@@ -98,6 +101,12 @@ class TopicPartition
 
     public function setMetadata(?string $metadata): void
     {
-        $this->metadata = $metadata;
+        if (empty($metadata) === true) {
+            $this->metadata = null;
+            $this->metadataSize = 0;
+        } else {
+            $this->metadata = $metadata;
+            $this->metadataSize = strlen($metadata);
+        }
     }
 }
