@@ -9,7 +9,7 @@ on:
 
 jobs:
   test-extension-compatibility:
-    name: Test extensions compatibility
+    name: Tests
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false

@@ -1,0 +1,93 @@
+name: test-window
+
+on:
+  push:
+    branches:
+      - main
+#    schedule:
+#      - cron:  '* * * * 1'
+
+jobs:
+  tests-windows:
+    name: Tests
+    runs-on: windows-latest
+    strategy:
+      fail-fast: true
+      matrix:
+        php:
+          - '7.4'
+          - '8.0'
+          - '8.1'
+        librdkafka:
+          - 'v1.5.2'
+        publish:
+          - false
+    defaults:
+      run:
+        shell: bash
+    env:
+      PHP_VERSION: ${{ matrix.php }}
+      LIBRDKAFKA_VERSION: ${{ matrix.librdkafka }}
+      KAFKA_BROKERS: localhost:9092
+      COMPOSER_AUTH: ${{ secrets.COMPOSER_AUTH }}
+      GH_TOKEN: ${{ secrets.GH_TOKEN }}
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Install librdkafka & kafka
+        shell: bash
+        run: |
+          nuget install librdkafka.redist -Version 1.5.2
+          export PATH=$PWD/librdkafka.redist.1.5.2/runtimes/win-x64/native:$PATH
+          wget -O kafka_2.13-2.6.0.tgz http://ftp.fau.de/apache/kafka/2.6.0/kafka_2.13-2.6.0.tgz
+          tar -xzf kafka_2.13-2.6.0.tgz
+          cp -pr kafka_2.13-2.6.0 /c/kafka
+          sed -i "s|broker.id=0|broker.id=111|g" /c/kafka/config/server.properties
+          cat /c/kafka/config/server.properties
+          choco install nssm
+          nssm install zookeeper /c/kafka/bin/windows/zookeeper-server-start.bat /c/kafka/config/zookeeper.properties
+          nssm set zookeeper AppExit Default Exit
+          nssm install kafka /c/kafka/bin/windows/kafka-server-start.bat /c/kafka/config/server.properties
+          nssm set kafka AppExit Default Exit
+          printenv
+
+      - name: Start Kafka
+        shell: bash
+        run: |
+          nssm start zookeeper
+          nssm status zookeeper
+          nssm start kafka
+          nssm status kafka
+
+      - name: Install PHP ${{ matrix.php }}
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          coverage: none
+          extensions: ffi, pcntl
+
+      - name: Get composer cache directory
+        id: composer-cache
+        run: |
+          echo "::set-output name=dir::$(composer config cache-files-dir)"
+      - name: Cache composer cache directory
+        uses: actions/cache@v2
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
+          restore-keys: ${{ runner.os }}-composer-
+      - name: Install dependencies
+        run: |
+          composer update --prefer-dist --prefer-stable --no-interaction --ignore-platform-req=php
+
+      - name: Run tests
+        run: |
+          composer test-init
+          composer test
+
+      - name: Stop kafka
+        run: |
+          nssm stop kafka
+          nssm stop zookeeper

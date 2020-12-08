@@ -1,0 +1,79 @@
+name: test-macos
+
+on:
+  push:
+    branches:
+      - main
+#    schedule:
+#      - cron:  '* * * * 1'
+
+jobs:
+  tests-windows:
+    name: Tests
+    runs-on: macos-latest
+    strategy:
+      fail-fast: true
+      matrix:
+        php:
+          - '7.4'
+          - '8.0'
+          - '8.1'
+        librdkafka:
+          - 'v1.5.2'
+        publish:
+          - false
+    defaults:
+      run:
+        shell: bash
+    env:
+      PHP_VERSION: ${{ matrix.php }}
+      LIBRDKAFKA_VERSION: ${{ matrix.librdkafka }}
+      KAFKA_BROKERS: localhost:9092
+      COMPOSER_AUTH: ${{ secrets.COMPOSER_AUTH }}
+      GH_TOKEN: ${{ secrets.GH_TOKEN }}
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Install librdkafka & kafka
+        shell: bash
+        run: |
+          brew install composer librdkafka kafka
+
+      - name: Start Kafka
+        shell: bash
+        run: |
+          zookeeper-server-start -daemon /usr/local/etc/kafka/zookeeper.properties;
+          kafka-server-start -daemon /usr/local/etc/kafka/server.properties --override broker.id=111 --override advertised.listeners=${{ env.KAFKA_ADVERTISED_LISTENERS }};
+
+      - name: Install PHP ${{ matrix.php }}
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          coverage: none
+          extensions: ffi, pcntl
+
+      - name: Get composer cache directory
+        id: composer-cache
+        run: |
+          echo "::set-output name=dir::$(composer config cache-files-dir)"
+      - name: Cache composer cache directory
+        uses: actions/cache@v2
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
+          restore-keys: ${{ runner.os }}-composer-
+      - name: Install dependencies
+        run: |
+          composer update --prefer-dist --prefer-stable --no-interaction --ignore-platform-req=php
+
+      - name: Run tests
+        run: |
+          composer test-init
+          composer test
+
+      - name: Stop kafka
+        run: |
+          kafka-server-stop;
+          zookeeper-server-stop;

@@ -14,11 +14,18 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
+        include:
+          - php: '7.4'
+            librdkafka: 'v1.5.2'
+            publish: true
+        exclude:
+          - php: '7.4'
+            librdkafka: 'v1.5.2'
+            publish: false
         php:
           - '7.4'
           - '8.0'
           - '8.1'
-
         librdkafka:
           - 'v1.5.2'
           - 'v1.4.4'
@@ -27,35 +34,8 @@ jobs:
           - 'v1.1.0'
           - 'v1.0.1'
           - 'master'
-
-        experimental:
-          - false
-
         publish:
           - false
-
-        include:
-          - php: '7.4'
-            librdkafka: 'v1.5.2'
-            experimental: false
-            publish: true
-          - php: '7.4'
-            librdkafka: 'master'
-            experimental: true
-            publish: false
-          - php: '8.0'
-            librdkafka: 'master'
-            experimental: true
-            publish: false
-          - php: '8.1'
-            librdkafka: 'master'
-            experimental: true
-            publish: false
-        exclude:
-          - php: '7.4'
-            librdkafka: 'v1.5.2'
-            experimental: false
-            publish: false
     services:
       zookeeper:
         image: confluentinc/cp-zookeeper:5.5.1
@@ -106,10 +86,10 @@ jobs:
         run: |
           sudo rsync -av ~/build-cache/librdkafka/ /
           sudo ldconfig
-      - name: Install PHP ${{matrix.php }}
+      - name: Install PHP ${{ matrix.php }}
         uses: shivammathur/setup-php@v2
         with:
-          php-version: ${{matrix.php }}
+          php-version: ${{ matrix.php }}
           coverage: pcov
           extensions: ffi, pcntl
 
