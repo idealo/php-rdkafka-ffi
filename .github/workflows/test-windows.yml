@@ -40,8 +40,7 @@ jobs:
         shell: bash
         run: |
           nuget install librdkafka.redist -Version 1.5.2
-          export PATH=$PWD/librdkafka.redist.1.5.2/runtimes/win-x64/native:$PATH
-          choco install wget nssm
+          choco install --no-progress wget nssm
           wget -O kafka_2.13-2.6.0.tgz http://ftp.fau.de/apache/kafka/2.6.0/kafka_2.13-2.6.0.tgz
           tar -xzf kafka_2.13-2.6.0.tgz
           cp -pr kafka_2.13-2.6.0 /c/kafka
@@ -84,6 +83,7 @@ jobs:
 
       - name: Run tests
         run: |
+          export PATH=$PWD/librdkafka.redist.1.5.2/runtimes/win-x64/native:$PATH
           composer test-init
           composer test
 
