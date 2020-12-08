@@ -42,12 +42,15 @@ jobs:
           - php: '7.4'
             librdkafka: 'master'
             experimental: true
+            publish: false
           - php: '8.0'
             librdkafka: 'master'
             experimental: true
+            publish: false
           - php: '8.1'
             librdkafka: 'master'
             experimental: true
+            publish: false
         exclude:
           - php: '7.4'
             librdkafka: 'v1.5.2'

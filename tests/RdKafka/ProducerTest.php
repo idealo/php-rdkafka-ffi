@@ -123,6 +123,7 @@ class ProducerTest extends TestCase
     public function testTransaction(): void
     {
         $this->requiresLibrdkafkaVersion('>=', '1.4.0');
+        $this->requiresRdKafkaExtensionVersion('>=', '4.1.0');
 
         $producerConf = new Conf();
         $producerConf->set('bootstrap.servers', KAFKA_BROKERS);
