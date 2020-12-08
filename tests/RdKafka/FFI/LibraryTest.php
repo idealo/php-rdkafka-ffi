@@ -15,7 +15,7 @@ use RuntimeException;
  */
 class LibraryTest extends TestCase
 {
-    use \RequireRdKafkaVersionTrait;
+    use \RequireVersionTrait;
 
     protected function tearDown(): void
     {
@@ -42,7 +42,7 @@ class LibraryTest extends TestCase
 
     public function testHasMethodWithNotSupportedMethod(): void
     {
-        $this->requiresRdKafkaVersion('<', '1.4.0');
+        $this->requiresLibrdkafkaVersion('<', '1.4.0');
 
         $this->assertFalse(Library::hasMethod('rd_kafka_msg_partitioner_fnv1a_random'));
     }
@@ -56,7 +56,7 @@ class LibraryTest extends TestCase
 
     public function testRequireMethodWithNotSupportedMethod(): void
     {
-        $this->requiresRdKafkaVersion('<', '1.4.0');
+        $this->requiresLibrdkafkaVersion('<', '1.4.0');
 
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessageMatches('/rd_kafka_msg_partitioner_fnv1a_random/');
@@ -65,7 +65,7 @@ class LibraryTest extends TestCase
 
     public function testRequireVersion(): void
     {
-        $this->requiresRdKafkaVersion('>', '1.0.0');
+        $this->requiresLibrdkafkaVersion('>', '1.0.0');
 
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessageMatches('/<= 1\.0\.0/');
@@ -74,7 +74,7 @@ class LibraryTest extends TestCase
 
     public function testVersionMatches(): void
     {
-        $this->requiresRdKafkaVersion('>', '1.0.0');
+        $this->requiresLibrdkafkaVersion('>', '1.0.0');
 
         $this->assertFalse(Library::versionMatches('<=', '1.0.0'));
         $this->assertTrue(Library::versionMatches('=', Library::getVersion()));

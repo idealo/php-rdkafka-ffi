@@ -6,7 +6,7 @@ namespace RdKafka;
 
 use PHPUnit\Framework\TestCase;
 use RdKafka;
-use RequireRdKafkaVersionTrait;
+use RequireVersionTrait;
 
 /**
  * @covers \RdKafka\Producer
@@ -14,7 +14,7 @@ use RequireRdKafkaVersionTrait;
  */
 class ProducerTest extends TestCase
 {
-    use RequireRdKafkaVersionTrait;
+    use RequireVersionTrait;
 
     private Producer $producer;
 
@@ -107,7 +107,8 @@ class ProducerTest extends TestCase
 
     public function testTransactionNotConfiguresShouldFail(): void
     {
-        $this->requiresRdKafkaVersion('>=', '1.4.0');
+        $this->requiresLibrdkafkaVersion('>=', '1.4.0');
+        $this->requiresRdKafkaExtensionVersion('>=', '4.1.0');
 
         $producerConf = new Conf();
         $producerConf->set('bootstrap.servers', KAFKA_BROKERS);
@@ -121,7 +122,7 @@ class ProducerTest extends TestCase
 
     public function testTransaction(): void
     {
-        $this->requiresRdKafkaVersion('>=', '1.4.0');
+        $this->requiresLibrdkafkaVersion('>=', '1.4.0');
 
         $producerConf = new Conf();
         $producerConf->set('bootstrap.servers', KAFKA_BROKERS);

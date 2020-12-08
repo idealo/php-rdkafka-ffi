@@ -6,7 +6,7 @@ namespace RdKafka;
 
 use PHPUnit\Framework\TestCase;
 use RdKafka\FFI\Library;
-use RequireRdKafkaVersionTrait;
+use RequireVersionTrait;
 
 /**
  * @covers \RdKafka\Conf
@@ -20,7 +20,7 @@ use RequireRdKafkaVersionTrait;
  */
 class ConfTest extends TestCase
 {
-    use RequireRdKafkaVersionTrait;
+    use RequireVersionTrait;
 
     public function testDump(): void
     {
@@ -144,7 +144,7 @@ class ConfTest extends TestCase
      */
     public function testClientSoftwareNameAndVersionForKIP511(): void
     {
-        $this->requiresRdKafkaVersion('>=', '1.4.0');
+        $this->requiresLibrdkafkaVersion('>=', '1.4.0');
 
         $conf = new Conf();
 

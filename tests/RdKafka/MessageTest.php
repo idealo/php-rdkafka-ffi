@@ -11,7 +11,7 @@ use PHPUnit\Framework\TestCase;
  */
 class MessageTest extends TestCase
 {
-    use \RequireRdKafkaVersionTrait;
+    use \RequireVersionTrait;
 
     private ?Message $message;
     private Message $producedMessage;
@@ -131,7 +131,7 @@ class MessageTest extends TestCase
      */
     public function testBrokerId(): void
     {
-        $this->requiresRdKafkaVersion('>=', '1.5.0');
+        $this->requiresLibrdkafkaVersion('>=', '1.5.0');
 
         $this->prepareMessage(0, 0, __METHOD__);
 

@@ -2,11 +2,14 @@
 
 declare(strict_types=1);
 
-trait RequireRdKafkaVersionTrait
+trait RequireVersionTrait
 {
     abstract public static function markTestSkipped(string $message = ''): void;
 
-    protected function requiresRdKafkaVersion(string $operator, string $version): void
+    /**
+     * Require specific librdkafka version
+     */
+    protected function requiresLibrdkafkaVersion(string $operator, string $version): void
     {
         if (function_exists('rd_kafka_version')) {
             $runtimeVersion = rd_kafka_version();
@@ -25,6 +28,28 @@ trait RequireRdKafkaVersionTrait
             $this->markTestSkipped(
                 sprintf(
                     'Requires librdkafka %s %s. Current version is %s.',
+                    $operator,
+                    $version,
+                    $runtimeVersion
+                )
+            );
+        }
+    }
+
+    /**
+     * Require specific rdkafka extension version if installed
+     */
+    protected function requiresRdKafkaExtensionVersion(string $operator, string $version): void
+    {
+        $runtimeVersion = phpversion('rdkafka');
+        if ($runtimeVersion === false) {
+            return;
+        }
+
+        if (version_compare($runtimeVersion, $version, $operator) === false) {
+            $this->markTestSkipped(
+                sprintf(
+                    'Requires rdkafka extension %s %s. Current version is %s.',
                     $operator,
                     $version,
                     $runtimeVersion

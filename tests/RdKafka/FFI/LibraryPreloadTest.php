@@ -14,7 +14,7 @@ use PHPUnit\Framework\TestCase;
  */
 class LibraryPreloadTest extends TestCase
 {
-    use \RequireRdKafkaVersionTrait;
+    use \RequireVersionTrait;
 
     protected function tearDown(): void
     {

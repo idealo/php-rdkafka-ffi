@@ -6,7 +6,7 @@ namespace RdKafka;
 
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
-use RequireRdKafkaVersionTrait;
+use RequireVersionTrait;
 use stdClass;
 
 /**
@@ -18,7 +18,7 @@ use stdClass;
  */
 class KafkaConsumerTest extends TestCase
 {
-    use RequireRdKafkaVersionTrait;
+    use RequireVersionTrait;
 
     public static function setUpBeforeClass(): void
     {
@@ -274,7 +274,7 @@ class KafkaConsumerTest extends TestCase
      */
     public function testCommitWithOffsetAndMetadata(): void
     {
-        $this->requiresRdKafkaVersion('>=', '1.2.0');
+        $this->requiresLibrdkafkaVersion('>=', '1.2.0');
 
         $conf = new Conf();
         $conf->set('log_level', (string) LOG_EMERG);

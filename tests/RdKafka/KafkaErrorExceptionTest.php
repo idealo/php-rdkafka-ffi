@@ -6,18 +6,19 @@ namespace RdKafka;
 
 use PHPUnit\Framework\TestCase;
 use RdKafka\FFI\Library;
-use RequireRdKafkaVersionTrait;
+use RequireVersionTrait;
 
 /**
  * @covers \RdKafka\KafkaErrorException
  */
 class KafkaErrorExceptionTest extends TestCase
 {
-    use RequireRdKafkaVersionTrait;
+    use RequireVersionTrait;
 
     protected function setUp(): void
     {
-        $this->requiresRdKafkaVersion('>=', '1.4.0');
+        $this->requiresLibrdkafkaVersion('>=', '1.4.0');
+        $this->requiresRdKafkaExtensionVersion('>=', '4.1.0');
     }
 
     /**

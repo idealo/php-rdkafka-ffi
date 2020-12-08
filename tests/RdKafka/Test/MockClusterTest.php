@@ -11,7 +11,7 @@ use RdKafka\KafkaConsumer;
 use RdKafka\Metadata;
 use RdKafka\Producer;
 use RdKafka\TopicPartition;
-use RequireRdKafkaVersionTrait;
+use RequireVersionTrait;
 
 /**
  * @covers \RdKafka\Test\MockCluster
@@ -19,11 +19,11 @@ use RequireRdKafkaVersionTrait;
  */
 class MockClusterTest extends TestCase
 {
-    use RequireRdKafkaVersionTrait;
+    use RequireVersionTrait;
 
     protected function setUp(): void
     {
-        $this->requiresRdKafkaVersion('>=', '1.3.0');
+        $this->requiresLibrdkafkaVersion('>=', '1.3.0');
     }
 
     public function testCreateWithProducingAndConsuming(): void
@@ -61,7 +61,7 @@ class MockClusterTest extends TestCase
 
     public function testFromProducer(): void
     {
-        $this->requiresRdKafkaVersion('>=', '1.4.0');
+        $this->requiresLibrdkafkaVersion('>=', '1.4.0');
 
         $producerConfig = new Conf();
         $producerConfig->set('log_level', (string) LOG_EMERG);
@@ -75,7 +75,7 @@ class MockClusterTest extends TestCase
 
     public function testFromProducerWithMissingConfigShouldFail(): void
     {
-        $this->requiresRdKafkaVersion('>=', '1.4.0');
+        $this->requiresLibrdkafkaVersion('>=', '1.4.0');
 
         $producerConfig = new Conf();
         $producerConfig->set('log_level', (string) LOG_EMERG);
@@ -99,7 +99,7 @@ class MockClusterTest extends TestCase
 
     public function testSetApiVersion(): void
     {
-        $this->requiresRdKafkaVersion('>=', '1.4.0');
+        $this->requiresLibrdkafkaVersion('>=', '1.4.0');
 
         $logStack = [];
 
@@ -256,7 +256,7 @@ class MockClusterTest extends TestCase
 
     public function testSetBrokerDownAndUp(): void
     {
-        $this->requiresRdKafkaVersion('>=', '1.4.0');
+        $this->requiresLibrdkafkaVersion('>=', '1.4.0');
 
         $clusterConfig = new Conf();
         $clusterConfig->set('log_level', (string) LOG_EMERG);
@@ -326,7 +326,7 @@ class MockClusterTest extends TestCase
 
     public function testCreateTopic(): void
     {
-        $this->requiresRdKafkaVersion('>=', '1.4.0');
+        $this->requiresLibrdkafkaVersion('>=', '1.4.0');
 
         $clusterConfig = new Conf();
         $clusterConfig->set('log_level', (string) LOG_EMERG);
@@ -349,7 +349,7 @@ class MockClusterTest extends TestCase
 
     public function testPushBrokerRequestErrors(): void
     {
-        $this->requiresRdKafkaVersion('>=', '1.5.0');
+        $this->requiresLibrdkafkaVersion('>=', '1.5.0');
 
         $clusterConfig = new Conf();
         $clusterConfig->set('log_level', (string) LOG_EMERG);
