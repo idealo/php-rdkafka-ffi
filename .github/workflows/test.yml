@@ -16,17 +16,17 @@ jobs:
       matrix:
         php:
           - '7.4'
-#          - '8.0'
-#          - '8.1'
+        #          - '8.0'
+        #          - '8.1'
 
         librdkafka:
           - 'v1.5.2'
-#          - 'v1.4.4'
-#          - 'v1.3.0'
-#          - 'v1.2.2'
-#          - 'v1.1.0'
-#          - 'v1.0.1'
-#          - 'master'
+        #          - 'v1.4.4'
+        #          - 'v1.3.0'
+        #          - 'v1.2.2'
+        #          - 'v1.1.0'
+        #          - 'v1.0.1'
+        #          - 'master'
 
         experimental:
           - false
@@ -39,15 +39,15 @@ jobs:
             librdkafka: 'v1.5.2'
             experimental: false
             publish: true
-#          - php: '7.4'
-#            librdkafka: 'master'
-#            experimental: true
-#          - php: '8.0'
-#            librdkafka: 'master'
-#            experimental: true
-#          - php: '8.1'
-#            librdkafka: 'master'
-#            experimental: true
+        #          - php: '7.4'
+        #            librdkafka: 'master'
+        #            experimental: true
+        #          - php: '8.0'
+        #            librdkafka: 'master'
+        #            experimental: true
+        #          - php: '8.1'
+        #            librdkafka: 'master'
+        #            experimental: true
         exclude:
           - php: '7.4'
             librdkafka: 'v1.5.2'
@@ -83,12 +83,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Install PHP ${{matrix.php }}
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: ${{matrix.php }}
-          coverage: pcov
-          extensions: ffi, pcntl
 
       - name: Cache librdkafka ${{ matrix.librdkafka }} build
         id: librdkafka-build-cache
@@ -109,6 +103,12 @@ jobs:
         run: |
           sudo rsync -av ~/build-cache/librdkafka/ /
           sudo ldconfig
+      - name: Install PHP ${{matrix.php }}
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{matrix.php }}
+          coverage: pcov
+          extensions: ffi, pcntl
 
       - name: Get composer cache directory
         id: composer-cache

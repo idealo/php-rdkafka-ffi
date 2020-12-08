@@ -51,13 +51,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Install PHP ${{ matrix.php }} with rdkafka ${{ matrix.rdkafka }}
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: ${{ matrix.php }}
-          coverage: none
-          tools: pecl
-          extensions: rdkafka
 
       - name: Cache librdkafka ${{ matrix.librdkafka }} build
         id: librdkafka-build-cache
@@ -78,6 +71,13 @@ jobs:
         run: |
           sudo rsync -av ~/build-cache/librdkafka/ /
           sudo ldconfig
+            - name: Install PHP ${{ matrix.php }} with rdkafka ${{ matrix.rdkafka }}
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          coverage: none
+          tools: pecl
+          extensions: rdkafka-${{ matrix.rdkafka }}
 
       - name: Get composer cache directory
         id: composer-cache
