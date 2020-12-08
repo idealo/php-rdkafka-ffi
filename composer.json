@@ -58,24 +58,24 @@
             "@php examples/create-topic.php -ttest -p1 -r1",
             "@php examples/create-topic.php -ttest_partitions -p3 -r1"
         ],
-        "test": "vendor/bin/phpunit",
-        "test-coverage": "vendor/bin/phpunit --coverage-text --coverage-clover=clover.xml",
+        "test": "./vendor/bin/phpunit",
+        "test-coverage": "./vendor/bin/phpunit --coverage-text --coverage-clover=clover.xml",
         "test-extension-init" : [
             "@php -n -dextension=ffi.so examples/delete-topic.php -ttest",
             "@php -n -dextension=ffi.so examples/delete-topic.php -ttest_partitions",
             "@php -n -dextension=ffi.so examples/create-topic.php -ttest -p1 -r1",
             "@php -n -dextension=ffi.so examples/create-topic.php -ttest_partitions -p3 -r1"
         ],
-        "test-extension": "resources/test-extension/vendor/bin/phpunit -c resources/test-extension/phpunit.xml",
-        "cs": "vendor/bin/ecs check src tests examples resources/ffigen benchmarks --ansi",
-        "cs-fix": "vendor/bin/ecs check src tests examples resources/ffigen benchmarks --ansi --fix",
+        "test-extension": "./resources/test-extension/vendor/bin/phpunit -c resources/test-extension/phpunit.xml",
+        "cs": "./vendor/bin/ecs check src tests examples resources/ffigen benchmarks --ansi",
+        "cs-fix": "./vendor/bin/ecs check src tests examples resources/ffigen benchmarks --ansi --fix",
         "prepare-docs": [
             "echo '---\ntitle: Getting started\n---\n' > docs/index.md",
             "sed 's/docs\\/img/img/g' README.md | sed 's/LICENSE)/license.md)/g' | sed 's/CONTRIBUTING.md/contributing.md/g' >> docs/index.md",
             "sed 's/docs\\/try-out/try-out/g' CONTRIBUTING.md > docs/contributing.md",
             "cp CHANGELOG.md docs/changelog.md",
             "cp LICENSE docs/license.md",
-            "vendor/bin/dog"
+            "./vendor/bin/dog"
         ]
     }
 }

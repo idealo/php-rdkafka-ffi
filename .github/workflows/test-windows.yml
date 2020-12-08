@@ -40,7 +40,7 @@ jobs:
         run: |
           nuget install librdkafka.redist -Version 1.5.2
           choco install --no-progress wget nssm
-          wget -O kafka_2.13-2.6.0.tgz http://ftp.fau.de/apache/kafka/2.6.0/kafka_2.13-2.6.0.tgz
+          wget -q -O kafka_2.13-2.6.0.tgz http://ftp.fau.de/apache/kafka/2.6.0/kafka_2.13-2.6.0.tgz
           tar -xzf kafka_2.13-2.6.0.tgz
           cp -pr kafka_2.13-2.6.0 /c/kafka
           sed -i "s|broker.id=0|broker.id=111|g" /c/kafka/config/server.properties
