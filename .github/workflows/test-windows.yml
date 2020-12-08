@@ -22,9 +22,6 @@ jobs:
           - 'v1.5.2'
         publish:
           - false
-    defaults:
-      run:
-        shell: bash
     env:
       PHP_VERSION: ${{ matrix.php }}
       LIBRDKAFKA_VERSION: ${{ matrix.librdkafka }}
@@ -37,7 +34,6 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Install librdkafka & kafka
-        shell: bash
         run: |
           nuget install librdkafka.redist -Version 1.5.2
           choco install --no-progress wget nssm
@@ -53,7 +49,6 @@ jobs:
           printenv
 
       - name: Start Kafka
-        shell: bash
         run: |
           nssm start zookeeper
           nssm status zookeeper
@@ -83,9 +78,9 @@ jobs:
 
       - name: Run tests
         run: |
-          export PATH=$PWD/librdkafka.redist.1.5.2/runtimes/win-x64/native:$PATH
+          set PATH=%CD%\librdkafka.redist.1.5.2\runtimes\win-x64\native;%PATH%
           composer test-init
-          php vendor/bin/phpunit --verbose --colors
+          composer test
 
       - name: Stop kafka
         run: |
