@@ -22,6 +22,9 @@ jobs:
           - 'v1.5.2'
         publish:
           - false
+    defaults:
+      run:
+        shell: bash
     env:
       PHP_VERSION: ${{ matrix.php }}
       LIBRDKAFKA_VERSION: ${{ matrix.librdkafka }}
@@ -78,9 +81,10 @@ jobs:
 
       - name: Run tests
         run: |
-          set PATH=%CD%\librdkafka.redist.1.5.2\runtimes\win-x64\native;%PATH%
-          composer test-init
-          composer test
+          export PATH=$PWD/librdkafka.redist.1.5.2/runtimes/win-x64/native:$PATH
+          php ./examples/create-topic.php -ttest -p1 -r1;
+          php ./examples/create-topic.php -ttest_partitions -p3 -r1;
+          php ./vendor/bin/phpunit --verbose --colors;
 
       - name: Stop kafka
         run: |
