@@ -13,6 +13,7 @@ class TopicPartition
     private int $partition;
     private int $offset;
     private ?string $metadata = null;
+    private int $metadataSize = 0;
     private ?object $opaque = null;
     private ?int $err = null;
 
@@ -24,9 +25,13 @@ class TopicPartition
             (int) $topicPartition->offset
         );
 
-        $topar->metadata = $topicPartition->metadata === null
-            ? null
-            : FFI::string($topicPartition->metadata, $topicPartition->metadata_size);
+        if ((int) $topicPartition->metadata_size > 0 && $topicPartition->metadata !== null) {
+            $topar->metadata = FFI::string($topicPartition->metadata, $topicPartition->metadata_size);
+            $topar->metadataSize = (int) $topicPartition->metadata_size;
+        } else {
+            $topar->metadata = null;
+            $topar->metadataSize = 0;
+        }
         $topar->opaque = $topicPartition->opaque;
         $topar->err = (int) $topicPartition->err;
 
@@ -64,7 +69,7 @@ class TopicPartition
     public function getMetadata(): ?string
     {
         return $this->metadata;
-    }
+    }π
 
     public function getOpqaque(): ?object
     {
