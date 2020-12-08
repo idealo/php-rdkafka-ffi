@@ -91,7 +91,7 @@ jobs:
           restore-keys: ${{ runner.os }}-composer-
       - name: Install dependencies
         run: |
-          composer update --prefer-dist --prefer-stable --no-interaction --ignore-platform-req=php
+          composer update --prefer-dist --prefer-stable --no-interaction --ignore-platform-reqs
       - name: Install dependencies for test-extension
         run: |
           composer update --prefer-dist --prefer-stable --no-interaction --ignore-platform-req=php -d resources/test-extension
