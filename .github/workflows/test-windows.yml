@@ -82,9 +82,8 @@ jobs:
       - name: Run tests
         run: |
           export PATH=$PWD/librdkafka.redist.1.5.2/runtimes/win-x64/native:$PATH
-          php ./examples/create-topic.php -ttest -p1 -r1;
-          php ./examples/create-topic.php -ttest_partitions -p3 -r1;
-          php ./vendor/bin/phpunit --verbose --colors;
+          composer test-init
+          composer test
 
       - name: Stop kafka
         run: |
