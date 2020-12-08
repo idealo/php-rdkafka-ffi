@@ -1,4 +1,4 @@
-name: codestyle
+name: Coding Standard
 
 on:
   push:
@@ -9,8 +9,8 @@ on:
 
 jobs:
 
-  codestyle:
-    name: Codestyle
+  coding-standard:
+    name: Coding Standard
     runs-on: ubuntu-latest
     steps:
       - name: Checkout

@@ -5,9 +5,17 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [Unreleased]
 
+### Fixed
+
+- Fix empty TopicPartition metadata handling
+
+### Added
+
+- Add TopicPartition::getMetadataSize()
+
 ### Changed
 
-- Rename KafkaError to KafkaErrorException and change its interface for extension compatibility with v4.1.0
+- Rename KafkaError to KafkaErrorException and change its interface for extension compatibility with v4.1.*
 - Suggests pcntl extension (instead of requires)
 
 ## [0.1.0] - 2020-12-06
