@@ -1,0 +1,36 @@
+name: codestyle
+
+on:
+  push:
+    branches:
+      - main
+#    schedule:
+#      - cron:  '* * * * 1'
+
+jobs:
+
+  codestyle:
+    name: Codestyle
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Install PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 7.4
+          coverage: none
+      - name: Get composer cache directory
+        id: composer-cache
+        run: |
+          echo "::set-output name=dir::$(composer config cache-files-dir)"
+      - name: Cache composer cache directory
+        uses: actions/cache@v2
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
+          restore-keys: ${{ runner.os }}-composer-
+      - name: Install dependencies
+        run: composer update --prefer-dist --ignore-platform-reqs
+      - name: Check style
+        run: composer cs

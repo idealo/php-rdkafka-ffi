@@ -1,0 +1,102 @@
+name: test-extension-compatibility
+
+on:
+  push:
+    branches:
+      - main
+#    schedule:
+#      - cron:  '* * * * 1'
+
+jobs:
+  test-extension-compatibility:
+    name: Test extensions compatibility
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: true
+      matrix:
+        php:
+          - '7.4'
+        librdkafka:
+          - 'v1.5.2'
+        rdkafka:
+          - '4.1.1'
+          - '4.0.4'
+    services:
+      zookeeper:
+        image: confluentinc/cp-zookeeper:5.5.1
+        ports:
+          - 2181:2181
+        env:
+          ZOOKEEPER_CLIENT_PORT: 2181
+          ZOOKEEPER_TICK_TIME: 2000
+      kafka:
+        image: confluentinc/cp-kafka:5.5.1
+        ports:
+          - 9092:9092
+        env:
+          KAFKA_BROKER_ID: 111
+          KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+          KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
+          KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT
+          KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+          KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+          KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+          KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+    env:
+      PHP_VERSION: ${{ matrix.php }}
+      LIBRDKAFKA_VERSION: ${{ matrix.librdkafka }}
+      RDKAFKA_VERSION: ${{ matrix.rdkafka }}
+      KAFKA_BROKERS: localhost:9092
+      COMPOSER_AUTH: ${{ secrets.COMPOSER_AUTH }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Install PHP ${{matrix.php }}
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{matrix.php }}
+          coverage: none
+          extensions: rdkafka-${{ matrix.rdkafka }}
+          tools: pecl
+
+      - name: Cache librdkafka ${{ matrix.librdkafka }} build
+        id: librdkafka-build-cache
+        uses: actions/cache@v2
+        with:
+          path: ~/build-cache
+          key: ${{ runner.os }}-librdkafka-${{ matrix.librdkafka }}
+      - name: Build librdkafka ${{ matrix.librdkafka }}
+        if: ${{ steps.librdkafka-build-cache.outputs.cache-hit != 'true' }}
+        run: |
+          git clone --branch "${{ matrix.librdkafka }}" -c advice.detachedHead=false --depth 1 https://github.com/edenhill/librdkafka.git /tmp/librdkafka; \
+          cd /tmp/librdkafka
+          ./configure --install-deps
+          make
+          mkdir -p ~/build-cache/librdkafka
+          sudo make install DESTDIR=~/build-cache/librdkafka
+      - name: Install librdkafka ${{ matrix.librdkafka }}
+        run: |
+          sudo rsync -av ~/build-cache/librdkafka/ /
+          sudo ldconfig
+
+      - name: Get composer cache directory
+        id: composer-cache
+        run: |
+          echo "::set-output name=dir::$(composer config cache-files-dir)"
+      - name: Cache composer cache directory
+        uses: actions/cache@v2
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
+          restore-keys: ${{ runner.os }}-composer-
+      - name: Install dependencies
+        run: |
+          composer update --prefer-dist --prefer-stable --no-interaction --ignore-platform-req=php
+      - name: Install dependencies for test-extension
+        run: |
+          composer update --prefer-dist --prefer-stable --no-interaction --ignore-platform-req=php -d resources/test-extension
+
+      - name: Run tests
+        run: |
+          composer test-extension-init
+          composer test-extension
