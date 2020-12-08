@@ -1,4 +1,4 @@
-name: test-extension-compatibility
+name: Extension Compatibility
 
 on:
   push:
