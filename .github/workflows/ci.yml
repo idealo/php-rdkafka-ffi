@@ -96,6 +96,7 @@ jobs:
       LIBRDKAFKA_VERSION: ${{ matrix.librdkafka }}
       KAFKA_BROKERS: localhost:9092
       COMPOSER_AUTH: ${{ secrets.COMPOSER_AUTH }}
+      GH_TOKEN: ${{ secrets.GH_TOKEN }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -155,12 +156,18 @@ jobs:
         if: matrix.publish == 'true' && github.event_name == 'push'
         run: |
           composer prepare-docs
-      - name: Generate docs
+      - name: Setup Python
+        if: matrix.publish == 'true' && github.event_name == 'push'
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.x
+      - name: Setup mkdocs-material
         if: matrix.publish == 'true' && github.event_name == 'push'
         run: |
           pip install mkdocs-material mkdocs-awesome-pages-plugin
-          mkdocs build
-      - name: Publish docs to github pages
+      - name: Generate & publish docs
         if: matrix.publish == 'true' && github.event_name == 'push'
         run: |
-          echo "tbd"
+          mkdocs gh-deploy --force
+
+
