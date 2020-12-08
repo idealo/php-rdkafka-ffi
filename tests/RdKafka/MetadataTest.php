@@ -43,7 +43,10 @@ class MetadataTest extends TestCase
         /** @var Broker $broker */
         $broker = $brokers->current();
 
+        [$host, $port] = explode(':', KAFKA_BROKERS);
         $this->assertGreaterThan(0, $broker->getId());
+        $this->assertSame($host, $broker->getHost());
+        $this->assertSame((int) $port, $broker->getPort());
     }
 
     public function testGetTopics(): void
