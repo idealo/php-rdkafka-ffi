@@ -8,7 +8,7 @@ on:
 #      - cron:  '* * * * 1'
 
 jobs:
-  tests-windows:
+  tests-macos:
     name: Tests
     runs-on: macos-latest
     strategy:
