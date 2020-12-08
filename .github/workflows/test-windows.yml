@@ -41,12 +41,12 @@ jobs:
         run: |
           nuget install librdkafka.redist -Version 1.5.2
           export PATH=$PWD/librdkafka.redist.1.5.2/runtimes/win-x64/native:$PATH
+          choco install wget nssm
           wget -O kafka_2.13-2.6.0.tgz http://ftp.fau.de/apache/kafka/2.6.0/kafka_2.13-2.6.0.tgz
           tar -xzf kafka_2.13-2.6.0.tgz
           cp -pr kafka_2.13-2.6.0 /c/kafka
           sed -i "s|broker.id=0|broker.id=111|g" /c/kafka/config/server.properties
           cat /c/kafka/config/server.properties
-          choco install nssm
           nssm install zookeeper /c/kafka/bin/windows/zookeeper-server-start.bat /c/kafka/config/zookeeper.properties
           nssm set zookeeper AppExit Default Exit
           nssm install kafka /c/kafka/bin/windows/kafka-server-start.bat /c/kafka/config/server.properties
