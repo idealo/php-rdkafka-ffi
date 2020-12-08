@@ -16,17 +16,17 @@ jobs:
       matrix:
         php:
           - '7.4'
-        #          - '8.0'
-        #          - '8.1'
+          - '8.0'
+          - '8.1'
 
         librdkafka:
           - 'v1.5.2'
-        #          - 'v1.4.4'
-        #          - 'v1.3.0'
-        #          - 'v1.2.2'
-        #          - 'v1.1.0'
-        #          - 'v1.0.1'
-        #          - 'master'
+          - 'v1.4.4'
+          - 'v1.3.0'
+          - 'v1.2.2'
+          - 'v1.1.0'
+          - 'v1.0.1'
+          - 'master'
 
         experimental:
           - false
@@ -39,15 +39,15 @@ jobs:
             librdkafka: 'v1.5.2'
             experimental: false
             publish: true
-        #          - php: '7.4'
-        #            librdkafka: 'master'
-        #            experimental: true
-        #          - php: '8.0'
-        #            librdkafka: 'master'
-        #            experimental: true
-        #          - php: '8.1'
-        #            librdkafka: 'master'
-        #            experimental: true
+          - php: '7.4'
+            librdkafka: 'master'
+            experimental: true
+          - php: '8.0'
+            librdkafka: 'master'
+            experimental: true
+          - php: '8.1'
+            librdkafka: 'master'
+            experimental: true
         exclude:
           - php: '7.4'
             librdkafka: 'v1.5.2'
@@ -130,25 +130,25 @@ jobs:
           composer test-coverage
 
       - name: Publish code coverage to codeclimate
-        if: matrix.publish == 'true' && github.event_name == 'push'
+        if: matrix.publish == true && github.event_name == 'push'
         uses: paambaati/codeclimate-action@v2.7.4
         env:
           CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
 
       - name: Prepare docs
-        if: matrix.publish == 'true' && github.event_name == 'push'
+        if: matrix.publish == true && github.event_name == 'push'
         run: |
           composer prepare-docs
       - name: Setup Python
-        if: matrix.publish == 'true' && github.event_name == 'push'
+        if: matrix.publish == true && github.event_name == 'push'
         uses: actions/setup-python@v2
         with:
           python-version: 3.x
       - name: Setup mkdocs-material
-        if: matrix.publish == 'true' && github.event_name == 'push'
+        if: matrix.publish == true && github.event_name == 'push'
         run: |
           pip install mkdocs-material mkdocs-awesome-pages-plugin
       - name: Generate & publish docs
-        if: matrix.publish == 'true' && github.event_name == 'push'
+        if: matrix.publish == true && github.event_name == 'push'
         run: |
           mkdocs gh-deploy --force
