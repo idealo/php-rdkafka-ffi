@@ -78,6 +78,7 @@ jobs:
           coverage: none
           tools: pecl
           extensions: rdkafka-${{ matrix.rdkafka }}, ffi
+      - run: php -i
 
       - name: Get composer cache directory
         id: composer-cache
