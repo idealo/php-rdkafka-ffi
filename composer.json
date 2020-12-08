@@ -32,11 +32,11 @@
     },
     "require": {
         "php" : "^7.4 || ^8.0",
-        "ext-ffi": "*",
-        "ext-pcntl": "*"
+        "ext-ffi": "*"
     },
     "suggest": {
-        "ext-zend opcache": "*"
+        "ext-zend opcache": "*",
+        "ext-pcntl": "*"
     },
     "conflict": {
         "ext-rdkafka": "*"

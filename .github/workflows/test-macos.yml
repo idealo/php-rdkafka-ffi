@@ -39,7 +39,7 @@ jobs:
       - name: Install librdkafka & kafka
         shell: bash
         run: |
-          brew install composer librdkafka kafka
+          brew install librdkafka kafka
 
       - name: Start Kafka
         shell: bash
