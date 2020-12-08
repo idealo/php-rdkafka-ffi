@@ -61,10 +61,10 @@
         "test": "vendor/bin/phpunit",
         "test-coverage": "vendor/bin/phpunit --coverage-text --coverage-clover=clover.xml",
         "test-extension-init" : [
-            "php -n examples/delete-topic.php -ttest",
-            "php -n examples/delete-topic.php -ttest_partitions",
-            "php -n examples/create-topic.php -ttest -p1 -r1",
-            "php -n examples/create-topic.php -ttest_partitions -p3 -r1"
+            "php -n -dextension=ffi.so examples/delete-topic.php -ttest",
+            "php -n -dextension=ffi.so examples/delete-topic.php -ttest_partitions",
+            "php -n -dextension=ffi.so examples/create-topic.php -ttest -p1 -r1",
+            "php -n -dextension=ffi.so examples/create-topic.php -ttest_partitions -p3 -r1"
         ],
         "test-extension": "resources/test-extension/vendor/bin/phpunit -c resources/test-extension/phpunit.xml",
         "cs": "vendor/bin/ecs check src tests examples resources/ffigen benchmarks --ansi",
