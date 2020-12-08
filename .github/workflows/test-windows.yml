@@ -83,7 +83,7 @@ jobs:
         run: |
           export PATH=$PWD/librdkafka.redist.1.5.2/runtimes/win-x64/native:$PATH
           composer test-init
-          composer test
+          vendor/bin/phpunit --verbose --debug;
 
       - name: Stop kafka
         run: |
