@@ -2,10 +2,7 @@ name: Build
 
 on:
   push:
-    branches:
-      - main
-#    schedule:
-#      - cron:  '* * * * 1'
+  pull_request:
 
 jobs:
   tests:
@@ -119,19 +116,19 @@ jobs:
           CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
 
       - name: Prepare docs
-        if: matrix.publish == true && github.event_name == 'push'
+        if: matrix.publish == true && github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: |
           composer prepare-docs
       - name: Setup Python
-        if: matrix.publish == true && github.event_name == 'push'
+        if: matrix.publish == true && github.event_name == 'push' && github.ref == 'refs/heads/main'
         uses: actions/setup-python@v2
         with:
           python-version: 3.x
       - name: Setup mkdocs-material
-        if: matrix.publish == true && github.event_name == 'push'
+        if: matrix.publish == true && github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: |
           pip install mkdocs-material mkdocs-awesome-pages-plugin
       - name: Generate & publish docs
-        if: matrix.publish == true && github.event_name == 'push'
+        if: matrix.publish == true && github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: |
           mkdocs gh-deploy --force

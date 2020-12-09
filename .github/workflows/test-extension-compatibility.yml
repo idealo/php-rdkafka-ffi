@@ -2,10 +2,7 @@ name: Extension Compatibility
 
 on:
   push:
-    branches:
-      - main
-#    schedule:
-#      - cron:  '* * * * 1'
+  pull_request:
 
 jobs:
   test-extension-compatibility:

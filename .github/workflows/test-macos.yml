@@ -2,10 +2,7 @@ name: Build macOS
 
 on:
   push:
-    branches:
-      - main
-#    schedule:
-#      - cron:  '* * * * 1'
+  pull_request:
 
 jobs:
   tests-macos:
