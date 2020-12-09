@@ -1,9 +1,9 @@
 # <img src="docs/img/php-rdkafka.svg" width="100" /> PHP Kafka Client
 
-[![Build](https://github.com/idealo/php-rdkafka-ffi/workflows/test/badge.svg)](https://github.com/idealo/php-rdkafka-ffi/actions?query=workflow%3Atest)
-[![Extension Compatibility](https://github.com/idealo/php-rdkafka-ffi/workflows/test-extension-compatibility/badge.svg)](https://github.com/idealo/php-rdkafka-ffi/actions?query=workflow%3Atest-extension-compatibility)
-[![Build macOS](https://github.com/idealo/php-rdkafka-ffi/workflows/test-macos/badge.svg)](https://github.com/idealo/php-rdkafka-ffi/actions?query=workflow%3Atest-macos)
-[![Build Windows](https://github.com/idealo/php-rdkafka-ffi/workflows/test-windows/badge.svg)](https://github.com/idealo/php-rdkafka-ffi/actions?query=workflow%3Atest-windows)
+[![Build](https://github.com/idealo/php-rdkafka-ffi/workflows/Build/badge.svg)](https://github.com/idealo/php-rdkafka-ffi/actions?query=workflow%3Atest)
+[![Extension Compatibility](https://github.com/idealo/php-rdkafka-ffi/workflows/Extension%20Compatibility/badge.svg)](https://github.com/idealo/php-rdkafka-ffi/actions?query=workflow%3Atest-extension-compatibility)
+[![Build macOS](https://github.com/idealo/php-rdkafka-ffi/workflows/Build%20macOS/badge.svg)](https://github.com/idealo/php-rdkafka-ffi/actions?query=workflow%3Atest-macos)
+[![Build Windows](https://github.com/idealo/php-rdkafka-ffi/workflows/Build%20Windows/badge.svg)](https://github.com/idealo/php-rdkafka-ffi/actions?query=workflow%3Atest-windows)
 
 [![Test Coverage](https://api.codeclimate.com/v1/badges/9ee55cb5587fbf64dea8/test_coverage)](https://codeclimate.com/github/idealo/php-rdkafka-ffi/test_coverage)
 [![Maintainability](https://api.codeclimate.com/v1/badges/9ee55cb5587fbf64dea8/maintainability)](https://codeclimate.com/github/idealo/php-rdkafka-ffi/maintainability)
