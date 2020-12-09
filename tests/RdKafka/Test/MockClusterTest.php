@@ -269,6 +269,8 @@ class MockClusterTest extends TestCase
         $producer = new Producer($producerConfig);
 
         $cluster->setBrokerDown(1);
+        sleep(1);
+
         try {
             $producer->getMetadata(false, null, KAFKA_TEST_TIMEOUT_MS);
             $errorCode = 0;
