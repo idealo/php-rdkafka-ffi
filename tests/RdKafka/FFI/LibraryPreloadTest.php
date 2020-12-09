@@ -24,7 +24,7 @@ class LibraryPreloadTest extends TestCase
     public function testPreloadWithInvalidCdef(): void
     {
         $this->expectException(\FFI\Exception::class);
-        Library::preload('', 'Any', null, 'invalid');
+        Library::preload(Library::getLibraryVersion(), 'Any', null, 'invalid');
     }
 
     /**
