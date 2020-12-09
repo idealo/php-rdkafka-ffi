@@ -19,7 +19,7 @@ jobs:
           - '8.0'
           - '8.1'
         librdkafka:
-          - 'v1.5.3'
+          - '1.5.3'
         publish:
           - false
     defaults:
@@ -27,7 +27,7 @@ jobs:
         shell: bash
     env:
       PHP_VERSION: ${{ matrix.php }}
-      LIBRDKAFKA_VERSION: ${{ matrix.librdkafka }}
+      LIBRDKAFKA_VERSION: v${{ matrix.librdkafka }}
       KAFKA_BROKERS: localhost:9092
       COMPOSER_AUTH: ${{ secrets.COMPOSER_AUTH }}
       GH_TOKEN: ${{ secrets.GH_TOKEN }}
@@ -44,12 +44,10 @@ jobs:
           tar -xzf kafka_2.13-2.6.0.tgz
           cp -pr kafka_2.13-2.6.0 /c/kafka
           sed -i "s|broker.id=0|broker.id=111|g" /c/kafka/config/server.properties
-          cat /c/kafka/config/server.properties
           nssm install zookeeper /c/kafka/bin/windows/zookeeper-server-start.bat /c/kafka/config/zookeeper.properties
           nssm set zookeeper AppExit Default Exit
           nssm install kafka /c/kafka/bin/windows/kafka-server-start.bat /c/kafka/config/server.properties
           nssm set kafka AppExit Default Exit
-          printenv
 
       - name: Start Kafka
         run: |
