@@ -17,7 +17,7 @@ jobs:
         php:
           - '7.4'
         librdkafka:
-          - 'v1.5.2'
+          - 'v1.5.3'
         rdkafka:
           - '4.1.1'
           - '4.0.4'

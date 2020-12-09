@@ -5,6 +5,11 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [Unreleased]
 
+This pre-release supports PHP ^7.4 and ^8.0 and [librdkafka](https://github.com/edenhill/librdkafka) v1.0.0 - v1.5.3.
+It is compatible with the [PHP RdKafka extension](https://github.com/arnaud-lb/php-rdkafka) ^4.0.
+
+Note: Transactional Producer is no longer marked as experimental.
+
 ### Fixed
 
 - Fix empty TopicPartition metadata handling
@@ -12,10 +17,11 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 ### Added
 
 - Add TopicPartition::getMetadataSize()
+- Add support for librdkafka v1.5.3
 
 ### Changed
 
-- Rename KafkaError to KafkaErrorException and change its interface for extension compatibility with v4.1.*
+- Rename KafkaError to KafkaErrorException and change its interface for rdkafka extension compatibility with v4.1.*
 - Suggests pcntl extension (instead of requires)
 
 ## [0.1.0] - 2020-12-06
