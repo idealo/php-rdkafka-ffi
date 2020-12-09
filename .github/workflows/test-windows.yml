@@ -38,7 +38,7 @@ jobs:
 
       - name: Install librdkafka & kafka
         run: |
-          nuget install librdkafka.redist -Version 1.5.3
+          nuget install librdkafka.redist -Version ${{ matrix.librdkafka }}
           choco install --no-progress wget nssm
           wget -q -O kafka_2.13-2.6.0.tgz http://ftp.fau.de/apache/kafka/2.6.0/kafka_2.13-2.6.0.tgz
           tar -xzf kafka_2.13-2.6.0.tgz

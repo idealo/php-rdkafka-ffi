@@ -28,7 +28,7 @@ class Library
     use Methods;
 
     public const VERSION_AUTODETECT = '';
-    public const VERSION_LATEST = '1.5.2';
+    public const VERSION_LATEST = '1.5.3';
     public const PHP_LIBRARY_VERSION = '0.1.0';
 
     private static FFI $ffi;
