@@ -15,17 +15,12 @@ jobs:
           - '7.4'
           - '8.0'
           - '8.1'
-        librdkafka:
-          - 'v1.5.3'
-        publish:
-          - false
     continue-on-error: ${{ matrix.php == '8.1' }}
     defaults:
       run:
         shell: bash
     env:
       PHP_VERSION: ${{ matrix.php }}
-      LIBRDKAFKA_VERSION: ${{ matrix.librdkafka }}
       KAFKA_BROKERS: localhost:9092
       COMPOSER_AUTH: ${{ secrets.COMPOSER_AUTH }}
       GH_TOKEN: ${{ secrets.GH_TOKEN }}
@@ -34,9 +29,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Install librdkafka & kafka
+      - name: Install latest librdkafka & kafka via brew
         shell: bash
         run: |
+          brew update
           brew install librdkafka kafka
 
       - name: Start Kafka
