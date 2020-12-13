@@ -312,11 +312,12 @@ class KafkaConsumerTest extends TestCase
         $conf->set('group.id', __METHOD__);
         $conf->set('bootstrap.servers', KAFKA_BROKERS);
         $conf->set('enable.auto.commit', 'false');
+        $conf->set('auto.commit.interval.ms', (string) 100);
 
         $consumer = new KafkaConsumer($conf);
         $consumer->commitAsync([new TopicPartition(KAFKA_TEST_TOPIC, 0, 2)]);
 
-        sleep(2);
+        sleep(3);
 
         $topicPartitions = $consumer->getCommittedOffsets(
             [
