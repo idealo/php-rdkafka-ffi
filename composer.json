@@ -52,6 +52,10 @@
         "phpbench/phpbench": "dev-master"
     },
     "scripts": {
+        "examples-init" : [
+            "@php examples/delete-topic.php -tplayground",
+            "@php examples/create-topic.php -tplayground -p3 -r1"
+        ],
         "test-init" : [
             "@php examples/delete-topic.php -ttest",
             "@php examples/delete-topic.php -ttest_partitions",
@@ -66,7 +70,7 @@
             "@php -n -dextension=ffi.so examples/create-topic.php -ttest -p1 -r1",
             "@php -n -dextension=ffi.so examples/create-topic.php -ttest_partitions -p3 -r1"
         ],
-        "test-extension": "resources/test-extension/vendor/bin/phpunit -c resources/test-extension/phpunit.xml",
+        "test-extension": "@php -dextension=rdkafka.so resources/test-extension/vendor/bin/phpunit -c resources/test-extension/phpunit.xml",
         "cs": "ecs check src tests examples resources/ffigen benchmarks --ansi",
         "cs-fix": "ecs check src tests examples resources/ffigen benchmarks --ansi --fix",
         "prepare-docs": [

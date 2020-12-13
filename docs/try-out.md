@@ -80,6 +80,10 @@ Create required topics
 
 Examples use topic ```playground```.
 
+Init playground topic
+
+    docker-compose run --rm php74 composer examples-init
+
 Updating Dependencies
 
     docker-compose run --rm --no-deps php74 composer update
@@ -159,11 +163,12 @@ Updating Dependencies
 
 Run tests
 
-    docker-compose run --rm php74 vendor/bin/phpunit
+    docker-compose run --rm php74 composer test-init
+    docker-compose run --rm php74 composer test
 
 Run tests with coverage
 
-    docker-compose run --rm -e -XDEBUG_MODE=coverage php74 vendor/bin/phpunit --coverage-text --coverage-clover=clover.xml
+    docker-compose run --rm php74 composer test-coverage
 
 ### Run tests against RdKafka extension / PHP 7.4
 
@@ -173,7 +178,8 @@ Updating Dependencies
 
 Run tests
 
-     docker-compose run --rm php74 php -dextension=rdkafka.so resources/test-extension/vendor/bin/phpunit -c resources/test-extension/phpunit.xml
+    docker-compose run --rm php74 composer test-extension-init
+    docker-compose run --rm php74 composer test-extension
 
 ### Run tests against RdKafka extension / PHP 8.0
 
@@ -183,8 +189,8 @@ Updating Dependencies
 
 Run tests
 
-     docker-compose run --rm php80 php -dextension=rdkafka.so resources/test-extension/vendor/bin/phpunit -c resources/test-extension/phpunit.xml
-
+    docker-compose run --rm php80 composer test-extension-init
+    docker-compose run --rm php80 composer test-extension
 
 ## Run benchmarks
 
