@@ -23,15 +23,15 @@ ARG XDEBUG_VERSION=stable
 RUN pecl install xdebug-${XDEBUG_VERSION}; \
     docker-php-ext-enable xdebug;
 
-# install rdkafka master-dev
-#ARG RDKAFKA_EXT_VERSION=master
-#RUN git clone --branch "$RDKAFKA_EXT_VERSION" --depth 1 https://github.com/arnaud-lb/php-rdkafka.git /tmp/php-rdkafka; \
-#    cd /tmp/php-rdkafka; \
-#    phpize; \
-#    ./configure; \
-#    make; \
-#    make install; \
-#    rm -rf /tmp/*;
+# install rdkafka
+ARG RDKAFKA_EXT_VERSION=5.x
+RUN git clone --branch "$RDKAFKA_EXT_VERSION" --depth 1 https://github.com/arnaud-lb/php-rdkafka.git /tmp/php-rdkafka; \
+    cd /tmp/php-rdkafka; \
+    phpize; \
+    ./configure; \
+    make; \
+    make install; \
+    rm -rf /tmp/*;
 
 ENV COMPOSER_HOME /tmp
 ENV COMPOSER_ALLOW_SUPERUSER 1

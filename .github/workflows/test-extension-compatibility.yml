@@ -18,6 +18,9 @@ jobs:
         rdkafka:
           - '4.1.1'
           - '4.0.4'
+          - '4.1.x'
+          - '5.x'
+    continue-on-error: ${{ matrix.rdkafka == '5.x' || matrix.rdkafka == '4.1.x' }}
     services:
       zookeeper:
         image: confluentinc/cp-zookeeper:5.5.1
@@ -53,7 +56,7 @@ jobs:
         id: librdkafka-build-cache
         uses: actions/cache@v2
         with:
-          path: ~/build-cache
+          path: ~/build-cache/librdkafka
           key: ${{ runner.os }}-librdkafka-${{ matrix.librdkafka }}
       - name: Build librdkafka ${{ matrix.librdkafka }}
         if: ${{ steps.librdkafka-build-cache.outputs.cache-hit != 'true' }}
@@ -73,8 +76,27 @@ jobs:
         with:
           php-version: ${{ matrix.php }}
           coverage: none
-          tools: pecl
-          extensions: rdkafka-${{ matrix.rdkafka }}, ffi
+          extensions: ffi
+          tools: phpize
+      - name: Cache php-rdkafka ${{ matrix.rdkafka }} build
+        id: php-rdkafka-build-cache
+        uses: actions/cache@v2
+        with:
+          path: ~/build-cache/php-rdkafka
+          key: ${{ runner.os }}-php-rdkafka-${{ matrix.rdkafka }}
+      - name: Build php-rdkafka ${{ matrix.rdkafka }}
+        if: ${{ steps.php-rdkafka-build-cache.outputs.cache-hit != 'true' }}
+        run: |
+          git clone --branch "${{ matrix.rdkafka }}" -c advice.detachedHead=false --depth 1 https://github.com/arnaud-lb/php-rdkafka.git /tmp/php-rdkafka; \
+          cd /tmp/php-rdkafka
+          phpize
+          ./configure
+          make
+          mkdir -p ~/build-cache/php-rdkafka
+          cp ./modules/rdkafka.so ~/build-cache/php-rdkafka/
+      - name: Install php-rdkafka ${{ matrix.rdkafka }}
+        run: |
+          echo "extension=$HOME/build-cache/php-rdkafka/rdkafka.so"|sudo tee /etc/php/7.4/cli/conf.d/99-rdkafka.ini >/dev/null
 
       - name: Get composer cache directory
         id: composer-cache
