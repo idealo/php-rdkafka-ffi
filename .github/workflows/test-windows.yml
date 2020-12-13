@@ -19,6 +19,7 @@ jobs:
           - '1.5.3'
         publish:
           - false
+    continue-on-error: ${{ matrix.php == '8.1' }}
     defaults:
       run:
         shell: bash

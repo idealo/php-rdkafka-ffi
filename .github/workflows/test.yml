@@ -33,6 +33,7 @@ jobs:
           - 'master'
         publish:
           - false
+    continue-on-error: ${{ matrix.php == '8.1' || matrix.librdkafka == 'master' }}
     services:
       zookeeper:
         image: confluentinc/cp-zookeeper:5.5.1
