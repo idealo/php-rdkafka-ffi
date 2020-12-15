@@ -7,7 +7,17 @@ use RdKafka\FFI\Library;
 /**
  * @param int $err Error code
  *
- * @return string Returns the error as a string.
+ * @return string The error name as a string.
+ */
+function rd_kafka_err2name(int $err): string
+{
+    return Library::rd_kafka_err2name($err);
+}
+
+/**
+ * @param int $err Error code
+ *
+ * @return string The error description a string.
  */
 function rd_kafka_err2str(int $err): string
 {
@@ -17,7 +27,7 @@ function rd_kafka_err2str(int $err): string
 /**
  * @param int $errnox A system errno
  *
- * @return int Returns a kafka error code as an integer.
+ * @return int A kafka error code as an integer.
  * @deprecated
  */
 function rd_kafka_errno2err(int $errnox): int
@@ -26,7 +36,7 @@ function rd_kafka_errno2err(int $errnox): int
 }
 
 /**
- * @return int Returns the system errno as an integer.
+ * @return int The system errno as an integer.
  * @deprecated
  */
 function rd_kafka_errno(): int
@@ -51,7 +61,7 @@ function rd_kafka_thread_cnt(): int
 }
 
 /**
- * @return string Returns librdkafka version.
+ * @return string The librdkafka version.
  */
 function rd_kafka_version(): string
 {
