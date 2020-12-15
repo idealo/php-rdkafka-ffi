@@ -8,6 +8,7 @@ use FFI\CData;
 use InvalidArgumentException;
 use RdKafka\FFI\ConsumeCallbackProxy;
 use RdKafka\FFI\Library;
+use RdKafka\FFI\OpaqueMap;
 
 use function array_key_exists;
 use function array_keys;
@@ -210,22 +211,23 @@ class ConsumerTopic extends Topic
         }
     }
 
-    public function consumeCallback(int $partition, int $timeout_ms, callable $callback): int
+    public function consumeCallback(int $partition, int $timeout_ms, callable $callback, $opaque = null): int
     {
         $this->assertPartition($partition);
+
+        $cOpaque = OpaqueMap::push($opaque);
 
         $result = (int) Library::rd_kafka_consume_callback(
             $this->topic,
             $partition,
             $timeout_ms,
             ConsumeCallbackProxy::create($callback),
-            // opaque
-            null
+            $cOpaque === null ? null : \FFI::addr($cOpaque)
         );
 
         if ($result === -1) {
+            OpaqueMap::pull($cOpaque);
             $err = (int) Library::rd_kafka_last_error();
-
             throw Exception::fromError($err);
         }
 

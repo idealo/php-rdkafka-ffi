@@ -8,7 +8,7 @@ use RdKafka\Message;
 use RdKafka\Producer;
 
 /**
- * @Groups({"Consumer", "ffi", "ext"})
+ * @Groups({"Consumer"})
  * @BeforeClassMethods({"produce10000Messages"})
  */
 class ConsumerBench
@@ -31,6 +31,7 @@ class ConsumerBench
      * @Warmup(1)
      * @Revs(100)
      * @Iterations(5)
+     * @Groups({"ffi", "ext"})
      */
     public function benchConsume1Message(): void
     {
@@ -60,6 +61,7 @@ class ConsumerBench
      * @Warmup(1)
      * @Revs(100)
      * @Iterations(5)
+     * @Groups({"ffi", "ext"})
      */
     public function benchConsumeCallback1Message(): void
     {
@@ -75,7 +77,7 @@ class ConsumerBench
         $callback = new class() {
             public int $messages = 0;
 
-            public function __invoke(Message $message, ?object $opaque = null): void
+            public function __invoke(Message $message, $opaque = null): void
             {
                 $this->messages++;
             }
@@ -89,9 +91,44 @@ class ConsumerBench
     }
 
     /**
+     * @Warmup(10)
+     * @Revs(100)
+     * @Iterations(5)
+     * @Groups({"ffi"})
+     */
+    public function benchConsumeCallback1MessageWithOpaque(): void
+    {
+        $counter = new stdClass();
+        $counter->count = 0;
+
+        $conf = new Conf();
+        $conf->set('metadata.broker.list', 'kafka:9092');
+        $conf->set('auto.offset.reset', 'earliest');
+        $conf->set('log_level', (string) 0);
+        $conf->set('consume.callback.max.messages', (string) 1);
+        $consumer = new Consumer($conf);
+        $topic = $consumer->newTopic('benchmarks');
+
+        $topic->consumeStart(0, 0);
+        $callback = new class() {
+            public function __invoke(Message $message, $opaque = null): void
+            {
+                $opaque->count++;
+            }
+        };
+        $topic->consumeCallback(0, 500, $callback, $counter);
+        $topic->consumeStop(0);
+
+        if ($counter->count < 1) {
+            throw new Exception('failed to consume 1 message');
+        }
+    }
+
+    /**
      * @Warmup(1)
      * @Revs(100)
      * @Iterations(5)
+     * @Groups({"ffi", "ext"})
      */
     public function benchConsume100Messages(): void
     {
@@ -121,6 +158,7 @@ class ConsumerBench
      * @Warmup(1)
      * @Revs(100)
      * @Iterations(5)
+     * @Groups({"ffi", "ext"})
      */
     public function benchConsume100MessagesWithLogCallback(): void
     {
@@ -156,6 +194,7 @@ class ConsumerBench
      * @Warmup(1)
      * @Revs(100)
      * @Iterations(5)
+     * @Groups({"ffi", "ext"})
      */
     public function benchConsumeBatch100Messages(): void
     {
@@ -179,6 +218,7 @@ class ConsumerBench
      * @Warmup(1)
      * @Revs(100)
      * @Iterations(5)
+     * @Groups({"ffi", "ext"})
      */
     public function benchConsumeCallback100Message(): void
     {
@@ -194,7 +234,7 @@ class ConsumerBench
         $callback = new class() {
             public int $messages = 0;
 
-            public function __invoke(Message $message, ?object $opaque = null): void
+            public function __invoke(Message $message, $opaque = null): void
             {
                 $this->messages++;
             }
@@ -203,6 +243,40 @@ class ConsumerBench
         $topic->consumeStop(0);
 
         if ($callback->messages < 100) {
+            throw new Exception('failed to consume 100 messages');
+        }
+    }
+
+    /**
+     * @Warmup(10)
+     * @Revs(100)
+     * @Iterations(5)
+     * @Groups({"ffi"})
+     */
+    public function benchConsumeCallback100MessageWithOpaque(): void
+    {
+        $counter = new stdClass();
+        $counter->count = 0;
+
+        $conf = new Conf();
+        $conf->set('metadata.broker.list', 'kafka:9092');
+        $conf->set('auto.offset.reset', 'earliest');
+        $conf->set('log_level', (string) 0);
+        $conf->set('consume.callback.max.messages', (string) 100);
+        $consumer = new Consumer($conf);
+        $topic = $consumer->newTopic('benchmarks');
+
+        $topic->consumeStart(0, 0);
+        $callback = new class() {
+            public function __invoke(Message $message, $opaque = null): void
+            {
+                $opaque->count++;
+            }
+        };
+        $topic->consumeCallback(0, 500, $callback, $counter);
+        $topic->consumeStop(0);
+
+        if ($counter->count < 100) {
             throw new Exception('failed to consume 100 messages');
         }
     }

@@ -83,6 +83,37 @@ class ProducerTopicTest extends TestCase
         $this->assertNull($payload);
     }
 
+    /**
+     * @group ffiOnly
+     */
+    public function testProduceWithOpaque(): void
+    {
+        $opaques = [];
+        $expectedOpaque1 = new \stdClass();
+        $expectedOpaque2 = new \stdClass();
+        $expectedOpaque3 = new \stdClass();
+
+        $conf = new Conf();
+        $conf->set('bootstrap.servers', KAFKA_BROKERS);
+        $conf->setDrMsgCb(
+            function (RdKafka $kafka, Message $message) use (&$opaques): void {
+                $opaques[] = $message->_private;
+            }
+        );
+        $producer = new Producer($conf);
+        $topic = $producer->newTopic(KAFKA_TEST_TOPIC);
+
+        $topic->produce(RD_KAFKA_PARTITION_UA, 0, 'payload-1', null, $expectedOpaque1);
+        $topic->produce(RD_KAFKA_PARTITION_UA, 0, 'payload-2', null, $expectedOpaque2);
+        $topic->produce(RD_KAFKA_PARTITION_UA, 0, 'payload-3', null, $expectedOpaque3);
+
+        $producer->flush(KAFKA_TEST_TIMEOUT_MS);
+
+        $this->assertSame($expectedOpaque1, $opaques[0]);
+        $this->assertSame($expectedOpaque2, $opaques[1]);
+        $this->assertSame($expectedOpaque3, $opaques[2]);
+    }
+
     public function testProduceWithInvalidPartitionShouldFail(): void
     {
         $conf = new Conf();

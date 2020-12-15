@@ -42,7 +42,6 @@ class Producer extends RdKafka
 
     public function purge(int $purge_flags): int
     {
-        // todo: handle binding for different librdkafka versions
         return (int) Library::rd_kafka_purge($this->kafka, $purge_flags);
     }
 

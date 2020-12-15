@@ -22,16 +22,16 @@ class NativePartitionerCallbackProxy
         ?CData $keydata,
         int $keylen,
         int $partition_cnt,
-        ?object $topic_opaque = null,
-        ?object $msg_opaque = null
+        ?CData $topic_opaque = null,
+        ?CData $msg_opaque = null
     ): int {
         return (int) Library::{$this->partitionerMethod}(
             $topic,
             $keydata,
             $keylen,
             $partition_cnt,
-            $topic_opaque,
-            $msg_opaque
+            OpaqueMap::get($topic_opaque),
+            OpaqueMap::get($msg_opaque)
         );
     }
 

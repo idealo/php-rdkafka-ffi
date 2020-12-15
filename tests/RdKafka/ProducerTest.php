@@ -176,4 +176,19 @@ class ProducerTest extends TestCase
         $this->assertSame(__METHOD__ . '2', $messages[1]->payload);
         $this->assertSame(__METHOD__ . '3', $messages[2]->payload);
     }
+
+    /**
+     * @group ffiOnly
+     */
+    public function testGetOpaque(): void
+    {
+        $expectedOpaque = new \stdClass();
+
+        $conf = new Conf();
+        $conf->set('log_level', (string) LOG_EMERG);
+        $conf->setOpaque($expectedOpaque);
+
+        $producer = new Producer($conf);
+        $this->assertSame($expectedOpaque, $producer->getOpaque());
+    }
 }

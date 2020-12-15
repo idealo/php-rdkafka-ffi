@@ -226,4 +226,19 @@ class ConsumerTest extends TestCase
         $this->assertNull(Consumer::resolveFromCData($cData1));
         $this->assertSame($consumer2, Consumer::resolveFromCData($cData2));
     }
+
+    /**
+     * @group ffiOnly
+     */
+    public function testGetOpaque(): void
+    {
+        $expectedOpaque = new \stdClass();
+
+        $conf = new Conf();
+        $conf->set('log_level', (string) LOG_EMERG);
+        $conf->setOpaque($expectedOpaque);
+
+        $consumer = new Consumer($conf);
+        $this->assertSame($expectedOpaque, $consumer->getOpaque());
+    }
 }

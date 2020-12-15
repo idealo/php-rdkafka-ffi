@@ -31,7 +31,7 @@ $conf->setLogCb(
 );
 $conf->set('statistics.interval.ms', (string) 1000);
 $conf->setStatsCb(
-    function ($consumer, $json, $json_len, $opaque): void {
+    function (Producer $producer, string $json, int $json_len, $opaque): void {
         echo "stats: ${json}" . PHP_EOL;
     }
 );

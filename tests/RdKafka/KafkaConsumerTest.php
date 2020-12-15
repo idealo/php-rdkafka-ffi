@@ -467,4 +467,20 @@ class KafkaConsumerTest extends TestCase
         $this->assertInstanceOf(KafkaConsumer::class, $consumer);
         $this->assertInstanceOf(KafkaConsumerTopic::class, $topic);
     }
+
+    /**
+     * @group ffiOnly
+     */
+    public function testGetOpaque(): void
+    {
+        $expectedOpaque = new \stdClass();
+
+        $conf = new Conf();
+        $conf->set('log_level', (string) LOG_EMERG);
+        $conf->set('group.id', __METHOD__);
+        $conf->setOpaque($expectedOpaque);
+
+        $consumer = new KafkaConsumer($conf);
+        $this->assertSame($expectedOpaque, $consumer->getOpaque());
+    }
 }

@@ -7,7 +7,7 @@ use RdKafka\Message;
 use RdKafka\Producer;
 
 /**
- * @Groups({"Producer", "ffi", "ext"})
+ * @Groups({"Producer"})
  */
 class ProducerBench
 {
@@ -15,6 +15,7 @@ class ProducerBench
      * @Warmup(1)
      * @Revs(100)
      * @Iterations(5)
+     * @Groups({"ffi", "ext"})
      */
     public function benchProduce1Message(): void
     {
@@ -36,6 +37,7 @@ class ProducerBench
      * @Warmup(1)
      * @Revs(100)
      * @Iterations(5)
+     * @Groups({"ffi", "ext"})
      */
     public function benchProduce100Messages(): void
     {
@@ -59,6 +61,7 @@ class ProducerBench
      * @Warmup(1)
      * @Revs(100)
      * @Iterations(5)
+     * @Groups({"ffi", "ext"})
      */
     public function benchProduce100MessagesWithLogAndDrMsgCallbacks(): void
     {
@@ -75,7 +78,7 @@ class ProducerBench
         $deliveryCallback = new class() {
             public int $messages = 0;
 
-            public function __invoke(Producer $producer, Message $message, ?object $opaque = null): void
+            public function __invoke(Producer $producer, Message $message, $opaque = null): void
             {
                 $this->messages++;
             }
@@ -89,6 +92,47 @@ class ProducerBench
         }
 
         while ($deliveryCallback->messages < 100) {
+            $producer->poll(0);
+        }
+    }
+
+    /**
+     * @Warmup(10)
+     * @Revs(1000)
+     * @Iterations(5)
+     * @Groups({"ffi"})
+     */
+    public function benchProduce100MessagesWithLogAndDrMsgCallbacksWithOpaque(): void
+    {
+        $counter = new stdClass();
+        $counter->count = 0;
+
+        $conf = new Conf();
+        $conf->set('metadata.broker.list', 'kafka:9092');
+        $conf->set('batch.num.messages', (string) 100);
+        $conf->set('debug', 'broker,topic,msg');
+        $conf->set('log_level', (string) LOG_DEBUG);
+        $conf->setOpaque($counter);
+        $conf->setLogCb(
+            function (Producer $producer, int $level, string $facility, string $message): void {
+                // echo sprintf('log: %d %s %s', $level, $facility, $message) . PHP_EOL;
+            }
+        );
+        $deliveryCallback = new class() {
+            public function __invoke(Producer $producer, Message $message, $opaque = null): void
+            {
+                $message->_private->count += $opaque->add;
+            }
+        };
+        $conf->setDrMsgCb($deliveryCallback);
+        $producer = new Producer($conf);
+        $topic = $producer->newTopic('benchmarks');
+
+        for ($i = 0; $i < 100; $i++) {
+            $topic->produce(0, 0, 'bench', 'mark', 1);
+        }
+
+        while ($counter->count < 100) {
             $producer->poll(0);
         }
     }

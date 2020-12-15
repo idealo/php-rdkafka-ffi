@@ -7,6 +7,7 @@ namespace RdKafka;
 use FFI;
 use FFI\CData;
 use RdKafka\FFI\Library;
+use RdKafka\FFI\OpaqueMap;
 
 class Message
 {
@@ -41,6 +42,8 @@ class Message
      * @since 1.5.0 of librdkafka
      */
     public int $brokerId;
+
+    public $_private;
 
     public function __construct(CData $nativeMessage)
     {
@@ -85,6 +88,8 @@ class Message
         } else {
             $this->brokerId = -1;
         }
+
+        $this->_private = OpaqueMap::pull($nativeMessage->_private);
     }
 
     public function errstr(): string

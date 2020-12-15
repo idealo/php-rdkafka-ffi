@@ -6,6 +6,7 @@ use FFI\CData;
 use RdKafka\Conf;
 use RdKafka\Exception;
 use RdKafka\FFI\Library;
+use RdKafka\FFI\OpaqueMap;
 use RdKafka\Metadata;
 use RdKafka\Topic;
 
@@ -158,5 +159,14 @@ abstract class RdKafka
 
         $low = (int) $lowResult->cdata;
         $high = (int) $highResult->cdata;
+    }
+
+    /**
+     * @return mixed|null
+     */
+    public function getOpaque()
+    {
+        $cOpaque = Library::rd_kafka_opaque($this->kafka);
+        return OpaqueMap::get($cOpaque);
     }
 }

@@ -156,4 +156,46 @@ class TopicConfTest extends TestCase
         $this->assertSame('test3', $msg3->payload);
         $this->assertSame('test4', $msg4->payload);
     }
+
+    /**
+     * @group ffiOnly
+     */
+    public function testSetPartitionerCbWithCallback(): void
+    {
+        $expectedTopicOpaque = new \stdClass();
+        $expectedMessageOpaque = new \stdClass();
+
+        $callbackTopicOpaque = null;
+        $callbackMessageOpaque = null;
+
+        $topicConf = new TopicConf();
+        $topicConf->setOpaque($expectedTopicOpaque);
+        $topicConf->setPartitionerCb(
+            function (string $key, int $partitionCount, ?object $topic_opaque = null, ?object $message_opaque = null) use (&$callbackTopicOpaque, &$callbackMessageOpaque) {
+                $callbackTopicOpaque = $topic_opaque;
+                $callbackMessageOpaque = $message_opaque;
+                // force partition 2
+                return 2;
+            }
+        );
+
+        $conf = new Conf();
+        $conf->set('bootstrap.servers', KAFKA_BROKERS);
+        $producer = new Producer($conf);
+        $topic = $producer->newTopic(KAFKA_TEST_TOPIC_PARTITIONS, $topicConf);
+
+        $topic->produce(RD_KAFKA_PARTITION_UA, 0, 'test1', '1', $expectedMessageOpaque);
+        $producer->flush(KAFKA_TEST_TIMEOUT_MS);
+
+        $consumer = new Consumer($conf);
+        $consumerTopic = $consumer->newTopic(KAFKA_TEST_TOPIC_PARTITIONS, $topicConf);
+
+        $consumerTopic->consumeStart(2, rd_kafka_offset_tail(1));
+        $msg1 = $consumerTopic->consume(2, KAFKA_TEST_TIMEOUT_MS);
+        $consumerTopic->consumeStop(2);
+
+        $this->assertSame('test1', $msg1->payload);
+        $this->assertSame($expectedTopicOpaque, $callbackTopicOpaque);
+        $this->assertSame($expectedMessageOpaque, $callbackMessageOpaque);
+    }
 }

@@ -10,12 +10,12 @@ use RdKafka\Message;
 
 class DrMsgCallbackProxy extends CallbackProxy
 {
-    public function __invoke(CData $producer, CData $nativeMessage, ?object $opaque = null): void
+    public function __invoke(CData $producer, CData $nativeMessage, ?CData $opaque = null): void
     {
         ($this->callback)(
             RdKafka::resolveFromCData($producer),
             new Message($nativeMessage),
-            $opaque
+            OpaqueMap::get($opaque)
         );
     }
 }

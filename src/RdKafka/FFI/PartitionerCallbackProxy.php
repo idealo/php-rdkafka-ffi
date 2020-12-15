@@ -14,12 +14,14 @@ class PartitionerCallbackProxy extends CallbackProxy
         ?CData $keydata,
         int $keylen,
         int $partition_cnt,
-        ?object $topic_opaque = null,
-        ?object $msg_opaque = null
+        ?CData $topic_opaque = null,
+        ?CData $msg_opaque = null
     ): int {
         return (int) ($this->callback)(
             $keydata === null ? null : FFI::string($keydata, $keylen),
-            $partition_cnt
+            $partition_cnt,
+            OpaqueMap::get($topic_opaque),
+            OpaqueMap::get($msg_opaque)
         );
     }
 }

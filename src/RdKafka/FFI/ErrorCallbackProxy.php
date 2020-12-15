@@ -9,13 +9,13 @@ use RdKafka;
 
 class ErrorCallbackProxy extends CallbackProxy
 {
-    public function __invoke(CData $consumerOrProducer, int $err, string $reason, ?object $opaque = null): void
+    public function __invoke(CData $consumerOrProducer, int $err, string $reason, ?CData $opaque = null): void
     {
         ($this->callback)(
             RdKafka::resolveFromCData($consumerOrProducer),
             $err,
             $reason,
-            $opaque
+            OpaqueMap::get($opaque)
         );
     }
 }

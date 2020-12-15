@@ -6,6 +6,7 @@ namespace RdKafka;
 
 use InvalidArgumentException;
 use RdKafka\FFI\Library;
+use RdKafka\FFI\OpaqueMap;
 
 use function sprintf;
 use function strlen;
@@ -27,10 +28,12 @@ class ProducerTopic extends Topic
      *
      * @throws Exception
      */
-    public function produce(int $partition, int $msgflags, ?string $payload = null, ?string $key = null): void
+    public function produce(int $partition, int $msgflags, ?string $payload = null, ?string $key = null, $opaque = null): void
     {
         $this->assertPartition($partition);
         $this->assertMsgflags($msgflags);
+
+        $cOpaque = OpaqueMap::push($opaque);
 
         $ret = Library::rd_kafka_produce(
             $this->topic,
@@ -40,9 +43,11 @@ class ProducerTopic extends Topic
             $payload === null ? null : strlen($payload),
             $key,
             $key === null ? null : strlen($key),
-            null
+            $cOpaque === null ? null : \FFI::addr($cOpaque)
         );
+
         if ($ret === -1) {
+            OpaqueMap::pull($cOpaque);
             $err = (int) Library::rd_kafka_last_error();
             throw Exception::fromError($err);
         }
@@ -57,10 +62,13 @@ class ProducerTopic extends Topic
         ?string $payload = null,
         ?string $key = null,
         array $headers = [],
-        ?int $timestamp_ms = null
+        ?int $timestamp_ms = null,
+        $opaque = null
     ): void {
         $this->assertPartition($partition);
         $this->assertMsgflags($msgflags);
+
+        $cOpaque = OpaqueMap::push($opaque);
 
         $args = [
             RD_KAFKA_VTYPE_RKT,
@@ -77,6 +85,8 @@ class ProducerTopic extends Topic
             $key === null ? null : strlen($key),
             RD_KAFKA_VTYPE_TIMESTAMP,
             $timestamp_ms === null ? 0 : $timestamp_ms,
+            RD_KAFKA_VTYPE_OPAQUE,
+            $cOpaque === null ? null : \FFI::addr($cOpaque),
         ];
 
         if (empty($headers) === false) {
@@ -96,6 +106,7 @@ class ProducerTopic extends Topic
         );
 
         if ($ret === -1) {
+            OpaqueMap::pull($cOpaque);
             $err = (int) Library::rd_kafka_last_error();
             throw Exception::fromError($err);
         }

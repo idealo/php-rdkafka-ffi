@@ -9,6 +9,7 @@ use FFI\CData;
 use InvalidArgumentException;
 use RdKafka\FFI\Library;
 use RdKafka\FFI\NativePartitionerCallbackProxy;
+use RdKafka\FFI\OpaqueMap;
 use RdKafka\FFI\PartitionerCallbackProxy;
 
 /**
@@ -17,10 +18,12 @@ use RdKafka\FFI\PartitionerCallbackProxy;
 class TopicConf
 {
     private CData $topicConf;
+    private ?CData $cOpaque;
 
     public function __construct()
     {
         $this->topicConf = Library::rd_kafka_topic_conf_new();
+        $this->cOpaque = null;
     }
 
     public function __destruct()
@@ -119,5 +122,27 @@ class TopicConf
             $this->topicConf,
             PartitionerCallbackProxy::create($callback)
         );
+    }
+
+    /**
+     * @param mixed $opaque
+     */
+    public function setOpaque($opaque): void
+    {
+        if ($this->cOpaque !== null) {
+            OpaqueMap::pull($this->cOpaque);
+        }
+
+        $this->cOpaque = OpaqueMap::push($opaque);
+        Library::rd_kafka_topic_conf_set_opaque($this->topicConf, FFI::addr($this->cOpaque));
+    }
+
+    /**
+     * @return mixed|null
+     */
+    public function getOpaque()
+    {
+        $cOpaque = Library::rd_kafka_topic_opaque($this->topicConf);
+        return OpaqueMap::get($cOpaque);
     }
 }

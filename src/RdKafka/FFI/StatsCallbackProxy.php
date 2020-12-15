@@ -10,13 +10,13 @@ use RdKafka;
 
 class StatsCallbackProxy extends CallbackProxy
 {
-    public function __invoke(CData $consumerOrProducer, CData $json, int $json_len, ?object $opaque = null): int
+    public function __invoke(CData $consumerOrProducer, CData $json, int $json_len, ?CData $opaque = null): int
     {
         ($this->callback)(
             RdKafka::resolveFromCData($consumerOrProducer),
             FFI::string($json, $json_len),
             $json_len,
-            $opaque
+            OpaqueMap::get($opaque)
         );
 
         return 0;

@@ -11,6 +11,7 @@ use RdKafka\FFI\ErrorCallbackProxy;
 use RdKafka\FFI\Library;
 use RdKafka\FFI\LogCallbackProxy;
 use RdKafka\FFI\OffsetCommitCallbackProxy;
+use RdKafka\FFI\OpaqueMap;
 use RdKafka\FFI\RebalanceCallbackProxy;
 use RdKafka\FFI\StatsCallbackProxy;
 
@@ -20,6 +21,7 @@ use RdKafka\FFI\StatsCallbackProxy;
 class Conf
 {
     private CData $conf;
+    private ?CData $cOpaque;
 
     public function __construct()
     {
@@ -29,6 +31,8 @@ class Conf
             $this->set('client.software.name', 'php-rdkafka-ffi');
             $this->set('client.software.version', Library::getClientVersion());
         }
+
+        $this->cOpaque = null;
     }
 
     public function __destruct()
@@ -120,7 +124,7 @@ class Conf
     }
 
     /**
-     * @param callable $callback function(Producer $producer, Message $message, ?object $opaque = null)
+     * @param callable $callback function(Producer $producer, Message $message, ?mixed $opaque = null)
      * @throws Exception
      */
     public function setDrMsgCb(callable $callback): void
@@ -150,7 +154,7 @@ class Conf
     }
 
     /**
-     * @param callable $callback function($consumerOrProducer, int $err, string $reason, ?object $opaque = null)
+     * @param callable $callback function($consumerOrProducer, int $err, string $reason, ?mixed $opaque = null)
      */
     public function setErrorCb(callable $callback): void
     {
@@ -161,7 +165,7 @@ class Conf
     }
 
     /**
-     * @param callable $callback function(KafkaConsumer $consumer, int $err, array $topicPartitions, ?object $opaque = null)
+     * @param callable $callback function(KafkaConsumer $consumer, int $err, array $topicPartitions, ?mixed $opaque = null)
      */
     public function setRebalanceCb(callable $callback): void
     {
@@ -172,7 +176,7 @@ class Conf
     }
 
     /**
-     * @param callable $callback function($consumerOrProducer, string $json, int $jsonLength, ?object $opaque = null)
+     * @param callable $callback function($consumerOrProducer, string $json, int $jsonLength, ?mixed $opaque = null)
      */
     public function setStatsCb(callable $callback): void
     {
@@ -183,7 +187,7 @@ class Conf
     }
 
     /**
-     * @param callable $callback function(KafkaConsumer $consumer, int $err, array $topicPartitions, ?object $opaque = null)
+     * @param callable $callback function(KafkaConsumer $consumer, int $err, array $topicPartitions, ?mixed $opaque = null)
      */
     public function setOffsetCommitCb(callable $callback): void
     {
@@ -191,5 +195,18 @@ class Conf
             $this->conf,
             OffsetCommitCallbackProxy::create($callback)
         );
+    }
+
+    /**
+     * @param mixed $opaque
+     */
+    public function setOpaque($opaque): void
+    {
+        if ($this->cOpaque !== null) {
+            OpaqueMap::pull($this->cOpaque);
+        }
+
+        $this->cOpaque = OpaqueMap::push($opaque);
+        Library::rd_kafka_conf_set_opaque($this->conf, FFI::addr($this->cOpaque));
     }
 }

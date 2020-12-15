@@ -14,7 +14,7 @@ class TopicPartition
     private int $offset;
     private ?string $metadata = null;
     private int $metadataSize = 0;
-    private ?object $opaque = null;
+    private $opaque = null;
     private ?int $err = null;
 
     public static function fromCData(CData $topicPartition): self

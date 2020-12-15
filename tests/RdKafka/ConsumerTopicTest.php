@@ -109,6 +109,45 @@ class ConsumerTopicTest extends TestCase
         $this->assertSame(__METHOD__, $consumedMessage->payload);
     }
 
+    /**
+     * @group ffiOnly
+     */
+    public function testConsumeCallbackWithOpaque(): void
+    {
+        $expectedOpaque = new \stdClass();
+
+        $consumedOpaque = null;
+        $consumedMessage = null;
+
+        $producerConf = new Conf();
+        $producerConf->set('bootstrap.servers', KAFKA_BROKERS);
+
+        $consumerConf = new Conf();
+        $consumerConf->set('bootstrap.servers', KAFKA_BROKERS);
+        $consumerConf->set('consume.callback.max.messages', (string) 1);
+
+        $producer = new Producer($producerConf);
+        $producerTopic = $producer->newTopic(KAFKA_TEST_TOPIC);
+        $producerTopic->produce(0, 0, __METHOD__);
+        $producer->flush(KAFKA_TEST_TIMEOUT_MS);
+
+        $consumer = new Consumer($consumerConf);
+        $consumerTopic = $consumer->newTopic(KAFKA_TEST_TOPIC);
+        $consumerTopic->consumeStart(0, rd_kafka_offset_tail(1));
+
+        $callback = function (Message $message, $opaque = null) use (&$consumedMessage, &$consumedOpaque): void {
+            $consumedMessage = $message;
+            $consumedOpaque = $opaque;
+        };
+        $messagesConsumed = $consumerTopic->consumeCallback(0, KAFKA_TEST_TIMEOUT_MS, $callback, $expectedOpaque);
+
+        $consumerTopic->consumeStop(0);
+
+        $this->assertSame($expectedOpaque, $consumedOpaque);
+        $this->assertSame(1, $messagesConsumed);
+        $this->assertSame(__METHOD__, $consumedMessage->payload);
+    }
+
     public function testConsumeBatch(): void
     {
         $batchSize = 1000;
