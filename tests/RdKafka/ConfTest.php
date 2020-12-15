@@ -297,6 +297,9 @@ class ConfTest extends TestCase
         $producer->flush(KAFKA_TEST_TIMEOUT_MS);
     }
 
+    /**
+     * @group ffiOnly
+     */
     public function testSetDrMsgCbWithOpaque(): void
     {
         $expectedOpaque = new \stdClass();
@@ -357,6 +360,9 @@ class ConfTest extends TestCase
         $this->assertSame([], $stats['brokers']);
     }
 
+    /**
+     * @group ffiOnly
+     */
     public function testSetStatsCbWithOpaque(): void
     {
         $expectedOpaque = new \stdClass();
@@ -482,6 +488,8 @@ class ConfTest extends TestCase
 
     /**
      * Note: if this tests runs too long it will fail
+     *
+     * @group ffiOnly
      */
     public function testSetRebalanceCbWithOpaque(): void
     {
@@ -571,6 +579,9 @@ class ConfTest extends TestCase
         $this->assertSame(20, $offsetCommitCallbackStack[0]['topicPartitions'][0]->getOffset());
     }
 
+    /**
+     * @group ffiOnly
+     */
     public function testSetOffsetCommitCbWithOpaque(): void
     {
         $expectedOpaque = new \stdClass();
