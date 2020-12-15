@@ -5,6 +5,11 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [Unreleased]
 
+### Added
+
+- Add support for rd_kafka_err2name
+- Add opaque reference handling in Configs & Callbacks, produce & Message
+
 ## [0.2.0] - 2020-12-09
 
 This pre-release supports PHP ^7.4 and ^8.0 and [librdkafka](https://github.com/edenhill/librdkafka) v1.0.0 - v1.5.3.
