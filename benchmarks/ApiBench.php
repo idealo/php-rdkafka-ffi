@@ -5,7 +5,7 @@ declare(strict_types=1);
 use RdKafka\FFI\Library;
 
 /**
- * @Groups({"Api", "ffi"})
+ * @Groups({"Library"})
  */
 class ApiBench
 {

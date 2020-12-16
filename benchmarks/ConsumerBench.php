@@ -91,7 +91,7 @@ class ConsumerBench
     }
 
     /**
-     * @Warmup(10)
+     * @Warmup(1)
      * @Revs(100)
      * @Iterations(5)
      * @Groups({"ffi"})
@@ -248,7 +248,7 @@ class ConsumerBench
     }
 
     /**
-     * @Warmup(10)
+     * @Warmup(1)
      * @Revs(100)
      * @Iterations(5)
      * @Groups({"ffi"})

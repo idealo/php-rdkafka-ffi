@@ -1,13 +1,13 @@
 # Benchmarks
 
-These benchmarks were run with version 0.1.0.
+These benchmarks were run with version 0.3.0.
 
 !!! Note
     Please note that these benchmarks depend on asynchronous responses/requests to a Kafka broker.
 
 ## Variants
 
-All variants use librdkafka v1.5.2.
+All variants use librdkafka v1.5.3.
 
 | Tag                   | PHP                                    | PHP Config                | phpbench Config      |
 |-----------------------|----------------------------------------|---------------------------|----------------------|
@@ -16,7 +16,7 @@ All variants use librdkafka v1.5.2.
 | php80_ffi             | 8.0.0                                  | opcache                   | ffi.json             |
 | php80_ffi_preload     | 8.0.0                                  | opcache<br>preload        | ffi_preload.json     |
 | php80_ffi_preload_jit | 8.0.0                                  | opcache<br>preload<br>jit | ffi_preload_jit.json |
-| php74_ext             | 7.4.13<br>RdKafka Extension v4.0.5-dev | opcache                   | ext.json             |
+| php74_ext             | 7.4.13<br>RdKafka Extension v4.1.1-dev | opcache                   | ext.json             |
 
 ## Runtime Mean FFI <> Extension
 
@@ -36,8 +36,8 @@ See https://github.com/idealo/php-rdkafka-ffi/tree/main/benchmarks/reports
 
 * Hetzner CCX21 Cloud Server (dedicated 4 vCPU, 16 GB Ram, NVMe SSD)
 * Ubuntu 20.04
-* docker ce 19.03.14
-* docker-compose with images for php 7.4 / 8.0 and librdkafka 1.5.2 installed
+* docker ce 20.10.1
+* docker-compose with images for php 7.4 / 8.0 and librdkafka 1.5.3 installed
     * see https://github.com/idealo/php-rdkafka-ffi/blob/main/docker-compose.yml
     * see https://github.com/idealo/php-rdkafka-ffi/tree/main/resources/docker
 

@@ -1,8 +1,8 @@
 provider;key;value
 unameuname;os;Linux
-unameuname;host;2f0b4f8fa098
-unameuname;release;5.4.0-52-generic
-unameuname;version;"#57-Ubuntu SMP Thu Oct 15 10:57:00 UTC 2020"
+unameuname;host;682cb15ae669
+unameuname;release;5.4.0-54-generic
+unameuname;version;"#60-Ubuntu SMP Fri Nov 6 10:37:59 UTC 2020"
 unameuname;machine;x86_64
 phpphp;xdebug;
 phpphp;version;8.0.0
@@ -10,12 +10,12 @@ phpphp;ini;
 phpphp;extensions;"Core, date, libxml, openssl, pcre, sqlite3, zlib, ctype, curl, dom, fileinfo, filter, ftp, hash, iconv, json, mbstring, SPL, PDO, session, posix, readline, Reflection, standard, SimpleXML, pdo_sqlite, Phar, tokenizer, xml, xmlreader, xmlwriter, mysqlnd, FFI, Zend OPcache"
 opcacheopcache;extension_loaded;1
 opcacheopcache;enabled;1
-unix-sysloadunix-sysload;l1;0.99
-unix-sysloadunix-sysload;l5;1.24
-unix-sysloadunix-sysload;l15;1.07
+unix-sysloadunix-sysload;l1;1.34
+unix-sysloadunix-sysload;l5;1.42
+unix-sysloadunix-sysload;l15;1.2
 vcsvcs;system;git
 vcsvcs;branch;main
-vcsvcs;version;4d311d7884ba7aeb2a941a4de98c03ebdc984297
-baselinebaseline;nothing;0.023126602172852
-baselinebaseline;md5;0.37097930908203
-baselinebaseline;file_rw;2.586841583252
+vcsvcs;version;beeb28ebd1e309e0947c4fda2269260eee1305ec
+baselinebaseline;nothing;0.041961669921875
+baselinebaseline;md5;0.5190372467041
+baselinebaseline;file_rw;4.2531490325928

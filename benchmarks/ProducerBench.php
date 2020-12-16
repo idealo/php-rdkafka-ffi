@@ -97,8 +97,8 @@ class ProducerBench
     }
 
     /**
-     * @Warmup(10)
-     * @Revs(1000)
+     * @Warmup(1)
+     * @Revs(100)
      * @Iterations(5)
      * @Groups({"ffi"})
      */
@@ -121,7 +121,7 @@ class ProducerBench
         $deliveryCallback = new class() {
             public function __invoke(Producer $producer, Message $message, $opaque = null): void
             {
-                $message->_private->count += $opaque->add;
+                $opaque->count += $message->_private;
             }
         };
         $conf->setDrMsgCb($deliveryCallback);
