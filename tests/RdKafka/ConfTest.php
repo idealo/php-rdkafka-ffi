@@ -199,7 +199,7 @@ class ConfTest extends TestCase
 
         $params = $conf->dump();
         $this->assertSame('true', $params['log.queue']);
-        $this->assertSame(1, $loggerCallbacks, 'Expected debug level log callback');
+        $this->assertGreaterThan(0, $loggerCallbacks, 'Expected debug level log callback');
     }
 
     /**
