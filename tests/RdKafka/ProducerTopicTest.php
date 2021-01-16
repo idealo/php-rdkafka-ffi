@@ -8,6 +8,7 @@ use FFI\CData;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use RdKafka;
+use RequireVersionTrait;
 
 /**
  * @covers \RdKafka\ProducerTopic
@@ -15,6 +16,8 @@ use RdKafka;
  */
 class ProducerTopicTest extends TestCase
 {
+    use RequireVersionTrait;
+
     public function testGetName(): void
     {
         $conf = new Conf();
@@ -83,21 +86,20 @@ class ProducerTopicTest extends TestCase
         $this->assertNull($payload);
     }
 
-    /**
-     * @group ffiOnly
-     */
     public function testProduceWithOpaque(): void
     {
+        $this->requiresRdKafkaExtensionVersion('>=', '5');
+
         $opaques = [];
-        $expectedOpaque1 = new \stdClass();
-        $expectedOpaque2 = new \stdClass();
-        $expectedOpaque3 = new \stdClass();
+        $expectedOpaque1 = 'opaque1';
+        $expectedOpaque2 = 'opaque2';
+        $expectedOpaque3 = 'opaque3';
 
         $conf = new Conf();
         $conf->set('bootstrap.servers', KAFKA_BROKERS);
         $conf->setDrMsgCb(
             function (RdKafka $kafka, Message $message) use (&$opaques): void {
-                $opaques[] = $message->_private;
+                $opaques[] = $message->opaque;
             }
         );
         $producer = new Producer($conf);
@@ -244,6 +246,60 @@ class ProducerTopicTest extends TestCase
 
         $this->assertSame(__METHOD__, $payload);
         $this->assertSame(123456789, $timestamp);
+    }
+
+    public function testProducevWithOpaque(): void
+    {
+        $this->requiresRdKafkaExtensionVersion('>=', '5');
+
+        $opaques = [];
+        $expectedOpaque1 = 'opaque1';
+        $expectedOpaque2 = 'opaque2';
+        $expectedOpaque3 = 'opaque3';
+
+        $conf = new Conf();
+        $conf->set('bootstrap.servers', KAFKA_BROKERS);
+        $conf->setDrMsgCb(
+            function (RdKafka $kafka, Message $message) use (&$opaques): void {
+                $opaques[] = $message->opaque;
+            }
+        );
+
+        $producer = new Producer($conf);
+        $topic = $producer->newTopic(KAFKA_TEST_TOPIC);
+        $topic->producev(
+            RD_KAFKA_PARTITION_UA,
+            0,
+            __METHOD__,
+            'key-topic-produce',
+            null,
+            null,
+            $expectedOpaque1
+        );
+        $topic->producev(
+            RD_KAFKA_PARTITION_UA,
+            0,
+            __METHOD__,
+            'key-topic-produce',
+            null,
+            null,
+            $expectedOpaque2
+        );
+        $topic->producev(
+            RD_KAFKA_PARTITION_UA,
+            0,
+            __METHOD__,
+            'key-topic-produce',
+            null,
+            null,
+            $expectedOpaque3
+        );
+
+        $producer->flush(KAFKA_TEST_TIMEOUT_MS);
+
+        $this->assertSame($expectedOpaque1, $opaques[0]);
+        $this->assertSame($expectedOpaque2, $opaques[1]);
+        $this->assertSame($expectedOpaque3, $opaques[2]);
     }
 
     public function testProducevWithInvalidPartitionShouldFail(): void

@@ -17,11 +17,10 @@ class FunctionsTest extends TestCase
 {
     use RequireVersionTrait;
 
-    /**
-     * @group ffiOnly
-     */
     public function testErr2name(): void
     {
+        $this->requiresRdKafkaExtensionVersion('>=', '5.1');
+
         $this->assertSame('NO_ERROR', rd_kafka_err2name(RD_KAFKA_RESP_ERR_NO_ERROR));
     }
 

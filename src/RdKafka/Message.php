@@ -43,7 +43,10 @@ class Message
      */
     public int $brokerId;
 
-    public $_private;
+    /**
+     * @var mixed|null Note: RdKafka extension only supports type string
+     */
+    public $opaque;
 
     public function __construct(CData $nativeMessage)
     {
@@ -89,7 +92,7 @@ class Message
             $this->brokerId = -1;
         }
 
-        $this->_private = OpaqueMap::pull($nativeMessage->_private);
+        $this->opaque = OpaqueMap::pull($nativeMessage->_private);
     }
 
     public function errstr(): string
