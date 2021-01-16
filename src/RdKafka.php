@@ -9,6 +9,8 @@ use RdKafka\FFI\Library;
 use RdKafka\FFI\OpaqueMap;
 use RdKafka\Metadata;
 use RdKafka\Topic;
+use RdKafka\TopicPartition;
+use RdKafka\TopicPartitionList;
 
 abstract class RdKafka
 {
@@ -168,5 +170,57 @@ abstract class RdKafka
     {
         $cOpaque = Library::rd_kafka_opaque($this->kafka);
         return OpaqueMap::get($cOpaque);
+    }
+
+    /**
+     * @param TopicPartition[] $topicPartitions
+     * @return TopicPartition[]
+     * @throws Exception
+     */
+    public function pausePartitions(array $topicPartitions): array
+    {
+        $topicPartitionList = new TopicPartitionList(...$topicPartitions);
+        $nativeTopicPartitionList = $topicPartitionList->getCData();
+
+        $err = Library::rd_kafka_pause_partitions($this->kafka, $nativeTopicPartitionList);
+
+        if ($err !== RD_KAFKA_RESP_ERR_NO_ERROR) {
+            Library::rd_kafka_topic_partition_list_destroy($nativeTopicPartitionList);
+            throw Exception::fromError($err);
+        }
+
+        $topicPartitionList = TopicPartitionList::fromCData($nativeTopicPartitionList);
+
+        if ($nativeTopicPartitionList !== null) {
+            Library::rd_kafka_topic_partition_list_destroy($nativeTopicPartitionList);
+        }
+
+        return $topicPartitionList->asArray();
+    }
+
+    /**
+     * @param TopicPartition[] $topicPartitions
+     * @return TopicPartition[]
+     * @throws Exception
+     */
+    public function resumePartitions(array $topicPartitions): array
+    {
+        $topicPartitionList = new TopicPartitionList(...$topicPartitions);
+        $nativeTopicPartitionList = $topicPartitionList->getCData();
+
+        $err = Library::rd_kafka_resume_partitions($this->kafka, $nativeTopicPartitionList);
+
+        if ($err !== RD_KAFKA_RESP_ERR_NO_ERROR) {
+            Library::rd_kafka_topic_partition_list_destroy($nativeTopicPartitionList);
+            throw Exception::fromError($err);
+        }
+
+        $topicPartitionList = TopicPartitionList::fromCData($nativeTopicPartitionList);
+
+        if ($nativeTopicPartitionList !== null) {
+            Library::rd_kafka_topic_partition_list_destroy($nativeTopicPartitionList);
+        }
+
+        return $topicPartitionList->asArray();
     }
 }
