@@ -16,9 +16,10 @@ jobs:
         librdkafka:
           - 'v1.5.3'
         rdkafka:
-          - '4.1.1'
           - '4.0.4'
+          - '4.1.2'
           - '4.1.x'
+          - '5.0.0'
           - '5.x'
     continue-on-error: ${{ matrix.rdkafka == '5.x' || matrix.rdkafka == '4.1.x' }}
     services:
