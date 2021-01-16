@@ -61,7 +61,7 @@ class ProducerTopic extends Topic
         int $msgflags,
         ?string $payload = null,
         ?string $key = null,
-        array $headers = [],
+        ?array $headers = null,
         ?int $timestamp_ms = null,
         $opaque = null
     ): void {
