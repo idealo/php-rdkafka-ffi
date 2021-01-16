@@ -11,7 +11,7 @@
 
 This is a Kafka client library for PHP ^7.4 with a slim [librdkafka](https://github.com/edenhill/librdkafka) binding via  [FFI](https://www.php.net/manual/en/book.ffi.php).
 
-It supports the same interfaces as the [PHP RdKafka extension](https://github.com/arnaud-lb/php-rdkafka) ^4.0.
+It supports the same interfaces as the [PHP RdKafka extension](https://github.com/arnaud-lb/php-rdkafka) ^4.0 and ^5.0.
 
 ## Supported Features
 

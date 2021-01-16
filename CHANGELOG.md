@@ -5,6 +5,20 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [Unreleased]
 
+This pre-release improves compatible with the [PHP RdKafka extension](https://github.com/arnaud-lb/php-rdkafka) ^4.0 and ^5.0.
+
+## Added
+
+- Add pausePartitions/resumePartitions to Producer/ KafkaConsumer
+
+## Changed
+
+- Rename Message::_private to ::opaque
+
+## Fixed
+
+- Fix headers param in ProducerTopic::producev does not accept null
+
 ## [0.3.0] - 2020-12-16
 
 ### Added
