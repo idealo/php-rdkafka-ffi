@@ -183,7 +183,7 @@ class ConfTest extends TestCase
         $loggerCallbacks = 0;
 
         $conf = new Conf();
-        $conf->set('debug', 'consumer');
+        $conf->set('debug', 'feature');
         $conf->set('bootstrap.servers', KAFKA_BROKERS);
         $conf->set('log_level', (string) LOG_DEBUG);
         $conf->setLogCb(
