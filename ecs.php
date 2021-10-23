@@ -7,37 +7,26 @@ use PhpCsFixer\Fixer\ClassNotation\OrderedClassElementsFixer;
 use PhpCsFixer\Fixer\Import\OrderedImportsFixer;
 use PhpCsFixer\Fixer\Strict\StrictComparisonFixer;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symplify\EasyCodingStandard\ValueObject\Option;
+use Symplify\EasyCodingStandard\ValueObject\Set\SetList;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
+    $containerConfigurator->import(SetList::PSR_12);
+    $containerConfigurator->import(SetList::COMMON);
+    $containerConfigurator->import(SetList::CLEAN_CODE);
+
     $parameters = $containerConfigurator->parameters();
     $parameters->set(
-        'sets',
+        Option::SKIP,
         [
-            'psr12',
-            'php70',
-            'php71',
-            'common',
-            'clean-code',
-            'dead-code',
-        ]
-    );
-    $parameters->set(
-        'skip',
-        [
+            'src/constants.php',
+            'src/RdKafka/FFI/Methods.php',
+            'src/RdKafka/FFI/Versions/*.php',
             ClassAttributesSeparationFixer::class => '~',
             OrderedClassElementsFixer::class => '~',
             StrictComparisonFixer::class => [
                 'src/RdKafka.php',
             ],
-        ]
-    );
-    // generated files
-    $parameters->set(
-        'exclude_files',
-        [
-            'src/constants.php',
-            'src/RdKafka/FFI/Methods.php',
-            'src/RdKafka/FFI/Versions/*.php',
         ]
     );
 

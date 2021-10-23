@@ -82,7 +82,12 @@ foreach ($partitions as $partition) {
 $consumer->assign($toppar);
 
 $eofPartitions = [];
-while ($message = $consumer->consume(1000)) {
+do {
+    $message = $consumer->consume(1000);
+    if ($message === null) {
+        break;
+    }
+
     if ($message->err === RD_KAFKA_RESP_ERR__PARTITION_EOF) {
         $eofPartitions[$message->partition] = true;
         if (count($eofPartitions) === count($partitions)) {
@@ -90,4 +95,4 @@ while ($message = $consumer->consume(1000)) {
         }
     }
     echo sprintf('consume msg: %s, ts: %s, p: %s', $message->payload, $message->timestamp, $message->partition) . PHP_EOL;
-}
+} while (true);

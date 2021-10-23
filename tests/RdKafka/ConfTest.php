@@ -401,8 +401,7 @@ class ConfTest extends TestCase
         $conf->set('group.id', __METHOD__ . random_int(0, 99999999));
         $conf->set('bootstrap.servers', KAFKA_BROKERS);
         $conf->setRebalanceCb(
-            function (KafkaConsumer $consumer, int $err, array $topicPartitions, $opaque = null) use (&$rebalanceCallbackStack
-            ): void {
+            function (KafkaConsumer $consumer, int $err, array $topicPartitions, $opaque = null) use (&$rebalanceCallbackStack): void {
                 $rebalanceCallbackStack[] = [
                     'consumer' => $consumer,
                     'err' => $err,
@@ -504,8 +503,7 @@ class ConfTest extends TestCase
         $conf->set('bootstrap.servers', KAFKA_BROKERS);
         $conf->setOpaque($expectedOpaque);
         $conf->setRebalanceCb(
-            function (KafkaConsumer $consumer, int $err, array $topicPartitions, $opaque = null) use (&$rebalanceCallbackStack
-            ): void {
+            function (KafkaConsumer $consumer, int $err, array $topicPartitions, $opaque = null) use (&$rebalanceCallbackStack): void {
                 $rebalanceCallbackStack[] = $opaque;
                 switch ($err) {
                     case RD_KAFKA_RESP_ERR__ASSIGN_PARTITIONS:

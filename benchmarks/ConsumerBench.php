@@ -44,12 +44,17 @@ class ConsumerBench
 
         $topic->consumeStart(0, 0);
         $messages = 0;
-        while (($message = $topic->consume(0, 500)) && $messages < 1) {
+        do {
+            $message = $topic->consume(0, 500);
+            if ($message === null) {
+                break;
+            }
             if ($message->err !== RD_KAFKA_RESP_ERR_NO_ERROR) {
                 continue;
             }
             $messages++;
-        }
+        } while ($messages <= 1);
+
         $topic->consumeStop(0);
 
         if ($messages < 1) {
@@ -141,12 +146,17 @@ class ConsumerBench
 
         $topic->consumeStart(0, 0);
         $messages = 0;
-        while (($message = $topic->consume(0, 500)) && $messages < 100) {
+        do {
+            $message = $topic->consume(0, 500);
+            if ($message === null) {
+                break;
+            }
             if ($message->err !== RD_KAFKA_RESP_ERR_NO_ERROR) {
                 continue;
             }
             $messages++;
-        }
+        } while ($messages <= 100);
+
         $topic->consumeStop(0);
 
         if ($messages < 100) {
@@ -177,12 +187,17 @@ class ConsumerBench
 
         $topic->consumeStart(0, 0);
         $messages = 0;
-        while (($message = $topic->consume(0, 500)) && $messages < 100) {
+        do {
+            $message = $topic->consume(0, 500);
+            if ($message === null) {
+                break;
+            }
             if ($message->err !== RD_KAFKA_RESP_ERR_NO_ERROR) {
                 continue;
             }
             $messages++;
-        }
+        } while ($messages <= 100);
+
         $topic->consumeStop(0);
 
         if ($messages < 100) {

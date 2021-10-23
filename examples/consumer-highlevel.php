@@ -23,7 +23,11 @@ $conf->setLogCb(
 $consumer = new KafkaConsumer($conf);
 $consumer->subscribe(['playground']);
 
-while ($message = $consumer->consume(100)) {
+do {
+    $message = $consumer->consume(100);
+    if ($message === null) {
+        break;
+    }
     echo sprintf('consume msg: %s, ts: %s', $message->payload, $message->timestamp) . PHP_EOL;
 
     if ($message->err === RD_KAFKA_RESP_ERR__TIMED_OUT) {
@@ -34,4 +38,4 @@ while ($message = $consumer->consume(100)) {
     }
 
     $consumer->commit($message);
-}
+} while (true);

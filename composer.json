@@ -44,7 +44,7 @@
     "require-dev": {
         "phpunit/phpunit": "^9.4",
         "ircmaxell/php-c-parser": "dev-master",
-        "symplify/easy-coding-standard": "^8.1",
+        "symplify/easy-coding-standard": "^9.4",
         "klitsche/ffigen": "^0.6",
         "klitsche/dog": "^0.4",
         "symfony/dom-crawler": "^5.1",

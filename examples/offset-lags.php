@@ -76,7 +76,11 @@ $consumer->subscribe(['__consumer_offsets']);
 // read all messages
 $eofs = [];
 $compactedMessages = [];
-while ($message = $consumer->consume(100)) {
+do {
+    $message = $consumer->consume(100);
+    if ($message === null) {
+        break;
+    }
 //    var_dump($message->key, $message->payload, $message->err);
     if ($message->err === RD_KAFKA_RESP_ERR__TIMED_OUT) {
         echo '-';
@@ -101,7 +105,7 @@ while ($message = $consumer->consume(100)) {
     }
     echo '.';
     $compactedMessages[$message->key] = $message->payload;
-}
+} while (true);
 echo PHP_EOL . PHP_EOL;
 
 $consumer->unsubscribe();
