@@ -16,7 +16,7 @@ jobs:
           - '8.0'
           - '8.1'
         librdkafka:
-          - '1.5.3'
+          - '1.8.2'
     continue-on-error: ${{ matrix.php == '8.1' }}
     defaults:
       run:

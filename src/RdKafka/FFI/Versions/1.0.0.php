@@ -11,11 +11,13 @@ declare(strict_types=1);
 // version specific constants
 /**
  * <p>librdkafka version </p>
- * <p>Interpreted as hex <code>MM.mm.rr.xx</code>:</p><ul><li>MM = Major</li>
+ * <p>Interpreted as hex <code>MM.mm.rr.xx</code>:</p><ul>
+ * <li>MM = Major</li>
  * <li>mm = minor</li>
  * <li>rr = revision</li>
  * <li>xx = pre-release id (0xff is the final release)</li>
- * </ul><p>E.g.: <code>0x000801ff</code> = 0.8.1</p>
+ * </ul>
+ * <p>E.g.: <code>0x000801ff</code> = 0.8.1</p>
  * <dl class="section remark"><dt>Remarks</dt><dd>This value should only be used during compile time, for runtime checks of version use rd_kafka_version() </dd></dl>
  * @since 1.0.0 of librdkafka
  * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#aa2e242fb8620a32b650a40575bc7f98e
@@ -33,6 +35,12 @@ const RD_KAFKA_RESP_ERR_UNSUPPORTED_COMPRESSION_TYPE = 74;
  * @since 1.0.0 of librdkafka
  */
 const RD_KAFKA_RESP_ERR_END_ALL = 75;
+
+/**
+ * enum rd_kafka_admin_op_t
+ * @since 1.0.0 of librdkafka
+ */
+const RD_KAFKA_ADMIN_OP__CNT = 6;
 
 /**
  * rdkafka.h, rdkafka_mock.h

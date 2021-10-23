@@ -1249,12 +1249,6 @@ const RD_KAFKA_ADMIN_OP_ALTERCONFIGS = 4;
 const RD_KAFKA_ADMIN_OP_DESCRIBECONFIGS = 5;
 
 /**
- * enum rd_kafka_admin_op_t
- * @since 1.0.0 of librdkafka
- */
-const RD_KAFKA_ADMIN_OP__CNT = 6;
-
-/**
  * enum rd_kafka_ConfigSource_t
  * @since 1.0.0 of librdkafka
  */
@@ -1530,306 +1524,1465 @@ const RD_KAFKA_RESP_ERR_INVALID_RECORD = 87;
  */
 const RD_KAFKA_RESP_ERR_UNSTABLE_OFFSET_COMMIT = 88;
 
+/**
+ * define
+ * @since 1.6.0 of librdkafka
+ */
+const RD_KAFKA_EVENT_DELETERECORDS_RESULT = 105;
+
+/**
+ * define
+ * @since 1.6.0 of librdkafka
+ */
+const RD_KAFKA_EVENT_DELETEGROUPS_RESULT = 106;
+
+/**
+ * define
+ * @since 1.6.0 of librdkafka
+ */
+const RD_KAFKA_EVENT_DELETECONSUMERGROUPOFFSETS_RESULT = 107;
+
+/**
+ * enum rd_kafka_resp_err_t
+ * @since 1.6.0 of librdkafka
+ */
+const RD_KAFKA_RESP_ERR__ASSIGNMENT_LOST = -142;
+
+/**
+ * enum rd_kafka_resp_err_t
+ * @since 1.6.0 of librdkafka
+ */
+const RD_KAFKA_RESP_ERR__NOOP = -141;
+
+/**
+ * enum rd_kafka_resp_err_t
+ * @since 1.6.0 of librdkafka
+ */
+const RD_KAFKA_RESP_ERR_THROTTLING_QUOTA_EXCEEDED = 89;
+
+/**
+ * enum rd_kafka_resp_err_t
+ * @since 1.6.0 of librdkafka
+ */
+const RD_KAFKA_RESP_ERR_PRODUCER_FENCED = 90;
+
+/**
+ * enum rd_kafka_resp_err_t
+ * @since 1.6.0 of librdkafka
+ */
+const RD_KAFKA_RESP_ERR_RESOURCE_NOT_FOUND = 91;
+
+/**
+ * enum rd_kafka_resp_err_t
+ * @since 1.6.0 of librdkafka
+ */
+const RD_KAFKA_RESP_ERR_DUPLICATE_RESOURCE = 92;
+
+/**
+ * enum rd_kafka_resp_err_t
+ * @since 1.6.0 of librdkafka
+ */
+const RD_KAFKA_RESP_ERR_UNACCEPTABLE_CREDENTIAL = 93;
+
+/**
+ * enum rd_kafka_resp_err_t
+ * @since 1.6.0 of librdkafka
+ */
+const RD_KAFKA_RESP_ERR_INCONSISTENT_VOTER_SET = 94;
+
+/**
+ * enum rd_kafka_resp_err_t
+ * @since 1.6.0 of librdkafka
+ */
+const RD_KAFKA_RESP_ERR_INVALID_UPDATE_VERSION = 95;
+
+/**
+ * enum rd_kafka_resp_err_t
+ * @since 1.6.0 of librdkafka
+ */
+const RD_KAFKA_RESP_ERR_FEATURE_UPDATE_FAILED = 96;
+
+/**
+ * enum rd_kafka_resp_err_t
+ * @since 1.6.0 of librdkafka
+ */
+const RD_KAFKA_RESP_ERR_PRINCIPAL_DESERIALIZATION_FAILURE = 97;
+
+/**
+ * enum rd_kafka_admin_op_t
+ * @since 1.6.0 of librdkafka
+ */
+const RD_KAFKA_ADMIN_OP_DELETERECORDS = 6;
+
+/**
+ * enum rd_kafka_admin_op_t
+ * @since 1.6.0 of librdkafka
+ */
+const RD_KAFKA_ADMIN_OP_DELETEGROUPS = 7;
+
+/**
+ * enum rd_kafka_admin_op_t
+ * @since 1.6.0 of librdkafka
+ */
+const RD_KAFKA_ADMIN_OP_DELETECONSUMERGROUPOFFSETS = 8;
+
+/**
+ * enum rd_kafka_resp_err_t
+ * @since 1.6.1 of librdkafka
+ */
+const RD_KAFKA_RESP_ERR__AUTO_OFFSET_RESET = -140;
+
 const RD_KAFKA_SUPPORTED_METHODS = [
-    'rd_kafka_version' => '1.0.0',
-    'rd_kafka_version_str' => '1.0.0',
-    'rd_kafka_get_debug_contexts' => '1.0.0',
-    'rd_kafka_get_err_descs' => '1.0.0',
-    'rd_kafka_err2str' => '1.0.0',
-    'rd_kafka_err2name' => '1.0.0',
-    'rd_kafka_last_error' => '1.0.0',
-    'rd_kafka_errno2err' => '1.0.0',
-    'rd_kafka_errno' => '1.0.0',
-    'rd_kafka_fatal_error' => '1.0.0',
-    'rd_kafka_test_fatal_error' => '1.0.0',
-    'rd_kafka_topic_partition_destroy' => '1.0.0',
-    'rd_kafka_topic_partition_list_new' => '1.0.0',
-    'rd_kafka_topic_partition_list_destroy' => '1.0.0',
-    'rd_kafka_topic_partition_list_add' => '1.0.0',
-    'rd_kafka_topic_partition_list_add_range' => '1.0.0',
-    'rd_kafka_topic_partition_list_del' => '1.0.0',
-    'rd_kafka_topic_partition_list_del_by_idx' => '1.0.0',
-    'rd_kafka_topic_partition_list_copy' => '1.0.0',
-    'rd_kafka_topic_partition_list_set_offset' => '1.0.0',
-    'rd_kafka_topic_partition_list_find' => '1.0.0',
-    'rd_kafka_topic_partition_list_sort' => '1.0.0',
-    'rd_kafka_headers_new' => '1.0.0',
-    'rd_kafka_headers_destroy' => '1.0.0',
-    'rd_kafka_headers_copy' => '1.0.0',
-    'rd_kafka_header_add' => '1.0.0',
-    'rd_kafka_header_remove' => '1.0.0',
-    'rd_kafka_header_get_last' => '1.0.0',
-    'rd_kafka_header_get' => '1.0.0',
-    'rd_kafka_header_get_all' => '1.0.0',
-    'rd_kafka_message_destroy' => '1.0.0',
-    'rd_kafka_message_timestamp' => '1.0.0',
-    'rd_kafka_message_latency' => '1.0.0',
-    'rd_kafka_message_headers' => '1.0.0',
-    'rd_kafka_message_detach_headers' => '1.0.0',
-    'rd_kafka_message_set_headers' => '1.0.0',
-    'rd_kafka_header_cnt' => '1.0.0',
-    'rd_kafka_message_status' => '1.0.0',
-    'rd_kafka_conf_new' => '1.0.0',
-    'rd_kafka_conf_destroy' => '1.0.0',
-    'rd_kafka_conf_dup' => '1.0.0',
-    'rd_kafka_conf_dup_filter' => '1.0.0',
-    'rd_kafka_conf_set' => '1.0.0',
-    'rd_kafka_conf_set_events' => '1.0.0',
-    'rd_kafka_conf_set_background_event_cb' => '1.0.0',
-    'rd_kafka_conf_set_dr_cb' => '1.0.0',
-    'rd_kafka_conf_set_dr_msg_cb' => '1.0.0',
-    'rd_kafka_conf_set_consume_cb' => '1.0.0',
-    'rd_kafka_conf_set_rebalance_cb' => '1.0.0',
-    'rd_kafka_conf_set_offset_commit_cb' => '1.0.0',
-    'rd_kafka_conf_set_error_cb' => '1.0.0',
-    'rd_kafka_conf_set_throttle_cb' => '1.0.0',
-    'rd_kafka_conf_set_log_cb' => '1.0.0',
-    'rd_kafka_conf_set_stats_cb' => '1.0.0',
-    'rd_kafka_conf_set_socket_cb' => '1.0.0',
-    'rd_kafka_conf_set_connect_cb' => '1.0.0',
-    'rd_kafka_conf_set_closesocket_cb' => '1.0.0',
-    'rd_kafka_conf_set_opaque' => '1.0.0',
-    'rd_kafka_opaque' => '1.0.0',
-    'rd_kafka_conf_set_default_topic_conf' => '1.0.0',
-    'rd_kafka_conf_get' => '1.0.0',
-    'rd_kafka_topic_conf_get' => '1.0.0',
-    'rd_kafka_conf_dump' => '1.0.0',
-    'rd_kafka_topic_conf_dump' => '1.0.0',
-    'rd_kafka_conf_dump_free' => '1.0.0',
-    'rd_kafka_conf_properties_show' => '1.0.0',
-    'rd_kafka_topic_conf_new' => '1.0.0',
-    'rd_kafka_topic_conf_dup' => '1.0.0',
-    'rd_kafka_default_topic_conf_dup' => '1.0.0',
-    'rd_kafka_topic_conf_destroy' => '1.0.0',
-    'rd_kafka_topic_conf_set' => '1.0.0',
-    'rd_kafka_topic_conf_set_opaque' => '1.0.0',
-    'rd_kafka_topic_conf_set_partitioner_cb' => '1.0.0',
-    'rd_kafka_topic_conf_set_msg_order_cmp' => '1.0.0',
-    'rd_kafka_topic_partition_available' => '1.0.0',
-    'rd_kafka_msg_partitioner_random' => '1.0.0',
-    'rd_kafka_msg_partitioner_consistent' => '1.0.0',
-    'rd_kafka_msg_partitioner_consistent_random' => '1.0.0',
-    'rd_kafka_msg_partitioner_murmur2' => '1.0.0',
-    'rd_kafka_msg_partitioner_murmur2_random' => '1.0.0',
-    'rd_kafka_new' => '1.0.0',
-    'rd_kafka_destroy' => '1.0.0',
-    'rd_kafka_destroy_flags' => '1.0.0',
-    'rd_kafka_name' => '1.0.0',
-    'rd_kafka_type' => '1.0.0',
-    'rd_kafka_memberid' => '1.0.0',
-    'rd_kafka_clusterid' => '1.0.0',
-    'rd_kafka_controllerid' => '1.0.0',
-    'rd_kafka_topic_new' => '1.0.0',
-    'rd_kafka_topic_destroy' => '1.0.0',
-    'rd_kafka_topic_name' => '1.0.0',
-    'rd_kafka_topic_opaque' => '1.0.0',
-    'rd_kafka_poll' => '1.0.0',
-    'rd_kafka_yield' => '1.0.0',
-    'rd_kafka_pause_partitions' => '1.0.0',
-    'rd_kafka_resume_partitions' => '1.0.0',
-    'rd_kafka_query_watermark_offsets' => '1.0.0',
-    'rd_kafka_get_watermark_offsets' => '1.0.0',
-    'rd_kafka_offsets_for_times' => '1.0.0',
-    'rd_kafka_mem_free' => '1.0.0',
-    'rd_kafka_queue_new' => '1.0.0',
-    'rd_kafka_queue_destroy' => '1.0.0',
-    'rd_kafka_queue_get_main' => '1.0.0',
-    'rd_kafka_queue_get_consumer' => '1.0.0',
-    'rd_kafka_queue_get_partition' => '1.0.0',
-    'rd_kafka_queue_get_background' => '1.0.0',
-    'rd_kafka_queue_forward' => '1.0.0',
-    'rd_kafka_set_log_queue' => '1.0.0',
-    'rd_kafka_queue_length' => '1.0.0',
-    'rd_kafka_queue_io_event_enable' => '1.0.0',
-    'rd_kafka_queue_cb_event_enable' => '1.0.0',
-    'rd_kafka_consume_start' => '1.0.0',
-    'rd_kafka_consume_start_queue' => '1.0.0',
-    'rd_kafka_consume_stop' => '1.0.0',
-    'rd_kafka_seek' => '1.0.0',
-    'rd_kafka_consume' => '1.0.0',
-    'rd_kafka_consume_batch' => '1.0.0',
-    'rd_kafka_consume_callback' => '1.0.0',
-    'rd_kafka_consume_queue' => '1.0.0',
-    'rd_kafka_consume_batch_queue' => '1.0.0',
-    'rd_kafka_consume_callback_queue' => '1.0.0',
-    'rd_kafka_offset_store' => '1.0.0',
-    'rd_kafka_offsets_store' => '1.0.0',
-    'rd_kafka_subscribe' => '1.0.0',
-    'rd_kafka_unsubscribe' => '1.0.0',
-    'rd_kafka_subscription' => '1.0.0',
-    'rd_kafka_consumer_poll' => '1.0.0',
-    'rd_kafka_consumer_close' => '1.0.0',
-    'rd_kafka_assign' => '1.0.0',
-    'rd_kafka_assignment' => '1.0.0',
-    'rd_kafka_commit' => '1.0.0',
-    'rd_kafka_commit_message' => '1.0.0',
-    'rd_kafka_commit_queue' => '1.0.0',
-    'rd_kafka_committed' => '1.0.0',
-    'rd_kafka_position' => '1.0.0',
-    'rd_kafka_produce' => '1.0.0',
-    'rd_kafka_producev' => '1.0.0',
-    'rd_kafka_produce_batch' => '1.0.0',
-    'rd_kafka_flush' => '1.0.0',
-    'rd_kafka_purge' => '1.0.0',
-    'rd_kafka_metadata' => '1.0.0',
-    'rd_kafka_metadata_destroy' => '1.0.0',
-    'rd_kafka_list_groups' => '1.0.0',
-    'rd_kafka_group_list_destroy' => '1.0.0',
-    'rd_kafka_brokers_add' => '1.0.0',
-    'rd_kafka_set_logger' => '1.0.0',
-    'rd_kafka_set_log_level' => '1.0.0',
-    'rd_kafka_log_print' => '1.0.0',
-    'rd_kafka_log_syslog' => '1.0.0',
-    'rd_kafka_outq_len' => '1.0.0',
-    'rd_kafka_dump' => '1.0.0',
-    'rd_kafka_thread_cnt' => '1.0.0',
-    'rd_kafka_wait_destroyed' => '1.0.0',
-    'rd_kafka_unittest' => '1.0.0',
-    'rd_kafka_poll_set_consumer' => '1.0.0',
-    'rd_kafka_event_type' => '1.0.0',
-    'rd_kafka_event_name' => '1.0.0',
-    'rd_kafka_event_destroy' => '1.0.0',
-    'rd_kafka_event_message_next' => '1.0.0',
-    'rd_kafka_event_message_array' => '1.0.0',
-    'rd_kafka_event_message_count' => '1.0.0',
-    'rd_kafka_event_error' => '1.0.0',
-    'rd_kafka_event_error_string' => '1.0.0',
-    'rd_kafka_event_error_is_fatal' => '1.0.0',
-    'rd_kafka_event_opaque' => '1.0.0',
-    'rd_kafka_event_log' => '1.0.0',
-    'rd_kafka_event_stats' => '1.0.0',
-    'rd_kafka_event_topic_partition_list' => '1.0.0',
-    'rd_kafka_event_topic_partition' => '1.0.0',
-    'rd_kafka_event_CreateTopics_result' => '1.0.0',
-    'rd_kafka_event_DeleteTopics_result' => '1.0.0',
-    'rd_kafka_event_CreatePartitions_result' => '1.0.0',
-    'rd_kafka_event_AlterConfigs_result' => '1.0.0',
-    'rd_kafka_event_DescribeConfigs_result' => '1.0.0',
-    'rd_kafka_queue_poll' => '1.0.0',
-    'rd_kafka_queue_poll_callback' => '1.0.0',
-    'rd_kafka_plugin_f_conf_init_t' => '1.0.0',
-    'rd_kafka_interceptor_f_on_conf_set_t' => '1.0.0',
-    'rd_kafka_interceptor_f_on_conf_dup_t' => '1.0.0',
-    'rd_kafka_interceptor_f_on_conf_destroy_t' => '1.0.0',
-    'rd_kafka_interceptor_f_on_new_t' => '1.0.0',
-    'rd_kafka_interceptor_f_on_destroy_t' => '1.0.0',
-    'rd_kafka_interceptor_f_on_send_t' => '1.0.0',
-    'rd_kafka_interceptor_f_on_acknowledgement_t' => '1.0.0',
-    'rd_kafka_interceptor_f_on_consume_t' => '1.0.0',
-    'rd_kafka_interceptor_f_on_commit_t' => '1.0.0',
-    'rd_kafka_interceptor_f_on_request_sent_t' => '1.0.0',
-    'rd_kafka_conf_interceptor_add_on_conf_set' => '1.0.0',
-    'rd_kafka_conf_interceptor_add_on_conf_dup' => '1.0.0',
-    'rd_kafka_conf_interceptor_add_on_conf_destroy' => '1.0.0',
-    'rd_kafka_conf_interceptor_add_on_new' => '1.0.0',
-    'rd_kafka_interceptor_add_on_destroy' => '1.0.0',
-    'rd_kafka_interceptor_add_on_send' => '1.0.0',
-    'rd_kafka_interceptor_add_on_acknowledgement' => '1.0.0',
-    'rd_kafka_interceptor_add_on_consume' => '1.0.0',
-    'rd_kafka_interceptor_add_on_commit' => '1.0.0',
-    'rd_kafka_interceptor_add_on_request_sent' => '1.0.0',
-    'rd_kafka_topic_result_error' => '1.0.0',
-    'rd_kafka_topic_result_error_string' => '1.0.0',
-    'rd_kafka_topic_result_name' => '1.0.0',
-    'rd_kafka_AdminOptions_new' => '1.0.0',
-    'rd_kafka_AdminOptions_destroy' => '1.0.0',
-    'rd_kafka_AdminOptions_set_request_timeout' => '1.0.0',
-    'rd_kafka_AdminOptions_set_operation_timeout' => '1.0.0',
-    'rd_kafka_AdminOptions_set_validate_only' => '1.0.0',
-    'rd_kafka_AdminOptions_set_broker' => '1.0.0',
-    'rd_kafka_AdminOptions_set_opaque' => '1.0.0',
-    'rd_kafka_NewTopic_new' => '1.0.0',
-    'rd_kafka_NewTopic_destroy' => '1.0.0',
-    'rd_kafka_NewTopic_destroy_array' => '1.0.0',
-    'rd_kafka_NewTopic_set_replica_assignment' => '1.0.0',
-    'rd_kafka_NewTopic_set_config' => '1.0.0',
-    'rd_kafka_CreateTopics' => '1.0.0',
-    'rd_kafka_CreateTopics_result_topics' => '1.0.0',
-    'rd_kafka_DeleteTopic_new' => '1.0.0',
-    'rd_kafka_DeleteTopic_destroy' => '1.0.0',
-    'rd_kafka_DeleteTopic_destroy_array' => '1.0.0',
-    'rd_kafka_DeleteTopics' => '1.0.0',
-    'rd_kafka_DeleteTopics_result_topics' => '1.0.0',
-    'rd_kafka_NewPartitions_new' => '1.0.0',
-    'rd_kafka_NewPartitions_destroy' => '1.0.0',
-    'rd_kafka_NewPartitions_destroy_array' => '1.0.0',
-    'rd_kafka_NewPartitions_set_replica_assignment' => '1.0.0',
-    'rd_kafka_CreatePartitions' => '1.0.0',
-    'rd_kafka_CreatePartitions_result_topics' => '1.0.0',
-    'rd_kafka_ConfigSource_name' => '1.0.0',
-    'rd_kafka_ConfigEntry_name' => '1.0.0',
-    'rd_kafka_ConfigEntry_value' => '1.0.0',
-    'rd_kafka_ConfigEntry_source' => '1.0.0',
-    'rd_kafka_ConfigEntry_is_read_only' => '1.0.0',
-    'rd_kafka_ConfigEntry_is_default' => '1.0.0',
-    'rd_kafka_ConfigEntry_is_sensitive' => '1.0.0',
-    'rd_kafka_ConfigEntry_is_synonym' => '1.0.0',
-    'rd_kafka_ConfigEntry_synonyms' => '1.0.0',
-    'rd_kafka_ResourceType_name' => '1.0.0',
-    'rd_kafka_ConfigResource_new' => '1.0.0',
-    'rd_kafka_ConfigResource_destroy' => '1.0.0',
-    'rd_kafka_ConfigResource_destroy_array' => '1.0.0',
-    'rd_kafka_ConfigResource_set_config' => '1.0.0',
-    'rd_kafka_ConfigResource_configs' => '1.0.0',
-    'rd_kafka_ConfigResource_type' => '1.0.0',
-    'rd_kafka_ConfigResource_name' => '1.0.0',
-    'rd_kafka_ConfigResource_error' => '1.0.0',
-    'rd_kafka_ConfigResource_error_string' => '1.0.0',
-    'rd_kafka_AlterConfigs' => '1.0.0',
-    'rd_kafka_AlterConfigs_result_resources' => '1.0.0',
-    'rd_kafka_DescribeConfigs' => '1.0.0',
-    'rd_kafka_DescribeConfigs_result_resources' => '1.0.0',
-    'rd_kafka_conf' => '1.1.0',
-    'rd_kafka_conf_set_oauthbearer_token_refresh_cb' => '1.1.0',
-    'rd_kafka_conf_set_ssl_cert_verify_cb' => '1.1.0',
-    'rd_kafka_conf_set_ssl_cert' => '1.1.0',
-    'rd_kafka_event_config_string' => '1.1.0',
-    'rd_kafka_oauthbearer_set_token' => '1.1.0',
-    'rd_kafka_oauthbearer_set_token_failure' => '1.1.0',
-    'rd_kafka_interceptor_f_on_thread_start_t' => '1.2.0',
-    'rd_kafka_interceptor_f_on_thread_exit_t' => '1.2.0',
-    'rd_kafka_interceptor_add_on_thread_start' => '1.2.0',
-    'rd_kafka_interceptor_add_on_thread_exit' => '1.2.0',
-    'rd_kafka_mock_cluster_new' => '1.3.0',
-    'rd_kafka_mock_cluster_destroy' => '1.3.0',
-    'rd_kafka_mock_cluster_handle' => '1.3.0',
-    'rd_kafka_mock_cluster_bootstraps' => '1.3.0',
-    'rd_kafka_mock_push_request_errors' => '1.3.0',
-    'rd_kafka_mock_topic_set_error' => '1.3.0',
-    'rd_kafka_mock_partition_set_leader' => '1.3.0',
-    'rd_kafka_mock_partition_set_follower' => '1.3.0',
-    'rd_kafka_mock_partition_set_follower_wmarks' => '1.3.0',
-    'rd_kafka_mock_broker_set_rack' => '1.3.0',
-    'rd_kafka_error_code' => '1.4.0',
-    'rd_kafka_error_name' => '1.4.0',
-    'rd_kafka_error_string' => '1.4.0',
-    'rd_kafka_error_is_fatal' => '1.4.0',
-    'rd_kafka_error_is_retriable' => '1.4.0',
-    'rd_kafka_error_txn_requires_abort' => '1.4.0',
-    'rd_kafka_error_destroy' => '1.4.0',
-    'rd_kafka_error_new' => '1.4.0',
-    'rd_kafka_msg_partitioner_fnv1a' => '1.4.0',
-    'rd_kafka_msg_partitioner_fnv1a_random' => '1.4.0',
-    'rd_kafka_consumer_group_metadata' => '1.4.0',
-    'rd_kafka_consumer_group_metadata_new' => '1.4.0',
-    'rd_kafka_consumer_group_metadata_destroy' => '1.4.0',
-    'rd_kafka_consumer_group_metadata_write' => '1.4.0',
-    'rd_kafka_consumer_group_metadata_read' => '1.4.0',
-    'rd_kafka_init_transactions' => '1.4.0',
-    'rd_kafka_begin_transaction' => '1.4.0',
-    'rd_kafka_send_offsets_to_transaction' => '1.4.0',
-    'rd_kafka_commit_transaction' => '1.4.0',
-    'rd_kafka_abort_transaction' => '1.4.0',
-    'rd_kafka_handle_mock_cluster' => '1.4.0',
-    'rd_kafka_mock_topic_create' => '1.4.0',
-    'rd_kafka_mock_broker_set_down' => '1.4.0',
-    'rd_kafka_mock_broker_set_up' => '1.4.0',
-    'rd_kafka_mock_coordinator_set' => '1.4.0',
-    'rd_kafka_mock_set_apiversion' => '1.4.0',
-    'rd_kafka_mock_broker_set_rtt' => '1.4.4',
-    'rd_kafka_message_errstr' => '1.5.0',
-    'rd_kafka_message_broker_id' => '1.5.0',
-    'rd_kafka_produceva' => '1.5.0',
-    'rd_kafka_event_debug_contexts' => '1.5.0',
-    'rd_kafka_mock_broker_push_request_errors' => '1.5.0'
+    'rd_kafka_version' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_version_str' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_get_debug_contexts' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_get_err_descs' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_err2str' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_err2name' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_last_error' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_errno2err' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_errno' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_fatal_error' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_test_fatal_error' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_topic_partition_destroy' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_topic_partition_list_new' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_topic_partition_list_destroy' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_topic_partition_list_add' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_topic_partition_list_add_range' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_topic_partition_list_del' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_topic_partition_list_del_by_idx' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_topic_partition_list_copy' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_topic_partition_list_set_offset' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_topic_partition_list_find' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_topic_partition_list_sort' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_headers_new' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_headers_destroy' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_headers_copy' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_header_add' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_header_remove' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_header_get_last' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_header_get' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_header_get_all' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_message_destroy' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_message_timestamp' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_message_latency' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_message_headers' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_message_detach_headers' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_message_set_headers' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_header_cnt' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_message_status' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_conf_new' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_conf_destroy' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_conf_dup' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_conf_dup_filter' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_conf_set' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_conf_set_events' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_conf_set_background_event_cb' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_conf_set_dr_cb' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_conf_set_dr_msg_cb' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_conf_set_consume_cb' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_conf_set_rebalance_cb' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_conf_set_offset_commit_cb' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_conf_set_error_cb' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_conf_set_throttle_cb' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_conf_set_log_cb' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_conf_set_stats_cb' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_conf_set_socket_cb' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_conf_set_connect_cb' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_conf_set_closesocket_cb' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_conf_set_opaque' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_opaque' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_conf_set_default_topic_conf' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_conf_get' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_topic_conf_get' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_conf_dump' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_topic_conf_dump' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_conf_dump_free' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_conf_properties_show' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_topic_conf_new' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_topic_conf_dup' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_default_topic_conf_dup' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_topic_conf_destroy' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_topic_conf_set' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_topic_conf_set_opaque' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_topic_conf_set_partitioner_cb' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_topic_conf_set_msg_order_cmp' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_topic_partition_available' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_msg_partitioner_random' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_msg_partitioner_consistent' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_msg_partitioner_consistent_random' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_msg_partitioner_murmur2' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_msg_partitioner_murmur2_random' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_new' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_destroy' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_destroy_flags' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_name' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_type' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_memberid' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_clusterid' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_controllerid' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_topic_new' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_topic_destroy' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_topic_name' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_topic_opaque' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_poll' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_yield' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_pause_partitions' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_resume_partitions' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_query_watermark_offsets' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_get_watermark_offsets' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_offsets_for_times' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_mem_free' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_queue_new' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_queue_destroy' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_queue_get_main' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_queue_get_consumer' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_queue_get_partition' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_queue_get_background' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_queue_forward' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_set_log_queue' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_queue_length' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_queue_io_event_enable' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_queue_cb_event_enable' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_consume_start' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_consume_start_queue' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_consume_stop' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_seek' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_consume' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_consume_batch' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_consume_callback' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_consume_queue' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_consume_batch_queue' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_consume_callback_queue' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_offset_store' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_offsets_store' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_subscribe' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_unsubscribe' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_subscription' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_consumer_poll' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_consumer_close' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_assign' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_assignment' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_commit' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_commit_message' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_commit_queue' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_committed' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_position' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_produce' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_producev' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_produce_batch' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_flush' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_purge' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_metadata' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_metadata_destroy' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_list_groups' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_group_list_destroy' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_brokers_add' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_set_logger' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_set_log_level' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_log_print' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_log_syslog' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_outq_len' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_dump' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_thread_cnt' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_wait_destroyed' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_unittest' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_poll_set_consumer' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_event_type' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_event_name' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_event_destroy' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_event_message_next' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_event_message_array' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_event_message_count' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_event_error' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_event_error_string' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_event_error_is_fatal' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_event_opaque' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_event_log' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_event_stats' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_event_topic_partition_list' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_event_topic_partition' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_event_CreateTopics_result' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_event_DeleteTopics_result' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_event_CreatePartitions_result' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_event_AlterConfigs_result' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_event_DescribeConfigs_result' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_queue_poll' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_queue_poll_callback' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_plugin_f_conf_init_t' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_interceptor_f_on_conf_set_t' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_interceptor_f_on_conf_dup_t' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_interceptor_f_on_conf_destroy_t' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_interceptor_f_on_new_t' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_interceptor_f_on_destroy_t' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_interceptor_f_on_send_t' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_interceptor_f_on_acknowledgement_t' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_interceptor_f_on_consume_t' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_interceptor_f_on_commit_t' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_interceptor_f_on_request_sent_t' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_conf_interceptor_add_on_conf_set' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_conf_interceptor_add_on_conf_dup' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_conf_interceptor_add_on_conf_destroy' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_conf_interceptor_add_on_new' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_interceptor_add_on_destroy' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_interceptor_add_on_send' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_interceptor_add_on_acknowledgement' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_interceptor_add_on_consume' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_interceptor_add_on_commit' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_interceptor_add_on_request_sent' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_topic_result_error' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_topic_result_error_string' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_topic_result_name' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_AdminOptions_new' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_AdminOptions_destroy' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_AdminOptions_set_request_timeout' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_AdminOptions_set_operation_timeout' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_AdminOptions_set_validate_only' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_AdminOptions_set_broker' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_AdminOptions_set_opaque' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_NewTopic_new' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_NewTopic_destroy' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_NewTopic_destroy_array' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_NewTopic_set_replica_assignment' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_NewTopic_set_config' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_CreateTopics' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_CreateTopics_result_topics' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_DeleteTopic_new' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_DeleteTopic_destroy' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_DeleteTopic_destroy_array' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_DeleteTopics' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_DeleteTopics_result_topics' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_NewPartitions_new' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_NewPartitions_destroy' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_NewPartitions_destroy_array' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_NewPartitions_set_replica_assignment' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_CreatePartitions' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_CreatePartitions_result_topics' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_ConfigSource_name' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_ConfigEntry_name' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_ConfigEntry_value' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_ConfigEntry_source' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_ConfigEntry_is_read_only' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_ConfigEntry_is_default' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_ConfigEntry_is_sensitive' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_ConfigEntry_is_synonym' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_ConfigEntry_synonyms' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_ResourceType_name' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_ConfigResource_new' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_ConfigResource_destroy' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_ConfigResource_destroy_array' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_ConfigResource_set_config' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_ConfigResource_configs' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_ConfigResource_type' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_ConfigResource_name' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_ConfigResource_error' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_ConfigResource_error_string' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_AlterConfigs' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_AlterConfigs_result_resources' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_DescribeConfigs' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_DescribeConfigs_result_resources' => [
+        'min' => '1.0.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_conf' => [
+        'min' => '1.1.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_conf_set_oauthbearer_token_refresh_cb' => [
+        'min' => '1.1.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_conf_set_ssl_cert_verify_cb' => [
+        'min' => '1.1.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_conf_set_ssl_cert' => [
+        'min' => '1.1.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_event_config_string' => [
+        'min' => '1.1.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_oauthbearer_set_token' => [
+        'min' => '1.1.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_oauthbearer_set_token_failure' => [
+        'min' => '1.1.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_interceptor_f_on_thread_start_t' => [
+        'min' => '1.2.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_interceptor_f_on_thread_exit_t' => [
+        'min' => '1.2.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_interceptor_add_on_thread_start' => [
+        'min' => '1.2.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_interceptor_add_on_thread_exit' => [
+        'min' => '1.2.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_mock_cluster_new' => [
+        'min' => '1.3.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_mock_cluster_destroy' => [
+        'min' => '1.3.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_mock_cluster_handle' => [
+        'min' => '1.3.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_mock_cluster_bootstraps' => [
+        'min' => '1.3.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_mock_push_request_errors' => [
+        'min' => '1.3.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_mock_topic_set_error' => [
+        'min' => '1.3.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_mock_partition_set_leader' => [
+        'min' => '1.3.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_mock_partition_set_follower' => [
+        'min' => '1.3.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_mock_partition_set_follower_wmarks' => [
+        'min' => '1.3.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_mock_broker_set_rack' => [
+        'min' => '1.3.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_error_code' => [
+        'min' => '1.4.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_error_name' => [
+        'min' => '1.4.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_error_string' => [
+        'min' => '1.4.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_error_is_fatal' => [
+        'min' => '1.4.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_error_is_retriable' => [
+        'min' => '1.4.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_error_txn_requires_abort' => [
+        'min' => '1.4.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_error_destroy' => [
+        'min' => '1.4.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_error_new' => [
+        'min' => '1.4.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_msg_partitioner_fnv1a' => [
+        'min' => '1.4.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_msg_partitioner_fnv1a_random' => [
+        'min' => '1.4.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_consumer_group_metadata' => [
+        'min' => '1.4.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_consumer_group_metadata_new' => [
+        'min' => '1.4.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_consumer_group_metadata_destroy' => [
+        'min' => '1.4.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_consumer_group_metadata_write' => [
+        'min' => '1.4.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_consumer_group_metadata_read' => [
+        'min' => '1.4.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_init_transactions' => [
+        'min' => '1.4.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_begin_transaction' => [
+        'min' => '1.4.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_send_offsets_to_transaction' => [
+        'min' => '1.4.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_commit_transaction' => [
+        'min' => '1.4.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_abort_transaction' => [
+        'min' => '1.4.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_handle_mock_cluster' => [
+        'min' => '1.4.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_mock_topic_create' => [
+        'min' => '1.4.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_mock_broker_set_down' => [
+        'min' => '1.4.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_mock_broker_set_up' => [
+        'min' => '1.4.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_mock_coordinator_set' => [
+        'min' => '1.4.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_mock_set_apiversion' => [
+        'min' => '1.4.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_mock_broker_set_rtt' => [
+        'min' => '1.4.4',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_message_errstr' => [
+        'min' => '1.5.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_message_broker_id' => [
+        'min' => '1.5.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_produceva' => [
+        'min' => '1.5.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_event_debug_contexts' => [
+        'min' => '1.5.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_mock_broker_push_request_errors' => [
+        'min' => '1.5.0',
+        'max' => '1.6.1'
+    ],
+    'rd_kafka_conf_get_default_topic_conf' => [
+        'min' => '1.6.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_queue_yield' => [
+        'min' => '1.6.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_seek_partitions' => [
+        'min' => '1.6.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_incremental_assign' => [
+        'min' => '1.6.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_incremental_unassign' => [
+        'min' => '1.6.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_rebalance_protocol' => [
+        'min' => '1.6.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_assignment_lost' => [
+        'min' => '1.6.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_consumer_group_metadata_new_with_genid' => [
+        'min' => '1.6.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_event_DeleteRecords_result' => [
+        'min' => '1.6.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_event_DeleteGroups_result' => [
+        'min' => '1.6.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_event_DeleteConsumerGroupOffsets_result' => [
+        'min' => '1.6.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_group_result_error' => [
+        'min' => '1.6.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_group_result_name' => [
+        'min' => '1.6.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_group_result_partitions' => [
+        'min' => '1.6.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_DeleteRecords_new' => [
+        'min' => '1.6.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_DeleteRecords_destroy' => [
+        'min' => '1.6.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_DeleteRecords_destroy_array' => [
+        'min' => '1.6.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_DeleteRecords' => [
+        'min' => '1.6.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_DeleteRecords_result_offsets' => [
+        'min' => '1.6.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_DeleteGroup_new' => [
+        'min' => '1.6.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_DeleteGroup_destroy' => [
+        'min' => '1.6.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_DeleteGroup_destroy_array' => [
+        'min' => '1.6.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_DeleteGroups' => [
+        'min' => '1.6.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_DeleteGroups_result_groups' => [
+        'min' => '1.6.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_DeleteConsumerGroupOffsets_new' => [
+        'min' => '1.6.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_DeleteConsumerGroupOffsets_destroy' => [
+        'min' => '1.6.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_DeleteConsumerGroupOffsets_destroy_array' => [
+        'min' => '1.6.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_DeleteConsumerGroupOffsets' => [
+        'min' => '1.6.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_DeleteConsumerGroupOffsets_result_groups' => [
+        'min' => '1.6.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_mock_clear_request_errors' => [
+        'min' => '1.6.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_mock_push_request_errors_array' => [
+        'min' => '1.6.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_interceptor_f_on_response_received_t' => [
+        'min' => '1.6.1',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_interceptor_add_on_response_received' => [
+        'min' => '1.6.1',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_conf_set_engine_callback_data' => [
+        'min' => '1.7.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_mem_calloc' => [
+        'min' => '1.7.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_mem_malloc' => [
+        'min' => '1.7.0',
+        'max' => '1.8.2'
+    ],
+    'rd_kafka_mock_broker_push_request_error_rtts' => [
+        'min' => '1.7.0',
+        'max' => '1.8.2'
+    ]
 ];

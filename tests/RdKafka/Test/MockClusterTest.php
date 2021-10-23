@@ -326,6 +326,50 @@ class MockClusterTest extends TestCase
         $this->assertSame(__METHOD__, $message2->payload);
     }
 
+    public function testPushRequestErrorsArray(): void
+    {
+        $this->requiresLibrdkafkaVersion('>=', '1.7.0');
+
+        $clusterConfig = new Conf();
+        $clusterConfig->set('log_level', (string) LOG_EMERG);
+        $cluster = MockCluster::create(1, $clusterConfig);
+
+        // produce msg
+        $producerConfig = new Conf();
+        $producerConfig->set('log_level', (string) LOG_EMERG);
+        $producerConfig->set('bootstrap.servers', $cluster->getBootstraps());
+        $producer = new Producer($producerConfig);
+        $producerTopic = $producer->newTopic(KAFKA_TEST_TOPIC);
+        $producerTopic->produce(0, 0, __METHOD__);
+        $producer->flush(KAFKA_TEST_TIMEOUT_MS);
+
+        // first error is retriable, second fatal
+        $cluster->pushRequestErrorsArray(
+            ApiKey::Fetch,
+            2,
+            [
+                RD_KAFKA_RESP_ERR_BROKER_NOT_AVAILABLE,
+                RD_KAFKA_RESP_ERR__AUTHENTICATION,
+            ]
+        );
+
+        // try to consume msg
+        $consumerConfig = new Conf();
+        $consumerConfig->set('log_level', (string) LOG_EMERG);
+        $consumerConfig->set('group.id', __METHOD__);
+//        $consumerConfig->set('debug', 'fetch');
+        $consumerConfig->set('bootstrap.servers', $cluster->getBootstraps());
+        $consumer = new KafkaConsumer($consumerConfig);
+        $consumer->assign([new TopicPartition(KAFKA_TEST_TOPIC, 0, rd_kafka_offset_tail(1))]);
+
+        // try to consume msg
+        $message1 = $consumer->consume(KAFKA_TEST_TIMEOUT_MS);
+        $message2 = $consumer->consume(KAFKA_TEST_TIMEOUT_MS);
+
+        $this->assertSame(RD_KAFKA_RESP_ERR__AUTHENTICATION, $message1->err);
+        $this->assertSame(__METHOD__, $message2->payload);
+    }
+
     public function testCreateTopic(): void
     {
         $this->requiresLibrdkafkaVersion('>=', '1.4.0');
@@ -352,6 +396,7 @@ class MockClusterTest extends TestCase
     public function testPushBrokerRequestErrors(): void
     {
         $this->requiresLibrdkafkaVersion('>=', '1.5.0');
+        $this->requiresLibrdkafkaVersion('<', '1.7.0');
 
         $clusterConfig = new Conf();
         $clusterConfig->set('log_level', (string) LOG_EMERG);
@@ -373,6 +418,51 @@ class MockClusterTest extends TestCase
             2,
             RD_KAFKA_RESP_ERR_BROKER_NOT_AVAILABLE,
             RD_KAFKA_RESP_ERR__AUTHENTICATION
+        );
+
+        // try to consume msg
+        $consumerConfig = new Conf();
+        $consumerConfig->set('log_level', (string) LOG_EMERG);
+        $consumerConfig->set('group.id', __METHOD__);
+//        $consumerConfig->set('debug', 'fetch');
+        $consumerConfig->set('bootstrap.servers', $cluster->getBootstraps());
+        $consumer = new KafkaConsumer($consumerConfig);
+        $consumer->assign([new TopicPartition(KAFKA_TEST_TOPIC, 0, rd_kafka_offset_tail(1))]);
+
+        // try to consume msg
+        $message1 = $consumer->consume(KAFKA_TEST_TIMEOUT_MS);
+        $message2 = $consumer->consume(KAFKA_TEST_TIMEOUT_MS);
+
+        $this->assertSame(RD_KAFKA_RESP_ERR__AUTHENTICATION, $message1->err);
+        $this->assertSame(__METHOD__, $message2->payload);
+    }
+
+    public function testPushBrokerRequestErrorRtts(): void
+    {
+        $this->requiresLibrdkafkaVersion('>=', '1.7.0');
+
+        $clusterConfig = new Conf();
+        $clusterConfig->set('log_level', (string) LOG_EMERG);
+        $cluster = MockCluster::create(1, $clusterConfig);
+
+        // produce msg
+        $producerConfig = new Conf();
+        $producerConfig->set('log_level', (string) LOG_EMERG);
+        $producerConfig->set('bootstrap.servers', $cluster->getBootstraps());
+        $producer = new Producer($producerConfig);
+        $producerTopic = $producer->newTopic(KAFKA_TEST_TOPIC);
+        $producerTopic->produce(0, 0, __METHOD__);
+        $producer->flush(KAFKA_TEST_TIMEOUT_MS);
+
+        // first error is retriable, second fatal
+        $cluster->pushBrokerRequestErrorRtts(
+            1,
+            ApiKey::Fetch,
+            2,
+            RD_KAFKA_RESP_ERR_BROKER_NOT_AVAILABLE,
+            100,
+            RD_KAFKA_RESP_ERR__AUTHENTICATION,
+            100
         );
 
         // try to consume msg

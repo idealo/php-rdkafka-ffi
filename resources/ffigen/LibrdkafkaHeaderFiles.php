@@ -40,13 +40,18 @@ class LibrdkafkaHeaderFiles
             $file = $this->config->getOutputPath() . '/' . $fileName;
             $this->filesystem->remove($file);
 
-            $url = $baseUrl . '/' . $fileName;
-            echo "  Download ${url}" . PHP_EOL;
+            if (file_exists($this->config->getOutputPath() . '/' . $version . '-' . $fileName)) {
+                $content = @file_get_contents($this->config->getOutputPath() . '/' . $version . '-' . $fileName);
+            } else {
+                $url = $baseUrl . '/' . $fileName;
+                echo "  Download ${url}" . PHP_EOL;
 
-            $content = @file_get_contents($url);
-            if ($content === false) {
-                echo '  Not found - skip' . PHP_EOL;
-                continue;
+                $content = @file_get_contents($url);
+                if ($content === false) {
+                    echo '  Not found - skip' . PHP_EOL;
+                    continue;
+                }
+                $this->filesystem->dumpFile($this->config->getOutputPath() . '/' . $version . '-' . $fileName, $content);
             }
 
             $content = $this->prepareFileContent($file, $content, $version);
@@ -146,6 +151,22 @@ class LibrdkafkaHeaderFiles
                         unsigned char txn_requires_abort;
                     }
                     CDEF;
+                },
+                $content
+            );
+
+            // #define RD_FORMAT(...) not supported by cparser
+            $content = preg_replace_callback(
+                '/(#define.+RD_FORMAT[^\n]+)/i',
+                function ($matches) {
+                    return '//' . $matches[1];
+                },
+                $content
+            );
+            $content = preg_replace_callback(
+                '/(RD_FORMAT[^)]+\))/i',
+                function ($matches) {
+                    return '';
                 },
                 $content
             );

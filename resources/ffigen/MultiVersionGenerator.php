@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace RdKafka\FFIGen;
 
-use Composer\Semver\Comparator;
 use Klitsche\FFIGen\ConfigInterface;
 use Klitsche\FFIGen\Constant;
 use Klitsche\FFIGen\ConstantsCollection;
@@ -124,42 +123,6 @@ class MultiVersionGenerator implements GeneratorInterface
         echo 'Done.' . PHP_EOL;
     }
 
-    private function getSupportedVersions()
-    {
-        $content = file_get_contents(
-            self::RELEASE_URL,
-            false,
-            stream_context_create(
-                [
-                    'http' => [
-                        'header' => [
-                            'Connection: close',
-                            'Accept: application/json',
-                            'User-Agent: php',
-                        ],
-                    ],
-                ]
-            )
-        );
-
-        $releases = json_decode($content);
-
-        $supportedVersions = [];
-        foreach ($releases as $release) {
-            if ($release->prerelease === false) {
-                $version = str_replace('v', '', $release->tag_name);
-                if (Comparator::greaterThanOrEqualTo($version, '1.0.0')) {
-                    $supportedVersions[$version] = sprintf(
-                        'https://raw.githubusercontent.com/edenhill/librdkafka/%s/src',
-                        $release->tag_name
-                    );
-                }
-            }
-        }
-        asort($supportedVersions);
-        return $supportedVersions;
-    }
-
     private function parse(string $version): void
     {
         echo '  Parse ...' . PHP_EOL;
@@ -172,7 +135,7 @@ class MultiVersionGenerator implements GeneratorInterface
             ->filter($this->config->getExcludeConstants());
         $constants->add(new Constant('RD_KAFKA_CDEF', $parser->getCDef(), implode(', ', $this->config->getHeaderFiles())));
 
-        // add to overall consts
+        // add to overall constants
         foreach ($constants as $name => $const) {
             $const->getDocBlock()->addTag(new DocBlockTag('since', $version . ' of librdkafka'));
 
@@ -192,10 +155,10 @@ class MultiVersionGenerator implements GeneratorInterface
             $this->documentation->enrich($method);
             if (array_key_exists($name, $this->overAllMethods) === false) {
                 $this->overAllMethods[$name] = $method;
-                $this->supportedMethods[$name] = $version;
+                $this->supportedMethods[$name]['min'] = $version;
             }
-            if (array_key_exists($name, $this->supportedMethods) === false) {
-                $this->supportedMethods[$name] = $version;
+            if (array_key_exists($name, $this->supportedMethods) === true) {
+                $this->supportedMethods[$name]['max'] = $version;
             }
         }
     }

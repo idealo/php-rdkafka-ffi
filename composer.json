@@ -58,8 +58,10 @@
         ],
         "test-init" : [
             "@php examples/delete-topic.php -ttest",
+            "@php examples/delete-topic.php -ttest_admin",
             "@php examples/delete-topic.php -ttest_partitions",
             "@php examples/create-topic.php -ttest -p1 -r1",
+            "@php examples/create-topic.php -ttest_admin -p1 -r1",
             "@php examples/create-topic.php -ttest_partitions -p3 -r1"
         ],
         "test": "phpunit",

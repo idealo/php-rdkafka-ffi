@@ -13,17 +13,20 @@ jobs:
       matrix:
         include:
           - php: '7.4'
-            librdkafka: 'v1.5.3'
+            librdkafka: 'v1.8.2'
             publish: true
         exclude:
           - php: '7.4'
-            librdkafka: 'v1.5.3'
+            librdkafka: 'v1.8.2'
             publish: false
         php:
           - '7.4'
           - '8.0'
           - '8.1'
         librdkafka:
+          - 'v1.8.2'
+          - 'v1.7.0'
+          - 'v1.6.1'
           - 'v1.5.3'
           - 'v1.4.4'
           - 'v1.3.0'

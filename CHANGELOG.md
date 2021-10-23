@@ -7,15 +7,17 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 This pre-release improves compatible with the [PHP RdKafka extension](https://github.com/arnaud-lb/php-rdkafka) ^4.0 and ^5.0.
 
-## Added
+### Added
 
 - Add pausePartitions/resumePartitions to Producer/ KafkaConsumer
+- Add deleteRecords, deleteConsumerGroupOffsets and deleteGroups to Admin Client
+- Add support for librdkafka v1.6.0, v1.6.1, v1.7.0, v1.8.0, v1.8.2
 
-## Changed
+### Changed
 
 - Rename Message::_private to ::opaque
 
-## Fixed
+### Fixed
 
 - Fix headers param in ProducerTopic::producev does not accept null
 

@@ -95,12 +95,32 @@ class MockCluster
      * the first error code, then the second, etc.
      *
      * @param int ...$errorCodes
-     * @since 1.3.0 librdkafka
-     * @since 1.4.0 librdkafka - adds support for Produce request types
+     * @since 1.3.0 of librdkafka
+     * @since 1.4.0 of librdkafka - adds support for Produce request types
+     * @since 1.7.0 of librdkafka - you may also use {@link MockCluster::pushRequestErrorsArray()}
      */
     public function pushRequestErrors(int $apiKey, int $count, int ...$errorCodes): void
     {
         Library::rd_kafka_mock_push_request_errors($this->cluster, $apiKey, $count, ...$errorCodes);
+    }
+
+    /**
+     * See {@link MockCluster::pushRequestErrors()}
+     *
+     * @param int[] $errorCodes
+     * @since 1.7.0 of librdkafka
+     */
+    public function pushRequestErrorsArray(int $apiKey, int $count, array $errorCodes): void
+    {
+        Library::requireVersion('>=', '1.7.0');
+
+        $errorCodesNative = Library::new('rd_kafka_resp_err_t[' . count($errorCodes) . ']', false, true);
+        foreach ($errorCodes as $i => $errorCode) {
+            $errorCodesNative[$i] = $errorCode;
+        }
+        $errorCodesPointer = Library::cast('rd_kafka_resp_err_t*', $errorCodesNative);
+
+        Library::rd_kafka_mock_push_request_errors_array($this->cluster, $apiKey, $count, $errorCodesPointer);
     }
 
     /**
@@ -295,15 +315,49 @@ class MockCluster
      * Same as {@link MockCluster::pushRequestErrors()} but for a specific broker.
      * The broker errors take precedence over the cluster errors.
      *
-     * @param int ...$errorCodes
+     * @param int ...$errorCodes a list of error codes or 0
      * @throws RdKafka\Exception
      * @since 1.5.0 of librdkafka
+     * @removed 1.7.0 of librdkafka - use {@link MockCluster::pushBrokerRequestErrorRtts()}
      */
     public function pushBrokerRequestErrors(int $brokerId, int $apiKey, int $count, int ...$errorCodes): void
     {
         Library::requireVersion('>=', '1.5.0');
+        Library::requireVersion('<', '1.7.0');
 
-        $errorCode = Library::rd_kafka_mock_broker_push_request_errors($this->cluster, $brokerId, $apiKey, $count, ...$errorCodes);
+        $errorCode = Library::rd_kafka_mock_broker_push_request_errors(
+            $this->cluster,
+            $brokerId,
+            $apiKey,
+            $count,
+            ...$errorCodes
+        );
+
+        if ($errorCode !== RD_KAFKA_RESP_ERR_NO_ERROR) {
+            throw RdKafka\Exception::fromError($errorCode);
+        }
+    }
+
+    /**
+     * Same as {@link MockCluster::pushBrokerRequestErrors()} but for a specific broker.
+     * The broker errors take precedence over the cluster errors.
+     *
+     * @param int ...$errorCodeAndRttTuples plain tuples of error code or 0 (int) and response RTT/delay in millisecond (int)
+     * @throws RdKafka\Exception
+     * @since 1.7.0 of librdkafka
+     */
+    public function pushBrokerRequestErrorRtts(int $brokerId, int $apiKey, int $count, int ...$errorCodeAndRttTuples): void
+    {
+        Library::requireVersion('>=', '1.7.0');
+
+        $errorCode = Library::rd_kafka_mock_broker_push_request_error_rtts(
+            $this->cluster,
+            $brokerId,
+            $apiKey,
+            $count,
+            ...$errorCodeAndRttTuples
+        );
+
         if ($errorCode !== RD_KAFKA_RESP_ERR_NO_ERROR) {
             throw RdKafka\Exception::fromError($errorCode);
         }

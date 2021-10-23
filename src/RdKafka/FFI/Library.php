@@ -28,7 +28,7 @@ class Library
     use Methods;
 
     public const VERSION_AUTODETECT = '';
-    public const VERSION_LATEST = '1.5.3';
+    public const VERSION_LATEST = '1.8.2';
     public const PHP_LIBRARY_VERSION = '0.3.0';
 
     private static FFI $ffi;
@@ -158,7 +158,8 @@ class Library
         self::chooseVersion();
 
         return array_key_exists($name, RD_KAFKA_SUPPORTED_METHODS)
-            && version_compare(self::$version, RD_KAFKA_SUPPORTED_METHODS[$name], '<') === false;
+            && version_compare(self::$version, RD_KAFKA_SUPPORTED_METHODS[$name]['min'], '<') === false
+            && version_compare(self::$version, RD_KAFKA_SUPPORTED_METHODS[$name]['max'], '>') === false;
     }
 
     /**

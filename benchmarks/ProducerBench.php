@@ -121,7 +121,7 @@ class ProducerBench
         $deliveryCallback = new class() {
             public function __invoke(Producer $producer, Message $message, $opaque = null): void
             {
-                $opaque->count += $message->_private;
+                $opaque->count += $message->opaque;
             }
         };
         $conf->setDrMsgCb($deliveryCallback);

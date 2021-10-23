@@ -80,33 +80,41 @@ class ConsumerTopicTest extends TestCase
 
     public function testConsumeCallback(): void
     {
-        $consumedMessage = null;
+        $consumed = new class() {
+            public ?Message $message = null;
+        };
 
         $producerConf = new Conf();
         $producerConf->set('bootstrap.servers', KAFKA_BROKERS);
 
-        $consumerConf = new Conf();
-        $consumerConf->set('bootstrap.servers', KAFKA_BROKERS);
-        $consumerConf->set('consume.callback.max.messages', (string) 1);
-
         $producer = new Producer($producerConf);
         $producerTopic = $producer->newTopic(KAFKA_TEST_TOPIC);
         $producerTopic->produce(0, 0, __METHOD__);
+        $producerTopic->produce(0, 0, __METHOD__);
+        $producerTopic->produce(0, 0, __METHOD__);
         $producer->flush(KAFKA_TEST_TIMEOUT_MS);
+
+        $consumerConf = new Conf();
+        $consumerConf->set('bootstrap.servers', KAFKA_BROKERS);
+        $consumerConf->set('consume.callback.max.messages', (string) 3);
+        $consumerConf->set('enable.partition.eof', 'false');
 
         $consumer = new Consumer($consumerConf);
         $consumerTopic = $consumer->newTopic(KAFKA_TEST_TOPIC);
-        $consumerTopic->consumeStart(0, rd_kafka_offset_tail(1));
+        $consumerTopic->consumeStart(0, rd_kafka_offset_tail(3));
 
-        $callback = function (Message $message, $opaque = null) use (&$consumedMessage): void {
-            $consumedMessage = $message;
+        // note: seems to buggy since librdkafka 1.8.0 (even with ext) first call returns 1 but does not call the callback
+        $callback = function (Message $message, $opaque = null) use ($consumed): void {
+            $consumed->message = $message;
         };
-        $messagesConsumed = $consumerTopic->consumeCallback(0, KAFKA_TEST_TIMEOUT_MS, $callback);
+        do {
+            $messagesConsumed = $consumerTopic->consumeCallback(0, KAFKA_TEST_TIMEOUT_MS, $callback);
+        } while ($consumed->message === null);
 
         $consumerTopic->consumeStop(0);
 
-        $this->assertSame(1, $messagesConsumed);
-        $this->assertSame(__METHOD__, $consumedMessage->payload);
+        $this->assertSame(3, $messagesConsumed);
+        $this->assertSame(__METHOD__, $consumed->message->payload);
     }
 
     /**
@@ -116,8 +124,10 @@ class ConsumerTopicTest extends TestCase
     {
         $expectedOpaque = new \stdClass();
 
-        $consumedOpaque = null;
-        $consumedMessage = null;
+        $consumed = new class() {
+            public ?Message $message = null;
+            public ?object $opaque = null;
+        };
 
         $producerConf = new Conf();
         $producerConf->set('bootstrap.servers', KAFKA_BROKERS);
@@ -135,17 +145,20 @@ class ConsumerTopicTest extends TestCase
         $consumerTopic = $consumer->newTopic(KAFKA_TEST_TOPIC);
         $consumerTopic->consumeStart(0, rd_kafka_offset_tail(1));
 
-        $callback = function (Message $message, $opaque = null) use (&$consumedMessage, &$consumedOpaque): void {
-            $consumedMessage = $message;
-            $consumedOpaque = $opaque;
+        $callback = function (Message $message, $opaque = null) use ($consumed): void {
+            $consumed->message = $message;
+            $consumed->opaque = $opaque;
         };
-        $messagesConsumed = $consumerTopic->consumeCallback(0, KAFKA_TEST_TIMEOUT_MS, $callback, $expectedOpaque);
+
+        do {
+            $messagesConsumed = $consumerTopic->consumeCallback(0, KAFKA_TEST_TIMEOUT_MS, $callback, $expectedOpaque);
+        } while ($consumed->message === null);
 
         $consumerTopic->consumeStop(0);
 
-        $this->assertSame($expectedOpaque, $consumedOpaque);
         $this->assertSame(1, $messagesConsumed);
-        $this->assertSame(__METHOD__, $consumedMessage->payload);
+        $this->assertSame(__METHOD__, $consumed->message->payload);
+        $this->assertSame($expectedOpaque, $consumed->opaque);
     }
 
     public function testConsumeBatch(): void
