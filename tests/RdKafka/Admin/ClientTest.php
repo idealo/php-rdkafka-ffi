@@ -475,6 +475,7 @@ class ClientTest extends TestCase
         $conf->set('bootstrap.servers', KAFKA_BROKERS);
         $client = Client::fromConf($conf);
         $client->setWaitForResultEventTimeout(KAFKA_TEST_TIMEOUT_MS);
+        $client->getMetadata(true, null, KAFKA_TEST_TIMEOUT_MS);
 
         $deleteRecords = new DeleteRecords(
             new TopicPartition(KAFKA_TEST_TOPIC_ADMIN, 0, 1)

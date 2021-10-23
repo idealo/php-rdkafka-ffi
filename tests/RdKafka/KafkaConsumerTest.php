@@ -377,9 +377,11 @@ class KafkaConsumerTest extends TestCase
         $conf->set('group.id', __METHOD__ . random_int(0, 999999999));
         $conf->set('bootstrap.servers', KAFKA_BROKERS);
 
-        $future = (int) (time() + 3600) * 1000;
+        $future = (time() + 3600) * 1000;
 
         $consumer = new KafkaConsumer($conf);
+        $consumer->getMetadata(true, null, KAFKA_TEST_TIMEOUT_MS);
+
         $topicPartitions = $consumer->offsetsForTimes(
             [
                 new TopicPartition(KAFKA_TEST_TOPIC, 0, $future),
@@ -410,6 +412,8 @@ class KafkaConsumerTest extends TestCase
         $producer->flush(KAFKA_TEST_TIMEOUT_MS);
 
         $consumer = new KafkaConsumer($conf);
+        $consumer->getMetadata(true, null, KAFKA_TEST_TIMEOUT_MS);
+
         $topicPartitions = $consumer->offsetsForTimes(
             [
                 new TopicPartition(KAFKA_TEST_TOPIC, 0, $nearNow),
@@ -430,6 +434,8 @@ class KafkaConsumerTest extends TestCase
         $past = 0;
 
         $consumer = new KafkaConsumer($conf);
+        $consumer->getMetadata(true, null, KAFKA_TEST_TIMEOUT_MS);
+
         $topicPartitions = $consumer->offsetsForTimes(
             [
                 new TopicPartition(KAFKA_TEST_TOPIC, 0, $past),

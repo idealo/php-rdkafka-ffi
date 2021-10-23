@@ -35,6 +35,8 @@ class KafkaConsumerTopicTest extends TestCase
         $conf->set('bootstrap.servers', KAFKA_BROKERS);
         $conf->set('enable.auto.offset.store', 'false');
         $consumer = new KafkaConsumer($conf);
+        $consumer->getMetadata(true, null, KAFKA_TEST_TIMEOUT_MS);
+
         $consumer->assign([new TopicPartition(KAFKA_TEST_TOPIC, 0)]);
         $topic = $consumer->newTopic(KAFKA_TEST_TOPIC);
 
