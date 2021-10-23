@@ -15,6 +15,7 @@ use RdKafka\Metadata;
 use RdKafka\Producer;
 use RdKafka\Queue;
 use RdKafka\Topic;
+use RdKafka\TopicPartition;
 
 use function array_values;
 use function count;
@@ -51,8 +52,7 @@ class Client
 
     /**
      * @param ConfigResource[] $resources
-     * @param AlterConfigsOptions $options
-     * @return ConfigResource[]
+     * @return ConfigResourceResult[]
      * @throws Exception
      */
     public function alterConfigs(array $resources, ?AlterConfigsOptions $options = null): array
@@ -92,7 +92,6 @@ class Client
 
     /**
      * @param ConfigResource[] $resources
-     * @param DescribeConfigsOptions $options
      * @return ConfigResourceResult[]
      * @throws Exception
      */
@@ -133,7 +132,6 @@ class Client
 
     /**
      * @param NewPartitions[] $partitions
-     * @param CreatePartitionsOptions $options
      * @return TopicResult[]
      * @throws Exception
      */
@@ -173,7 +171,6 @@ class Client
 
     /**
      * @param NewTopic[] $topics
-     * @param CreateTopicsOptions $options
      * @return TopicResult[]
      * @throws Exception
      */
@@ -213,7 +210,6 @@ class Client
 
     /**
      * @param DeleteTopic[] $topics
-     * @param DeleteTopicsOptions $options
      * @return TopicResult[]
      * @throws Exception
      */
@@ -252,8 +248,122 @@ class Client
     }
 
     /**
-     * @param Topic $only_topic
-     *
+     * @param DeleteRecords[] $records
+     * @return TopicPartition[]
+     * @throws Exception
+     * @since 1.6.0 of librdkafka
+     */
+    public function deleteRecords(array $records, ?DeleteRecordsOptions $options = null): array
+    {
+        Library::requireVersion('>=', '1.6.0');
+
+        $this->assertArray($records, 'records', DeleteRecords::class);
+
+        $queue = Queue::fromRdKafka($this->kafka);
+
+        $records_ptr = Library::new('rd_kafka_DeleteRecords_t*[' . count($records) . ']');
+        foreach (array_values($records) as $i => $topic) {
+            $records_ptr[$i] = $topic->getCData();
+        }
+
+        Library::rd_kafka_DeleteRecords(
+            $this->kafka->getCData(),
+            $records_ptr,
+            count($records),
+            $options ? $options->getCData() : null,
+            $queue->getCData()
+        );
+
+        $event = $this->waitForResultEvent($queue, RD_KAFKA_EVENT_DELETERECORDS_RESULT);
+
+        $eventResult = Library::rd_kafka_event_DeleteRecords_result($event->getCData());
+
+        $result = Library::rd_kafka_DeleteRecords_result_offsets($eventResult);
+        $topicPartitionList = RdKafka\TopicPartitionList::fromCData($result);
+
+        return $topicPartitionList->asArray();
+    }
+
+    /**
+     * @return GroupResult[]
+     * @throws Exception
+     * @since 1.6.0 of librdkafka
+     */
+    public function deleteConsumerGroupOffsets(DeleteConsumerGroupOffsets $offsets, ?DeleteConsumerGroupOffsetsOptions $options = null): array
+    {
+        Library::requireVersion('>=', '1.6.0');
+
+        $queue = Queue::fromRdKafka($this->kafka);
+
+        $offsets_ptr = Library::new('rd_kafka_DeleteConsumerGroupOffsets_t*[1]');
+        $offsets_ptr[0] = $offsets->getCData();
+
+        Library::rd_kafka_DeleteConsumerGroupOffsets(
+            $this->kafka->getCData(),
+            $offsets_ptr,
+            1,
+            $options ? $options->getCData() : null,
+            $queue->getCData()
+        );
+
+        $event = $this->waitForResultEvent($queue, RD_KAFKA_EVENT_DELETECONSUMERGROUPOFFSETS_RESULT);
+
+        $eventResult = Library::rd_kafka_event_DeleteConsumerGroupOffsets_result($event->getCData());
+
+        $size = Library::new('size_t');
+        $result = Library::rd_kafka_DeleteConsumerGroupOffsets_result_groups($eventResult, FFI::addr($size));
+
+        $groupResults = [];
+        for ($i = 0; $i < (int) $size->cdata; $i++) {
+            $groupResults[] = new GroupResult($result[$i]);
+        }
+
+        return $groupResults;
+    }
+
+    /**
+     * @param DeleteGroup[] $groups
+     * @return GroupResult[]
+     * @throws Exception
+     * @since 1.6.0 of librdkafka
+     */
+    public function deleteGroups(array $groups, ?DeleteGroupsOptions $options = null): array
+    {
+        Library::requireVersion('>=', '1.6.0');
+
+        $this->assertArray($groups, 'groups', DeleteGroup::class);
+
+        $queue = Queue::fromRdKafka($this->kafka);
+
+        $groups_ptr = Library::new('rd_kafka_DeleteGroup_t*[' . count($groups) . ']');
+        foreach (array_values($groups) as $i => $topic) {
+            $groups_ptr[$i] = $topic->getCData();
+        }
+
+        Library::rd_kafka_DeleteGroups(
+            $this->kafka->getCData(),
+            $groups_ptr,
+            count($groups),
+            $options ? $options->getCData() : null,
+            $queue->getCData()
+        );
+
+        $event = $this->waitForResultEvent($queue, RD_KAFKA_EVENT_DELETEGROUPS_RESULT);
+
+        $eventResult = Library::rd_kafka_event_DeleteGroups_result($event->getCData());
+
+        $size = Library::new('size_t');
+        $result = Library::rd_kafka_DeleteGroups_result_groups($eventResult, FFI::addr($size));
+
+        $groupResults = [];
+        for ($i = 0; $i < (int) $size->cdata; $i++) {
+            $groupResults[] = new GroupResult($result[$i]);
+        }
+
+        return $groupResults;
+    }
+
+    /**
      * @throws Exception
      */
     public function getMetadata(bool $all_topics, ?Topic $only_topic, int $timeout_ms): Metadata
@@ -284,6 +394,21 @@ class Client
     public function newDescribeConfigsOptions(): DescribeConfigsOptions
     {
         return new DescribeConfigsOptions($this->kafka);
+    }
+
+    public function newDeleteRecordsOptions(): DeleteRecordsOptions
+    {
+        return new DeleteRecordsOptions($this->kafka);
+    }
+
+    public function newDeleteConsumerGroupOffsetsOptions(): DeleteConsumerGroupOffsetsOptions
+    {
+        return new DeleteConsumerGroupOffsetsOptions($this->kafka);
+    }
+
+    public function newDeleteGroupsOptions(): DeleteGroupsOptions
+    {
+        return new DeleteGroupsOptions($this->kafka);
     }
 
     private function waitForResultEvent(Queue $queue, int $eventType): Event

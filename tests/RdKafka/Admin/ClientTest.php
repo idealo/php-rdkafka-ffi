@@ -7,7 +7,9 @@ namespace RdKafka\Admin;
 use Exception;
 use PHPUnit\Framework\TestCase;
 use RdKafka\Conf;
+use RdKafka\KafkaConsumer;
 use RdKafka\Producer;
+use RdKafka\TopicPartition;
 
 /**
  * @covers \RdKafka\Admin\AlterConfigsOptions
@@ -17,6 +19,8 @@ use RdKafka\Producer;
  * @covers \RdKafka\Admin\ConfigResourceResult
  * @covers \RdKafka\Admin\CreatePartitionsOptions
  * @covers \RdKafka\Admin\CreateTopicsOptions
+ * @covers \RdKafka\Admin\DeleteRecords
+ * @covers \RdKafka\Admin\DeleteRecordsOptions
  * @covers \RdKafka\Admin\DeleteTopic
  * @covers \RdKafka\Admin\DeleteTopicsOptions
  * @covers \RdKafka\Admin\DescribeConfigsOptions
@@ -33,6 +37,8 @@ use RdKafka\Producer;
  */
 class ClientTest extends TestCase
 {
+    use \RequireVersionTrait;
+
     public static function setUpBeforeClass(): void
     {
         $conf = new Conf();
@@ -451,6 +457,97 @@ class ClientTest extends TestCase
         $this->expectExceptionMessageMatches(ConfigResource::class);
         $this->expectExceptionMessageMatches('/resources/');
         $client->alterConfigs([new \stdClass()]);
+    }
+
+    public function testDeleteRecords(): void
+    {
+        $this->requiresLibrdkafkaVersion('>=', '1.6.0');
+
+        $conf = new Conf();
+        $conf->set('bootstrap.servers', KAFKA_BROKERS);
+        $producer = new Producer($conf);
+        $topic = $producer->newTopic(KAFKA_TEST_TOPIC_ADMIN);
+        $topic->produce(0, 0, __METHOD__);
+        $topic->produce(0, 0, __METHOD__);
+        $producer->flush(KAFKA_TEST_TIMEOUT_MS);
+
+        $conf = new Conf();
+        $conf->set('bootstrap.servers', KAFKA_BROKERS);
+        $client = Client::fromConf($conf);
+        $client->setWaitForResultEventTimeout(KAFKA_TEST_TIMEOUT_MS);
+
+        $deleteRecords = new DeleteRecords(
+            new TopicPartition(KAFKA_TEST_TOPIC_ADMIN, 0, 1)
+        );
+
+        $deleteRecordsOptions = $client->newDeleteRecordsOptions();
+        $deleteRecordsOptions->setRequestTimeout(KAFKA_TEST_TIMEOUT_MS);
+        $deleteRecordsOptions->setBrokerId(KAFKA_BROKER_ID);
+
+        $result = $client->deleteRecords([$deleteRecords], $deleteRecordsOptions);
+
+        $this->assertCount(1, $result);
+        $this->assertSame(KAFKA_TEST_TOPIC_ADMIN, $result[0]->getTopic());
+        $this->assertSame(1, $result[0]->getOffset());
+        $this->assertSame(0, $result[0]->getPartition());
+    }
+
+    public function testDeleteConsumerGroupOffset(): void
+    {
+        $this->requiresLibrdkafkaVersion('>=', '1.6.0');
+
+        $conf = new Conf();
+        $conf->set('bootstrap.servers', KAFKA_BROKERS);
+        $producer = new Producer($conf);
+        $topic = $producer->newTopic(KAFKA_TEST_TOPIC_ADMIN);
+        $topic->produce(0, 0, __METHOD__);
+        $topic->produce(0, 0, __METHOD__);
+        $topic->produce(0, 0, __METHOD__);
+        $topic->produce(0, 0, __METHOD__);
+        $producer->flush(KAFKA_TEST_TIMEOUT_MS);
+
+        $conf = new Conf();
+        $conf->set('bootstrap.servers', KAFKA_BROKERS);
+        $conf->set('group.id', __METHOD__);
+        $conf->set('enable.auto.offset.store', 'false');
+
+        $consumer = new KafkaConsumer($conf);
+        $consumer->assign([new TopicPartition(KAFKA_TEST_TOPIC_ADMIN, 0, RD_KAFKA_OFFSET_BEGINNING)]);
+        $topic = $consumer->newTopic(KAFKA_TEST_TOPIC_ADMIN);
+
+        sleep(1);
+        $topic->offsetStore(0, 1);
+
+        $consumer->commit();
+        $topicPartitions = $consumer->getCommittedOffsets(
+            [new TopicPartition(KAFKA_TEST_TOPIC_ADMIN, 0)],
+            KAFKA_TEST_TIMEOUT_MS
+        );
+        $this->assertSame(2, $topicPartitions[0]->getOffset());
+
+        $conf = new Conf();
+        $conf->set('bootstrap.servers', KAFKA_BROKERS);
+        $client = Client::fromConf($conf);
+        $client->setWaitForResultEventTimeout(KAFKA_TEST_TIMEOUT_MS);
+
+        $deleteGroupOffsets = new DeleteConsumerGroupOffsets(
+            __METHOD__,
+            new TopicPartition(KAFKA_TEST_TOPIC_ADMIN, 0, 1)
+        );
+
+        $deleteGroupOffsetsOptions = $client->newDeleteConsumerGroupOffsetsOptions();
+        $deleteGroupOffsetsOptions->setRequestTimeout(KAFKA_TEST_TIMEOUT_MS);
+        $deleteGroupOffsetsOptions->setBrokerId(KAFKA_BROKER_ID);
+
+        $result = $client->deleteConsumerGroupOffsets($deleteGroupOffsets, $deleteGroupOffsetsOptions);
+
+        $this->assertCount(1, $result);
+        $this->assertSame(0, $result[0]->error);
+        $this->assertSame(__METHOD__, $result[0]->name);
+        $this->assertCount(1, $result[0]->partitions);
+        $this->assertSame(0, $result[0]->partitions[0]->getPartition());
+        $this->assertSame(-1001, $result[0]->partitions[0]->getOffset());
+        $this->assertSame(KAFKA_TEST_TOPIC_ADMIN, $result[0]->partitions[0]->getTopic());
     }
 
     /**
