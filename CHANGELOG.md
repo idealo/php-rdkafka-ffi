@@ -16,6 +16,7 @@ This pre-release improves compatible with the [PHP RdKafka extension](https://gi
 ### Changed
 
 - Rename Message::_private to ::opaque
+- Mark consumeCallback in ConsumerTopic as deprecated (it is deprecated in librdkafka since v1.4.0)
 
 ### Fixed
 

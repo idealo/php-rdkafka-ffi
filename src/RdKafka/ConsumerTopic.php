@@ -211,6 +211,9 @@ class ConsumerTopic extends Topic
         }
     }
 
+    /**
+     * @deprecated since 1.4.0 librdkafka
+     */
     public function consumeCallback(int $partition, int $timeout_ms, callable $callback, $opaque = null): int
     {
         $this->assertPartition($partition);
