@@ -12,7 +12,7 @@ use Exception;
 class SubscriptionParser extends Parser
 {
     public const V0 = 0;
-    public const V1 = 0;
+    public const V1 = 1;
 
     private int $version;
     private array $parsed;
