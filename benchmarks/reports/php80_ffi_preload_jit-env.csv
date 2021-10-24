@@ -1,21 +1,21 @@
 provider;key;value
-unameuname;os;Linux
-unameuname;host;682cb15ae669
-unameuname;release;5.4.0-54-generic
-unameuname;version;"#60-Ubuntu SMP Fri Nov 6 10:37:59 UTC 2020"
-unameuname;machine;x86_64
-phpphp;xdebug;
-phpphp;version;8.0.0
-phpphp;ini;
-phpphp;extensions;"Core, date, libxml, openssl, pcre, sqlite3, zlib, ctype, curl, dom, fileinfo, filter, ftp, hash, iconv, json, mbstring, SPL, PDO, session, posix, readline, Reflection, standard, SimpleXML, pdo_sqlite, Phar, tokenizer, xml, xmlreader, xmlwriter, mysqlnd, FFI, Zend OPcache"
-opcacheopcache;extension_loaded;1
-opcacheopcache;enabled;1
-unix-sysloadunix-sysload;l1;1.34
-unix-sysloadunix-sysload;l5;1.42
-unix-sysloadunix-sysload;l15;1.2
-vcsvcs;system;git
-vcsvcs;branch;main
-vcsvcs;version;beeb28ebd1e309e0947c4fda2269260eee1305ec
-baselinebaseline;nothing;0.041961669921875
-baselinebaseline;md5;0.5190372467041
-baselinebaseline;file_rw;4.2531490325928
+uname;os;Linux
+uname;host;f79815691a35
+uname;release;5.4.0-84-generic
+uname;version;"#94-Ubuntu SMP Thu Aug 26 20:27:37 UTC 2021"
+uname;machine;x86_64
+php;xdebug;
+php;version;8.0.12
+php;ini;
+php;extensions;"Core, date, libxml, openssl, pcre, sqlite3, zlib, ctype, curl, dom, fileinfo, filter, ftp, hash, iconv, json, mbstring, SPL, PDO, pdo_sqlite, session, posix, readline, Reflection, standard, SimpleXML, Phar, tokenizer, xml, xmlreader, xmlwriter, mysqlnd, FFI, Zend OPcache"
+opcache;extension_loaded;1
+opcache;enabled;1
+unix-sysload;l1;1.53
+unix-sysload;l5;1.38
+unix-sysload;l15;0.94
+vcs;system;git
+vcs;branch;main
+vcs;version;3455346cf6a1d981a38eb3753e28df8652a59777
+sampler;nothing;0.020980834960938
+sampler;md5;0.3049373626709
+sampler;file_rw;2.6071071624756

@@ -12,14 +12,14 @@
         depth: 1
         force: true
 
-    #    # just for testing
-    #    - name: 'Upload local Bench classes and config'
-    #      copy:
-    #        src: ./../../../benchmarks/
-    #        dest: /srv/php-rdkafka-ffi/benchmarks/
-    #        owner: appuser
-    #        group: appuser
-    #        mode: '0644'
+#    # just for testing
+#    - name: 'Upload local Bench classes and config'
+#      copy:
+#        src: ./../../../benchmarks/
+#        dest: /srv/php-rdkafka-ffi/benchmarks/
+#        owner: appuser
+#        group: appuser
+#        mode: '0644'
 
     - name: 'Ensure docker can read/write checked out repo'
       file:
@@ -42,6 +42,12 @@
         cmd: |
           docker-compose run --rm --no-deps php74 composer install --no-ansi
           docker-compose run --rm --no-deps php74 composer install --no-ansi -d /app/resources/test-extension --ignore-platform-reqs
+
+    - name: 'Ensure phpbench cache is empty'
+      shell:
+        chdir: /srv/php-rdkafka-ffi
+        cmd: |
+          rm -fr .phpbench
 
     - name: 'Run benchmarks'
       loop:
@@ -89,7 +95,6 @@
         chdir: /srv/php-rdkafka-ffi
         cmd: |
           docker-compose run --rm --no-deps php74 vendor/bin/phpbench report \
-                      --output='extends:delimited, delimiter:";", file:benchmarks/reports/summary.csv' \
                       --ref=php74_ffi \
                       --ref=php74_ffi_preload \
                       --ref=php80_ffi \
@@ -98,7 +103,8 @@
                       --ref=php74_ext \
                       --ref=php80_ext \
                       --report=summary \
-                      --config=benchmarks/report.json
+                      --config=benchmarks/report.json \
+                      --output='extends:delimited, delimiter:";", file:benchmarks/reports/summary.csv'
 
     - name: 'Download reports'
       loop:
