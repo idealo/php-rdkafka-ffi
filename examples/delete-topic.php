@@ -8,10 +8,10 @@ use RdKafka\Conf;
 
 require_once dirname(__DIR__) . '/vendor/autoload.php';
 
-$options = getopt('t:b::');
+$options = getopt('t:b::w::');
 if (empty($options)) {
     echo sprintf(
-        'Usage: %s -t{topicname} [-b{brokerList:kafka:9092}' . PHP_EOL,
+        'Usage: %s -t{topicname} [-b{brokerList:kafka:9092} [-w{waitForResultMs:10000}]' . PHP_EOL,
         basename(__FILE__)
     );
     exit();
@@ -20,9 +20,9 @@ if (empty($options)) {
 $conf = new Conf();
 $conf->set('bootstrap.servers', $options['b'] ?? getenv('KAFKA_BROKERS') ?: 'kafka:9092');
 $client = Client::fromConf($conf);
-$client->setWaitForResultEventTimeout(2000);
+$client->setWaitForResultEventTimeout((int) $options['w'] ?? 10000);
 
-$result = $client->deleteTopics(
+$results = $client->deleteTopics(
     [
         new DeleteTopic(
             (string) $options['t']
@@ -30,4 +30,19 @@ $result = $client->deleteTopics(
     ]
 );
 
-var_dump($result);
+foreach ($results as $result) {
+    if ($result->error === RD_KAFKA_RESP_ERR_NO_ERROR) {
+        echo sprintf(
+            'Deleted topic %s.',
+            $result->name,
+        );
+    } else {
+        echo sprintf(
+            'Failed to delete topic %s. Reason: %s (%s)',
+            $result->name,
+            $result->errorString,
+            $result->error
+        );
+    }
+    echo PHP_EOL;
+}
