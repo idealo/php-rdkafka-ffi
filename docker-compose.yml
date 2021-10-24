@@ -44,6 +44,19 @@ services:
     networks:
       - php-rdkafka-ffi
 
+  php74-153:
+    build:
+      context: resources/docker/php74-librdkafka-ffi
+      args:
+        LIBRDKAFKA_VERSION: v1.5.3
+    image: php74-librdkafka-ffi:1.5.3
+    volumes:
+      - .:/app
+    depends_on:
+      - kafka
+    networks:
+      - php-rdkafka-ffi
+
   php80:
     build:
       context: resources/docker/php80-librdkafka-ffi

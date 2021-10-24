@@ -69,13 +69,6 @@ Updating dependencies
 
     docker-compose run --rm --no-deps php74 composer update
 
-Create required topics
-
-    docker-compose run --rm php74 php examples/create-topic.php -tplayground -p3 -r1 && \
-    docker-compose run --rm php74 php examples/create-topic.php -ttest -p1 -r1 && \
-    docker-compose run --rm php74 php examples/create-topic.php -ttest_partitions -p3 -r1 && \
-    docker-compose run --rm php74 php examples/create-topic.php -tbenchmarks -p1 -r1
-
 ## Having fun with examples
 
 Examples use topic ```playground```.
@@ -200,36 +193,28 @@ Run Benchmarks
 
     docker-compose down -v; \
     docker-compose up -d kafka; \
-    sleep 10s; \
-    docker-compose run --rm php74 php examples/create-topic.php -tbenchmarks -p1 -r1; \
+    docker-compose exec kafka cub kafka-ready -z zookeeper:2181 1 20; \
+    docker-compose run --rm php74 composer benchmarks-init; \
     docker-compose run --rm php74 vendor/bin/phpbench run benchmarks --config=/app/benchmarks/ffi.json --report=default --store --tag=php74_ffi --group=ffi; \
     docker-compose run --rm php74 vendor/bin/phpbench run benchmarks --config=/app/benchmarks/ffi_preload.json --report=default --store --tag=php74_ffi_preload --group=ffi; \
     docker-compose run --rm php80 vendor/bin/phpbench run benchmarks --config=/app/benchmarks/ffi.json --report=default --store --tag=php80_ffi --group=ffi; \
     docker-compose run --rm php80 vendor/bin/phpbench run benchmarks --config=/app/benchmarks/ffi_preload.json --report=default --store --tag=php80_ffi_preload --group=ffi; \
     docker-compose run --rm php80 vendor/bin/phpbench run benchmarks --config=/app/benchmarks/ffi_jit.json --report=default --store --tag=php80_ffi_preload_jit --group=ffi; \
-    docker-compose run --rm php74 vendor/bin/phpbench run benchmarks --config=/app/benchmarks/ext.json --report=default --store --tag=php74_ext --group=ext
+    docker-compose run --rm php74 vendor/bin/phpbench run benchmarks --config=/app/benchmarks/ext.json --report=default --store --tag=php74_ext --group=ext; \
+    docker-compose run --rm php80 vendor/bin/phpbench run benchmarks --config=/app/benchmarks/ext.json --report=default --store --tag=php80_ext --group=ext
 
-Show comparison for runtime mean
-
-    docker-compose run --rm php74 vendor/bin/phpbench report \
-        --uuid=tag:php74_ffi \
-        --uuid=tag:php74_ffi_preload \
-        --uuid=tag:php80_ffi \
-        --uuid=tag:php80_ffi_preload \
-        --uuid=tag:php80_ffi_preload_jit \
-        --uuid=tag:php74_ext \
-        --report='{extends: compare, compare: tag, compare_fields: [mean]}'
-
-Show comparison for memory peak
+Show comparison for runtime average
 
     docker-compose run --rm php74 vendor/bin/phpbench report \
-        --uuid=tag:php74_ffi \
-        --uuid=tag:php74_ffi_preload \
-        --uuid=tag:php80_ffi \
-        --uuid=tag:php80_ffi_preload \
-        --uuid=tag:php80_ffi_preload_jit \
-        --uuid=tag:php74_ext \
-        --report='{extends: compare, compare: tag, compare_fields: [mem_peak]}'
+        --ref=php74_ffi \
+        --ref=php74_ffi_preload \
+        --ref=php80_ffi \
+        --ref=php80_ffi_preload \
+        --ref=php80_ffi_preload_jit \
+        --ref=php74_ext \
+        --ref=php80_ext \
+        --report=summary \
+        --config=benchmarks\report.json
 
 Run Api::init benchmark (fix vs auto detected version)
 

@@ -27,7 +27,7 @@
         location: nbg1
         image: ubuntu-20.04
         ssh_keys:
-          - dirx@mac
+          - php-rdkafka-ffi
         state: present
       register: server
 

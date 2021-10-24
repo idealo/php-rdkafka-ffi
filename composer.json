@@ -52,6 +52,10 @@
         "phpbench/phpbench": "^1.1"
     },
     "scripts": {
+        "bechmarks-init" : [
+            "@php examples/delete-topic.php -tbenchmark",
+            "@php examples/create-topic.php -tbenchmark -p3 -r1"
+        ],
         "examples-init" : [
             "@php examples/delete-topic.php -tplayground",
             "@php examples/create-topic.php -tplayground -p3 -r1"

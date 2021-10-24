@@ -1,0 +1,22 @@
+{
+  "report.generators": {
+    "summary": {
+      "generator": "component",
+      "components": [
+        {
+          "component": "table_aggregate",
+          "partition": [
+            "suite_tag",
+            "subject_name"
+          ],
+          "row": {
+            "subject": "first(partition['subject_name'])",
+            "suite": "first(partition['suite_tag'])",
+            "time_average": "mode(partition['result_time_avg'])",
+            "mem_peak": "mode(partition['result_mem_peak'])"
+          }
+        }
+      ]
+    }
+  }
+}
