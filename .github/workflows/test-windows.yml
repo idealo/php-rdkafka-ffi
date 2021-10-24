@@ -36,9 +36,9 @@ jobs:
         run: |
           nuget install librdkafka.redist -Version ${{ matrix.librdkafka }}
           choco install --no-progress wget nssm
-          wget -q -O kafka_2.13-2.6.0.tgz http://ftp.fau.de/apache/kafka/2.6.0/kafka_2.13-2.6.0.tgz
-          tar -xzf kafka_2.13-2.6.0.tgz
-          cp -pr kafka_2.13-2.6.0 /c/kafka
+          wget -q -O kafka_2.13-3.0.0.tgz http://ftp.fau.de/apache/kafka/3.0.0/kafka_2.13-3.0.0.tgz
+          tar -xzf kafka_2.13-3.0.0.tgz
+          cp -pr kafka_2.13-3.0.0 /c/kafka
           sed -i "s|broker.id=0|broker.id=111|g" /c/kafka/config/server.properties
           nssm install zookeeper /c/kafka/bin/windows/zookeeper-server-start.bat /c/kafka/config/zookeeper.properties
           nssm set zookeeper AppExit Default Exit
@@ -75,7 +75,7 @@ jobs:
 
       - name: Run tests
         run: |
-          export PATH=$PWD/librdkafka.redist.1.5.3/runtimes/win-x64/native:$PATH
+          export PATH=$PWD/librdkafka.redist.1.8.2/runtimes/win-x64/native:$PATH
           composer test-init
           vendor/bin/phpunit --verbose --debug;
 
