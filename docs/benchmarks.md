@@ -2,7 +2,8 @@
 
 These benchmarks were run with version 0.4.0.
 
-!!! Note Please note that these benchmarks depend on asynchronous responses/requests to a Kafka broker.
+!!! Note 
+    Please note that these benchmarks depend on asynchronous responses/requests to a Kafka broker.
 
 ## Suites
 
