@@ -257,6 +257,7 @@ class ConsumerTopicTest extends TestCase
         $conf->set('enable.auto.offset.store', 'false');
         $conf->set('enable.auto.commit', 'true');
         $conf->set('auto.commit.interval.ms', '50');
+        $conf->set('topic.metadata.refresh.interval.ms', (string) 900);
 
         $highLevelConsumer = new KafkaConsumer($conf);
 
@@ -268,7 +269,7 @@ class ConsumerTopicTest extends TestCase
 
         $consumer = new Consumer($conf);
 
-        // wait for meta data
+        // wait for meta data refresh
         sleep(1);
 
         $topic = $consumer->newTopic(KAFKA_TEST_TOPIC);

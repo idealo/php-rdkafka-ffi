@@ -167,9 +167,10 @@ class ConsumerTest extends TestCase
     {
         $conf = new Conf();
         $conf->set('bootstrap.servers', KAFKA_BROKERS);
+        $conf->set('topic.metadata.refresh.interval.ms', (string) 900);
         $consumer = new Consumer($conf);
 
-        // wait for meta data
+        // wait for meta data refresh
         sleep(1);
 
         $lowWatermarkOffset1 = 0;

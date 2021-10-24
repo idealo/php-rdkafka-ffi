@@ -376,12 +376,13 @@ class KafkaConsumerTest extends TestCase
         $conf = new Conf();
         $conf->set('group.id', __METHOD__ . random_int(0, 999999999));
         $conf->set('bootstrap.servers', KAFKA_BROKERS);
+        $conf->set('topic.metadata.refresh.interval.ms', (string) 900);
 
         $future = (time() + 3600) * 1000;
 
         $consumer = new KafkaConsumer($conf);
 
-        // wait for meta data
+        // wait for meta data refresh
         sleep(1);
 
         $topicPartitions = $consumer->offsetsForTimes(
@@ -401,6 +402,7 @@ class KafkaConsumerTest extends TestCase
         $conf->set('log_level', (string) LOG_EMERG);
         $conf->set('group.id', __METHOD__ . random_int(0, 999999999));
         $conf->set('bootstrap.servers', KAFKA_BROKERS);
+        $conf->set('topic.metadata.refresh.interval.ms', (string) 900);
 
         $nearNow = (int) (time()) * 1000;
 
@@ -415,7 +417,7 @@ class KafkaConsumerTest extends TestCase
 
         $consumer = new KafkaConsumer($conf);
 
-        // wait for meta data
+        // wait for meta data refresh
         sleep(1);
 
         $topicPartitions = $consumer->offsetsForTimes(
@@ -434,12 +436,13 @@ class KafkaConsumerTest extends TestCase
         $conf = new Conf();
         $conf->set('group.id', __METHOD__ . random_int(0, 999999999));
         $conf->set('bootstrap.servers', KAFKA_BROKERS);
+        $conf->set('topic.metadata.refresh.interval.ms', (string) 900);
 
         $past = 0;
 
         $consumer = new KafkaConsumer($conf);
 
-        // wait for meta data
+        // wait for meta data refresh
         sleep(1);
 
         $topicPartitions = $consumer->offsetsForTimes(

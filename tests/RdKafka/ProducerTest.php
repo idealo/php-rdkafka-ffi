@@ -131,7 +131,7 @@ class ProducerTest extends TestCase
 
         $producer = new Producer($producerConf);
 
-        $producer->initTransactions(KAFKA_TEST_TIMEOUT_MS);
+        $producer->initTransactions(KAFKA_TEST_TIMEOUT_MS * 5);
 
         // produce and commit
         $producer->beginTransaction();

@@ -34,13 +34,14 @@ class KafkaConsumerTopicTest extends TestCase
         $conf->set('group.id', __METHOD__ . random_int(0, 99999999));
         $conf->set('bootstrap.servers', KAFKA_BROKERS);
         $conf->set('enable.auto.offset.store', 'false');
+        $conf->set('topic.metadata.refresh.interval.ms', (string) 900);
         $consumer = new KafkaConsumer($conf);
-
-        // wait for meta data
-        sleep(1);
 
         $consumer->assign([new TopicPartition(KAFKA_TEST_TOPIC, 0)]);
         $topic = $consumer->newTopic(KAFKA_TEST_TOPIC);
+
+        // wait for meta data refresh and assignment
+        sleep(1);
 
         $topicPartitions = $consumer->getCommittedOffsets(
             [new TopicPartition(KAFKA_TEST_TOPIC, 0)],
