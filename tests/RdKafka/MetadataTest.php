@@ -24,7 +24,7 @@ class MetadataTest extends TestCase
     {
         $conf = new Conf();
         $conf->set('bootstrap.servers', KAFKA_BROKERS);
-        $conf->set('topic.metadata.refresh.interval.ms', (string) KAFKA_TEST_TIMEOUT_MS);
+        $conf->set('topic.metadata.refresh.interval.ms', (string) 900);
         $producer = new Producer($conf);
 
         // wait for metadata refresh

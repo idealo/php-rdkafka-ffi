@@ -380,7 +380,9 @@ class KafkaConsumerTest extends TestCase
         $future = (time() + 3600) * 1000;
 
         $consumer = new KafkaConsumer($conf);
-        $consumer->getMetadata(true, null, KAFKA_TEST_TIMEOUT_MS);
+
+        // wait for meta data
+        sleep(1);
 
         $topicPartitions = $consumer->offsetsForTimes(
             [
@@ -412,7 +414,9 @@ class KafkaConsumerTest extends TestCase
         $producer->flush(KAFKA_TEST_TIMEOUT_MS);
 
         $consumer = new KafkaConsumer($conf);
-        $consumer->getMetadata(true, null, KAFKA_TEST_TIMEOUT_MS);
+
+        // wait for meta data
+        sleep(1);
 
         $topicPartitions = $consumer->offsetsForTimes(
             [
@@ -434,7 +438,9 @@ class KafkaConsumerTest extends TestCase
         $past = 0;
 
         $consumer = new KafkaConsumer($conf);
-        $consumer->getMetadata(true, null, KAFKA_TEST_TIMEOUT_MS);
+
+        // wait for meta data
+        sleep(1);
 
         $topicPartitions = $consumer->offsetsForTimes(
             [

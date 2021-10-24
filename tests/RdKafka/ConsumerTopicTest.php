@@ -267,7 +267,9 @@ class ConsumerTopicTest extends TestCase
         $this->assertSame(-1001, $topicPartitions[0]->getOffset());
 
         $consumer = new Consumer($conf);
-        $consumer->getMetadata(true, null, KAFKA_TEST_TIMEOUT_MS);
+
+        // wait for meta data
+        sleep(1);
 
         $topic = $consumer->newTopic(KAFKA_TEST_TOPIC);
         $topic->consumeStart(0, RD_KAFKA_OFFSET_STORED);

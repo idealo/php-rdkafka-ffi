@@ -168,7 +168,9 @@ class ConsumerTest extends TestCase
         $conf = new Conf();
         $conf->set('bootstrap.servers', KAFKA_BROKERS);
         $consumer = new Consumer($conf);
-        $consumer->getMetadata(true, null, KAFKA_TEST_TIMEOUT_MS);
+
+        // wait for meta data
+        sleep(1);
 
         $lowWatermarkOffset1 = 0;
         $highWatermarkOffset1 = 0;
