@@ -131,7 +131,7 @@ class ProducerTest extends TestCase
 
         $producer = new Producer($producerConf);
 
-        $producer->initTransactions(KAFKA_TEST_TIMEOUT_MS * 5);
+        $producer->initTransactions(KAFKA_TEST_TIMEOUT_MS);
 
         // produce and commit
         $producer->beginTransaction();
@@ -142,6 +142,7 @@ class ProducerTest extends TestCase
         $topic->produce(0, 0, __METHOD__ . '3');
 
         $producer->commitTransaction(KAFKA_TEST_TIMEOUT_MS);
+        $producer->poll(KAFKA_TEST_TIMEOUT_MS);
 
         // produce and abort
         $producer->beginTransaction();
@@ -151,8 +152,7 @@ class ProducerTest extends TestCase
         $topic->produce(0, 0, __METHOD__ . '6');
 
         $producer->abortTransaction(KAFKA_TEST_TIMEOUT_MS);
-
-        $producer->flush(KAFKA_TEST_TIMEOUT_MS);
+        $producer->poll(KAFKA_TEST_TIMEOUT_MS);
 
         $consumerConf = new Conf();
         $consumerConf->set('bootstrap.servers', KAFKA_BROKERS);
