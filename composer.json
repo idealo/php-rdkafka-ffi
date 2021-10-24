@@ -52,7 +52,7 @@
         "phpbench/phpbench": "^1.1"
     },
     "scripts": {
-        "bechmarks-init" : [
+        "benchmarks-init" : [
             "@php examples/delete-topic.php -tbenchmark",
             "@php examples/create-topic.php -tbenchmark -p3 -r1"
         ],
