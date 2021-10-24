@@ -5,6 +5,8 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [Unreleased]
 
+## [0.4.0]
+
 This pre-release improves compatible with the [PHP RdKafka extension](https://github.com/arnaud-lb/php-rdkafka) ^4.0 and ^5.0.
 
 ### Added
@@ -69,7 +71,8 @@ Special thanks to [@siad007](https://github.com/siad007) and [@carusogabriel]( h
 - Add examples and basic documentation
 - Add benchmarks
 
-[Unreleased]: https://github.com/idealo/php-rdkafka-ffi/compare/v0.3.0...HEAD
+[Unreleased]: https://github.com/idealo/php-rdkafka-ffi/compare/v0.4.0...HEAD
+[0.3.0]: https://github.com/idealo/php-rdkafka-ffi/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/idealo/php-rdkafka-ffi/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/idealo/php-rdkafka-ffi/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/idealo/php-rdkafka-ffi/releases/tag/v0.1.0

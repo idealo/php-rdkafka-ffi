@@ -29,7 +29,7 @@ class Library
 
     public const VERSION_AUTODETECT = '';
     public const VERSION_LATEST = '1.8.2';
-    public const PHP_LIBRARY_VERSION = '0.3.0';
+    public const PHP_LIBRARY_VERSION = '0.4.0';
 
     private static FFI $ffi;
     private static string $scope = 'RdKafka';
