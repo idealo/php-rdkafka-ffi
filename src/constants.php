@@ -2835,7 +2835,7 @@ const RD_KAFKA_SUPPORTED_METHODS = [
     ],
     'rd_kafka_mock_broker_push_request_errors' => [
         'min' => '1.5.0',
-        'max' => '1.6.1'
+        'max' => '1.6.2'
     ],
     'rd_kafka_conf_get_default_topic_conf' => [
         'min' => '1.6.0',
