@@ -25,8 +25,8 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
-          restore-keys: ${{ runner.os }}-composer-
+          key: ${{ runner.os }}-7.4-composer-${{ hashFiles('**/composer.json') }}
+          restore-keys: ${{ runner.os }}-7.4-composer-
       - name: Install dependencies
         run: composer update --prefer-dist --ignore-platform-reqs
       - name: Check style
