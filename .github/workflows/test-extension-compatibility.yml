@@ -111,10 +111,10 @@ jobs:
           restore-keys: ${{ runner.os }}-${{ matrix.php }}-composer-
       - name: Install dependencies
         run: |
-          composer update --prefer-dist --prefer-stable --no-interaction --ignore-platform-reqs
+          composer update --prefer-dist --prefer-stable --no-interaction
       - name: Install dependencies for test-extension
         run: |
-          composer update --prefer-dist --prefer-stable --no-interaction --ignore-platform-req=php -d resources/test-extension
+          composer update --prefer-dist --prefer-stable --no-interaction -d resources/test-extension
 
       - name: Run tests
         run: |

@@ -28,6 +28,6 @@ jobs:
           key: ${{ runner.os }}-7.4-composer-${{ hashFiles('**/composer.json') }}
           restore-keys: ${{ runner.os }}-7.4-composer-
       - name: Install dependencies
-        run: composer update --prefer-dist --ignore-platform-reqs
+        run: composer update --prefer-dist --prefer-stable --no-interaction
       - name: Check style
         run: composer cs
