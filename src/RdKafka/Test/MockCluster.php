@@ -94,7 +94,6 @@ class MockCluster
      * provided error code and removed from the stack, starting with
      * the first error code, then the second, etc.
      *
-     * @param int ...$errorCodes
      * @since 1.3.0 of librdkafka
      * @since 1.4.0 of librdkafka - adds support for Produce request types
      * @since 1.7.0 of librdkafka - you may also use {@link MockCluster::pushRequestErrorsArray()}
@@ -315,7 +314,7 @@ class MockCluster
      * Same as {@link MockCluster::pushRequestErrors()} but for a specific broker.
      * The broker errors take precedence over the cluster errors.
      *
-     * @param int ...$errorCodes a list of error codes or 0
+     * @param int[] $errorCodes a list of error codes or 0
      * @throws RdKafka\Exception
      * @since 1.5.0 of librdkafka
      * @removed 1.7.0 of librdkafka - use {@link MockCluster::pushBrokerRequestErrorRtts()}
@@ -342,7 +341,7 @@ class MockCluster
      * Same as {@link MockCluster::pushBrokerRequestErrors()} but for a specific broker.
      * The broker errors take precedence over the cluster errors.
      *
-     * @param int ...$errorCodeAndRttTuples plain tuples of error code or 0 (int) and response RTT/delay in millisecond (int)
+     * @param int[] $errorCodeAndRttTuples plain tuples of error code or 0 (int) and response RTT/delay in millisecond (int)
      * @throws RdKafka\Exception
      * @since 1.7.0 of librdkafka
      */
