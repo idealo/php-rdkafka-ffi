@@ -71,7 +71,7 @@ jobs:
           restore-keys: ${{ runner.os }}-${{ matrix.php }}-composer-
       - name: Install dependencies
         run: |
-          composer upcomposer update --prefer-dist --prefer-stable --no-interaction
+          composer update --prefer-dist --prefer-stable --no-interaction
 
       - name: Run tests
         run: |
