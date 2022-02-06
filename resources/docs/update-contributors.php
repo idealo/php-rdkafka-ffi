@@ -19,7 +19,6 @@ function getContributors(string $url): array
             ]
         )
     );
-    var_dump($response);
     return json_decode($response, true);
 }
 
