@@ -8,8 +8,14 @@ use RdKafka\Conf;
 
 require_once dirname(__DIR__) . '/vendor/autoload.php';
 
-$options = getopt('t:b::w::');
-if (empty($options)) {
+$options = array_merge(
+    [
+        'b' => getenv('KAFKA_BROKERS') ?: 'kafka:9092',
+        'w' => 10000,
+    ],
+    getopt('t:b::w::')
+);
+if (empty($options['t'])) {
     echo sprintf(
         'Usage: %s -t{topicname} [-b{brokerList:kafka:9092} [-w{waitForResultMs:10000}]' . PHP_EOL,
         basename(__FILE__)
@@ -18,9 +24,9 @@ if (empty($options)) {
 }
 
 $conf = new Conf();
-$conf->set('bootstrap.servers', $options['b'] ?? getenv('KAFKA_BROKERS') ?: 'kafka:9092');
+$conf->set('bootstrap.servers', $options['b']);
 $client = Client::fromConf($conf);
-$client->setWaitForResultEventTimeout((int) $options['w'] ?? 10000);
+$client->setWaitForResultEventTimeout((int) $options['w']);
 
 $results = $client->deleteTopics(
     [

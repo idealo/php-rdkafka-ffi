@@ -1,8 +1,6 @@
-arrange:
-  - index.md
+nav:
+  - Getting Started: index.md
+  - usage
   - api
   - benchmarks.md
-  - try-out.md
-  - changelog.md
-  - contributing.md
-  - license.md
+  - contributing

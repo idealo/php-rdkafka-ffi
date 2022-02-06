@@ -43,6 +43,10 @@ This changes may depend on upcoming major releases of the RdKafka extension or i
 
 https://idealo.github.io/php-rdkafka-ffi/
 
+## Changelog
+
+See [Changelog](CHANGELOG.md) for details.
+
 ## Contributing
 
 We welcome all kinds of contributions. See the [Contribution guide](CONTRIBUTING.md) for more details.

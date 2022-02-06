@@ -6,11 +6,21 @@ docs_dir: docs
 theme:
   name: 'material'
   palette:
-    primary: 'white'
+    - scheme: default
+      primary: white
+      toggle:
+        icon: material/toggle-switch-off-outline
+        name: Switch to dark mode
+    - scheme: slate
+      primary: black
+      toggle:
+        icon: material/toggle-switch
+        name: Switch to light mode
   logo: 'img/php-rdkafka.svg'
   favicon: 'img/php-rdkafka.svg'
   features:
     - navigation.tabs
+    - navigation.indexes
   include_sidebar: false
 
 repo_name: 'idealo/php-rdkafka-ffi'
@@ -36,11 +46,13 @@ markdown_extensions:
       emoji_index: !!python/name:materialx.emoji.twemoji
       emoji_generator: !!python/name:materialx.emoji.to_svg
   - pymdownx.highlight:
-      # fixes copy paste support
-      css_class: codehilite
       # disables use of <?php
       extend_pygments_lang:
         - name: php
+          lang: php
+          options:
+            startinline: true
+        - name: php-inline
           lang: php
           options:
             startinline: true

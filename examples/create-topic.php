@@ -8,8 +8,16 @@ use RdKafka\Conf;
 
 require_once dirname(__DIR__) . '/vendor/autoload.php';
 
-$options = getopt('t:p::r::b::w::');
-if (empty($options)) {
+$options = array_merge(
+    [
+        'p' => 1,
+        'r' => 1,
+        'b' => getenv('KAFKA_BROKERS') ?: 'kafka:9092',
+        'w' => 10000,
+    ],
+    getopt('t:p::r::b::w::')
+);
+if (empty($options['t'])) {
     echo sprintf(
         'Usage: %s -t{topicname} [-p{numberOfPartitions:1}] [-r{replicationFactor:1} [-b{brokerList:kafka:9092} [-w{waitForResultMs:10000}]' . PHP_EOL,
         basename(__FILE__)
@@ -18,11 +26,11 @@ if (empty($options)) {
 }
 
 $conf = new Conf();
-$conf->set('bootstrap.servers', $options['b'] ?? getenv('KAFKA_BROKERS') ?: 'kafka:9092');
+$conf->set('bootstrap.servers', $options['b']);
 $client = Client::fromConf($conf);
-$client->setWaitForResultEventTimeout((int) $options['w'] ?? 10000);
-$partitions = $options['p'] ?? 1;
-$replicationFactor = $options['r'] ?? 1;
+$client->setWaitForResultEventTimeout((int) $options['w']);
+$partitions = $options['p'];
+$replicationFactor = $options['r'];
 
 $results = $client->createTopics(
     [

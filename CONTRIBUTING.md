@@ -34,13 +34,13 @@ You may look through the [GitHub issues](https://github.com/idealo/php-rdkafka-f
 
 * Make sure any new code you introduce has proper phpdoc. You may add extra usage documentation under /docs/usage
 
-See [work on the documentation](docs/try-out.md#work-on-the-documentation) locally.
+See [work on the documentation](docs/contributing/work-on-the-documentation.md) locally.
 
 ## Testing
 
 * Make sure to write tests for any new feature and/or bug fixes. We use [phpunit](https://phpunit.readthedocs.io/en/latest/) for our testing. 
 
-See [run tests](docs/try-out.md#run-tests) locally.
+See [run tests](docs/contributing/run-tests.md) locally.
 
 ## Main Contributor List
 

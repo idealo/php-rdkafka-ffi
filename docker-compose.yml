@@ -78,3 +78,4 @@ services:
       - php-rdkafka-ffi
     ports:
       - 127.0.0.1:8000:8000
+    restart: on-failure

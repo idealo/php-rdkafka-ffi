@@ -80,11 +80,11 @@
         "cs": "ecs check src tests examples resources/ffigen benchmarks --ansi",
         "cs-fix": "ecs check src tests examples resources/ffigen benchmarks --ansi --fix",
         "prepare-docs": [
-            "echo '---\ntitle: Getting started\n---\n' > docs/index.md",
-            "sed 's/docs\\/img/img/g' README.md | sed 's/LICENSE)/license.md)/g' | sed 's/CONTRIBUTING.md/contributing.md/g' >> docs/index.md",
-            "sed 's/docs\\/try-out/try-out/g' CONTRIBUTING.md > docs/contributing.md",
-            "cp CHANGELOG.md docs/changelog.md",
-            "cp LICENSE docs/license.md",
+            "sed 's/docs\\/img/img/g' README.md | sed 's/LICENSE)/usage\\\/license.md)/g' | sed 's/CONTRIBUTING.md/contributing\\\/index.md/g' | sed 's/CHANGELOG.md/usage\\/changelog.md/g' > docs/index.md",
+            "sed 's/docs\\/contributing/./g' CONTRIBUTING.md > docs/contributing/index.md",
+            "cp CHANGELOG.md docs/usage/changelog.md",
+            "cp LICENSE docs/usage/license.md",
+            "php resources/docs/update-contributors.php",
             "dog"
         ]
     }

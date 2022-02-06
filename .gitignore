@@ -1,8 +1,9 @@
 vendor
 composer.lock
-/docs/contributing.md
 /docs/index.md
-/docs/license.md
+/docs/contributing/index.md
+/docs/contributing/contributors.md
+/docs/usage/license.md
+/docs/usage/changelog.md
 /docs/api/
-/docs/changelog.md
 /resources/benchmarks/vars/vault.yml

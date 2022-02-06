@@ -1,0 +1,16 @@
+nav:
+  - about-ffi-and-librdkafka.md
+  - producer.md
+  - transactional-producer.md
+  - consumer-high-level.md
+  - consumer-low-level.md
+  - configuration.md
+  - topic-configuration.md
+  - mock-cluster.md
+  - admin-client.md
+  - preloading.md
+  - library-version-handling.md
+  - examples.md
+  - changelog.md
+  - license.md
+  - alternatives.md
