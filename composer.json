@@ -45,11 +45,12 @@
         "phpunit/phpunit": "^9.4",
         "ircmaxell/php-c-parser": "dev-master",
         "symplify/easy-coding-standard": "^10.0",
-        "klitsche/ffigen": "^0.6",
+        "klitsche/ffigen": "^0.7",
         "klitsche/dog": "^0.4",
         "symfony/dom-crawler": "^5.1",
         "symfony/css-selector": "^5.1",
-        "phpbench/phpbench": "^1.1"
+        "phpbench/phpbench": "^1.1",
+        "composer/semver": "^3.2"
     },
     "scripts": {
         "benchmarks-init" : [
