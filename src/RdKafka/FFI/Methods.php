@@ -1240,7 +1240,7 @@ trait Methods
     }
 
     /**
-     * <p>Loose application's topic handle refcount as previously created with <code>rd_kafka_topic_new()</code>. </p>
+     * <p>Lose application's topic handle refcount as previously created with <code>rd_kafka_topic_new()</code>. </p>
      * <dl class="section remark"><dt>Remarks</dt><dd>Since topic objects are refcounted (both internally and for the app) the topic object might not actually be destroyed by this call, but the application must consider the object destroyed. </dd></dl>
      * @param \FFI\CData|null $rkt rd_kafka_topic_t* - )
      * @since 1.0.0 of librdkafka
@@ -1433,7 +1433,7 @@ trait Methods
     }
 
     /**
-     * <p>Use rd_kafka_queue_destroy() to loose the reference. </p>
+     * <p>Use rd_kafka_queue_destroy() to lose the reference. </p>
      * @param \FFI\CData|null $rk rd_kafka_t* - )
      * @return \FFI\CData|null rd_kafka_queue_t* - a reference to the main librdkafka event queue. This is the queue served by rd_kafka_poll().
      * @since 1.0.0 of librdkafka
@@ -1445,7 +1445,7 @@ trait Methods
     }
 
     /**
-     * <p>Use rd_kafka_queue_destroy() to loose the reference.</p>
+     * <p>Use rd_kafka_queue_destroy() to lose the reference.</p>
      * <dl class="section remark"><dt>Remarks</dt><dd>rd_kafka_queue_destroy() MUST be called on this queue prior to calling rd_kafka_consumer_close(). </dd></dl>
      * @param \FFI\CData|null $rk rd_kafka_t* - )
      * @return \FFI\CData|null rd_kafka_queue_t* - a reference to the librdkafka consumer queue. This is the queue served by rd_kafka_consumer_poll().
@@ -1458,7 +1458,7 @@ trait Methods
     }
 
     /**
-     * <p>Use rd_kafka_queue_destroy() to loose the reference.</p>
+     * <p>Use rd_kafka_queue_destroy() to lose the reference.</p>
      * <dl class="section remark"><dt>Remarks</dt><dd>rd_kafka_queue_destroy() MUST be called on this queue</dd>
      * <dd>
      * This function only works on consumers. </dd></dl>
