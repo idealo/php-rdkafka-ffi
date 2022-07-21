@@ -70,7 +70,7 @@ $producer->flush(5000);
 
 !!! Warning
 
-    Always call `flush` after producing messages to not loose messages on shutdown that are still queued up within librdkafka memory and not yet delivered to a broker.
+    Always call `flush` after producing messages to not lose messages on shutdown that are still queued up within librdkafka memory and not yet delivered to a broker.
 
 ## Flush on shutdown
 
