@@ -34,14 +34,14 @@ class CollectionTest extends TestCase
     public function testKey(): void
     {
         $collection = new Collection([
-            'abc' => 1,
+            3 => 1,
             2 => 2,
-            3 => 3,
+            1 => 3,
         ]);
 
         $first = $collection->key();
 
-        $this->assertSame('abc', $first);
+        $this->assertSame(3, $first);
     }
 
     public function testCurrent(): void

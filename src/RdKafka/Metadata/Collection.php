@@ -16,6 +16,7 @@ class Collection implements Iterator, Countable
         $this->items = $items;
     }
 
+    #[\ReturnTypeWillChange]
     public function current()
     {
         return \current($this->items);
@@ -26,10 +27,7 @@ class Collection implements Iterator, Countable
         \next($this->items);
     }
 
-    /**
-     * @return int|string
-     */
-    public function key()
+    public function key(): int
     {
         return \key($this->items);
     }
