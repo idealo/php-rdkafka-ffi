@@ -98,7 +98,7 @@ jobs:
 
       - name: Install php-rdkafka ${{ matrix.rdkafka }}
         run: |
-          echo "extension=$HOME/build-cache/php-rdkafka/rdkafka.so"|sudo tee /etc/php/7.4/cli/conf.d/99-rdkafka.ini >/dev/null
+          echo "extension=$HOME/build-cache/php-rdkafka/rdkafka.so"|sudo tee /etc/php/${{ matrix.php }}/cli/conf.d/99-rdkafka.ini >/dev/null
 
       - name: Install dependencies
         uses: ramsey/composer-install@v2
