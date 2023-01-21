@@ -12,10 +12,9 @@ jobs:
       fail-fast: true
       matrix:
         php:
-          - '7.4'
           - '8.0'
           - '8.1'
-    continue-on-error: ${{ matrix.php == '8.1' }}
+          - '8.2'
     defaults:
       run:
         shell: bash
@@ -27,7 +26,7 @@ jobs:
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Install latest librdkafka & kafka via brew
         shell: bash
@@ -48,19 +47,10 @@ jobs:
           coverage: none
           extensions: ffi, pcntl
 
-      - name: Get composer cache directory
-        id: composer-cache
-        run: |
-          echo "::set-output name=dir::$(composer config cache-files-dir)"
-      - name: Cache composer cache directory
-        uses: actions/cache@v2
-        with:
-          path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ runner.os }}-${{ matrix.php }}-composer-${{ hashFiles('**/composer.json') }}
-          restore-keys: ${{ runner.os }}-${{ matrix.php }}-composer-
       - name: Install dependencies
-        run: |
-          composer update --prefer-dist --prefer-stable --no-interaction
+        uses: ramsey/composer-install@v2
+        with:
+          composer-options: "--prefer-dist --prefer-stable"
 
       - name: Run tests
         run: |

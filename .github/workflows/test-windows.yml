@@ -12,12 +12,11 @@ jobs:
       fail-fast: true
       matrix:
         php:
-          - '7.4'
           - '8.0'
           - '8.1'
+          - '8.2'
         librdkafka:
-          - '1.8.2'
-    continue-on-error: ${{ matrix.php == '8.1' }}
+          - '1.9.2'
     defaults:
       run:
         shell: bash
@@ -30,15 +29,15 @@ jobs:
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Install librdkafka & kafka
         run: |
           nuget install librdkafka.redist -Version ${{ matrix.librdkafka }}
           choco install --no-progress wget nssm
-          wget -q -O kafka_2.13-3.0.0.tgz http://ftp.fau.de/apache/kafka/3.0.0/kafka_2.13-3.0.0.tgz
-          tar -xzf kafka_2.13-3.0.0.tgz
-          cp -pr kafka_2.13-3.0.0 /c/kafka
+          wget -q -O kafka_2.13-3.3.2.tgz http://ftp.fau.de/apache/kafka/3.3.2/kafka_2.13-3.3.2.tgz
+          tar -xzf kafka_2.13-3.3.2.tgz
+          cp -pr kafka_2.13-3.3.2 /c/kafka
           sed -i "s|broker.id=0|broker.id=111|g" /c/kafka/config/server.properties
           nssm install zookeeper /c/kafka/bin/windows/zookeeper-server-start.bat /c/kafka/config/zookeeper.properties
           nssm set zookeeper AppExit Default Exit
@@ -59,23 +58,14 @@ jobs:
           coverage: none
           extensions: ffi
 
-      - name: Get composer cache directory
-        id: composer-cache
-        run: |
-          echo "::set-output name=dir::$(composer config cache-files-dir)"
-      - name: Cache composer cache directory
-        uses: actions/cache@v2
-        with:
-          path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ runner.os }}-${{ matrix.php }}-composer-${{ hashFiles('**/composer.json') }}
-          restore-keys: ${{ runner.os }}-${{ matrix.php }}-composer-
       - name: Install dependencies
-        run: |
-          composer update --prefer-dist --prefer-stable --no-interaction
+        uses: ramsey/composer-install@v2
+        with:
+          composer-options: "--prefer-dist --prefer-stable"
 
       - name: Run tests
         run: |
-          export PATH=$PWD/librdkafka.redist.1.8.2/runtimes/win-x64/native:$PATH
+          export PATH=$PWD/librdkafka.redist.${{ matrix.librdkafka }}/runtimes/win-x64/native:$PATH
           composer test-init
           vendor/bin/phpunit --verbose --debug;
 

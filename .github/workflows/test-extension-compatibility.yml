@@ -12,26 +12,21 @@ jobs:
       fail-fast: false
       matrix:
         php:
-          - '7.4'
+          - '8.1'
         librdkafka:
-          - 'v1.8.2'
+          - 'v1.9.2'
         rdkafka:
-          - '4.0.4'
-          - '4.1.2'
-          - '4.1.x'
-          - '5.0.0'
-          - '5.x'
-    continue-on-error: ${{ matrix.rdkafka == '5.x' || matrix.rdkafka == '4.1.x' }}
+          - '6.x'
     services:
       zookeeper:
-        image: confluentinc/cp-zookeeper:6.2.1
+        image: confluentinc/cp-zookeeper:7.3.1
         ports:
           - 2181:2181
         env:
           ZOOKEEPER_CLIENT_PORT: 2181
           ZOOKEEPER_TICK_TIME: 2000
       kafka:
-        image: confluentinc/cp-kafka:6.2.1
+        image: confluentinc/cp-kafka:7.3.1
         ports:
           - 9092:9092
         env:
@@ -51,14 +46,15 @@ jobs:
       COMPOSER_AUTH: ${{ secrets.COMPOSER_AUTH }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Cache librdkafka ${{ matrix.librdkafka }} build
         id: librdkafka-build-cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: ~/build-cache/librdkafka
           key: ${{ runner.os }}-librdkafka-${{ matrix.librdkafka }}
+
       - name: Build librdkafka ${{ matrix.librdkafka }}
         if: ${{ steps.librdkafka-build-cache.outputs.cache-hit != 'true' }}
         run: |
@@ -68,10 +64,12 @@ jobs:
           make
           mkdir -p ~/build-cache/librdkafka
           sudo make install DESTDIR=~/build-cache/librdkafka
+
       - name: Install librdkafka ${{ matrix.librdkafka }}
         run: |
           sudo rsync -av ~/build-cache/librdkafka/ /
           sudo ldconfig
+
       - name: Install PHP ${{ matrix.php }} with rdkafka ${{ matrix.rdkafka }}
         uses: shivammathur/setup-php@v2
         with:
@@ -79,12 +77,14 @@ jobs:
           coverage: none
           extensions: ffi
           tools: phpize
+
       - name: Cache php-rdkafka ${{ matrix.rdkafka }} build
         id: php-rdkafka-build-cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: ~/build-cache/php-rdkafka
           key: ${{ runner.os }}-php-rdkafka-${{ matrix.rdkafka }}
+
       - name: Build php-rdkafka ${{ matrix.rdkafka }}
         if: ${{ steps.php-rdkafka-build-cache.outputs.cache-hit != 'true' }}
         run: |
@@ -95,23 +95,16 @@ jobs:
           make
           mkdir -p ~/build-cache/php-rdkafka
           cp ./modules/rdkafka.so ~/build-cache/php-rdkafka/
+
       - name: Install php-rdkafka ${{ matrix.rdkafka }}
         run: |
           echo "extension=$HOME/build-cache/php-rdkafka/rdkafka.so"|sudo tee /etc/php/7.4/cli/conf.d/99-rdkafka.ini >/dev/null
 
-      - name: Get composer cache directory
-        id: composer-cache
-        run: |
-          echo "::set-output name=dir::$(composer config cache-files-dir)"
-      - name: Cache composer cache directory
-        uses: actions/cache@v2
-        with:
-          path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ runner.os }}-${{ matrix.php }}-composer-${{ hashFiles('**/composer.json') }}
-          restore-keys: ${{ runner.os }}-${{ matrix.php }}-composer-
       - name: Install dependencies
-        run: |
-          composer update --prefer-dist --prefer-stable --no-interaction --ignore-platform-req=ext-rdkafka
+        uses: ramsey/composer-install@v2
+        with:
+          composer-options: "--prefer-dist --prefer-stable --no-interaction --ignore-platform-req=ext-rdkafka"
+
       - name: Install dependencies for test-extension
         run: |
           composer update --prefer-dist --prefer-stable --no-interaction -d resources/test-extension
