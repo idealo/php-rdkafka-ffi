@@ -44,7 +44,7 @@ class LibrdkafkaHeaderFiles
                 $content = @file_get_contents($this->config->getOutputPath() . '/' . $version . '-' . $fileName);
             } else {
                 $url = $baseUrl . '/' . $fileName;
-                echo "  Download ${url}" . PHP_EOL;
+                echo "  Download {$url}" . PHP_EOL;
 
                 $content = @file_get_contents($url);
                 if ($content === false) {
@@ -57,7 +57,7 @@ class LibrdkafkaHeaderFiles
             $content = $this->prepareFileContent($file, $content, $version);
             $this->filesystem->dumpFile($file, $content);
 
-            echo "  Save as ${file}" . PHP_EOL;
+            echo "  Save as {$file}" . PHP_EOL;
         }
     }
 

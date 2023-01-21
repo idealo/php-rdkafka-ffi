@@ -22,8 +22,12 @@ const RD_KAFKA_MSG_PARTITIONER_FNV1A_RANDOM = 8;
 
 // librdkafka overall constants
 /**
- * define
+ * <p>Flags for rd_kafka_destroy_flags() </p>
+ * <p>Don't call consumer_close() to leave group and commit final offsets.</p>
+ * <p>This also disables consumer callbacks to be called from rd_kafka_destroy*(), such as rebalance_cb.</p>
+ * <p>The consumer group handler is still closed internally, but from an application perspective none of the functionality from consumer_close() is performed. </p>
  * @since 1.0.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#af2a79b2f2bef22e06ed9fade159f42d4
  */
 const RD_KAFKA_DESTROY_F_NO_CONSUMER_CLOSE = 8;
 
@@ -31,35 +35,35 @@ const RD_KAFKA_DESTROY_F_NO_CONSUMER_CLOSE = 8;
  * <p>Unassigned partition. </p>
  * <p>The unassigned partition is used by the producer API for messages that should be partitioned using the configured or default partitioner. </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#a3002d1858385de283ea004893e352863
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a3002d1858385de283ea004893e352863
  */
 const RD_KAFKA_PARTITION_UA = -1;
 
 /**
- * <p>Start consuming from beginning of kafka partition queue: oldest msg </p>
+ * <p>Start consuming from beginning of \ kafka partition queue: oldest msg </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#a32dc6dd93c16e3aac9b89804c4817fba
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a32dc6dd93c16e3aac9b89804c4817fba
  */
 const RD_KAFKA_OFFSET_BEGINNING = -2;
 
 /**
- * <p>Start consuming from end of kafka partition queue: next msg </p>
+ * <p>Start consuming from end of kafka \ partition queue: next msg </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#aa7aaaf16e5bd7c0a8a8cb014275c3e06
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#aa7aaaf16e5bd7c0a8a8cb014275c3e06
  */
 const RD_KAFKA_OFFSET_END = -1;
 
 /**
- * <p>Start consuming from offset retrieved from offset store </p>
+ * <p>Start consuming from offset retrieved \ from offset store </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#a727dc7080140da43adbd5d0b170d49be
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a727dc7080140da43adbd5d0b170d49be
  */
 const RD_KAFKA_OFFSET_STORED = -1000;
 
 /**
  * <p>Invalid offset </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#ac2e48c4fef9e959ab43cad60ade84af1
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#ac2e48c4fef9e959ab43cad60ade84af1
  */
 const RD_KAFKA_OFFSET_INVALID = -1001;
 
@@ -71,1324 +75,1418 @@ const RD_KAFKA_OFFSET_TAIL_BASE = -2000;
 
 /**
  * <p>Producer message flags. </p>
- * <p>Delegate freeing of payload to rdkafka. </p>
+ * <p>Delegate freeing of payload to rdkafka. \ </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#a21be13f8a4cb1d5aff01419f333e5ea7
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a21be13f8a4cb1d5aff01419f333e5ea7
  */
 const RD_KAFKA_MSG_F_FREE = 1;
 
 /**
- * <p>rdkafka will make a copy of the payload. </p>
+ * <p>rdkafka will make a copy of the payload. \ </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#ad7468ab0ece73cc9cb6253a3dcfe702d
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#ad7468ab0ece73cc9cb6253a3dcfe702d
  */
 const RD_KAFKA_MSG_F_COPY = 2;
 
 /**
- * <p>Block produce*() on message queue full. WARNING: If a delivery report callback is used the application MUST call rd_kafka_poll() (or equiv.) to make sure delivered messages are drained from the internal delivery report queue. Failure to do so will result in indefinately blocking on the produce() call when the message queue is full. </p>
+ * <p>Block produce*() on message queue full. \ WARNING: If a delivery report callback \ is used the application MUST \ call rd_kafka_poll() (or equiv.) \ to make sure delivered messages \ are drained from the internal \ delivery report queue. \ Failure to do so will result \ in indefinately blocking on \ the produce() call when the \ message queue is full. </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#aca3cdf1c55668f4aa1c2391ddd39c9c2
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#aca3cdf1c55668f4aa1c2391ddd39c9c2
  */
 const RD_KAFKA_MSG_F_BLOCK = 4;
 
 /**
- * define
+ * <p>produce_batch() will honor \ per-message partition. </p>
  * @since 1.0.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a991bd9378d2fc5b2102ce3a29805b345
  */
 const RD_KAFKA_MSG_F_PARTITION = 8;
 
 /**
- * define
+ * <p>Flags for rd_kafka_purge() </p>
+ * <p>Purge messages in internal queues. </p>
  * @since 1.0.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#ad5bcdab21e406a23d50cdb1c68e95a34
  */
 const RD_KAFKA_PURGE_F_QUEUE = 1;
 
 /**
- * define
+ * <p>Purge messages in-flight to or from the broker. Purging these messages will void any future acknowledgements from the broker, making it impossible for the application to know if these messages were successfully delivered or not. Retrying these messages may lead to duplicates. </p>
  * @since 1.0.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#af232512144175a21b5bda2a1fcbe1f00
  */
 const RD_KAFKA_PURGE_F_INFLIGHT = 2;
 
 /**
- * define
+ * <p>Don't wait for background thread queue purging to finish. </p>
  * @since 1.0.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#aef197fd7fd6dfa02d70563e359b8281f
  */
 const RD_KAFKA_PURGE_F_NON_BLOCKING = 4;
 
 /**
- * define
+ * <p>Unset value </p>
  * @since 1.0.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#aa2707dd1a6225e7649fd5d825284da4d
  */
 const RD_KAFKA_EVENT_NONE = 0;
 
 /**
  * <p>Producer Delivery report batch </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#abfe880d05ff52138b26dbe8b8e0d2132
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#abfe880d05ff52138b26dbe8b8e0d2132
  */
 const RD_KAFKA_EVENT_DR = 1;
 
 /**
  * <p>Fetched message (consumer) </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#acfddfd9f3d49591dcd9e7f323dbcd865
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#acfddfd9f3d49591dcd9e7f323dbcd865
  */
 const RD_KAFKA_EVENT_FETCH = 2;
 
 /**
  * <p>Log message </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#a6265a9eeee57e83eb9f3bbd33d92700f
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a6265a9eeee57e83eb9f3bbd33d92700f
  */
 const RD_KAFKA_EVENT_LOG = 4;
 
 /**
  * <p>Error </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#a080a7ad60de643f47424031ee95da103
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a080a7ad60de643f47424031ee95da103
  */
 const RD_KAFKA_EVENT_ERROR = 8;
 
 /**
  * <p>Group rebalance (consumer) </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#a271e6a5984932015585dd5248535aa2b
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a271e6a5984932015585dd5248535aa2b
  */
 const RD_KAFKA_EVENT_REBALANCE = 16;
 
 /**
  * <p>Offset commit result </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#a73a29f22b22433a93253a5f77c866437
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a73a29f22b22433a93253a5f77c866437
  */
 const RD_KAFKA_EVENT_OFFSET_COMMIT = 32;
 
 /**
- * define
+ * <p>Stats </p>
  * @since 1.0.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a67070a77150f54039273097c57da5965
  */
 const RD_KAFKA_EVENT_STATS = 64;
 
 /**
- * define
+ * <p>CreateTopics_result_t </p>
  * @since 1.0.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#ae0622aab30c391aed6c8b57d1aa5d0a8
  */
 const RD_KAFKA_EVENT_CREATETOPICS_RESULT = 100;
 
 /**
- * define
+ * <p>DeleteTopics_result_t </p>
  * @since 1.0.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#af69b2889c6e9cc2ebb03c607efade311
  */
 const RD_KAFKA_EVENT_DELETETOPICS_RESULT = 101;
 
 /**
- * define
+ * <p>CreatePartitions_result_t </p>
  * @since 1.0.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a82de17d7d0eb7ac80761a35695b1f971
  */
 const RD_KAFKA_EVENT_CREATEPARTITIONS_RESULT = 102;
 
 /**
- * define
+ * <p>AlterConfigs_result_t </p>
  * @since 1.0.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a25ded37b0459f4207e033ead15d30909
  */
 const RD_KAFKA_EVENT_ALTERCONFIGS_RESULT = 103;
 
 /**
- * define
+ * <p>DescribeConfigs_result_t </p>
  * @since 1.0.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a5918e726a9b2828c3051e48d6a747259
  */
 const RD_KAFKA_EVENT_DESCRIBECONFIGS_RESULT = 104;
 
 /**
  * <p>Producer client </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#ac6f9c3cb01cbaf3013689c4f2731b831
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#ac6f9c3cb01cbaf3013689c4f2731b831
  */
 const RD_KAFKA_PRODUCER = 0;
 
 /**
  * <p>Consumer client </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#ac6f9c3cb01cbaf3013689c4f2731b831
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#ac6f9c3cb01cbaf3013689c4f2731b831
  */
 const RD_KAFKA_CONSUMER = 1;
 
 /**
  * <p>Timestamp not available </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#af7cb459a230a61489234823da2beb3f3
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#af7cb459a230a61489234823da2beb3f3
  */
 const RD_KAFKA_TIMESTAMP_NOT_AVAILABLE = 0;
 
 /**
  * <p>Message creation time </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#af7cb459a230a61489234823da2beb3f3
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#af7cb459a230a61489234823da2beb3f3
  */
 const RD_KAFKA_TIMESTAMP_CREATE_TIME = 1;
 
 /**
  * <p>Log append time </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#af7cb459a230a61489234823da2beb3f3
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#af7cb459a230a61489234823da2beb3f3
  */
 const RD_KAFKA_TIMESTAMP_LOG_APPEND_TIME = 2;
 
 /**
  * <p>Begin internal error codes </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR__BEGIN = -200;
 
 /**
  * <p>Received message is incorrect </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR__BAD_MSG = -199;
 
 /**
  * <p>Bad/unknown compression </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR__BAD_COMPRESSION = -198;
 
 /**
  * <p>Broker is going away </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR__DESTROY = -197;
 
 /**
  * <p>Generic failure </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR__FAIL = -196;
 
 /**
  * <p>Broker transport failure </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR__TRANSPORT = -195;
 
 /**
  * <p>Critical system resource </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR__CRIT_SYS_RESOURCE = -194;
 
 /**
  * <p>Failed to resolve broker </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR__RESOLVE = -193;
 
 /**
  * <p>Produced message timed out </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR__MSG_TIMED_OUT = -192;
 
 /**
- * <p>Reached the end of the topic+partition queue on the broker. Not really an error. </p>
+ * <p>Reached the end of the topic+partition queue on the broker. Not really an error. This event is disabled by default, see the <code>enable.partition.eof</code> configuration property. </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR__PARTITION_EOF = -191;
 
 /**
  * <p>Permanent: Partition does not exist in cluster. </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR__UNKNOWN_PARTITION = -190;
 
 /**
  * <p>File or filesystem error </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR__FS = -189;
 
 /**
  * <p>Permanent: Topic does not exist in cluster. </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR__UNKNOWN_TOPIC = -188;
 
 /**
  * <p>All broker connections are down. </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR__ALL_BROKERS_DOWN = -187;
 
 /**
  * <p>Invalid argument, or invalid configuration </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR__INVALID_ARG = -186;
 
 /**
  * <p>Operation timed out </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR__TIMED_OUT = -185;
 
 /**
  * <p>Queue is full </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR__QUEUE_FULL = -184;
 
 /**
  * <p>ISR count &lt; required.acks </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR__ISR_INSUFF = -183;
 
 /**
  * <p>Broker node update </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR__NODE_UPDATE = -182;
 
 /**
  * <p>SSL error </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR__SSL = -181;
 
 /**
  * <p>Waiting for coordinator to become available. </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR__WAIT_COORD = -180;
 
 /**
  * <p>Unknown client group </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR__UNKNOWN_GROUP = -179;
 
 /**
  * <p>Operation in progress </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR__IN_PROGRESS = -178;
 
 /**
  * <p>Previous operation in progress, wait for it to finish. </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR__PREV_IN_PROGRESS = -177;
 
 /**
  * <p>This operation would interfere with an existing subscription </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR__EXISTING_SUBSCRIPTION = -176;
 
 /**
  * <p>Assigned partitions (rebalance_cb) </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR__ASSIGN_PARTITIONS = -175;
 
 /**
  * <p>Revoked partitions (rebalance_cb) </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR__REVOKE_PARTITIONS = -174;
 
 /**
  * <p>Conflicting use </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR__CONFLICT = -173;
 
 /**
  * <p>Wrong state </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR__STATE = -172;
 
 /**
  * <p>Unknown protocol </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR__UNKNOWN_PROTOCOL = -171;
 
 /**
  * <p>Not implemented </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR__NOT_IMPLEMENTED = -170;
 
 /**
  * <p>Authentication failure </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR__AUTHENTICATION = -169;
 
 /**
  * <p>No stored offset </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR__NO_OFFSET = -168;
 
 /**
  * <p>Outdated </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR__OUTDATED = -167;
 
 /**
  * <p>Timed out in queue </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR__TIMED_OUT_QUEUE = -166;
 
 /**
  * <p>Feature not supported by broker </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR__UNSUPPORTED_FEATURE = -165;
 
 /**
  * <p>Awaiting cache update </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR__WAIT_CACHE = -164;
 
 /**
- * enum rd_kafka_resp_err_t
+ * <p>Operation interrupted (e.g., due to yield)) </p>
  * @since 1.0.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR__INTR = -163;
 
 /**
- * enum rd_kafka_resp_err_t
+ * <p>Key serialization error </p>
  * @since 1.0.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR__KEY_SERIALIZATION = -162;
 
 /**
- * enum rd_kafka_resp_err_t
+ * <p>Value serialization error </p>
  * @since 1.0.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR__VALUE_SERIALIZATION = -161;
 
 /**
- * enum rd_kafka_resp_err_t
+ * <p>Key deserialization error </p>
  * @since 1.0.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR__KEY_DESERIALIZATION = -160;
 
 /**
- * enum rd_kafka_resp_err_t
+ * <p>Value deserialization error </p>
  * @since 1.0.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR__VALUE_DESERIALIZATION = -159;
 
 /**
- * enum rd_kafka_resp_err_t
+ * <p>Partial response </p>
  * @since 1.0.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR__PARTIAL = -158;
 
 /**
- * enum rd_kafka_resp_err_t
+ * <p>Modification attempted on read-only object </p>
  * @since 1.0.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR__READ_ONLY = -157;
 
 /**
- * enum rd_kafka_resp_err_t
+ * <p>No such entry / item not found </p>
  * @since 1.0.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR__NOENT = -156;
 
 /**
- * enum rd_kafka_resp_err_t
+ * <p>Read underflow </p>
  * @since 1.0.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR__UNDERFLOW = -155;
 
 /**
- * enum rd_kafka_resp_err_t
+ * <p>Invalid type </p>
  * @since 1.0.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR__INVALID_TYPE = -154;
 
 /**
- * enum rd_kafka_resp_err_t
+ * <p>Retry operation </p>
  * @since 1.0.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR__RETRY = -153;
 
 /**
- * enum rd_kafka_resp_err_t
+ * <p>Purged in queue </p>
  * @since 1.0.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR__PURGE_QUEUE = -152;
 
 /**
- * enum rd_kafka_resp_err_t
+ * <p>Purged in flight </p>
  * @since 1.0.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR__PURGE_INFLIGHT = -151;
 
 /**
- * enum rd_kafka_resp_err_t
+ * <p>Fatal error: see rd_kafka_fatal_error() </p>
  * @since 1.0.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR__FATAL = -150;
 
 /**
- * enum rd_kafka_resp_err_t
+ * <p>Inconsistent state </p>
  * @since 1.0.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR__INCONSISTENT = -149;
 
 /**
- * enum rd_kafka_resp_err_t
+ * <p>Gap-less ordering would not be guaranteed if proceeding </p>
  * @since 1.0.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR__GAPLESS_GUARANTEE = -148;
 
 /**
- * enum rd_kafka_resp_err_t
+ * <p>Maximum poll interval exceeded </p>
  * @since 1.0.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR__MAX_POLL_EXCEEDED = -147;
 
 /**
  * <p>End internal error codes </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR__END = -100;
 
 /**
  * <p>Unknown broker error </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR_UNKNOWN = -1;
 
 /**
  * <p>Success </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR_NO_ERROR = 0;
 
 /**
  * <p>Offset out of range </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR_OFFSET_OUT_OF_RANGE = 1;
 
 /**
  * <p>Invalid message </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR_INVALID_MSG = 2;
 
 /**
  * <p>Unknown topic or partition </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR_UNKNOWN_TOPIC_OR_PART = 3;
 
 /**
  * <p>Invalid message size </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR_INVALID_MSG_SIZE = 4;
 
 /**
  * <p>Leader not available </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR_LEADER_NOT_AVAILABLE = 5;
 
 /**
  * <p>Not leader for partition </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR_NOT_LEADER_FOR_PARTITION = 6;
 
 /**
  * <p>Request timed out </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR_REQUEST_TIMED_OUT = 7;
 
 /**
  * <p>Broker not available </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR_BROKER_NOT_AVAILABLE = 8;
 
 /**
  * <p>Replica not available </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR_REPLICA_NOT_AVAILABLE = 9;
 
 /**
  * <p>Message size too large </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR_MSG_SIZE_TOO_LARGE = 10;
 
 /**
  * <p>StaleControllerEpochCode </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR_STALE_CTRL_EPOCH = 11;
 
 /**
  * <p>Offset metadata string too large </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR_OFFSET_METADATA_TOO_LARGE = 12;
 
 /**
  * <p>Broker disconnected before response received </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR_NETWORK_EXCEPTION = 13;
 
 /**
  * <p>Group coordinator load in progress </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#afa695eee077bfd031e5bb637b899cfd8
  */
 const RD_KAFKA_RESP_ERR_GROUP_LOAD_IN_PROGRESS = 14;
 
 /**
  * <p>Group coordinator not available </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a23a154df5190e1fc072199737f39bd87
  */
 const RD_KAFKA_RESP_ERR_GROUP_COORDINATOR_NOT_AVAILABLE = 15;
 
 /**
  * <p>Not coordinator for group </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a7755c1901da130a937be67a1c66e2c1f
  */
 const RD_KAFKA_RESP_ERR_NOT_COORDINATOR_FOR_GROUP = 16;
 
 /**
  * <p>Invalid topic </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR_TOPIC_EXCEPTION = 17;
 
 /**
  * <p>Message batch larger than configured server segment size </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR_RECORD_LIST_TOO_LARGE = 18;
 
 /**
  * <p>Not enough in-sync replicas </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR_NOT_ENOUGH_REPLICAS = 19;
 
 /**
  * <p>Message(s) written to insufficient number of in-sync replicas </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR_NOT_ENOUGH_REPLICAS_AFTER_APPEND = 20;
 
 /**
  * <p>Invalid required acks value </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR_INVALID_REQUIRED_ACKS = 21;
 
 /**
  * <p>Specified group generation id is not valid </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR_ILLEGAL_GENERATION = 22;
 
 /**
  * <p>Inconsistent group protocol </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR_INCONSISTENT_GROUP_PROTOCOL = 23;
 
 /**
  * <p>Invalid group.id </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR_INVALID_GROUP_ID = 24;
 
 /**
  * <p>Unknown member </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR_UNKNOWN_MEMBER_ID = 25;
 
 /**
  * <p>Invalid session timeout </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR_INVALID_SESSION_TIMEOUT = 26;
 
 /**
  * <p>Group rebalance in progress </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR_REBALANCE_IN_PROGRESS = 27;
 
 /**
  * <p>Commit offset data size is not valid </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR_INVALID_COMMIT_OFFSET_SIZE = 28;
 
 /**
  * <p>Topic authorization failed </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR_TOPIC_AUTHORIZATION_FAILED = 29;
 
 /**
  * <p>Group authorization failed </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR_GROUP_AUTHORIZATION_FAILED = 30;
 
 /**
  * <p>Cluster authorization failed </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR_CLUSTER_AUTHORIZATION_FAILED = 31;
 
 /**
  * <p>Invalid timestamp </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR_INVALID_TIMESTAMP = 32;
 
 /**
  * <p>Unsupported SASL mechanism </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR_UNSUPPORTED_SASL_MECHANISM = 33;
 
 /**
  * <p>Illegal SASL state </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR_ILLEGAL_SASL_STATE = 34;
 
 /**
  * <p>Unuspported version </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR_UNSUPPORTED_VERSION = 35;
 
 /**
  * <p>Topic already exists </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR_TOPIC_ALREADY_EXISTS = 36;
 
 /**
  * <p>Invalid number of partitions </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR_INVALID_PARTITIONS = 37;
 
 /**
  * <p>Invalid replication factor </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR_INVALID_REPLICATION_FACTOR = 38;
 
 /**
  * <p>Invalid replica assignment </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR_INVALID_REPLICA_ASSIGNMENT = 39;
 
 /**
  * <p>Invalid config </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR_INVALID_CONFIG = 40;
 
 /**
  * <p>Not controller for cluster </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR_NOT_CONTROLLER = 41;
 
 /**
  * <p>Invalid request </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR_INVALID_REQUEST = 42;
 
 /**
  * <p>Message format on broker does not support request </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR_UNSUPPORTED_FOR_MESSAGE_FORMAT = 43;
 
 /**
- * enum rd_kafka_resp_err_t
+ * <p>Policy violation </p>
  * @since 1.0.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR_POLICY_VIOLATION = 44;
 
 /**
- * enum rd_kafka_resp_err_t
+ * <p>Broker received an out of order sequence number </p>
  * @since 1.0.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR_OUT_OF_ORDER_SEQUENCE_NUMBER = 45;
 
 /**
- * enum rd_kafka_resp_err_t
+ * <p>Broker received a duplicate sequence number </p>
  * @since 1.0.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR_DUPLICATE_SEQUENCE_NUMBER = 46;
 
 /**
- * enum rd_kafka_resp_err_t
+ * <p>Producer attempted an operation with an old epoch </p>
  * @since 1.0.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR_INVALID_PRODUCER_EPOCH = 47;
 
 /**
- * enum rd_kafka_resp_err_t
+ * <p>Producer attempted a transactional operation in an invalid state </p>
  * @since 1.0.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR_INVALID_TXN_STATE = 48;
 
 /**
- * enum rd_kafka_resp_err_t
+ * <p>Producer attempted to use a producer id which is not currently assigned to its transactional id </p>
  * @since 1.0.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR_INVALID_PRODUCER_ID_MAPPING = 49;
 
 /**
- * enum rd_kafka_resp_err_t
+ * <p>Transaction timeout is larger than the maximum value allowed by the broker's max.transaction.timeout.ms </p>
  * @since 1.0.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR_INVALID_TRANSACTION_TIMEOUT = 50;
 
 /**
- * enum rd_kafka_resp_err_t
+ * <p>Producer attempted to update a transaction while another concurrent operation on the same transaction was ongoing </p>
  * @since 1.0.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR_CONCURRENT_TRANSACTIONS = 51;
 
 /**
- * enum rd_kafka_resp_err_t
+ * <p>Indicates that the transaction coordinator sending a WriteTxnMarker is no longer the current coordinator for a given producer </p>
  * @since 1.0.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR_TRANSACTION_COORDINATOR_FENCED = 52;
 
 /**
- * enum rd_kafka_resp_err_t
+ * <p>Transactional Id authorization failed </p>
  * @since 1.0.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR_TRANSACTIONAL_ID_AUTHORIZATION_FAILED = 53;
 
 /**
- * enum rd_kafka_resp_err_t
+ * <p>Security features are disabled </p>
  * @since 1.0.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR_SECURITY_DISABLED = 54;
 
 /**
- * enum rd_kafka_resp_err_t
+ * <p>Operation not attempted </p>
  * @since 1.0.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR_OPERATION_NOT_ATTEMPTED = 55;
 
 /**
- * enum rd_kafka_resp_err_t
+ * <p>Disk error when trying to access log file on the disk </p>
  * @since 1.0.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR_KAFKA_STORAGE_ERROR = 56;
 
 /**
- * enum rd_kafka_resp_err_t
+ * <p>The user-specified log directory is not found in the broker config </p>
  * @since 1.0.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR_LOG_DIR_NOT_FOUND = 57;
 
 /**
- * enum rd_kafka_resp_err_t
+ * <p>SASL Authentication failed </p>
  * @since 1.0.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR_SASL_AUTHENTICATION_FAILED = 58;
 
 /**
- * enum rd_kafka_resp_err_t
+ * <p>Unknown Producer Id </p>
  * @since 1.0.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR_UNKNOWN_PRODUCER_ID = 59;
 
 /**
- * enum rd_kafka_resp_err_t
+ * <p>Partition reassignment is in progress </p>
  * @since 1.0.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR_REASSIGNMENT_IN_PROGRESS = 60;
 
 /**
- * enum rd_kafka_resp_err_t
+ * <p>Delegation Token feature is not enabled </p>
  * @since 1.0.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR_DELEGATION_TOKEN_AUTH_DISABLED = 61;
 
 /**
- * enum rd_kafka_resp_err_t
+ * <p>Delegation Token is not found on server </p>
  * @since 1.0.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR_DELEGATION_TOKEN_NOT_FOUND = 62;
 
 /**
- * enum rd_kafka_resp_err_t
+ * <p>Specified Principal is not valid Owner/Renewer </p>
  * @since 1.0.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR_DELEGATION_TOKEN_OWNER_MISMATCH = 63;
 
 /**
- * enum rd_kafka_resp_err_t
+ * <p>Delegation Token requests are not allowed on this connection </p>
  * @since 1.0.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR_DELEGATION_TOKEN_REQUEST_NOT_ALLOWED = 64;
 
 /**
- * enum rd_kafka_resp_err_t
+ * <p>Delegation Token authorization failed </p>
  * @since 1.0.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR_DELEGATION_TOKEN_AUTHORIZATION_FAILED = 65;
 
 /**
- * enum rd_kafka_resp_err_t
+ * <p>Delegation Token is expired </p>
  * @since 1.0.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR_DELEGATION_TOKEN_EXPIRED = 66;
 
 /**
- * enum rd_kafka_resp_err_t
+ * <p>Supplied principalType is not supported </p>
  * @since 1.0.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR_INVALID_PRINCIPAL_TYPE = 67;
 
 /**
- * enum rd_kafka_resp_err_t
+ * <p>The group is not empty </p>
  * @since 1.0.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR_NON_EMPTY_GROUP = 68;
 
 /**
- * enum rd_kafka_resp_err_t
+ * <p>The group id does not exist </p>
  * @since 1.0.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR_GROUP_ID_NOT_FOUND = 69;
 
 /**
- * enum rd_kafka_resp_err_t
+ * <p>The fetch session ID was not found </p>
  * @since 1.0.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR_FETCH_SESSION_ID_NOT_FOUND = 70;
 
 /**
- * enum rd_kafka_resp_err_t
+ * <p>The fetch session epoch is invalid </p>
  * @since 1.0.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR_INVALID_FETCH_SESSION_EPOCH = 71;
 
 /**
- * enum rd_kafka_resp_err_t
+ * <p>No matching listener </p>
  * @since 1.0.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR_LISTENER_NOT_FOUND = 72;
 
 /**
- * enum rd_kafka_resp_err_t
+ * <p>Topic deletion is disabled </p>
  * @since 1.0.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR_TOPIC_DELETION_DISABLED = 73;
 
 /**
  * <p>va-arg sentinel </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#a03c74ceba678b4e7a624310160a02165
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#a9aac65afa4c30e6d75550e39f6c1ea6b
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03c74ceba678b4e7a624310160a02165
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a9aac65afa4c30e6d75550e39f6c1ea6b
  */
 const RD_KAFKA_VTYPE_END = 0;
 
 /**
  * <p>(const char *) Topic name </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#a9aac65afa4c30e6d75550e39f6c1ea6b
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a9aac65afa4c30e6d75550e39f6c1ea6b
  */
 const RD_KAFKA_VTYPE_TOPIC = 1;
 
 /**
  * <p>(rd_kafka_topic_t *) Topic handle </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#a9aac65afa4c30e6d75550e39f6c1ea6b
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a9aac65afa4c30e6d75550e39f6c1ea6b
  */
 const RD_KAFKA_VTYPE_RKT = 2;
 
 /**
  * <p>(int32_t) Partition </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#a9aac65afa4c30e6d75550e39f6c1ea6b
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a9aac65afa4c30e6d75550e39f6c1ea6b
  */
 const RD_KAFKA_VTYPE_PARTITION = 3;
 
 /**
  * <p>(void *, size_t) Message value (payload) </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#a9aac65afa4c30e6d75550e39f6c1ea6b
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a9aac65afa4c30e6d75550e39f6c1ea6b
  */
 const RD_KAFKA_VTYPE_VALUE = 4;
 
 /**
  * <p>(void *, size_t) Message key </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#a9aac65afa4c30e6d75550e39f6c1ea6b
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a9aac65afa4c30e6d75550e39f6c1ea6b
  */
 const RD_KAFKA_VTYPE_KEY = 5;
 
 /**
- * <p>(void *) Application opaque </p>
+ * <p>(void *) Per-message application opaque value. This is the same as the _private field in rd_kafka_message_t, also known as the msg_opaque. </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#a9aac65afa4c30e6d75550e39f6c1ea6b
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a9aac65afa4c30e6d75550e39f6c1ea6b
  */
 const RD_KAFKA_VTYPE_OPAQUE = 6;
 
 /**
  * <p>(int) RD_KAFKA_MSG_F_.. flags </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#a9aac65afa4c30e6d75550e39f6c1ea6b
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a9aac65afa4c30e6d75550e39f6c1ea6b
  */
 const RD_KAFKA_VTYPE_MSGFLAGS = 7;
 
 /**
  * <p>(int64_t) Milliseconds since epoch UTC </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#a9aac65afa4c30e6d75550e39f6c1ea6b
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a9aac65afa4c30e6d75550e39f6c1ea6b
  */
 const RD_KAFKA_VTYPE_TIMESTAMP = 8;
 
 /**
- * enum rd_kafka_vtype_t
+ * <p>(const char *, const void *, ssize_t) Message Header </p>
  * @since 1.0.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a9aac65afa4c30e6d75550e39f6c1ea6b
  */
 const RD_KAFKA_VTYPE_HEADER = 9;
 
 /**
- * enum rd_kafka_vtype_t
+ * <p>(rd_kafka_headers_t *) Headers list </p>
  * @since 1.0.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a9aac65afa4c30e6d75550e39f6c1ea6b
  */
 const RD_KAFKA_VTYPE_HEADERS = 10;
 
 /**
- * enum rd_kafka_msg_status_t
+ * <p>Message was never transmitted to the broker, or failed with an error indicating it was not written to the log. Application retry risks ordering, but not duplication. </p>
  * @since 1.0.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#ad46cb2b6064fcfbe2451aca8df802517
  */
 const RD_KAFKA_MSG_STATUS_NOT_PERSISTED = 0;
 
 /**
- * enum rd_kafka_msg_status_t
+ * <p>Message was transmitted to broker, but no acknowledgement was received. Application retry risks ordering and duplication. </p>
  * @since 1.0.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#ad46cb2b6064fcfbe2451aca8df802517
  */
 const RD_KAFKA_MSG_STATUS_POSSIBLY_PERSISTED = 1;
 
 /**
- * enum rd_kafka_msg_status_t
+ * <p>Message was written to the log and acknowledged by the broker. No reason for application to retry. Note: this value should only be trusted with <code>acks=all</code>. </p>
  * @since 1.0.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#ad46cb2b6064fcfbe2451aca8df802517
  */
 const RD_KAFKA_MSG_STATUS_PERSISTED = 2;
 
 /**
  * <p>Unknown configuration name. </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#ad8306a08e59e8e2cbc6abdb84f9689f4
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#ad8306a08e59e8e2cbc6abdb84f9689f4
  */
 const RD_KAFKA_CONF_UNKNOWN = -2;
 
 /**
- * <p>Invalid configuration value. </p>
+ * <p>Invalid configuration value or property or value not supported in this build. </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#ad8306a08e59e8e2cbc6abdb84f9689f4
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#ad8306a08e59e8e2cbc6abdb84f9689f4
  */
 const RD_KAFKA_CONF_INVALID = -1;
 
 /**
  * <p>Configuration okay </p>
  * @since 1.0.0 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#ad8306a08e59e8e2cbc6abdb84f9689f4
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#ad8306a08e59e8e2cbc6abdb84f9689f4
  */
 const RD_KAFKA_CONF_OK = 0;
 
 /**
- * enum rd_kafka_admin_op_t
+ * <p>Default value </p>
  * @since 1.0.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a8041b7c45068283d95f54ee14c7362fe
  */
 const RD_KAFKA_ADMIN_OP_ANY = 0;
 
 /**
- * enum rd_kafka_admin_op_t
+ * <p>CreateTopics </p>
  * @since 1.0.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a8041b7c45068283d95f54ee14c7362fe
  */
 const RD_KAFKA_ADMIN_OP_CREATETOPICS = 1;
 
 /**
- * enum rd_kafka_admin_op_t
+ * <p>DeleteTopics </p>
  * @since 1.0.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a8041b7c45068283d95f54ee14c7362fe
  */
 const RD_KAFKA_ADMIN_OP_DELETETOPICS = 2;
 
 /**
- * enum rd_kafka_admin_op_t
+ * <p>CreatePartitions </p>
  * @since 1.0.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a8041b7c45068283d95f54ee14c7362fe
  */
 const RD_KAFKA_ADMIN_OP_CREATEPARTITIONS = 3;
 
 /**
- * enum rd_kafka_admin_op_t
+ * <p>AlterConfigs </p>
  * @since 1.0.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a8041b7c45068283d95f54ee14c7362fe
  */
 const RD_KAFKA_ADMIN_OP_ALTERCONFIGS = 4;
 
 /**
- * enum rd_kafka_admin_op_t
+ * <p>DescribeConfigs </p>
  * @since 1.0.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a8041b7c45068283d95f54ee14c7362fe
  */
 const RD_KAFKA_ADMIN_OP_DESCRIBECONFIGS = 5;
 
 /**
- * enum rd_kafka_ConfigSource_t
+ * <p>Source unknown, e.g., in the ConfigEntry used for alter requests where source is not set </p>
  * @since 1.0.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#aab84b4178e74bd4319721ee0c68ae62c
  */
 const RD_KAFKA_CONFIG_SOURCE_UNKNOWN_CONFIG = 0;
 
 /**
- * enum rd_kafka_ConfigSource_t
+ * <p>Dynamic topic config that is configured for a specific topic </p>
  * @since 1.0.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#aab84b4178e74bd4319721ee0c68ae62c
  */
 const RD_KAFKA_CONFIG_SOURCE_DYNAMIC_TOPIC_CONFIG = 1;
 
 /**
- * enum rd_kafka_ConfigSource_t
+ * <p>Dynamic broker config that is configured for a specific broker </p>
  * @since 1.0.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#aab84b4178e74bd4319721ee0c68ae62c
  */
 const RD_KAFKA_CONFIG_SOURCE_DYNAMIC_BROKER_CONFIG = 2;
 
 /**
- * enum rd_kafka_ConfigSource_t
+ * <p>Dynamic broker config that is configured as default for all brokers in the cluster </p>
  * @since 1.0.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#aab84b4178e74bd4319721ee0c68ae62c
  */
 const RD_KAFKA_CONFIG_SOURCE_DYNAMIC_DEFAULT_BROKER_CONFIG = 3;
 
 /**
- * enum rd_kafka_ConfigSource_t
+ * <p>Static broker config provided as broker properties at startup (e.g. from server.properties file) </p>
  * @since 1.0.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#aab84b4178e74bd4319721ee0c68ae62c
  */
 const RD_KAFKA_CONFIG_SOURCE_STATIC_BROKER_CONFIG = 4;
 
 /**
- * enum rd_kafka_ConfigSource_t
+ * <p>Built-in default configuration for configs that have a default value </p>
  * @since 1.0.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#aab84b4178e74bd4319721ee0c68ae62c
  */
 const RD_KAFKA_CONFIG_SOURCE_DEFAULT_CONFIG = 5;
 
 /**
- * enum rd_kafka_ConfigSource_t
+ * <p>Number of source types defined </p>
  * @since 1.0.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#aab84b4178e74bd4319721ee0c68ae62c
  */
 const RD_KAFKA_CONFIG_SOURCE__CNT = 6;
 
 /**
- * enum rd_kafka_ResourceType_t
+ * <p>Unknown </p>
  * @since 1.0.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#acca83a66d7783ff7683ed2691cc907c9
  */
 const RD_KAFKA_RESOURCE_UNKNOWN = 0;
 
 /**
- * enum rd_kafka_ResourceType_t
+ * <p>Any (used for lookups) </p>
  * @since 1.0.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#acca83a66d7783ff7683ed2691cc907c9
  */
 const RD_KAFKA_RESOURCE_ANY = 1;
 
 /**
- * enum rd_kafka_ResourceType_t
+ * <p>Topic </p>
  * @since 1.0.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#acca83a66d7783ff7683ed2691cc907c9
  */
 const RD_KAFKA_RESOURCE_TOPIC = 2;
 
 /**
- * enum rd_kafka_ResourceType_t
+ * <p>Group </p>
  * @since 1.0.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#acca83a66d7783ff7683ed2691cc907c9
  */
 const RD_KAFKA_RESOURCE_GROUP = 3;
 
 /**
- * enum rd_kafka_ResourceType_t
+ * <p>Broker </p>
  * @since 1.0.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#acca83a66d7783ff7683ed2691cc907c9
  */
 const RD_KAFKA_RESOURCE_BROKER = 4;
 
 /**
- * enum rd_kafka_ResourceType_t
+ * <p>Number of resource types defined </p>
  * @since 1.0.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#acca83a66d7783ff7683ed2691cc907c9
  */
 const RD_KAFKA_RESOURCE__CNT = 5;
 
 /**
- * enum rd_kafka_resp_err_t
+ * <p>Leader epoch is older than broker epoch </p>
  * @since 1.0.1 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR_FENCED_LEADER_EPOCH = 74;
 
 /**
- * enum rd_kafka_resp_err_t
+ * <p>Leader epoch is newer than broker epoch </p>
  * @since 1.0.1 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR_UNKNOWN_LEADER_EPOCH = 75;
 
 /**
- * enum rd_kafka_resp_err_t
+ * <p>Broker epoch has changed </p>
  * @since 1.0.1 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR_STALE_BROKER_EPOCH = 77;
 
 /**
- * enum rd_kafka_resp_err_t
+ * <p>Leader high watermark is not caught up </p>
  * @since 1.0.1 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR_OFFSET_NOT_AVAILABLE = 78;
 
 /**
- * enum rd_kafka_resp_err_t
+ * <p>Group member needs a valid member ID </p>
  * @since 1.0.1 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR_MEMBER_ID_REQUIRED = 79;
 
 /**
- * enum rd_kafka_resp_err_t
+ * <p>Preferred leader was not available </p>
  * @since 1.0.1 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR_PREFERRED_LEADER_NOT_AVAILABLE = 80;
 
 /**
- * enum rd_kafka_resp_err_t
+ * <p>Consumer group has reached maximum size </p>
  * @since 1.0.1 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR_GROUP_MAX_SIZE_REACHED = 81;
 
 /**
- * define
+ * <p>SASL/OAUTHBEARER token needs to be refreshed </p>
  * @since 1.1.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a63e097de934fac48b93411ac91564db1
  */
 const RD_KAFKA_EVENT_OAUTHBEARER_TOKEN_REFRESH = 256;
 
 /**
- * enum rd_kafka_cert_type_t
+ * <p>Client's public key </p>
  * @since 1.1.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a5f0ba54591c0ffa725cb1a5eafe8b180
  */
 const RD_KAFKA_CERT_PUBLIC_KEY = 0;
 
 /**
- * enum rd_kafka_cert_type_t
+ * <p>Client's private key </p>
  * @since 1.1.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a5f0ba54591c0ffa725cb1a5eafe8b180
  */
 const RD_KAFKA_CERT_PRIVATE_KEY = 1;
 
 /**
- * enum rd_kafka_cert_type_t
+ * <p>CA certificate </p>
  * @since 1.1.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a5f0ba54591c0ffa725cb1a5eafe8b180
  */
 const RD_KAFKA_CERT_CA = 2;
 
@@ -1399,20 +1497,23 @@ const RD_KAFKA_CERT_CA = 2;
 const RD_KAFKA_CERT__CNT = 3;
 
 /**
- * enum rd_kafka_cert_enc_t
+ * <p>PKCS#12 </p>
  * @since 1.1.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#ab7a624d3a484453f4abe5955bb6a45eb
  */
 const RD_KAFKA_CERT_ENC_PKCS12 = 0;
 
 /**
- * enum rd_kafka_cert_enc_t
+ * <p>DER / binary X.509 ASN1 </p>
  * @since 1.1.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#ab7a624d3a484453f4abe5955bb6a45eb
  */
 const RD_KAFKA_CERT_ENC_DER = 1;
 
 /**
- * enum rd_kafka_cert_enc_t
+ * <p>PEM </p>
  * @since 1.1.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#ab7a624d3a484453f4abe5955bb6a45eb
  */
 const RD_KAFKA_CERT_ENC_PEM = 2;
 
@@ -1423,284 +1524,334 @@ const RD_KAFKA_CERT_ENC_PEM = 2;
 const RD_KAFKA_CERT_ENC__CNT = 3;
 
 /**
- * enum rd_kafka_thread_type_t
+ * <p>librdkafka's internal main thread </p>
  * @since 1.2.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#ab327ca8929b6895de7b300970ad59745
  */
 const RD_KAFKA_THREAD_MAIN = 0;
 
 /**
- * enum rd_kafka_thread_type_t
+ * <p>Background thread (if enabled) </p>
  * @since 1.2.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#ab327ca8929b6895de7b300970ad59745
  */
 const RD_KAFKA_THREAD_BACKGROUND = 1;
 
 /**
- * enum rd_kafka_thread_type_t
+ * <p>Per-broker thread </p>
  * @since 1.2.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#ab327ca8929b6895de7b300970ad59745
  */
 const RD_KAFKA_THREAD_BROKER = 2;
 
 /**
- * enum rd_kafka_resp_err_t
+ * <p>Unknown broker </p>
  * @since 1.3.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR__UNKNOWN_BROKER = -146;
 
 /**
- * enum rd_kafka_resp_err_t
+ * <p>Coordinator load in progress </p>
  * @since 1.3.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#afa695eee077bfd031e5bb637b899cfd8
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR_COORDINATOR_LOAD_IN_PROGRESS = 14;
 
 /**
- * enum rd_kafka_resp_err_t
+ * <p>Coordinator not available </p>
  * @since 1.3.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a23a154df5190e1fc072199737f39bd87
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR_COORDINATOR_NOT_AVAILABLE = 15;
 
 /**
- * enum rd_kafka_resp_err_t
+ * <p>Not coordinator </p>
  * @since 1.3.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a7755c1901da130a937be67a1c66e2c1f
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR_NOT_COORDINATOR = 16;
 
 /**
- * enum rd_kafka_resp_err_t
+ * <p>Functionality not configured </p>
  * @since 1.4.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR__NOT_CONFIGURED = -145;
 
 /**
- * enum rd_kafka_resp_err_t
+ * <p>Instance has been fenced </p>
  * @since 1.4.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR__FENCED = -144;
 
 /**
- * enum rd_kafka_resp_err_t
+ * <p>Application generated error </p>
  * @since 1.4.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR__APPLICATION = -143;
 
 /**
- * enum rd_kafka_resp_err_t
+ * <p>Static consumer fenced by other consumer with same group.instance.id. </p>
  * @since 1.4.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR_FENCED_INSTANCE_ID = 82;
 
 /**
- * enum rd_kafka_resp_err_t
+ * <p>Eligible partition leaders are not available </p>
  * @since 1.5.2 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR_ELIGIBLE_LEADERS_NOT_AVAILABLE = 83;
 
 /**
- * enum rd_kafka_resp_err_t
+ * <p>Leader election not needed for topic partition </p>
  * @since 1.5.2 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR_ELECTION_NOT_NEEDED = 84;
 
 /**
- * enum rd_kafka_resp_err_t
+ * <p>No partition reassignment is in progress </p>
  * @since 1.5.2 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR_NO_REASSIGNMENT_IN_PROGRESS = 85;
 
 /**
- * enum rd_kafka_resp_err_t
+ * <p>Deleting offsets of a topic while the consumer group is subscribed to it </p>
  * @since 1.5.2 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR_GROUP_SUBSCRIBED_TO_TOPIC = 86;
 
 /**
- * enum rd_kafka_resp_err_t
+ * <p>Broker failed to validate record </p>
  * @since 1.5.2 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR_INVALID_RECORD = 87;
 
 /**
- * enum rd_kafka_resp_err_t
+ * <p>There are unstable offsets that need to be cleared </p>
  * @since 1.5.2 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR_UNSTABLE_OFFSET_COMMIT = 88;
 
 /**
- * define
+ * <p>DeleteRecords_result_t </p>
  * @since 1.6.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#ab572fd50785847b03c96af744ceffaf1
  */
 const RD_KAFKA_EVENT_DELETERECORDS_RESULT = 105;
 
 /**
- * define
+ * <p>DeleteGroups_result_t </p>
  * @since 1.6.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a6d2f3f1797ba2241c707b077ddc2c1b3
  */
 const RD_KAFKA_EVENT_DELETEGROUPS_RESULT = 106;
 
 /**
- * define
+ * <p>DeleteConsumerGroupOffsets_result_t </p>
  * @since 1.6.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a16dee39b23bef225ad3bb902cf391659
  */
 const RD_KAFKA_EVENT_DELETECONSUMERGROUPOFFSETS_RESULT = 107;
 
 /**
- * enum rd_kafka_resp_err_t
+ * <p>Assignment lost </p>
  * @since 1.6.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR__ASSIGNMENT_LOST = -142;
 
 /**
- * enum rd_kafka_resp_err_t
+ * <p>No operation performed </p>
  * @since 1.6.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR__NOOP = -141;
 
 /**
- * enum rd_kafka_resp_err_t
+ * <p>Throttling quota has been exceeded </p>
  * @since 1.6.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR_THROTTLING_QUOTA_EXCEEDED = 89;
 
 /**
- * enum rd_kafka_resp_err_t
+ * <p>There is a newer producer with the same transactionalId which fences the current one </p>
  * @since 1.6.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR_PRODUCER_FENCED = 90;
 
 /**
- * enum rd_kafka_resp_err_t
+ * <p>Request illegally referred to resource that does not exist </p>
  * @since 1.6.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR_RESOURCE_NOT_FOUND = 91;
 
 /**
- * enum rd_kafka_resp_err_t
+ * <p>Request illegally referred to the same resource twice </p>
  * @since 1.6.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR_DUPLICATE_RESOURCE = 92;
 
 /**
- * enum rd_kafka_resp_err_t
+ * <p>Requested credential would not meet criteria for acceptability </p>
  * @since 1.6.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR_UNACCEPTABLE_CREDENTIAL = 93;
 
 /**
- * enum rd_kafka_resp_err_t
+ * <p>Indicates that the either the sender or recipient of a voter-only request is not one of the expected voters </p>
  * @since 1.6.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR_INCONSISTENT_VOTER_SET = 94;
 
 /**
- * enum rd_kafka_resp_err_t
+ * <p>Invalid update version </p>
  * @since 1.6.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR_INVALID_UPDATE_VERSION = 95;
 
 /**
- * enum rd_kafka_resp_err_t
+ * <p>Unable to update finalized features due to server error </p>
  * @since 1.6.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR_FEATURE_UPDATE_FAILED = 96;
 
 /**
- * enum rd_kafka_resp_err_t
+ * <p>Request principal deserialization failed during forwarding </p>
  * @since 1.6.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR_PRINCIPAL_DESERIALIZATION_FAILURE = 97;
 
 /**
- * enum rd_kafka_admin_op_t
+ * <p>DeleteRecords </p>
  * @since 1.6.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a8041b7c45068283d95f54ee14c7362fe
  */
 const RD_KAFKA_ADMIN_OP_DELETERECORDS = 6;
 
 /**
- * enum rd_kafka_admin_op_t
+ * <p>DeleteGroups </p>
  * @since 1.6.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a8041b7c45068283d95f54ee14c7362fe
  */
 const RD_KAFKA_ADMIN_OP_DELETEGROUPS = 7;
 
 /**
- * enum rd_kafka_admin_op_t
+ * <p>DeleteConsumerGroupOffsets </p>
  * @since 1.6.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a8041b7c45068283d95f54ee14c7362fe
  */
 const RD_KAFKA_ADMIN_OP_DELETECONSUMERGROUPOFFSETS = 8;
 
 /**
- * enum rd_kafka_resp_err_t
+ * <p>No offset to automatically reset to </p>
  * @since 1.6.1 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR__AUTO_OFFSET_RESET = -140;
 
 /**
- * define
+ * <p>Enable background thread. </p>
  * @since 1.9.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#ad6fc906cff51d7ed8bfc9597c2054190
  */
 const RD_KAFKA_EVENT_BACKGROUND = 512;
 
 /**
- * define
+ * <p>CreateAcls_result_t </p>
  * @since 1.9.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#ae09849fc4a1e0a1b4240fbf9e195f2b9
  */
 const RD_KAFKA_EVENT_CREATEACLS_RESULT = 1024;
 
 /**
- * define
+ * <p>DescribeAcls_result_t </p>
  * @since 1.9.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#af4991ffb7e86a8344a7012d40e2124d8
  */
 const RD_KAFKA_EVENT_DESCRIBEACLS_RESULT = 2048;
 
 /**
- * define
+ * <p>DeleteAcls_result_t </p>
  * @since 1.9.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#aa44fa18142c943e305b48ae67c836cb4
  */
 const RD_KAFKA_EVENT_DELETEACLS_RESULT = 4096;
 
 /**
- * enum rd_kafka_admin_op_t
+ * <p>CreateAcls </p>
  * @since 1.9.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a8041b7c45068283d95f54ee14c7362fe
  */
 const RD_KAFKA_ADMIN_OP_CREATEACLS = 9;
 
 /**
- * enum rd_kafka_admin_op_t
+ * <p>DescribeAcls </p>
  * @since 1.9.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a8041b7c45068283d95f54ee14c7362fe
  */
 const RD_KAFKA_ADMIN_OP_DESCRIBEACLS = 10;
 
 /**
- * enum rd_kafka_admin_op_t
+ * <p>DeleteAcls </p>
  * @since 1.9.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a8041b7c45068283d95f54ee14c7362fe
  */
 const RD_KAFKA_ADMIN_OP_DELETEACLS = 11;
 
 /**
- * enum rd_kafka_ResourcePatternType_t
+ * <p>Unknown </p>
  * @since 1.9.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#acbe0ed4347fe1bd085eef03ca7aadbdb
  */
 const RD_KAFKA_RESOURCE_PATTERN_UNKNOWN = 0;
 
 /**
- * enum rd_kafka_ResourcePatternType_t
+ * <p>Any (used for lookups) </p>
  * @since 1.9.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#acbe0ed4347fe1bd085eef03ca7aadbdb
  */
 const RD_KAFKA_RESOURCE_PATTERN_ANY = 1;
 
 /**
- * enum rd_kafka_ResourcePatternType_t
+ * <p>Match: will perform pattern matching </p>
  * @since 1.9.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#acbe0ed4347fe1bd085eef03ca7aadbdb
  */
 const RD_KAFKA_RESOURCE_PATTERN_MATCH = 2;
 
 /**
- * enum rd_kafka_ResourcePatternType_t
+ * <p>Literal: A literal resource name </p>
  * @since 1.9.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#acbe0ed4347fe1bd085eef03ca7aadbdb
  */
 const RD_KAFKA_RESOURCE_PATTERN_LITERAL = 3;
 
 /**
- * enum rd_kafka_ResourcePatternType_t
+ * <p>Prefixed: A prefixed resource name </p>
  * @since 1.9.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#acbe0ed4347fe1bd085eef03ca7aadbdb
  */
 const RD_KAFKA_RESOURCE_PATTERN_PREFIXED = 4;
 
@@ -1711,80 +1862,93 @@ const RD_KAFKA_RESOURCE_PATTERN_PREFIXED = 4;
 const RD_KAFKA_RESOURCE_PATTERN_TYPE__CNT = 5;
 
 /**
- * enum rd_kafka_AclOperation_t
+ * <p>Unknown </p>
  * @since 1.9.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a526269d7fc5c9acd1b8b56e84895c2bb
  */
 const RD_KAFKA_ACL_OPERATION_UNKNOWN = 0;
 
 /**
- * enum rd_kafka_AclOperation_t
+ * <p>In a filter, matches any AclOperation </p>
  * @since 1.9.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a526269d7fc5c9acd1b8b56e84895c2bb
  */
 const RD_KAFKA_ACL_OPERATION_ANY = 1;
 
 /**
- * enum rd_kafka_AclOperation_t
+ * <p>ALL operation </p>
  * @since 1.9.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a526269d7fc5c9acd1b8b56e84895c2bb
  */
 const RD_KAFKA_ACL_OPERATION_ALL = 2;
 
 /**
- * enum rd_kafka_AclOperation_t
+ * <p>READ operation </p>
  * @since 1.9.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a526269d7fc5c9acd1b8b56e84895c2bb
  */
 const RD_KAFKA_ACL_OPERATION_READ = 3;
 
 /**
- * enum rd_kafka_AclOperation_t
+ * <p>WRITE operation </p>
  * @since 1.9.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a526269d7fc5c9acd1b8b56e84895c2bb
  */
 const RD_KAFKA_ACL_OPERATION_WRITE = 4;
 
 /**
- * enum rd_kafka_AclOperation_t
+ * <p>CREATE operation </p>
  * @since 1.9.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a526269d7fc5c9acd1b8b56e84895c2bb
  */
 const RD_KAFKA_ACL_OPERATION_CREATE = 5;
 
 /**
- * enum rd_kafka_AclOperation_t
+ * <p>DELETE operation </p>
  * @since 1.9.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a526269d7fc5c9acd1b8b56e84895c2bb
  */
 const RD_KAFKA_ACL_OPERATION_DELETE = 6;
 
 /**
- * enum rd_kafka_AclOperation_t
+ * <p>ALTER operation </p>
  * @since 1.9.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a526269d7fc5c9acd1b8b56e84895c2bb
  */
 const RD_KAFKA_ACL_OPERATION_ALTER = 7;
 
 /**
- * enum rd_kafka_AclOperation_t
+ * <p>DESCRIBE operation </p>
  * @since 1.9.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a526269d7fc5c9acd1b8b56e84895c2bb
  */
 const RD_KAFKA_ACL_OPERATION_DESCRIBE = 8;
 
 /**
- * enum rd_kafka_AclOperation_t
+ * <p>CLUSTER_ACTION operation </p>
  * @since 1.9.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a526269d7fc5c9acd1b8b56e84895c2bb
  */
 const RD_KAFKA_ACL_OPERATION_CLUSTER_ACTION = 9;
 
 /**
- * enum rd_kafka_AclOperation_t
+ * <p>DESCRIBE_CONFIGS operation </p>
  * @since 1.9.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a526269d7fc5c9acd1b8b56e84895c2bb
  */
 const RD_KAFKA_ACL_OPERATION_DESCRIBE_CONFIGS = 10;
 
 /**
- * enum rd_kafka_AclOperation_t
+ * <p>ALTER_CONFIGS operation </p>
  * @since 1.9.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a526269d7fc5c9acd1b8b56e84895c2bb
  */
 const RD_KAFKA_ACL_OPERATION_ALTER_CONFIGS = 11;
 
 /**
- * enum rd_kafka_AclOperation_t
+ * <p>IDEMPOTENT_WRITE operation </p>
  * @since 1.9.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a526269d7fc5c9acd1b8b56e84895c2bb
  */
 const RD_KAFKA_ACL_OPERATION_IDEMPOTENT_WRITE = 12;
 
@@ -1795,26 +1959,30 @@ const RD_KAFKA_ACL_OPERATION_IDEMPOTENT_WRITE = 12;
 const RD_KAFKA_ACL_OPERATION__CNT = 13;
 
 /**
- * enum rd_kafka_AclPermissionType_t
+ * <p>Unknown </p>
  * @since 1.9.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#ab2da1706fced5ccc7ac5566825ba44b8
  */
 const RD_KAFKA_ACL_PERMISSION_TYPE_UNKNOWN = 0;
 
 /**
- * enum rd_kafka_AclPermissionType_t
+ * <p>In a filter, matches any AclPermissionType </p>
  * @since 1.9.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#ab2da1706fced5ccc7ac5566825ba44b8
  */
 const RD_KAFKA_ACL_PERMISSION_TYPE_ANY = 1;
 
 /**
- * enum rd_kafka_AclPermissionType_t
+ * <p>Disallows access </p>
  * @since 1.9.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#ab2da1706fced5ccc7ac5566825ba44b8
  */
 const RD_KAFKA_ACL_PERMISSION_TYPE_DENY = 2;
 
 /**
- * enum rd_kafka_AclPermissionType_t
+ * <p>Grants access. </p>
  * @since 1.9.0 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#ab2da1706fced5ccc7ac5566825ba44b8
  */
 const RD_KAFKA_ACL_PERMISSION_TYPE_ALLOW = 3;
 

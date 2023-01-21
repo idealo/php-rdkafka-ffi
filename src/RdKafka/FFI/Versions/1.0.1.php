@@ -20,13 +20,14 @@ declare(strict_types=1);
  * <p>E.g.: <code>0x000801ff</code> = 0.8.1</p>
  * <dl class="section remark"><dt>Remarks</dt><dd>This value should only be used during compile time, for runtime checks of version use rd_kafka_version() </dd></dl>
  * @since 1.0.1 of librdkafka
- * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#aa2e242fb8620a32b650a40575bc7f98e
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#aa2e242fb8620a32b650a40575bc7f98e
  */
 const RD_KAFKA_VERSION = 16777727;
 
 /**
- * enum rd_kafka_resp_err_t
+ * <p>Unsupported compression type </p>
  * @since 1.0.1 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03509bab51072c72a8dcf52337e6d5cb
  */
 const RD_KAFKA_RESP_ERR_UNSUPPORTED_COMPRESSION_TYPE = 76;
 
@@ -37,8 +38,9 @@ const RD_KAFKA_RESP_ERR_UNSUPPORTED_COMPRESSION_TYPE = 76;
 const RD_KAFKA_RESP_ERR_END_ALL = 82;
 
 /**
- * enum rd_kafka_admin_op_t
+ * <p>Number of ops defined </p>
  * @since 1.0.1 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a8041b7c45068283d95f54ee14c7362fe
  */
 const RD_KAFKA_ADMIN_OP__CNT = 6;
 
