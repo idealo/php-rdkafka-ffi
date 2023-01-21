@@ -12,7 +12,7 @@ Note: compatibility with PHP RdKafka extension ^4.0 is no longer supported.
 ## Added
 
 - Add explicit support for PHP 8.1 and 8.2
-- Add support for librdkafka v1.6.2, v1.9.0, v1.9.1, v1.9.2
+- Add support for librdkafka v1.6.2, v1.9.0, v1.9.1, v1.9.2, v2.0.0, v2.0.1, v2.0.2
 
 ## Fixed
 

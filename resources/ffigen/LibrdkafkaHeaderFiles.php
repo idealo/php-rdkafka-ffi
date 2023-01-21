@@ -95,7 +95,7 @@ class LibrdkafkaHeaderFiles
         foreach ($releases as $release) {
             if ($release->prerelease === false) {
                 $version = str_replace('v', '', $release->tag_name);
-                if (Comparator::greaterThanOrEqualTo($version, '1.0.0') && Comparator::lessThan($version, '2.0.0')) {
+                if (Comparator::greaterThanOrEqualTo($version, '1.0.0') && Comparator::lessThan($version, '2.1.0')) {
                     $supportedVersions[$version] = sprintf(
                         self::DOWNLOAD_BASE_URL_TEMPLATE,
                         $release->tag_name
@@ -177,6 +177,7 @@ class LibrdkafkaHeaderFiles
             typedef struct _IO_FILE FILE;
             typedef long int mode_t;
             typedef signed int int16_t;
+            typedef unsigned int uint16_t;
             typedef signed int int32_t;
             typedef signed long int int64_t;
             

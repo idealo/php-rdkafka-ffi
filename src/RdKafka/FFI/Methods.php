@@ -4749,4 +4749,517 @@ trait Methods
     {
         static::getFFI()->rd_kafka_DeleteAcls($rk, $del_acls, $del_acls_cnt, $options, $rkqu);
     }
+
+    /**
+     * @param \FFI\CData|null $conf rd_kafka_conf_t*
+     * @param \FFI\CData|\Closure $resolve_cb int(*)(const char*, const char*, const struct addrinfo*, struct addrinfo**, void*)
+     * @since 2.0.0 of librdkafka
+     */
+    public static function rd_kafka_conf_set_resolve_cb(?\FFI\CData $conf, $resolve_cb): void
+    {
+        static::getFFI()->rd_kafka_conf_set_resolve_cb($conf, $resolve_cb);
+    }
+
+    /**
+     * @param \FFI\CData|null $rk rd_kafka_t*
+     * @param string|null $username const char*
+     * @param string|null $password const char*
+     * @return \FFI\CData|null rd_kafka_error_t*
+     * @since 2.0.0 of librdkafka
+     */
+    public static function rd_kafka_sasl_set_credentials(?\FFI\CData $rk, ?string $username, ?string $password): ?\FFI\CData
+    {
+        return static::getFFI()->rd_kafka_sasl_set_credentials($rk, $username, $password);
+    }
+
+    /**
+     * @param \FFI\CData|null $node const rd_kafka_Node_t*
+     * @return int|null int
+     * @since 2.0.0 of librdkafka
+     */
+    public static function rd_kafka_Node_id(?\FFI\CData $node): ?int
+    {
+        return static::getFFI()->rd_kafka_Node_id($node);
+    }
+
+    /**
+     * @param \FFI\CData|null $node const rd_kafka_Node_t*
+     * @return string|null const char*
+     * @since 2.0.0 of librdkafka
+     */
+    public static function rd_kafka_Node_host(?\FFI\CData $node): ?string
+    {
+        return static::getFFI()->rd_kafka_Node_host($node);
+    }
+
+    /**
+     * @param \FFI\CData|null $node const rd_kafka_Node_t*
+     * @return int|null uint16_t
+     * @since 2.0.0 of librdkafka
+     */
+    public static function rd_kafka_Node_port(?\FFI\CData $node): ?int
+    {
+        return static::getFFI()->rd_kafka_Node_port($node);
+    }
+
+    /**
+     * @param int $state rd_kafka_consumer_group_state_t
+     * @return string|null const char*
+     * @since 2.0.0 of librdkafka
+     */
+    public static function rd_kafka_consumer_group_state_name(int $state): ?string
+    {
+        return static::getFFI()->rd_kafka_consumer_group_state_name($state);
+    }
+
+    /**
+     * @param string|null $name const char*
+     * @return int rd_kafka_consumer_group_state_t
+     * @since 2.0.0 of librdkafka
+     */
+    public static function rd_kafka_consumer_group_state_code(?string $name): int
+    {
+        return static::getFFI()->rd_kafka_consumer_group_state_code($name);
+    }
+
+    /**
+     * @param \FFI\CData|null $rkev rd_kafka_event_t*
+     * @return \FFI\CData|null const rd_kafka_ListConsumerGroups_result_t*
+     * @since 2.0.0 of librdkafka
+     */
+    public static function rd_kafka_event_ListConsumerGroups_result(?\FFI\CData $rkev): ?\FFI\CData
+    {
+        return static::getFFI()->rd_kafka_event_ListConsumerGroups_result($rkev);
+    }
+
+    /**
+     * @param \FFI\CData|null $rkev rd_kafka_event_t*
+     * @return \FFI\CData|null const rd_kafka_DescribeConsumerGroups_result_t*
+     * @since 2.0.0 of librdkafka
+     */
+    public static function rd_kafka_event_DescribeConsumerGroups_result(?\FFI\CData $rkev): ?\FFI\CData
+    {
+        return static::getFFI()->rd_kafka_event_DescribeConsumerGroups_result($rkev);
+    }
+
+    /**
+     * @param \FFI\CData|null $rkev rd_kafka_event_t*
+     * @return \FFI\CData|null const rd_kafka_AlterConsumerGroupOffsets_result_t*
+     * @since 2.0.0 of librdkafka
+     */
+    public static function rd_kafka_event_AlterConsumerGroupOffsets_result(?\FFI\CData $rkev): ?\FFI\CData
+    {
+        return static::getFFI()->rd_kafka_event_AlterConsumerGroupOffsets_result($rkev);
+    }
+
+    /**
+     * @param \FFI\CData|null $rkev rd_kafka_event_t*
+     * @return \FFI\CData|null const rd_kafka_ListConsumerGroupOffsets_result_t*
+     * @since 2.0.0 of librdkafka
+     */
+    public static function rd_kafka_event_ListConsumerGroupOffsets_result(?\FFI\CData $rkev): ?\FFI\CData
+    {
+        return static::getFFI()->rd_kafka_event_ListConsumerGroupOffsets_result($rkev);
+    }
+
+    /**
+     * @param \FFI\CData|null $rk rd_kafka_t*
+     * @param int|null $broker_id int32_t
+     * @param string|null $secproto const char*
+     * @param string|null $name const char*
+     * @param int|null $port int
+     * @param string|null $state const char*
+     * @param \FFI\CData|object|string|null $ic_opaque void*
+     * @return int rd_kafka_resp_err_t
+     * @since 2.0.0 of librdkafka
+     */
+    public static function rd_kafka_interceptor_f_on_broker_state_change_t(?\FFI\CData $rk, ?int $broker_id, ?string $secproto, ?string $name, ?int $port, ?string $state, $ic_opaque): int
+    {
+        return static::getFFI()->rd_kafka_interceptor_f_on_broker_state_change_t($rk, $broker_id, $secproto, $name, $port, $state, $ic_opaque);
+    }
+
+    /**
+     * @param \FFI\CData|null $rk rd_kafka_t*
+     * @param string|null $ic_name const char*
+     * @param \FFI\CData|\Closure $on_broker_state_change rd_kafka_resp_err_t(rd_kafka_interceptor_f_on_broker_state_change_t*)(rd_kafka_t*, int32_t, const char*, const char*, int, const char*, void*)
+     * @param \FFI\CData|object|string|null $ic_opaque void*
+     * @return int rd_kafka_resp_err_t
+     * @since 2.0.0 of librdkafka
+     */
+    public static function rd_kafka_interceptor_add_on_broker_state_change(?\FFI\CData $rk, ?string $ic_name, $on_broker_state_change, $ic_opaque): int
+    {
+        return static::getFFI()->rd_kafka_interceptor_add_on_broker_state_change($rk, $ic_name, $on_broker_state_change, $ic_opaque);
+    }
+
+    /**
+     * @param \FFI\CData|null $options rd_kafka_AdminOptions_t*
+     * @param int|null $true_or_false int
+     * @return \FFI\CData|null rd_kafka_error_t*
+     * @since 2.0.0 of librdkafka
+     */
+    public static function rd_kafka_AdminOptions_set_require_stable_offsets(?\FFI\CData $options, ?int $true_or_false): ?\FFI\CData
+    {
+        return static::getFFI()->rd_kafka_AdminOptions_set_require_stable_offsets($options, $true_or_false);
+    }
+
+    /**
+     * @param \FFI\CData|null $options rd_kafka_AdminOptions_t*
+     * @param \FFI\CData|null $consumer_group_states const rd_kafka_consumer_group_state_t*
+     * @param int|null $consumer_group_states_cnt size_t
+     * @return \FFI\CData|null rd_kafka_error_t*
+     * @since 2.0.0 of librdkafka
+     */
+    public static function rd_kafka_AdminOptions_set_match_consumer_group_states(?\FFI\CData $options, ?\FFI\CData $consumer_group_states, ?int $consumer_group_states_cnt): ?\FFI\CData
+    {
+        return static::getFFI()->rd_kafka_AdminOptions_set_match_consumer_group_states($options, $consumer_group_states, $consumer_group_states_cnt);
+    }
+
+    /**
+     * @param \FFI\CData|null $rk rd_kafka_t*
+     * @param \FFI\CData|null $options const rd_kafka_AdminOptions_t*
+     * @param \FFI\CData|null $rkqu rd_kafka_queue_t*
+     * @since 2.0.0 of librdkafka
+     */
+    public static function rd_kafka_ListConsumerGroups(?\FFI\CData $rk, ?\FFI\CData $options, ?\FFI\CData $rkqu): void
+    {
+        static::getFFI()->rd_kafka_ListConsumerGroups($rk, $options, $rkqu);
+    }
+
+    /**
+     * @param \FFI\CData|null $grplist const rd_kafka_ConsumerGroupListing_t*
+     * @return string|null const char*
+     * @since 2.0.0 of librdkafka
+     */
+    public static function rd_kafka_ConsumerGroupListing_group_id(?\FFI\CData $grplist): ?string
+    {
+        return static::getFFI()->rd_kafka_ConsumerGroupListing_group_id($grplist);
+    }
+
+    /**
+     * @param \FFI\CData|null $grplist const rd_kafka_ConsumerGroupListing_t*
+     * @return int|null int
+     * @since 2.0.0 of librdkafka
+     */
+    public static function rd_kafka_ConsumerGroupListing_is_simple_consumer_group(?\FFI\CData $grplist): ?int
+    {
+        return static::getFFI()->rd_kafka_ConsumerGroupListing_is_simple_consumer_group($grplist);
+    }
+
+    /**
+     * @param \FFI\CData|null $grplist const rd_kafka_ConsumerGroupListing_t*
+     * @return int rd_kafka_consumer_group_state_t
+     * @since 2.0.0 of librdkafka
+     */
+    public static function rd_kafka_ConsumerGroupListing_state(?\FFI\CData $grplist): int
+    {
+        return static::getFFI()->rd_kafka_ConsumerGroupListing_state($grplist);
+    }
+
+    /**
+     * @param \FFI\CData|null $result const rd_kafka_ListConsumerGroups_result_t*
+     * @param \FFI\CData|null $cntp size_t*
+     * @return \FFI\CData|null const rd_kafka_ConsumerGroupListing_t**
+     * @since 2.0.0 of librdkafka
+     */
+    public static function rd_kafka_ListConsumerGroups_result_valid(?\FFI\CData $result, ?\FFI\CData $cntp): ?\FFI\CData
+    {
+        return static::getFFI()->rd_kafka_ListConsumerGroups_result_valid($result, $cntp);
+    }
+
+    /**
+     * @param \FFI\CData|null $result const rd_kafka_ListConsumerGroups_result_t*
+     * @param \FFI\CData|null $cntp size_t*
+     * @return \FFI\CData|null const rd_kafka_error_t**
+     * @since 2.0.0 of librdkafka
+     */
+    public static function rd_kafka_ListConsumerGroups_result_errors(?\FFI\CData $result, ?\FFI\CData $cntp): ?\FFI\CData
+    {
+        return static::getFFI()->rd_kafka_ListConsumerGroups_result_errors($result, $cntp);
+    }
+
+    /**
+     * @param \FFI\CData|null $rk rd_kafka_t*
+     * @param \FFI\CData|null $groups const char**
+     * @param int|null $groups_cnt size_t
+     * @param \FFI\CData|null $options const rd_kafka_AdminOptions_t*
+     * @param \FFI\CData|null $rkqu rd_kafka_queue_t*
+     * @since 2.0.0 of librdkafka
+     */
+    public static function rd_kafka_DescribeConsumerGroups(?\FFI\CData $rk, ?\FFI\CData $groups, ?int $groups_cnt, ?\FFI\CData $options, ?\FFI\CData $rkqu): void
+    {
+        static::getFFI()->rd_kafka_DescribeConsumerGroups($rk, $groups, $groups_cnt, $options, $rkqu);
+    }
+
+    /**
+     * @param \FFI\CData|null $result const rd_kafka_DescribeConsumerGroups_result_t*
+     * @param \FFI\CData|null $cntp size_t*
+     * @return \FFI\CData|null const rd_kafka_ConsumerGroupDescription_t**
+     * @since 2.0.0 of librdkafka
+     */
+    public static function rd_kafka_DescribeConsumerGroups_result_groups(?\FFI\CData $result, ?\FFI\CData $cntp): ?\FFI\CData
+    {
+        return static::getFFI()->rd_kafka_DescribeConsumerGroups_result_groups($result, $cntp);
+    }
+
+    /**
+     * @param \FFI\CData|null $grpdesc const rd_kafka_ConsumerGroupDescription_t*
+     * @return string|null const char*
+     * @since 2.0.0 of librdkafka
+     */
+    public static function rd_kafka_ConsumerGroupDescription_group_id(?\FFI\CData $grpdesc): ?string
+    {
+        return static::getFFI()->rd_kafka_ConsumerGroupDescription_group_id($grpdesc);
+    }
+
+    /**
+     * @param \FFI\CData|null $grpdesc const rd_kafka_ConsumerGroupDescription_t*
+     * @return \FFI\CData|null const rd_kafka_error_t*
+     * @since 2.0.0 of librdkafka
+     */
+    public static function rd_kafka_ConsumerGroupDescription_error(?\FFI\CData $grpdesc): ?\FFI\CData
+    {
+        return static::getFFI()->rd_kafka_ConsumerGroupDescription_error($grpdesc);
+    }
+
+    /**
+     * @param \FFI\CData|null $grpdesc const rd_kafka_ConsumerGroupDescription_t*
+     * @return int|null int
+     * @since 2.0.0 of librdkafka
+     */
+    public static function rd_kafka_ConsumerGroupDescription_is_simple_consumer_group(?\FFI\CData $grpdesc): ?int
+    {
+        return static::getFFI()->rd_kafka_ConsumerGroupDescription_is_simple_consumer_group($grpdesc);
+    }
+
+    /**
+     * @param \FFI\CData|null $grpdesc const rd_kafka_ConsumerGroupDescription_t*
+     * @return string|null const char*
+     * @since 2.0.0 of librdkafka
+     */
+    public static function rd_kafka_ConsumerGroupDescription_partition_assignor(?\FFI\CData $grpdesc): ?string
+    {
+        return static::getFFI()->rd_kafka_ConsumerGroupDescription_partition_assignor($grpdesc);
+    }
+
+    /**
+     * @param \FFI\CData|null $grpdesc const rd_kafka_ConsumerGroupDescription_t*
+     * @return int rd_kafka_consumer_group_state_t
+     * @since 2.0.0 of librdkafka
+     */
+    public static function rd_kafka_ConsumerGroupDescription_state(?\FFI\CData $grpdesc): int
+    {
+        return static::getFFI()->rd_kafka_ConsumerGroupDescription_state($grpdesc);
+    }
+
+    /**
+     * @param \FFI\CData|null $grpdesc const rd_kafka_ConsumerGroupDescription_t*
+     * @return \FFI\CData|null const rd_kafka_Node_t*
+     * @since 2.0.0 of librdkafka
+     */
+    public static function rd_kafka_ConsumerGroupDescription_coordinator(?\FFI\CData $grpdesc): ?\FFI\CData
+    {
+        return static::getFFI()->rd_kafka_ConsumerGroupDescription_coordinator($grpdesc);
+    }
+
+    /**
+     * @param \FFI\CData|null $grpdesc const rd_kafka_ConsumerGroupDescription_t*
+     * @return int|null size_t
+     * @since 2.0.0 of librdkafka
+     */
+    public static function rd_kafka_ConsumerGroupDescription_member_count(?\FFI\CData $grpdesc): ?int
+    {
+        return static::getFFI()->rd_kafka_ConsumerGroupDescription_member_count($grpdesc);
+    }
+
+    /**
+     * @param \FFI\CData|null $grpdesc const rd_kafka_ConsumerGroupDescription_t*
+     * @param int|null $idx size_t
+     * @return \FFI\CData|null const rd_kafka_MemberDescription_t*
+     * @since 2.0.0 of librdkafka
+     */
+    public static function rd_kafka_ConsumerGroupDescription_member(?\FFI\CData $grpdesc, ?int $idx): ?\FFI\CData
+    {
+        return static::getFFI()->rd_kafka_ConsumerGroupDescription_member($grpdesc, $idx);
+    }
+
+    /**
+     * @param \FFI\CData|null $member const rd_kafka_MemberDescription_t*
+     * @return string|null const char*
+     * @since 2.0.0 of librdkafka
+     */
+    public static function rd_kafka_MemberDescription_client_id(?\FFI\CData $member): ?string
+    {
+        return static::getFFI()->rd_kafka_MemberDescription_client_id($member);
+    }
+
+    /**
+     * @param \FFI\CData|null $member const rd_kafka_MemberDescription_t*
+     * @return string|null const char*
+     * @since 2.0.0 of librdkafka
+     */
+    public static function rd_kafka_MemberDescription_group_instance_id(?\FFI\CData $member): ?string
+    {
+        return static::getFFI()->rd_kafka_MemberDescription_group_instance_id($member);
+    }
+
+    /**
+     * @param \FFI\CData|null $member const rd_kafka_MemberDescription_t*
+     * @return string|null const char*
+     * @since 2.0.0 of librdkafka
+     */
+    public static function rd_kafka_MemberDescription_consumer_id(?\FFI\CData $member): ?string
+    {
+        return static::getFFI()->rd_kafka_MemberDescription_consumer_id($member);
+    }
+
+    /**
+     * @param \FFI\CData|null $member const rd_kafka_MemberDescription_t*
+     * @return string|null const char*
+     * @since 2.0.0 of librdkafka
+     */
+    public static function rd_kafka_MemberDescription_host(?\FFI\CData $member): ?string
+    {
+        return static::getFFI()->rd_kafka_MemberDescription_host($member);
+    }
+
+    /**
+     * @param \FFI\CData|null $member const rd_kafka_MemberDescription_t*
+     * @return \FFI\CData|null const rd_kafka_MemberAssignment_t*
+     * @since 2.0.0 of librdkafka
+     */
+    public static function rd_kafka_MemberDescription_assignment(?\FFI\CData $member): ?\FFI\CData
+    {
+        return static::getFFI()->rd_kafka_MemberDescription_assignment($member);
+    }
+
+    /**
+     * @param \FFI\CData|null $assignment const rd_kafka_MemberAssignment_t*
+     * @return \FFI\CData|null const rd_kafka_topic_partition_list_t*
+     * @since 2.0.0 of librdkafka
+     */
+    public static function rd_kafka_MemberAssignment_partitions(?\FFI\CData $assignment): ?\FFI\CData
+    {
+        return static::getFFI()->rd_kafka_MemberAssignment_partitions($assignment);
+    }
+
+    /**
+     * @param string|null $group_id const char*
+     * @param \FFI\CData|null $partitions const rd_kafka_topic_partition_list_t*
+     * @return \FFI\CData|null rd_kafka_ListConsumerGroupOffsets_t*
+     * @since 2.0.0 of librdkafka
+     */
+    public static function rd_kafka_ListConsumerGroupOffsets_new(?string $group_id, ?\FFI\CData $partitions): ?\FFI\CData
+    {
+        return static::getFFI()->rd_kafka_ListConsumerGroupOffsets_new($group_id, $partitions);
+    }
+
+    /**
+     * @param \FFI\CData|null $list_grpoffsets rd_kafka_ListConsumerGroupOffsets_t*
+     * @since 2.0.0 of librdkafka
+     */
+    public static function rd_kafka_ListConsumerGroupOffsets_destroy(?\FFI\CData $list_grpoffsets): void
+    {
+        static::getFFI()->rd_kafka_ListConsumerGroupOffsets_destroy($list_grpoffsets);
+    }
+
+    /**
+     * @param \FFI\CData|null $list_grpoffsets rd_kafka_ListConsumerGroupOffsets_t**
+     * @param int|null $list_grpoffset_cnt size_t
+     * @since 2.0.0 of librdkafka
+     */
+    public static function rd_kafka_ListConsumerGroupOffsets_destroy_array(?\FFI\CData $list_grpoffsets, ?int $list_grpoffset_cnt): void
+    {
+        static::getFFI()->rd_kafka_ListConsumerGroupOffsets_destroy_array($list_grpoffsets, $list_grpoffset_cnt);
+    }
+
+    /**
+     * @param \FFI\CData|null $rk rd_kafka_t*
+     * @param \FFI\CData|null $list_grpoffsets rd_kafka_ListConsumerGroupOffsets_t**
+     * @param int|null $list_grpoffsets_cnt size_t
+     * @param \FFI\CData|null $options const rd_kafka_AdminOptions_t*
+     * @param \FFI\CData|null $rkqu rd_kafka_queue_t*
+     * @since 2.0.0 of librdkafka
+     */
+    public static function rd_kafka_ListConsumerGroupOffsets(?\FFI\CData $rk, ?\FFI\CData $list_grpoffsets, ?int $list_grpoffsets_cnt, ?\FFI\CData $options, ?\FFI\CData $rkqu): void
+    {
+        static::getFFI()->rd_kafka_ListConsumerGroupOffsets($rk, $list_grpoffsets, $list_grpoffsets_cnt, $options, $rkqu);
+    }
+
+    /**
+     * @param \FFI\CData|null $result const rd_kafka_ListConsumerGroupOffsets_result_t*
+     * @param \FFI\CData|null $cntp size_t*
+     * @return \FFI\CData|null const rd_kafka_group_result_t**
+     * @since 2.0.0 of librdkafka
+     */
+    public static function rd_kafka_ListConsumerGroupOffsets_result_groups(?\FFI\CData $result, ?\FFI\CData $cntp): ?\FFI\CData
+    {
+        return static::getFFI()->rd_kafka_ListConsumerGroupOffsets_result_groups($result, $cntp);
+    }
+
+    /**
+     * @param string|null $group_id const char*
+     * @param \FFI\CData|null $partitions const rd_kafka_topic_partition_list_t*
+     * @return \FFI\CData|null rd_kafka_AlterConsumerGroupOffsets_t*
+     * @since 2.0.0 of librdkafka
+     */
+    public static function rd_kafka_AlterConsumerGroupOffsets_new(?string $group_id, ?\FFI\CData $partitions): ?\FFI\CData
+    {
+        return static::getFFI()->rd_kafka_AlterConsumerGroupOffsets_new($group_id, $partitions);
+    }
+
+    /**
+     * @param \FFI\CData|null $alter_grpoffsets rd_kafka_AlterConsumerGroupOffsets_t*
+     * @since 2.0.0 of librdkafka
+     */
+    public static function rd_kafka_AlterConsumerGroupOffsets_destroy(?\FFI\CData $alter_grpoffsets): void
+    {
+        static::getFFI()->rd_kafka_AlterConsumerGroupOffsets_destroy($alter_grpoffsets);
+    }
+
+    /**
+     * @param \FFI\CData|null $alter_grpoffsets rd_kafka_AlterConsumerGroupOffsets_t**
+     * @param int|null $alter_grpoffset_cnt size_t
+     * @since 2.0.0 of librdkafka
+     */
+    public static function rd_kafka_AlterConsumerGroupOffsets_destroy_array(?\FFI\CData $alter_grpoffsets, ?int $alter_grpoffset_cnt): void
+    {
+        static::getFFI()->rd_kafka_AlterConsumerGroupOffsets_destroy_array($alter_grpoffsets, $alter_grpoffset_cnt);
+    }
+
+    /**
+     * @param \FFI\CData|null $rk rd_kafka_t*
+     * @param \FFI\CData|null $alter_grpoffsets rd_kafka_AlterConsumerGroupOffsets_t**
+     * @param int|null $alter_grpoffsets_cnt size_t
+     * @param \FFI\CData|null $options const rd_kafka_AdminOptions_t*
+     * @param \FFI\CData|null $rkqu rd_kafka_queue_t*
+     * @since 2.0.0 of librdkafka
+     */
+    public static function rd_kafka_AlterConsumerGroupOffsets(?\FFI\CData $rk, ?\FFI\CData $alter_grpoffsets, ?int $alter_grpoffsets_cnt, ?\FFI\CData $options, ?\FFI\CData $rkqu): void
+    {
+        static::getFFI()->rd_kafka_AlterConsumerGroupOffsets($rk, $alter_grpoffsets, $alter_grpoffsets_cnt, $options, $rkqu);
+    }
+
+    /**
+     * @param \FFI\CData|null $result const rd_kafka_AlterConsumerGroupOffsets_result_t*
+     * @param \FFI\CData|null $cntp size_t*
+     * @return \FFI\CData|null const rd_kafka_group_result_t**
+     * @since 2.0.0 of librdkafka
+     */
+    public static function rd_kafka_AlterConsumerGroupOffsets_result_groups(?\FFI\CData $result, ?\FFI\CData $cntp): ?\FFI\CData
+    {
+        return static::getFFI()->rd_kafka_AlterConsumerGroupOffsets_result_groups($result, $cntp);
+    }
+
+    /**
+     * @param \FFI\CData|null $mcluster rd_kafka_mock_cluster_t*
+     * @param int|null $broker_id int32_t
+     * @param int|null $ApiKey int16_t
+     * @param \FFI\CData|null $cntp size_t*
+     * @return int rd_kafka_resp_err_t
+     * @since 2.0.0 of librdkafka
+     */
+    public static function rd_kafka_mock_broker_error_stack_cnt(?\FFI\CData $mcluster, ?int $broker_id, ?int $ApiKey, ?\FFI\CData $cntp): int
+    {
+        return static::getFFI()->rd_kafka_mock_broker_error_stack_cnt($mcluster, $broker_id, $ApiKey, $cntp);
+    }
 }

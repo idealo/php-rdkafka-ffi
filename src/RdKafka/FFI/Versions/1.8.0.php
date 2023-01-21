@@ -50,6 +50,7 @@ const RD_KAFKA_CDEF = 'typedef long int ssize_t;
 typedef struct _IO_FILE FILE;
 typedef long int mode_t;
 typedef signed int int16_t;
+typedef unsigned int uint16_t;
 typedef signed int int32_t;
 typedef signed long int int64_t;
 int rd_kafka_version(void);
