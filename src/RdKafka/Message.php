@@ -19,7 +19,7 @@ class Message
 
     public ?string $payload;
 
-    public int $len;
+    public ?int $len;
 
     public ?string $key;
 
@@ -29,7 +29,7 @@ class Message
 
     public int $timestampType;
 
-    public ?array $headers;
+    public array $headers;
 
     /**
      * @var int microseconds
@@ -44,7 +44,7 @@ class Message
     public int $brokerId;
 
     /**
-     * @var mixed|null Note: RdKafka extension only supports type string
+     * @var mixed|null Note: RdKafka extension supports only string
      */
     public $opaque;
 
@@ -69,7 +69,7 @@ class Message
             $this->len = (int) $nativeMessage->len;
         } else {
             $this->payload = null;
-            $this->len = 0;
+            $this->len = null;
         }
 
         if ($nativeMessage->key !== null) {
@@ -100,24 +100,24 @@ class Message
         return rd_kafka_err2str($this->err);
     }
 
-    private function parseHeaders(CData $nativeMessage): ?array
+    private function parseHeaders(CData $nativeMessage): array
     {
         $headers = [];
 
         if ($nativeMessage->err !== RD_KAFKA_RESP_ERR_NO_ERROR) {
-            return null;
+            return $headers;
         }
 
         $message_headers = Library::rd_kafka_headers_new(0);
 
         $resp = (int) Library::rd_kafka_message_headers($nativeMessage, FFI::addr($message_headers));
         if ($resp === RD_KAFKA_RESP_ERR__NOENT) {
-            return null;
+            return $headers;
         }
 
         if ($resp !== RD_KAFKA_RESP_ERR_NO_ERROR) {
             $this->err = $resp;
-            return null;
+            return $headers;
         }
 
         if ($message_headers !== null) {
