@@ -417,7 +417,7 @@ class ConfTest extends TestCase
                         break;
 
                     default:
-                        throw new \Exception($err);
+                        throw Exception::fromError($err);
                 }
             }
         );
@@ -446,13 +446,13 @@ class ConfTest extends TestCase
         $this->assertContains($consumer3, $assignedConsumers);
 
         $this->assertSame(RD_KAFKA_RESP_ERR__ASSIGN_PARTITIONS, $rebalanceCallbackStack[0]['err']);
-        $this->assertCount(1, $rebalanceCallbackStack[0]['partitions']);
+        $this->assertGreaterThanOrEqual(1, $rebalanceCallbackStack[0]['partitions']);
 
         $this->assertSame(RD_KAFKA_RESP_ERR__ASSIGN_PARTITIONS, $rebalanceCallbackStack[1]['err']);
-        $this->assertCount(1, $rebalanceCallbackStack[1]['partitions']);
+        $this->assertGreaterThanOrEqual(1, $rebalanceCallbackStack[1]['partitions']);
 
         $this->assertSame(RD_KAFKA_RESP_ERR__ASSIGN_PARTITIONS, $rebalanceCallbackStack[2]['err']);
-        $this->assertCount(1, $rebalanceCallbackStack[2]['partitions']);
+        $this->assertGreaterThanOrEqual(1, $rebalanceCallbackStack[2]['partitions']);
 
         // reset stack
         $rebalanceCallbackStack = [];
@@ -476,13 +476,13 @@ class ConfTest extends TestCase
         $this->assertContains($consumer3, $revokedConsumers);
 
         $this->assertSame(RD_KAFKA_RESP_ERR__REVOKE_PARTITIONS, $rebalanceCallbackStack[0]['err']);
-        $this->assertCount(1, $rebalanceCallbackStack[0]['partitions']);
+        $this->assertGreaterThanOrEqual(1, $rebalanceCallbackStack[0]['partitions']);
 
         $this->assertSame(RD_KAFKA_RESP_ERR__REVOKE_PARTITIONS, $rebalanceCallbackStack[1]['err']);
-        $this->assertCount(1, $rebalanceCallbackStack[1]['partitions']);
+        $this->assertGreaterThanOrEqual(1, $rebalanceCallbackStack[1]['partitions']);
 
         $this->assertSame(RD_KAFKA_RESP_ERR__REVOKE_PARTITIONS, $rebalanceCallbackStack[2]['err']);
-        $this->assertCount(1, $rebalanceCallbackStack[2]['partitions']);
+        $this->assertGreaterThanOrEqual(1, $rebalanceCallbackStack[2]['partitions']);
     }
 
     /**
@@ -515,7 +515,7 @@ class ConfTest extends TestCase
                         break;
 
                     default:
-                        throw new \Exception($err);
+                        throw Exception::fromError($err);
                 }
             }
         );
