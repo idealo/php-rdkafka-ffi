@@ -27,6 +27,29 @@ class LibrdkafkaDocumentation
         $page = new Crawler($html);
         $elements = $page->filter('div[class=contents] a[id]')->each(
             function (Crawler $node, $i) {
+                // rewrite code examples - use pre & code tag
+                $node->nextAll()->eq(1)->filter('div[class=fragment]')->each(
+                    function (Crawler $node, $i) {
+                        // remove ttc nodes
+                        $node->filter('div[class=ttc]')->each(function (Crawler $node, $i) {
+                            $node->getNode(0)->parentNode->removeChild($node->getNode(0));
+                        });
+
+                        $oldNode = $node->first()->getNode(0);
+                        $doc = $oldNode->ownerDocument;
+
+                        $content = $oldNode->ownerDocument->createTextNode(trim($node->first()->text('', false)));
+                        $code = $doc->createElement('code');
+                        $code->append($content);
+                        $pre = $doc->createElement('pre');
+                        $pre->append($code);
+                        $newNode = $doc->createElement('div');
+                        $newNode->append($pre);
+
+                        $oldNode->parentNode->replaceChild($newNode, $oldNode);
+                    }
+                );
+
                 // extract defines & methods
                 if ($node->nextAll()->count()
                     && $node->nextAll()->eq(1)->filter('td[class=memname]')->count()

@@ -565,22 +565,16 @@ trait Methods
 
     /**
      * <p>Create configuration object. </p>
-     * <p>When providing your own configuration to the <code>rd_kafka_*_new_*</code>() calls the rd_kafka_conf_t objects needs to be created with this function which will set up the defaults. I.e.: </p><div class="fragment"><div class="line">rd_kafka_conf_t *myconf;</div>
-     * <div class="line">rd_kafka_conf_res_t res;</div>
-     * <div class="line"> </div>
-     * <div class="line">myconf = rd_kafka_conf_new();</div>
-     * <div class="line">res = rd_kafka_conf_set(myconf, <span class="stringliteral">"socket.timeout.ms"</span>, <span class="stringliteral">"600"</span>,</div>
-     * <div class="line">                        errstr, <span class="keyword">sizeof</span>(errstr));</div>
-     * <div class="line"><span class="keywordflow">if</span> (res != RD_KAFKA_CONF_OK)</div>
-     * <div class="line">   die(<span class="stringliteral">"%s\n"</span>, errstr);</div>
-     * <div class="line"> </div>
-     * <div class="line">rk = rd_kafka_new(..., myconf);</div>
-     * <div class="ttc" id="ardkafka_8h_html_a63d5cd86ab1f77772b2be170e1c09c24"><div class="ttname">rd_kafka_new</div><div class="ttdeci">RD_EXPORT rd_kafka_t * rd_kafka_new(rd_kafka_type_t type, rd_kafka_conf_t *conf, char *errstr, size_t errstr_size)</div><div class="ttdoc">Creates a new Kafka handle and starts its operation according to the specified type (RD_KAFKA_CONSUME...</div></div>
-     * <div class="ttc" id="ardkafka_8h_html_aa7459bd22e8cfa81aa8c2480a4a0304c"><div class="ttname">rd_kafka_conf_new</div><div class="ttdeci">RD_EXPORT rd_kafka_conf_t * rd_kafka_conf_new(void)</div><div class="ttdoc">Create configuration object.</div></div>
-     * <div class="ttc" id="ardkafka_8h_html_abb1b319278333e8cdee9442da7f135e8"><div class="ttname">rd_kafka_conf_set</div><div class="ttdeci">RD_EXPORT rd_kafka_conf_res_t rd_kafka_conf_set(rd_kafka_conf_t *conf, const char *name, const char *value, char *errstr, size_t errstr_size)</div><div class="ttdoc">Sets a configuration property.</div></div>
-     * <div class="ttc" id="ardkafka_8h_html_ad8306a08e59e8e2cbc6abdb84f9689f4"><div class="ttname">rd_kafka_conf_res_t</div><div class="ttdeci">rd_kafka_conf_res_t</div><div class="ttdoc">Configuration result type.</div><div class="ttdef"><b>Definition:</b> rdkafka.h:1603</div></div>
-     * <div class="ttc" id="ardkafka_8h_html_ad8306a08e59e8e2cbc6abdb84f9689f4a12343fa082ab52164a17130d6b0d0f5b"><div class="ttname">RD_KAFKA_CONF_OK</div><div class="ttdeci">@ RD_KAFKA_CONF_OK</div><div class="ttdef"><b>Definition:</b> rdkafka.h:1608</div></div>
-     * </div><!-- fragment --><p>Please see CONFIGURATION.md for the default settings or use rd_kafka_conf_properties_show() to provide the information at runtime.</p>
+     * <p>When providing your own configuration to the <code>rd_kafka_*_new_*</code>() calls the rd_kafka_conf_t objects needs to be created with this function which will set up the defaults. I.e.: </p><div><pre><code>rd_kafka_conf_t *myconf;
+     * rd_kafka_conf_res_t res;
+     *
+     * myconf = rd_kafka_conf_new();
+     * res = rd_kafka_conf_set(myconf, "socket.timeout.ms", "600",
+     *                         errstr, sizeof(errstr));
+     * if (res != RD_KAFKA_CONF_OK)
+     *    die("%s\n", errstr);
+     *
+     * rk = rd_kafka_new(..., myconf);</code></pre></div><!-- fragment --><p>Please see CONFIGURATION.md for the default settings or use rd_kafka_conf_properties_show() to provide the information at runtime.</p>
      * <p>The properties are identical to the Apache Kafka configuration properties whenever possible.</p>
      * <dl class="section remark"><dt>Remarks</dt><dd>A successful call to rd_kafka_new() will assume ownership of the conf object and rd_kafka_conf_destroy() must not be called.</dd></dl>
      *
@@ -748,47 +742,37 @@ trait Methods
      * rd_kafka_assignment_lost() </dd>
      * <dd>
      * rd_kafka_rebalance_protocol()</dd></dl>
-     * <p>The following example shows the application's responsibilities: </p><div class="fragment"><div class="line"><span class="keyword">static</span> <span class="keywordtype">void</span> rebalance_cb (rd_kafka_t *rk, rd_kafka_resp_err_t err,</div>
-     * <div class="line">                          rd_kafka_topic_partition_list_t *partitions,</div>
-     * <div class="line">                          <span class="keywordtype">void</span> *opaque) {</div>
-     * <div class="line"> </div>
-     * <div class="line">    <span class="keywordflow">switch</span> (err)</div>
-     * <div class="line">    {</div>
-     * <div class="line">      <span class="keywordflow">case</span> RD_KAFKA_RESP_ERR__ASSIGN_PARTITIONS:</div>
-     * <div class="line">         <span class="comment">// application may load offets from arbitrary external</span></div>
-     * <div class="line">         <span class="comment">// storage here and update \p partitions</span></div>
-     * <div class="line">         <span class="keywordflow">if</span> (!strcmp(rd_kafka_rebalance_protocol(rk), <span class="stringliteral">"COOPERATIVE"</span>))</div>
-     * <div class="line">                 rd_kafka_incremental_assign(rk, partitions);</div>
-     * <div class="line">         <span class="keywordflow">else</span> <span class="comment">// EAGER</span></div>
-     * <div class="line">                 rd_kafka_assign(rk, partitions);</div>
-     * <div class="line">         <span class="keywordflow">break</span>;</div>
-     * <div class="line"> </div>
-     * <div class="line">      <span class="keywordflow">case</span> RD_KAFKA_RESP_ERR__REVOKE_PARTITIONS:</div>
-     * <div class="line">         <span class="keywordflow">if</span> (manual_commits) <span class="comment">// Optional explicit manual commit</span></div>
-     * <div class="line">             rd_kafka_commit(rk, partitions, 0); <span class="comment">// sync commit</span></div>
-     * <div class="line"> </div>
-     * <div class="line">         <span class="keywordflow">if</span> (!strcmp(rd_kafka_rebalance_protocol(rk), <span class="stringliteral">"COOPERATIVE"</span>))</div>
-     * <div class="line">                 rd_kafka_incremental_unassign(rk, partitions);</div>
-     * <div class="line">         <span class="keywordflow">else</span> <span class="comment">// EAGER</span></div>
-     * <div class="line">                 rd_kafka_assign(rk, NULL);</div>
-     * <div class="line">         <span class="keywordflow">break</span>;</div>
-     * <div class="line"> </div>
-     * <div class="line">      <span class="keywordflow">default</span>:</div>
-     * <div class="line">         handle_unlikely_error(err);</div>
-     * <div class="line">         rd_kafka_assign(rk, NULL); <span class="comment">// sync state</span></div>
-     * <div class="line">         <span class="keywordflow">break</span>;</div>
-     * <div class="line">     }</div>
-     * <div class="line">}</div>
-     * <div class="ttc" id="ardkafka_8h_html_a03509bab51072c72a8dcf52337e6d5cb"><div class="ttname">rd_kafka_resp_err_t</div><div class="ttdeci">rd_kafka_resp_err_t</div><div class="ttdoc">Error codes.</div><div class="ttdef"><b>Definition:</b> rdkafka.h:278</div></div>
-     * <div class="ttc" id="ardkafka_8h_html_a03509bab51072c72a8dcf52337e6d5cba4eab145a6f57f455bdde22cb94b61e90"><div class="ttname">RD_KAFKA_RESP_ERR__ASSIGN_PARTITIONS</div><div class="ttdeci">@ RD_KAFKA_RESP_ERR__ASSIGN_PARTITIONS</div><div class="ttdef"><b>Definition:</b> rdkafka.h:334</div></div>
-     * <div class="ttc" id="ardkafka_8h_html_a03509bab51072c72a8dcf52337e6d5cba52a7ba59b755f419beec0433cb1633bb"><div class="ttname">RD_KAFKA_RESP_ERR__REVOKE_PARTITIONS</div><div class="ttdeci">@ RD_KAFKA_RESP_ERR__REVOKE_PARTITIONS</div><div class="ttdef"><b>Definition:</b> rdkafka.h:336</div></div>
-     * <div class="ttc" id="ardkafka_8h_html_a0566419eff2001f8371e3b50aa7d26e9"><div class="ttname">rd_kafka_assign</div><div class="ttdeci">RD_EXPORT rd_kafka_resp_err_t rd_kafka_assign(rd_kafka_t *rk, const rd_kafka_topic_partition_list_t *partitions)</div><div class="ttdoc">Atomic assignment of partitions to consume.</div></div>
-     * <div class="ttc" id="ardkafka_8h_html_a27f7bd18e42ed44f33932c2f9b6a4192"><div class="ttname">rd_kafka_incremental_unassign</div><div class="ttdeci">RD_EXPORT rd_kafka_error_t * rd_kafka_incremental_unassign(rd_kafka_t *rk, const rd_kafka_topic_partition_list_t *partitions)</div><div class="ttdoc">Incrementally remove partitions from the current assignment.</div></div>
-     * <div class="ttc" id="ardkafka_8h_html_a3bd9f42cf76b2a8cf2f4a4343abe8556"><div class="ttname">rd_kafka_incremental_assign</div><div class="ttdeci">RD_EXPORT rd_kafka_error_t * rd_kafka_incremental_assign(rd_kafka_t *rk, const rd_kafka_topic_partition_list_t *partitions)</div><div class="ttdoc">Incrementally add partitions to the current assignment.</div></div>
-     * <div class="ttc" id="ardkafka_8h_html_a57d367712406848d59cdaae97ab29354"><div class="ttname">rd_kafka_rebalance_protocol</div><div class="ttdeci">RD_EXPORT const char * rd_kafka_rebalance_protocol(rd_kafka_t *rk)</div><div class="ttdoc">The rebalance protocol currently in use. This will be "NONE" if the consumer has not (yet) joined a g...</div></div>
-     * <div class="ttc" id="ardkafka_8h_html_ab96539928328f14c3c9177ea0c896c87"><div class="ttname">rd_kafka_commit</div><div class="ttdeci">RD_EXPORT rd_kafka_resp_err_t rd_kafka_commit(rd_kafka_t *rk, const rd_kafka_topic_partition_list_t *offsets, int async)</div><div class="ttdoc">Commit offsets on broker for the provided list of partitions.</div></div>
-     * <div class="ttc" id="astructrd__kafka__topic__partition__list__t_html"><div class="ttname">rd_kafka_topic_partition_list_t</div><div class="ttdoc">A growable list of Topic+Partitions.</div><div class="ttdef"><b>Definition:</b> rdkafka.h:917</div></div>
-     * </div><!-- fragment --><dl class="section remark"><dt>Remarks</dt><dd>The above example lacks error handling for assign calls, see the examples/ directory. </dd></dl>
+     * <p>The following example shows the application's responsibilities: </p><div><pre><code>static void rebalance_cb (rd_kafka_t *rk, rd_kafka_resp_err_t err,
+     *                           rd_kafka_topic_partition_list_t *partitions,
+     *                           void *opaque) {
+     *
+     *     switch (err)
+     *     {
+     *       case RD_KAFKA_RESP_ERR__ASSIGN_PARTITIONS:
+     *          // application may load offets from arbitrary external
+     *          // storage here and update \p partitions
+     *          if (!strcmp(rd_kafka_rebalance_protocol(rk), "COOPERATIVE"))
+     *                  rd_kafka_incremental_assign(rk, partitions);
+     *          else // EAGER
+     *                  rd_kafka_assign(rk, partitions);
+     *          break;
+     *
+     *       case RD_KAFKA_RESP_ERR__REVOKE_PARTITIONS:
+     *          if (manual_commits) // Optional explicit manual commit
+     *              rd_kafka_commit(rk, partitions, 0); // sync commit
+     *
+     *          if (!strcmp(rd_kafka_rebalance_protocol(rk), "COOPERATIVE"))
+     *                  rd_kafka_incremental_unassign(rk, partitions);
+     *          else // EAGER
+     *                  rd_kafka_assign(rk, NULL);
+     *          break;
+     *
+     *       default:
+     *          handle_unlikely_error(err);
+     *          rd_kafka_assign(rk, NULL); // sync state
+     *          break;
+     *      }
+     * }</code></pre></div><!-- fragment --><dl class="section remark"><dt>Remarks</dt><dd>The above example lacks error handling for assign calls, see the examples/ directory. </dd></dl>
      * @param \FFI\CData|null $conf rd_kafka_conf_t*
      * @param \FFI\CData|\Closure $rebalance_cb void(*)(rd_kafka_t*, rd_kafka_resp_err_t, rd_kafka_topic_partition_list_t*, void*)
      * @since 1.0.0 of librdkafka
