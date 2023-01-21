@@ -53,7 +53,7 @@ Test - should show ```rdkafka``` in modules list
 ## References
 
 * [FFI extension](https://www.php.net/manual/en/book.ffi.php)
-* [librdkafka ^1.0](https://github.com/edenhill/librdkafka) ([docs](https://docs.confluent.io/current/clients/librdkafka/rdkafka_8h.html))
+* [librdkafka ^1.0](https://github.com/confluentinc/librdkafka) ([docs](https://docs.confluent.io/current/clients/librdkafka/rdkafka_8h.html))
 * Confluent [Kafka](https://hub.docker.com/r/confluentinc/cp-kafka) / [Zookeeper](https://hub.docker.com/r/confluentinc/cp-zookeeper) docker
   images
 * [phpbench lib](https://github.com/phpbench/phpbench) for benchmarking

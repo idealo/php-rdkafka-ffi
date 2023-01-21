@@ -80,7 +80,7 @@ jobs:
       - name: Build librdkafka ${{ matrix.librdkafka }}
         if: ${{ steps.librdkafka-build-cache.outputs.cache-hit != 'true' }}
         run: |
-          git clone --branch "${{ matrix.librdkafka }}" -c advice.detachedHead=false --depth 1 https://github.com/edenhill/librdkafka.git /tmp/librdkafka; \
+          git clone --branch "${{ matrix.librdkafka }}" -c advice.detachedHead=false --depth 1 https://github.com/confluentinc/librdkafka.git /tmp/librdkafka; \
           cd /tmp/librdkafka
           ./configure --install-deps
           make

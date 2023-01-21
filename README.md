@@ -9,9 +9,9 @@
 [![Maintainability](https://api.codeclimate.com/v1/badges/9ee55cb5587fbf64dea8/maintainability)](https://codeclimate.com/github/idealo/php-rdkafka-ffi/maintainability)
 [![Packagist](https://img.shields.io/packagist/v/idealo/php-rdkafka-ffi)](https://packagist.org/packages/idealo/php-rdkafka-ffi)
 
-This is a Kafka client library for PHP ^7.4 with a slim [librdkafka](https://github.com/edenhill/librdkafka) binding via  [FFI](https://www.php.net/manual/en/book.ffi.php).
+This is a Kafka client library for PHP ^7.4 and ^8.0 with a slim [librdkafka](https://github.com/confluentinc/librdkafka) binding via  [FFI](https://www.php.net/manual/en/book.ffi.php).
 
-It supports the same interfaces as the [PHP RdKafka extension](https://github.com/arnaud-lb/php-rdkafka) ^4.0 and ^5.0.
+It supports the same interfaces as the [PHP RdKafka extension](https://github.com/arnaud-lb/php-rdkafka) ^5.0 and ^6.0.
 
 ## Supported Features
 

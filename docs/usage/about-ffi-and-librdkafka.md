@@ -1,6 +1,6 @@
 # About FFI and librdkafka
 
-This library is pretty slim wrapper around [librdkafka](https://github.com/edenhill/librdkafka). Most of the heavy lifting is done by librdkafka.
+This library is pretty slim wrapper around [librdkafka](https://github.com/confluentinc/librdkafka). Most of the heavy lifting is done by librdkafka.
 
 The binding to librdkafka is done via the [FFI extension](https://www.php.net/manual/en/book.ffi.php) which is bundled since PHP ^7.4.
 
@@ -19,8 +19,8 @@ The ffi extension allows the loading of shared libraries (.so, .dynlib or .DLL),
 
 ## What is librdkafka?
 
-[librdkafka](https://github.com/edenhill/librdkafka) is a high performance C implementation of the Apache Kafka client, providing a reliable and performant client for production use.
+[librdkafka](https://github.com/confluentinc/librdkafka) is a high performance C implementation of the Apache Kafka client, providing a reliable and performant client for production use.
 
 This [librdkafka introduction](https://docs.confluent.io/platform/current/clients/librdkafka/html/md_INTRODUCTION.html) gives a detailed overview of the supported features and inner workings.
 
-It is maintained by [Magnus Edenhill](https://github.com/edenhill).
+It is maintained by [Confluent Inc.](https://github.com/confluentinc).
