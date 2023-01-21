@@ -5,6 +5,8 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [Unreleased]
 
+## [0.5.0]
+
 This pre-release improves compatible with the [PHP RdKafka extension](https://github.com/arnaud-lb/php-rdkafka) ^5.0 and ^6.0.
 
 Note: compatibility with PHP RdKafka extension ^4.0 is no longer supported.
@@ -19,6 +21,8 @@ Note: compatibility with PHP RdKafka extension ^4.0 is no longer supported.
 - Fix Message header & len type handling
   - Message::headers is now always of type array
   - Message::len is null if payload is null
+- Fix Collection:key() and Collection::current() type handling
+  - Collection:key() always returns int
 
 ## [0.4.0]
 
@@ -86,7 +90,8 @@ Special thanks to [@siad007](https://github.com/siad007) and [@carusogabriel]( h
 - Add examples and basic documentation
 - Add benchmarks
 
-[Unreleased]: https://github.com/idealo/php-rdkafka-ffi/compare/v0.4.0...HEAD
+[Unreleased]: https://github.com/idealo/php-rdkafka-ffi/compare/v0.5.0...HEAD
+[0.5.0]: https://github.com/idealo/php-rdkafka-ffi/compare/v0.4.0...v0.5.0
 [0.4.0]: https://github.com/idealo/php-rdkafka-ffi/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/idealo/php-rdkafka-ffi/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/idealo/php-rdkafka-ffi/compare/v0.1.0...v0.2.0

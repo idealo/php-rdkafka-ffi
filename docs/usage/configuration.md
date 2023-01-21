@@ -2,7 +2,7 @@
 
 !!! Tip
 
-    See [librdkafka CONFIGURATION](https://github.com/edenhill/librdkafka/blob/master/CONFIGURATION.md) for available parameters
+    See [librdkafka CONFIGURATION](https://github.com/confluentinc/librdkafka/blob/master/CONFIGURATION.md) for available parameters
 
 ## Set, Get & Dump
 
@@ -67,7 +67,7 @@ $conf->setErrorCb(
 
 !!! Tip
 
-    See https://github.com/edenhill/librdkafka/blob/master/STATISTICS.md for a detailed list of emitted metrics.
+    See https://github.com/confluentinc/librdkafka/blob/master/STATISTICS.md for a detailed list of emitted metrics.
 
 ```php
 // create config
@@ -88,7 +88,7 @@ Keep track of message delivery and react on final delivery errors.
 
 !!! Note
 
-    Please read about [librdkafka & its message reliability](https://github.com/edenhill/librdkafka/blob/master/INTRODUCTION.md#message-reliability) to fully understand why delivery of messages can fail and how to handle failures.
+    Please read about [librdkafka & its message reliability](https://github.com/confluentinc/librdkafka/blob/master/INTRODUCTION.md#message-reliability) to fully understand why delivery of messages can fail and how to handle failures.
 
 ```php
 $conf->setDrMsgCb(
