@@ -419,7 +419,9 @@ class ClientTest extends TestCase
         $this->assertFalse($configs['max.connections.per.ip']->isDefault);
 
         // set config back to old value (deleteConfig not supported yet....)
-        $configResource->setConfig('max.connections.per.ip', '2147483647');
+        $configResource = new ConfigResource(RD_KAFKA_RESOURCE_BROKER, (string) KAFKA_BROKER_ID);
+        $configResource->setConfig('max.connections.per.ip', (string) 2147483647);
+
         $result = $client->alterConfigs([$configResource], $alterConfigOptions);
 
         $this->assertSame('111', $result[0]->name);

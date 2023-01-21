@@ -53,7 +53,7 @@ trait Methods
     }
 
     /**
-     * @param \FFI\CData|null $errdescs struct rd_kafka_err_desc**
+     * @param \FFI\CData|null $errdescs const struct rd_kafka_err_desc**
      * @param \FFI\CData|null $cntp size_t*
      * @since 1.0.0 of librdkafka
      */
@@ -271,7 +271,7 @@ trait Methods
 
     /**
      * <p>Make a copy of an existing list. </p>
-     * @param \FFI\CData|null $src rd_kafka_topic_partition_list_t* - ) - The existing list to copy.
+     * @param \FFI\CData|null $src const rd_kafka_topic_partition_list_t* - ) - The existing list to copy.
      * @return \FFI\CData|null rd_kafka_topic_partition_list_t* - A new list fully populated to be identical to <code>src</code>
      * @since 1.0.0 of librdkafka
      * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#a66fd3f8c00ffbd0ea740a638dd0a95f7
@@ -314,7 +314,7 @@ trait Methods
      * <p>Sort list using comparator <code>cmp</code>. </p>
      * <p>If <code>cmp</code> is NULL the default comparator will be used that sorts by ascending topic name and partition. </p>
      * @param \FFI\CData|null $rktparlist rd_kafka_topic_partition_list_t*
-     * @param \FFI\CData|\Closure $cmp int(*)(void*, void*, void*)
+     * @param \FFI\CData|\Closure $cmp int(*)(const void*, const void*, void*)
      * @param \FFI\CData|object|string|null $opaque void*
      * @since 1.0.0 of librdkafka
      * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#ab72ed92794eabf2e7ba1b7be9c94de1f
@@ -344,7 +344,7 @@ trait Methods
     }
 
     /**
-     * @param \FFI\CData|null $src rd_kafka_headers_t*
+     * @param \FFI\CData|null $src const rd_kafka_headers_t*
      * @return \FFI\CData|null rd_kafka_headers_t*
      * @since 1.0.0 of librdkafka
      */
@@ -357,7 +357,7 @@ trait Methods
      * @param \FFI\CData|null $hdrs rd_kafka_headers_t*
      * @param string|null $name const char*
      * @param int|null $name_size ssize_t
-     * @param \FFI\CData|object|string|null $value void*
+     * @param \FFI\CData|object|string|null $value const void*
      * @param int|null $value_size ssize_t
      * @return int rd_kafka_resp_err_t
      * @since 1.0.0 of librdkafka
@@ -379,9 +379,9 @@ trait Methods
     }
 
     /**
-     * @param \FFI\CData|null $hdrs rd_kafka_headers_t*
+     * @param \FFI\CData|null $hdrs const rd_kafka_headers_t*
      * @param string|null $name const char*
-     * @param \FFI\CData|object|string|null $valuep void**
+     * @param \FFI\CData|object|string|null $valuep const void**
      * @param \FFI\CData|null $sizep size_t*
      * @return int rd_kafka_resp_err_t
      * @since 1.0.0 of librdkafka
@@ -392,10 +392,10 @@ trait Methods
     }
 
     /**
-     * @param \FFI\CData|null $hdrs rd_kafka_headers_t*
+     * @param \FFI\CData|null $hdrs const rd_kafka_headers_t*
      * @param int|null $idx size_t
      * @param string|null $name const char*
-     * @param \FFI\CData|object|string|null $valuep void**
+     * @param \FFI\CData|object|string|null $valuep const void**
      * @param \FFI\CData|null $sizep size_t*
      * @return int rd_kafka_resp_err_t
      * @since 1.0.0 of librdkafka
@@ -406,10 +406,10 @@ trait Methods
     }
 
     /**
-     * @param \FFI\CData|null $hdrs rd_kafka_headers_t*
+     * @param \FFI\CData|null $hdrs const rd_kafka_headers_t*
      * @param int|null $idx size_t
-     * @param \FFI\CData|null $namep char**
-     * @param \FFI\CData|object|string|null $valuep void**
+     * @param \FFI\CData|null $namep const char**
+     * @param \FFI\CData|object|string|null $valuep const void**
      * @param \FFI\CData|null $sizep size_t*
      * @return int rd_kafka_resp_err_t
      * @since 1.0.0 of librdkafka
@@ -434,7 +434,7 @@ trait Methods
      * <p><code>tstype</code> (if not NULL) is updated to indicate the type of timestamp.</p>
      *
      * <dl class="section remark"><dt>Remarks</dt><dd>Message timestamps require broker version 0.10.0 or later. </dd></dl>
-     * @param \FFI\CData|null $rkmessage rd_kafka_message_t*
+     * @param \FFI\CData|null $rkmessage const rd_kafka_message_t*
      * @param \FFI\CData|null $tstype rd_kafka_timestamp_type_t*
      * @return int|null int64_t - message timestamp, or -1 if not available.
      * @since 1.0.0 of librdkafka
@@ -446,7 +446,7 @@ trait Methods
     }
 
     /**
-     * @param \FFI\CData|null $rkmessage rd_kafka_message_t*
+     * @param \FFI\CData|null $rkmessage const rd_kafka_message_t*
      * @return int|null int64_t
      * @since 1.0.0 of librdkafka
      */
@@ -456,7 +456,7 @@ trait Methods
     }
 
     /**
-     * @param \FFI\CData|null $rkmessage rd_kafka_message_t*
+     * @param \FFI\CData|null $rkmessage const rd_kafka_message_t*
      * @param \FFI\CData|null $hdrsp rd_kafka_headers_t**
      * @return int rd_kafka_resp_err_t
      * @since 1.0.0 of librdkafka
@@ -488,7 +488,7 @@ trait Methods
     }
 
     /**
-     * @param \FFI\CData|null $hdrs rd_kafka_headers_t*
+     * @param \FFI\CData|null $hdrs const rd_kafka_headers_t*
      * @return int|null size_t
      * @since 1.0.0 of librdkafka
      */
@@ -498,7 +498,7 @@ trait Methods
     }
 
     /**
-     * @param \FFI\CData|null $rkmessage rd_kafka_message_t*
+     * @param \FFI\CData|null $rkmessage const rd_kafka_message_t*
      * @return int rd_kafka_msg_status_t
      * @since 1.0.0 of librdkafka
      */
@@ -542,7 +542,7 @@ trait Methods
     }
 
     /**
-     * @param \FFI\CData|null $conf rd_kafka_conf_t*
+     * @param \FFI\CData|null $conf const rd_kafka_conf_t*
      * @return \FFI\CData|null rd_kafka_conf_t*
      * @since 1.0.0 of librdkafka
      */
@@ -552,9 +552,9 @@ trait Methods
     }
 
     /**
-     * @param \FFI\CData|null $conf rd_kafka_conf_t*
+     * @param \FFI\CData|null $conf const rd_kafka_conf_t*
      * @param int|null $filter_cnt size_t
-     * @param \FFI\CData|null $filter char**
+     * @param \FFI\CData|null $filter const char**
      * @return \FFI\CData|null rd_kafka_conf_t*
      * @since 1.0.0 of librdkafka
      */
@@ -619,7 +619,7 @@ trait Methods
      * <p>The callback is called when a message is succesfully produced or if librdkafka encountered a permanent failure, or the retry counter for temporary errors has been exhausted.</p>
      * <p>An application must call rd_kafka_poll() at regular intervals to serve queued delivery report callbacks. </p>
      * @param \FFI\CData|null $conf rd_kafka_conf_t*
-     * @param \FFI\CData|\Closure $dr_msg_cb void(*)(rd_kafka_t*, rd_kafka_message_t*, void*)
+     * @param \FFI\CData|\Closure $dr_msg_cb void(*)(rd_kafka_t*, const rd_kafka_message_t*, void*)
      * @since 1.0.0 of librdkafka
      * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#ac1c9946aee26e10de2661fcf2242ea8a
      */
@@ -736,7 +736,7 @@ trait Methods
      * <p>This is the configuration alternative to the deprecated rd_kafka_set_logger()</p>
      * <dl class="section remark"><dt>Remarks</dt><dd>The log_cb will be called spontaneously from librdkafka's internal threads unless logs have been forwarded to a poll queue through <code>rd_kafka_set_log_queue()</code>. An application MUST NOT call any librdkafka APIs or do any prolonged work in a non-forwarded <code>log_cb</code>. </dd></dl>
      * @param \FFI\CData|null $conf rd_kafka_conf_t*
-     * @param \FFI\CData|\Closure $log_cb void(*)(rd_kafka_t*, int, const char*, const char*)
+     * @param \FFI\CData|\Closure $log_cb void(*)(const rd_kafka_t*, int, const char*, const char*)
      * @since 1.0.0 of librdkafka
      * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#a06ade2ca41f32eb82c6f7e3d4acbe19f
      */
@@ -788,7 +788,7 @@ trait Methods
      * <p><code>connect_cb</code> shall return 0 on success (socket connected) or an error number (errno) on error.</p>
      * <dl class="section remark"><dt>Remarks</dt><dd>The callback will be called from an internal librdkafka thread. </dd></dl>
      * @param \FFI\CData|null $conf rd_kafka_conf_t*
-     * @param \FFI\CData|\Closure $connect_cb int(*)(int, struct sockaddr*, int, const char*, void*)
+     * @param \FFI\CData|\Closure $connect_cb int(*)(int, const struct sockaddr*, int, const char*, void*)
      * @since 1.0.0 of librdkafka
      * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#a53dd1b77019324170d0168617fdaf040
      */
@@ -822,7 +822,7 @@ trait Methods
     }
 
     /**
-     * @param \FFI\CData|null $rk rd_kafka_t*
+     * @param \FFI\CData|null $rk const rd_kafka_t*
      * @return \FFI\CData|object|string|null void*
      * @since 1.0.0 of librdkafka
      */
@@ -849,7 +849,7 @@ trait Methods
      * <p><code>*dest_size</code> is updated to the full length of the value, thus if <code>*dest_size</code> initially is smaller than the full length the application may reallocate <code>dest</code> to fit the returned <code>*dest_size</code> and try again.</p>
      * <p>If <code>dest</code> is NULL only the full length of the value is returned.</p>
      * <p>Fallthrough: Topic-level configuration properties from the <code>default_topic_conf</code> may be retrieved using this interface.</p>
-     * @param \FFI\CData|null $conf rd_kafka_conf_t*
+     * @param \FFI\CData|null $conf const rd_kafka_conf_t*
      * @param string|null $name const char*
      * @param \FFI\CData|null $dest char*
      * @param \FFI\CData|null $dest_size size_t*
@@ -865,7 +865,7 @@ trait Methods
     /**
      * <p>Retrieve topic configuration value for property <code>name</code>. </p>
      * <dl class="section see"><dt>See also</dt><dd>rd_kafka_conf_get() </dd></dl>
-     * @param \FFI\CData|null $conf rd_kafka_topic_conf_t*
+     * @param \FFI\CData|null $conf const rd_kafka_topic_conf_t*
      * @param string|null $name const char*
      * @param \FFI\CData|null $dest char*
      * @param \FFI\CData|null $dest_size size_t*
@@ -909,7 +909,7 @@ trait Methods
     }
 
     /**
-     * @param \FFI\CData|null $arr char**
+     * @param \FFI\CData|null $arr const char**
      * @param int|null $cnt size_t
      * @since 1.0.0 of librdkafka
      */
@@ -940,7 +940,7 @@ trait Methods
     }
 
     /**
-     * @param \FFI\CData|null $conf rd_kafka_topic_conf_t*
+     * @param \FFI\CData|null $conf const rd_kafka_topic_conf_t*
      * @return \FFI\CData|null rd_kafka_topic_conf_t*
      * @since 1.0.0 of librdkafka
      */
@@ -1004,7 +1004,7 @@ trait Methods
      * <li>MUST return a value between 0 and partition_cnt-1, or the special <code>RD_KAFKA_PARTITION_UA</code> value if partitioning could not be performed. </li>
      * </ul>
      * @param \FFI\CData|null $topic_conf rd_kafka_topic_conf_t*
-     * @param \FFI\CData|\Closure $partitioner int32_t(*)(rd_kafka_topic_t*, void*, size_t, int32_t, void*, void*)
+     * @param \FFI\CData|\Closure $partitioner int32_t(*)(const rd_kafka_topic_t*, const void*, size_t, int32_t, void*, void*)
      * @since 1.0.0 of librdkafka
      * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#abfc790b5e36c56ea6d79fdc32c57becf
      */
@@ -1015,7 +1015,7 @@ trait Methods
 
     /**
      * @param \FFI\CData|null $topic_conf rd_kafka_topic_conf_t*
-     * @param \FFI\CData|\Closure $msg_order_cmp int(*)(rd_kafka_message_t*, rd_kafka_message_t*)
+     * @param \FFI\CData|\Closure $msg_order_cmp int(*)(const rd_kafka_message_t*, const rd_kafka_message_t*)
      * @since 1.0.0 of librdkafka
      */
     public static function rd_kafka_topic_conf_set_msg_order_cmp(?\FFI\CData $topic_conf, $msg_order_cmp): void
@@ -1027,7 +1027,7 @@ trait Methods
      * <p>Check if partition is available (has a leader broker). </p>
      *
      * <dl class="section warning"><dt>Warning</dt><dd>This function must only be called from inside a partitioner function </dd></dl>
-     * @param \FFI\CData|null $rkt rd_kafka_topic_t*
+     * @param \FFI\CData|null $rkt const rd_kafka_topic_t*
      * @param int|null $partition int32_t
      * @return int|null int - 1 if the partition is available, else 0.
      * @since 1.0.0 of librdkafka
@@ -1041,8 +1041,8 @@ trait Methods
     /**
      * <p>Random partitioner. </p>
      * <p>Will try not to return unavailable partitions.</p>
-     * @param \FFI\CData|null $rkt rd_kafka_topic_t*
-     * @param \FFI\CData|object|string|null $key void*
+     * @param \FFI\CData|null $rkt const rd_kafka_topic_t*
+     * @param \FFI\CData|object|string|null $key const void*
      * @param int|null $keylen size_t
      * @param int|null $partition_cnt int32_t
      * @param \FFI\CData|object|string|null $opaque void*
@@ -1059,8 +1059,8 @@ trait Methods
     /**
      * <p>Consistent partitioner. </p>
      * <p>Uses consistent hashing to map identical keys onto identical partitions.</p>
-     * @param \FFI\CData|null $rkt rd_kafka_topic_t*
-     * @param \FFI\CData|object|string|null $key void*
+     * @param \FFI\CData|null $rkt const rd_kafka_topic_t*
+     * @param \FFI\CData|object|string|null $key const void*
      * @param int|null $keylen size_t
      * @param int|null $partition_cnt int32_t
      * @param \FFI\CData|object|string|null $opaque void*
@@ -1077,8 +1077,8 @@ trait Methods
     /**
      * <p>Consistent-Random partitioner. </p>
      * <p>This is the default partitioner. Uses consistent hashing to map identical keys onto identical partitions, and messages without keys will be assigned via the random partitioner.</p>
-     * @param \FFI\CData|null $rkt rd_kafka_topic_t*
-     * @param \FFI\CData|object|string|null $key void*
+     * @param \FFI\CData|null $rkt const rd_kafka_topic_t*
+     * @param \FFI\CData|object|string|null $key const void*
      * @param int|null $keylen size_t
      * @param int|null $partition_cnt int32_t
      * @param \FFI\CData|object|string|null $opaque void*
@@ -1093,8 +1093,8 @@ trait Methods
     }
 
     /**
-     * @param \FFI\CData|null $rkt rd_kafka_topic_t*
-     * @param \FFI\CData|object|string|null $key void*
+     * @param \FFI\CData|null $rkt const rd_kafka_topic_t*
+     * @param \FFI\CData|object|string|null $key const void*
      * @param int|null $keylen size_t
      * @param int|null $partition_cnt int32_t
      * @param \FFI\CData|object|string|null $rkt_opaque void*
@@ -1108,8 +1108,8 @@ trait Methods
     }
 
     /**
-     * @param \FFI\CData|null $rkt rd_kafka_topic_t*
-     * @param \FFI\CData|object|string|null $key void*
+     * @param \FFI\CData|null $rkt const rd_kafka_topic_t*
+     * @param \FFI\CData|object|string|null $key const void*
      * @param int|null $keylen size_t
      * @param int|null $partition_cnt int32_t
      * @param \FFI\CData|object|string|null $rkt_opaque void*
@@ -1167,7 +1167,7 @@ trait Methods
     }
 
     /**
-     * @param \FFI\CData|null $rk rd_kafka_t*
+     * @param \FFI\CData|null $rk const rd_kafka_t*
      * @return string|null const char*
      * @since 1.0.0 of librdkafka
      */
@@ -1177,7 +1177,7 @@ trait Methods
     }
 
     /**
-     * @param \FFI\CData|null $rk rd_kafka_t*
+     * @param \FFI\CData|null $rk const rd_kafka_t*
      * @return int rd_kafka_type_t
      * @since 1.0.0 of librdkafka
      */
@@ -1189,7 +1189,7 @@ trait Methods
     /**
      * <p>Returns this client's broker-assigned group member id. </p>
      * <dl class="section remark"><dt>Remarks</dt><dd>This currently requires the high-level KafkaConsumer</dd></dl>
-     * @param \FFI\CData|null $rk rd_kafka_t* - )
+     * @param \FFI\CData|null $rk const rd_kafka_t* - )
      * @return \FFI\CData|null char* - An allocated string containing the current broker-assigned group member id, or NULL if not available. The application must free the string with <code>free()</code> or rd_kafka_mem_free()
      * @since 1.0.0 of librdkafka
      * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#a856d7ecba1aa64e5c89ac92b445cdda6
@@ -1252,7 +1252,7 @@ trait Methods
     }
 
     /**
-     * @param \FFI\CData|null $rkt rd_kafka_topic_t*
+     * @param \FFI\CData|null $rkt const rd_kafka_topic_t*
      * @return string|null const char*
      * @since 1.0.0 of librdkafka
      */
@@ -1262,7 +1262,7 @@ trait Methods
     }
 
     /**
-     * @param \FFI\CData|null $rkt rd_kafka_topic_t*
+     * @param \FFI\CData|null $rkt const rd_kafka_topic_t*
      * @return \FFI\CData|object|string|null void*
      * @since 1.0.0 of librdkafka
      */
@@ -1536,7 +1536,7 @@ trait Methods
      * <dl class="section remark"><dt>Remarks</dt><dd>When using forwarded queues the IO event must only be enabled on the final forwarded-to (destination) queue. </dd></dl>
      * @param \FFI\CData|null $rkqu rd_kafka_queue_t*
      * @param int|null $fd int
-     * @param \FFI\CData|object|string|null $payload void*
+     * @param \FFI\CData|object|string|null $payload const void*
      * @param int|null $size size_t
      * @since 1.0.0 of librdkafka
      * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#acbdd13ab480f6320b2842981eebce784
@@ -1777,7 +1777,7 @@ trait Methods
      * <p>Subscribe to topic set using balanced consumer groups. </p>
      * <p>Wildcard (regex) topics are supported by the librdkafka assignor: any topic name in the <code>topics</code> list that is prefixed with <code>"^"</code> will be regex-matched to the full list of topics in the cluster and matching topics will be added to the subscription list.</p>
      * @param \FFI\CData|null $rk rd_kafka_t*
-     * @param \FFI\CData|null $topics rd_kafka_topic_partition_list_t*
+     * @param \FFI\CData|null $topics const rd_kafka_topic_partition_list_t*
      * @return int rd_kafka_resp_err_t - RD_KAFKA_RESP_ERR_NO_ERROR on success or RD_KAFKA_RESP_ERR__INVALID_ARG if list is empty, contains invalid topics or regexes.
      * @since 1.0.0 of librdkafka
      * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#a0ebe15e9d0f39ccc84e9686f0fcf46f1
@@ -1850,7 +1850,7 @@ trait Methods
      * <p>When used from a rebalance callback the application shall pass the partition list passed to the callback (or a copy of it) (even if the list is empty) rather than NULL to maintain internal join state.</p>
      * <p>A zero-length <code>partitions</code> will treat the partitions as a valid, albeit empty, assignment, and maintain internal state, while a <code>NULL</code> value for <code>partitions</code> will reset and clear the internal state. </p>
      * @param \FFI\CData|null $rk rd_kafka_t*
-     * @param \FFI\CData|null $partitions rd_kafka_topic_partition_list_t*
+     * @param \FFI\CData|null $partitions const rd_kafka_topic_partition_list_t*
      * @return int rd_kafka_resp_err_t
      * @since 1.0.0 of librdkafka
      * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#a0566419eff2001f8371e3b50aa7d26e9
@@ -1881,7 +1881,7 @@ trait Methods
      * <p>If <code>async</code> is false this operation will block until the broker offset commit is done, returning the resulting success or error code.</p>
      * <p>If a rd_kafka_conf_set_offset_commit_cb() offset commit callback has been configured the callback will be enqueued for a future call to rd_kafka_poll(), rd_kafka_consumer_poll() or similar. </p>
      * @param \FFI\CData|null $rk rd_kafka_t*
-     * @param \FFI\CData|null $offsets rd_kafka_topic_partition_list_t*
+     * @param \FFI\CData|null $offsets const rd_kafka_topic_partition_list_t*
      * @param int|null $async int
      * @return int rd_kafka_resp_err_t
      * @since 1.0.0 of librdkafka
@@ -1896,7 +1896,7 @@ trait Methods
      * <p>Commit message's offset on broker for the message's partition. </p>
      * <dl class="section see"><dt>See also</dt><dd>rd_kafka_commit </dd></dl>
      * @param \FFI\CData|null $rk rd_kafka_t*
-     * @param \FFI\CData|null $rkmessage rd_kafka_message_t*
+     * @param \FFI\CData|null $rkmessage const rd_kafka_message_t*
      * @param int|null $async int
      * @return int rd_kafka_resp_err_t
      * @since 1.0.0 of librdkafka
@@ -1918,7 +1918,7 @@ trait Methods
      * <dd>
      * rd_kafka_conf_set_offset_commit_cb() </dd></dl>
      * @param \FFI\CData|null $rk rd_kafka_t*
-     * @param \FFI\CData|null $offsets rd_kafka_topic_partition_list_t*
+     * @param \FFI\CData|null $offsets const rd_kafka_topic_partition_list_t*
      * @param \FFI\CData|null $rkqu rd_kafka_queue_t*
      * @param \FFI\CData|\Closure $cb void(*)(rd_kafka_t*, rd_kafka_resp_err_t, rd_kafka_topic_partition_list_t*, void*)
      * @param \FFI\CData|object|string|null $opaque void*
@@ -1987,7 +1987,7 @@ trait Methods
      * @param int|null $msgflags int
      * @param \FFI\CData|object|string|null $payload void*
      * @param int|null $len size_t
-     * @param \FFI\CData|object|string|null $key void*
+     * @param \FFI\CData|object|string|null $key const void*
      * @param int|null $keylen size_t
      * @param \FFI\CData|object|string|null $msg_opaque void*
      * @return int|null int
@@ -2076,7 +2076,7 @@ trait Methods
      * @param \FFI\CData|null $rk rd_kafka_t*
      * @param int|null $all_topics int
      * @param \FFI\CData|null $only_rkt rd_kafka_topic_t*
-     * @param \FFI\CData|null $metadatap struct rd_kafka_metadata**
+     * @param \FFI\CData|null $metadatap const struct rd_kafka_metadata**
      * @param int|null $timeout_ms int
      * @return int rd_kafka_resp_err_t
      * @since 1.0.0 of librdkafka
@@ -2088,7 +2088,7 @@ trait Methods
     }
 
     /**
-     * @param \FFI\CData|\Closure $metadata rd_kafka_resp_err_t(rd_kafka_metadata*)(rd_kafka_t*, int, rd_kafka_topic_t*, struct rd_kafka_metadata**, int)
+     * @param \FFI\CData|\Closure $metadata rd_kafka_resp_err_t(rd_kafka_metadata*)(rd_kafka_t*, int, rd_kafka_topic_t*, const struct rd_kafka_metadata**, int)
      * @since 1.0.0 of librdkafka
      */
     public static function rd_kafka_metadata_destroy($metadata): void
@@ -2104,7 +2104,7 @@ trait Methods
      * <dl class="section see"><dt>See also</dt><dd>Use rd_kafka_group_list_destroy() to release list memory. </dd></dl>
      * @param \FFI\CData|null $rk rd_kafka_t*
      * @param string|null $group const char*
-     * @param \FFI\CData|null $grplistp struct rd_kafka_group_list**
+     * @param \FFI\CData|null $grplistp const struct rd_kafka_group_list**
      * @param int|null $timeout_ms int
      * @return int rd_kafka_resp_err_t - <code>RD_KAFKA_RESP_ERR__NO_ERROR</code> on success and <code>grplistp</code> is updated to point to a newly allocated list of groups. Else returns an error code on failure and <code>grplistp</code> remains untouched.
      * @since 1.0.0 of librdkafka
@@ -2116,7 +2116,7 @@ trait Methods
     }
 
     /**
-     * @param \FFI\CData|null $grplist struct rd_kafka_group_list*
+     * @param \FFI\CData|null $grplist const struct rd_kafka_group_list*
      * @since 1.0.0 of librdkafka
      */
     public static function rd_kafka_group_list_destroy(?\FFI\CData $grplist): void
@@ -2149,7 +2149,7 @@ trait Methods
      * <dl class="deprecated"><dt><b>Deprecated:</b></dt><dd>Use rd_kafka_conf_set_log_cb()</dd></dl>
      * <dl class="section remark"><dt>Remarks</dt><dd><code>rk</code> may be passed as NULL in the callback. </dd></dl>
      * @param \FFI\CData|null $rk rd_kafka_t*
-     * @param \FFI\CData|\Closure $func void(*)(rd_kafka_t*, int, const char*, const char*)
+     * @param \FFI\CData|\Closure $func void(*)(const rd_kafka_t*, int, const char*, const char*)
      * @since 1.0.0 of librdkafka
      * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#a9e4af9adee414af74c7817403f7c4a53
      */
@@ -2172,7 +2172,7 @@ trait Methods
     }
 
     /**
-     * @param \FFI\CData|null $rk rd_kafka_t*
+     * @param \FFI\CData|null $rk const rd_kafka_t*
      * @param int|null $level int
      * @param string|null $fac const char*
      * @param string|null $buf const char*
@@ -2184,7 +2184,7 @@ trait Methods
     }
 
     /**
-     * @param \FFI\CData|null $rk rd_kafka_t*
+     * @param \FFI\CData|null $rk const rd_kafka_t*
      * @param int|null $level int
      * @param string|null $fac const char*
      * @param string|null $buf const char*
@@ -2271,7 +2271,7 @@ trait Methods
 
     /**
      * <dl class="section remark"><dt>Remarks</dt><dd>As a convenience it is okay to pass <code>rkev</code> as NULL in which case RD_KAFKA_EVENT_NONE is returned. </dd></dl>
-     * @param \FFI\CData|null $rkev rd_kafka_event_t* - )
+     * @param \FFI\CData|null $rkev const rd_kafka_event_t* - )
      * @return int|null rd_kafka_event_type_t - the event type for the given event.
      * @since 1.0.0 of librdkafka
      * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#a108de3729a4aa609a72a458a9de02d1d
@@ -2283,7 +2283,7 @@ trait Methods
 
     /**
      * <dl class="section remark"><dt>Remarks</dt><dd>As a convenience it is okay to pass <code>rkev</code> as NULL in which case the name for RD_KAFKA_EVENT_NONE is returned. </dd></dl>
-     * @param \FFI\CData|null $rkev rd_kafka_event_t* - )
+     * @param \FFI\CData|null $rkev const rd_kafka_event_t* - )
      * @return string|null const char* - the event type's name for the given event.
      * @since 1.0.0 of librdkafka
      * @link https://docs.confluent.io/3.2.1/clients/librdkafka/rdkafka_8h.html#a608193d1fb486f78c79497c8c5b63866
@@ -2415,8 +2415,8 @@ trait Methods
      * <li>RD_KAFKA_EVENT_LOG</li>
      * </ul>
      * @param \FFI\CData|null $rkev rd_kafka_event_t*
-     * @param \FFI\CData|null $fac char**
-     * @param \FFI\CData|null $str char**
+     * @param \FFI\CData|null $fac const char**
+     * @param \FFI\CData|null $str const char**
      * @param \FFI\CData|null $level int*
      * @return int|null int - 0 on success or -1 if unsupported event type.
      * @since 1.0.0 of librdkafka
@@ -2576,9 +2576,9 @@ trait Methods
 
     /**
      * @param \FFI\CData|null $new_conf rd_kafka_conf_t*
-     * @param \FFI\CData|null $old_conf rd_kafka_conf_t*
+     * @param \FFI\CData|null $old_conf const rd_kafka_conf_t*
      * @param int|null $filter_cnt size_t
-     * @param \FFI\CData|null $filter char**
+     * @param \FFI\CData|null $filter const char**
      * @param \FFI\CData|object|string|null $ic_opaque void*
      * @return int rd_kafka_resp_err_t
      * @since 1.0.0 of librdkafka
@@ -2600,7 +2600,7 @@ trait Methods
 
     /**
      * @param \FFI\CData|null $rk rd_kafka_t*
-     * @param \FFI\CData|null $conf rd_kafka_conf_t*
+     * @param \FFI\CData|null $conf const rd_kafka_conf_t*
      * @param \FFI\CData|object|string|null $ic_opaque void*
      * @param \FFI\CData|null $errstr char*
      * @param int|null $errstr_size size_t
@@ -2625,7 +2625,7 @@ trait Methods
 
     /**
      * @param \FFI\CData|null $rk rd_kafka_t*
-     * @param \FFI\CData|null $rkmessage const rd_kafka_message_t*
+     * @param \FFI\CData|null $rkmessage rd_kafka_message_t*
      * @param \FFI\CData|object|string|null $ic_opaque void*
      * @return int rd_kafka_resp_err_t
      * @since 1.0.0 of librdkafka
@@ -2637,7 +2637,7 @@ trait Methods
 
     /**
      * @param \FFI\CData|null $rk rd_kafka_t*
-     * @param \FFI\CData|null $rkmessage const rd_kafka_message_t*
+     * @param \FFI\CData|null $rkmessage rd_kafka_message_t*
      * @param \FFI\CData|object|string|null $ic_opaque void*
      * @return int rd_kafka_resp_err_t
      * @since 1.0.0 of librdkafka
@@ -2649,7 +2649,7 @@ trait Methods
 
     /**
      * @param \FFI\CData|null $rk rd_kafka_t*
-     * @param \FFI\CData|null $rkmessage const rd_kafka_message_t*
+     * @param \FFI\CData|null $rkmessage rd_kafka_message_t*
      * @param \FFI\CData|object|string|null $ic_opaque void*
      * @return int rd_kafka_resp_err_t
      * @since 1.0.0 of librdkafka
@@ -2661,7 +2661,7 @@ trait Methods
 
     /**
      * @param \FFI\CData|null $rk rd_kafka_t*
-     * @param \FFI\CData|null $offsets rd_kafka_topic_partition_list_t*
+     * @param \FFI\CData|null $offsets const rd_kafka_topic_partition_list_t*
      * @param int $err rd_kafka_resp_err_t
      * @param \FFI\CData|object|string|null $ic_opaque void*
      * @return int rd_kafka_resp_err_t
@@ -2706,7 +2706,7 @@ trait Methods
     /**
      * @param \FFI\CData|null $conf rd_kafka_conf_t*
      * @param string|null $ic_name const char*
-     * @param \FFI\CData|\Closure $on_conf_dup rd_kafka_resp_err_t(rd_kafka_interceptor_f_on_conf_dup_t*)(rd_kafka_conf_t*, rd_kafka_conf_t*, size_t, char**, void*)
+     * @param \FFI\CData|\Closure $on_conf_dup rd_kafka_resp_err_t(rd_kafka_interceptor_f_on_conf_dup_t*)(rd_kafka_conf_t*, const rd_kafka_conf_t*, size_t, const char**, void*)
      * @param \FFI\CData|object|string|null $ic_opaque void*
      * @return int rd_kafka_resp_err_t
      * @since 1.0.0 of librdkafka
@@ -2732,7 +2732,7 @@ trait Methods
     /**
      * @param \FFI\CData|null $conf rd_kafka_conf_t*
      * @param string|null $ic_name const char*
-     * @param \FFI\CData|\Closure $on_new rd_kafka_resp_err_t(rd_kafka_interceptor_f_on_new_t*)(rd_kafka_t*, rd_kafka_conf_t*, void*, char*, size_t)
+     * @param \FFI\CData|\Closure $on_new rd_kafka_resp_err_t(rd_kafka_interceptor_f_on_new_t*)(rd_kafka_t*, const rd_kafka_conf_t*, void*, char*, size_t)
      * @param \FFI\CData|object|string|null $ic_opaque void*
      * @return int rd_kafka_resp_err_t
      * @since 1.0.0 of librdkafka
@@ -2758,7 +2758,7 @@ trait Methods
     /**
      * @param \FFI\CData|null $rk rd_kafka_t*
      * @param string|null $ic_name const char*
-     * @param \FFI\CData|\Closure $on_send rd_kafka_resp_err_t(rd_kafka_interceptor_f_on_send_t*)(rd_kafka_t*, const rd_kafka_message_t*, void*)
+     * @param \FFI\CData|\Closure $on_send rd_kafka_resp_err_t(rd_kafka_interceptor_f_on_send_t*)(rd_kafka_t*, rd_kafka_message_t*, void*)
      * @param \FFI\CData|object|string|null $ic_opaque void*
      * @return int rd_kafka_resp_err_t
      * @since 1.0.0 of librdkafka
@@ -2771,7 +2771,7 @@ trait Methods
     /**
      * @param \FFI\CData|null $rk rd_kafka_t*
      * @param string|null $ic_name const char*
-     * @param \FFI\CData|\Closure $on_acknowledgement rd_kafka_resp_err_t(rd_kafka_interceptor_f_on_acknowledgement_t*)(rd_kafka_t*, const rd_kafka_message_t*, void*)
+     * @param \FFI\CData|\Closure $on_acknowledgement rd_kafka_resp_err_t(rd_kafka_interceptor_f_on_acknowledgement_t*)(rd_kafka_t*, rd_kafka_message_t*, void*)
      * @param \FFI\CData|object|string|null $ic_opaque void*
      * @return int rd_kafka_resp_err_t
      * @since 1.0.0 of librdkafka
@@ -2784,7 +2784,7 @@ trait Methods
     /**
      * @param \FFI\CData|null $rk rd_kafka_t*
      * @param string|null $ic_name const char*
-     * @param \FFI\CData|\Closure $on_consume rd_kafka_resp_err_t(rd_kafka_interceptor_f_on_consume_t*)(rd_kafka_t*, const rd_kafka_message_t*, void*)
+     * @param \FFI\CData|\Closure $on_consume rd_kafka_resp_err_t(rd_kafka_interceptor_f_on_consume_t*)(rd_kafka_t*, rd_kafka_message_t*, void*)
      * @param \FFI\CData|object|string|null $ic_opaque void*
      * @return int rd_kafka_resp_err_t
      * @since 1.0.0 of librdkafka
@@ -2797,7 +2797,7 @@ trait Methods
     /**
      * @param \FFI\CData|null $rk rd_kafka_t*
      * @param string|null $ic_name const char*
-     * @param \FFI\CData|\Closure $on_commit rd_kafka_resp_err_t(rd_kafka_interceptor_f_on_commit_t*)(rd_kafka_t*, rd_kafka_topic_partition_list_t*, rd_kafka_resp_err_t, void*)
+     * @param \FFI\CData|\Closure $on_commit rd_kafka_resp_err_t(rd_kafka_interceptor_f_on_commit_t*)(rd_kafka_t*, const rd_kafka_topic_partition_list_t*, rd_kafka_resp_err_t, void*)
      * @param \FFI\CData|object|string|null $ic_opaque void*
      * @return int rd_kafka_resp_err_t
      * @since 1.0.0 of librdkafka
@@ -2821,7 +2821,7 @@ trait Methods
     }
 
     /**
-     * @param \FFI\CData|null $topicres rd_kafka_topic_result_t*
+     * @param \FFI\CData|null $topicres const rd_kafka_topic_result_t*
      * @return int rd_kafka_resp_err_t
      * @since 1.0.0 of librdkafka
      */
@@ -2831,7 +2831,7 @@ trait Methods
     }
 
     /**
-     * @param \FFI\CData|null $topicres rd_kafka_topic_result_t*
+     * @param \FFI\CData|null $topicres const rd_kafka_topic_result_t*
      * @return string|null const char*
      * @since 1.0.0 of librdkafka
      */
@@ -2841,7 +2841,7 @@ trait Methods
     }
 
     /**
-     * @param \FFI\CData|null $topicres rd_kafka_topic_result_t*
+     * @param \FFI\CData|null $topicres const rd_kafka_topic_result_t*
      * @return string|null const char*
      * @since 1.0.0 of librdkafka
      */
@@ -2996,7 +2996,7 @@ trait Methods
      * @param \FFI\CData|null $rk rd_kafka_t*
      * @param \FFI\CData|null $new_topics rd_kafka_NewTopic_t**
      * @param int|null $new_topic_cnt size_t
-     * @param \FFI\CData|null $options rd_kafka_AdminOptions_t*
+     * @param \FFI\CData|null $options const rd_kafka_AdminOptions_t*
      * @param \FFI\CData|null $rkqu rd_kafka_queue_t*
      * @since 1.0.0 of librdkafka
      */
@@ -3049,7 +3049,7 @@ trait Methods
      * @param \FFI\CData|null $rk rd_kafka_t*
      * @param \FFI\CData|null $del_topics rd_kafka_DeleteTopic_t**
      * @param int|null $del_topic_cnt size_t
-     * @param \FFI\CData|null $options rd_kafka_AdminOptions_t*
+     * @param \FFI\CData|null $options const rd_kafka_AdminOptions_t*
      * @param \FFI\CData|null $rkqu rd_kafka_queue_t*
      * @since 1.0.0 of librdkafka
      */
@@ -3120,7 +3120,7 @@ trait Methods
      * @param \FFI\CData|null $rk rd_kafka_t*
      * @param \FFI\CData|null $new_parts rd_kafka_NewPartitions_t**
      * @param int|null $new_parts_cnt size_t
-     * @param \FFI\CData|null $options rd_kafka_AdminOptions_t*
+     * @param \FFI\CData|null $options const rd_kafka_AdminOptions_t*
      * @param \FFI\CData|null $rkqu rd_kafka_queue_t*
      * @since 1.0.0 of librdkafka
      */
@@ -3151,7 +3151,7 @@ trait Methods
     }
 
     /**
-     * @param \FFI\CData|null $entry rd_kafka_ConfigEntry_t*
+     * @param \FFI\CData|null $entry const rd_kafka_ConfigEntry_t*
      * @return string|null const char*
      * @since 1.0.0 of librdkafka
      */
@@ -3161,7 +3161,7 @@ trait Methods
     }
 
     /**
-     * @param \FFI\CData|null $entry rd_kafka_ConfigEntry_t*
+     * @param \FFI\CData|null $entry const rd_kafka_ConfigEntry_t*
      * @return string|null const char*
      * @since 1.0.0 of librdkafka
      */
@@ -3171,7 +3171,7 @@ trait Methods
     }
 
     /**
-     * @param \FFI\CData|null $entry rd_kafka_ConfigEntry_t*
+     * @param \FFI\CData|null $entry const rd_kafka_ConfigEntry_t*
      * @return int rd_kafka_ConfigSource_t
      * @since 1.0.0 of librdkafka
      */
@@ -3181,7 +3181,7 @@ trait Methods
     }
 
     /**
-     * @param \FFI\CData|null $entry rd_kafka_ConfigEntry_t*
+     * @param \FFI\CData|null $entry const rd_kafka_ConfigEntry_t*
      * @return int|null int
      * @since 1.0.0 of librdkafka
      */
@@ -3191,7 +3191,7 @@ trait Methods
     }
 
     /**
-     * @param \FFI\CData|null $entry rd_kafka_ConfigEntry_t*
+     * @param \FFI\CData|null $entry const rd_kafka_ConfigEntry_t*
      * @return int|null int
      * @since 1.0.0 of librdkafka
      */
@@ -3201,7 +3201,7 @@ trait Methods
     }
 
     /**
-     * @param \FFI\CData|null $entry rd_kafka_ConfigEntry_t*
+     * @param \FFI\CData|null $entry const rd_kafka_ConfigEntry_t*
      * @return int|null int
      * @since 1.0.0 of librdkafka
      */
@@ -3211,7 +3211,7 @@ trait Methods
     }
 
     /**
-     * @param \FFI\CData|null $entry rd_kafka_ConfigEntry_t*
+     * @param \FFI\CData|null $entry const rd_kafka_ConfigEntry_t*
      * @return int|null int
      * @since 1.0.0 of librdkafka
      */
@@ -3221,7 +3221,7 @@ trait Methods
     }
 
     /**
-     * @param \FFI\CData|null $entry rd_kafka_ConfigEntry_t*
+     * @param \FFI\CData|null $entry const rd_kafka_ConfigEntry_t*
      * @param \FFI\CData|null $cntp size_t*
      * @return \FFI\CData|null const rd_kafka_ConfigEntry_t**
      * @since 1.0.0 of librdkafka
@@ -3284,7 +3284,7 @@ trait Methods
     }
 
     /**
-     * @param \FFI\CData|null $config rd_kafka_ConfigResource_t*
+     * @param \FFI\CData|null $config const rd_kafka_ConfigResource_t*
      * @param \FFI\CData|null $cntp size_t*
      * @return \FFI\CData|null const rd_kafka_ConfigEntry_t**
      * @since 1.0.0 of librdkafka
@@ -3295,7 +3295,7 @@ trait Methods
     }
 
     /**
-     * @param \FFI\CData|null $config rd_kafka_ConfigResource_t*
+     * @param \FFI\CData|null $config const rd_kafka_ConfigResource_t*
      * @return int rd_kafka_ResourceType_t
      * @since 1.0.0 of librdkafka
      */
@@ -3305,7 +3305,7 @@ trait Methods
     }
 
     /**
-     * @param \FFI\CData|null $config rd_kafka_ConfigResource_t*
+     * @param \FFI\CData|null $config const rd_kafka_ConfigResource_t*
      * @return string|null const char*
      * @since 1.0.0 of librdkafka
      */
@@ -3315,7 +3315,7 @@ trait Methods
     }
 
     /**
-     * @param \FFI\CData|null $config rd_kafka_ConfigResource_t*
+     * @param \FFI\CData|null $config const rd_kafka_ConfigResource_t*
      * @return int rd_kafka_resp_err_t
      * @since 1.0.0 of librdkafka
      */
@@ -3325,7 +3325,7 @@ trait Methods
     }
 
     /**
-     * @param \FFI\CData|null $config rd_kafka_ConfigResource_t*
+     * @param \FFI\CData|null $config const rd_kafka_ConfigResource_t*
      * @return string|null const char*
      * @since 1.0.0 of librdkafka
      */
@@ -3338,7 +3338,7 @@ trait Methods
      * @param \FFI\CData|null $rk rd_kafka_t*
      * @param \FFI\CData|null $configs rd_kafka_ConfigResource_t**
      * @param int|null $config_cnt size_t
-     * @param \FFI\CData|null $options rd_kafka_AdminOptions_t*
+     * @param \FFI\CData|null $options const rd_kafka_AdminOptions_t*
      * @param \FFI\CData|null $rkqu rd_kafka_queue_t*
      * @since 1.0.0 of librdkafka
      */
@@ -3360,9 +3360,9 @@ trait Methods
 
     /**
      * @param \FFI\CData|null $rk rd_kafka_t*
-     * @param \FFI\CData|null $configs const rd_kafka_ConfigResource_t**
+     * @param \FFI\CData|null $configs rd_kafka_ConfigResource_t**
      * @param int|null $config_cnt size_t
-     * @param \FFI\CData|null $options rd_kafka_AdminOptions_t*
+     * @param \FFI\CData|null $options const rd_kafka_AdminOptions_t*
      * @param \FFI\CData|null $rkqu rd_kafka_queue_t*
      * @since 1.0.0 of librdkafka
      */
@@ -3393,7 +3393,7 @@ trait Methods
     }
 
     /**
-     * @param \FFI\CData|null $conf const rd_kafka_conf_t*
+     * @param \FFI\CData|null $conf rd_kafka_conf_t*
      * @param \FFI\CData|\Closure $oauthbearer_token_refresh_cb void(*)(rd_kafka_t*, const char*, void*)
      * @since 1.1.0 of librdkafka
      */
@@ -3403,7 +3403,7 @@ trait Methods
     }
 
     /**
-     * @param \FFI\CData|null $conf const rd_kafka_conf_t*
+     * @param \FFI\CData|null $conf rd_kafka_conf_t*
      * @param \FFI\CData|\Closure $ssl_cert_verify_cb int(*)(rd_kafka_t*, const char*, int32_t, int*, int, const char*, size_t, char*, size_t, void*)
      * @return int rd_kafka_conf_res_t
      * @since 1.1.0 of librdkafka
@@ -3414,10 +3414,10 @@ trait Methods
     }
 
     /**
-     * @param \FFI\CData|null $conf const rd_kafka_conf_t*
+     * @param \FFI\CData|null $conf rd_kafka_conf_t*
      * @param int $cert_type rd_kafka_cert_type_t
      * @param int $cert_enc rd_kafka_cert_enc_t
-     * @param \FFI\CData|object|string|null $buffer void*
+     * @param \FFI\CData|object|string|null $buffer const void*
      * @param int|null $size size_t
      * @param \FFI\CData|null $errstr char*
      * @param int|null $errstr_size size_t
@@ -3444,7 +3444,7 @@ trait Methods
      * @param string|null $token_value const char*
      * @param int|null $md_lifetime_ms int64_t
      * @param string|null $md_principal_name const char*
-     * @param \FFI\CData|null $extensions char**
+     * @param \FFI\CData|null $extensions const char**
      * @param int|null $extension_size size_t
      * @param \FFI\CData|null $errstr char*
      * @param int|null $errstr_size size_t
@@ -3540,7 +3540,7 @@ trait Methods
     }
 
     /**
-     * @param \FFI\CData|null $mcluster rd_kafka_mock_cluster_t*
+     * @param \FFI\CData|null $mcluster const rd_kafka_mock_cluster_t*
      * @return \FFI\CData|null rd_kafka_t*
      * @since 1.3.0 of librdkafka
      */
@@ -3550,7 +3550,7 @@ trait Methods
     }
 
     /**
-     * @param \FFI\CData|null $mcluster rd_kafka_mock_cluster_t*
+     * @param \FFI\CData|null $mcluster const rd_kafka_mock_cluster_t*
      * @return string|null const char*
      * @since 1.3.0 of librdkafka
      */
@@ -3635,7 +3635,7 @@ trait Methods
     }
 
     /**
-     * @param \FFI\CData|null $error rd_kafka_error_t*
+     * @param \FFI\CData|null $error const rd_kafka_error_t*
      * @return int rd_kafka_resp_err_t
      * @since 1.4.0 of librdkafka
      */
@@ -3645,7 +3645,7 @@ trait Methods
     }
 
     /**
-     * @param \FFI\CData|null $error rd_kafka_error_t*
+     * @param \FFI\CData|null $error const rd_kafka_error_t*
      * @return string|null const char*
      * @since 1.4.0 of librdkafka
      */
@@ -3655,7 +3655,7 @@ trait Methods
     }
 
     /**
-     * @param \FFI\CData|null $error rd_kafka_error_t*
+     * @param \FFI\CData|null $error const rd_kafka_error_t*
      * @return string|null const char*
      * @since 1.4.0 of librdkafka
      */
@@ -3665,7 +3665,7 @@ trait Methods
     }
 
     /**
-     * @param \FFI\CData|null $error rd_kafka_error_t*
+     * @param \FFI\CData|null $error const rd_kafka_error_t*
      * @return int|null int
      * @since 1.4.0 of librdkafka
      */
@@ -3675,7 +3675,7 @@ trait Methods
     }
 
     /**
-     * @param \FFI\CData|null $error rd_kafka_error_t*
+     * @param \FFI\CData|null $error const rd_kafka_error_t*
      * @return int|null int
      * @since 1.4.0 of librdkafka
      */
@@ -3685,7 +3685,7 @@ trait Methods
     }
 
     /**
-     * @param \FFI\CData|null $error rd_kafka_error_t*
+     * @param \FFI\CData|null $error const rd_kafka_error_t*
      * @return int|null int
      * @since 1.4.0 of librdkafka
      */
@@ -3716,8 +3716,8 @@ trait Methods
     }
 
     /**
-     * @param \FFI\CData|null $rkt rd_kafka_topic_t*
-     * @param \FFI\CData|object|string|null $key void*
+     * @param \FFI\CData|null $rkt const rd_kafka_topic_t*
+     * @param \FFI\CData|object|string|null $key const void*
      * @param int|null $keylen size_t
      * @param int|null $partition_cnt int32_t
      * @param \FFI\CData|object|string|null $rkt_opaque void*
@@ -3731,8 +3731,8 @@ trait Methods
     }
 
     /**
-     * @param \FFI\CData|null $rkt rd_kafka_topic_t*
-     * @param \FFI\CData|object|string|null $key void*
+     * @param \FFI\CData|null $rkt const rd_kafka_topic_t*
+     * @param \FFI\CData|object|string|null $key const void*
      * @param int|null $keylen size_t
      * @param int|null $partition_cnt int32_t
      * @param \FFI\CData|object|string|null $rkt_opaque void*
@@ -3775,7 +3775,7 @@ trait Methods
     }
 
     /**
-     * @param \FFI\CData|null $cgmd rd_kafka_consumer_group_metadata_t*
+     * @param \FFI\CData|null $cgmd const rd_kafka_consumer_group_metadata_t*
      * @param \FFI\CData|object|string|null $bufferp void**
      * @param \FFI\CData|null $sizep size_t*
      * @return \FFI\CData|null rd_kafka_error_t*
@@ -3788,7 +3788,7 @@ trait Methods
 
     /**
      * @param \FFI\CData|null $cgmdp rd_kafka_consumer_group_metadata_t**
-     * @param \FFI\CData|object|string|null $buffer void*
+     * @param \FFI\CData|object|string|null $buffer const void*
      * @param int|null $size size_t
      * @return \FFI\CData|null rd_kafka_error_t*
      * @since 1.4.0 of librdkafka
@@ -3821,8 +3821,8 @@ trait Methods
 
     /**
      * @param \FFI\CData|null $rk rd_kafka_t*
-     * @param \FFI\CData|null $offsets rd_kafka_topic_partition_list_t*
-     * @param \FFI\CData|null $cgmetadata rd_kafka_consumer_group_metadata_t*
+     * @param \FFI\CData|null $offsets const rd_kafka_topic_partition_list_t*
+     * @param \FFI\CData|null $cgmetadata const rd_kafka_consumer_group_metadata_t*
      * @param int|null $timeout_ms int
      * @return \FFI\CData|null rd_kafka_error_t*
      * @since 1.4.0 of librdkafka
@@ -3855,7 +3855,7 @@ trait Methods
     }
 
     /**
-     * @param \FFI\CData|null $rk rd_kafka_t*
+     * @param \FFI\CData|null $rk const rd_kafka_t*
      * @return \FFI\CData|null rd_kafka_mock_cluster_t*
      * @since 1.4.0 of librdkafka
      */
@@ -3938,7 +3938,7 @@ trait Methods
     }
 
     /**
-     * @param \FFI\CData|null $rkmessage rd_kafka_message_t*
+     * @param \FFI\CData|null $rkmessage const rd_kafka_message_t*
      * @return string|null const char*
      * @since 1.5.0 of librdkafka
      */
@@ -3948,7 +3948,7 @@ trait Methods
     }
 
     /**
-     * @param \FFI\CData|null $rkmessage rd_kafka_message_t*
+     * @param \FFI\CData|null $rkmessage const rd_kafka_message_t*
      * @return int|null int32_t
      * @since 1.5.0 of librdkafka
      */
@@ -3959,7 +3959,7 @@ trait Methods
 
     /**
      * @param \FFI\CData|null $rk rd_kafka_t*
-     * @param \FFI\CData|null $vus rd_kafka_vu_t*
+     * @param \FFI\CData|null $vus const rd_kafka_vu_t*
      * @param int|null $cnt size_t
      * @return \FFI\CData|null rd_kafka_error_t*
      * @since 1.5.0 of librdkafka
@@ -3996,7 +3996,7 @@ trait Methods
     }
 
     /**
-     * @param \FFI\CData|null $conf const rd_kafka_conf_t*
+     * @param \FFI\CData|null $conf rd_kafka_conf_t*
      * @return \FFI\CData|null rd_kafka_topic_conf_t*
      * @since 1.6.0 of librdkafka
      */
@@ -4028,7 +4028,7 @@ trait Methods
 
     /**
      * @param \FFI\CData|null $rk rd_kafka_t*
-     * @param \FFI\CData|null $partitions rd_kafka_topic_partition_list_t*
+     * @param \FFI\CData|null $partitions const rd_kafka_topic_partition_list_t*
      * @return \FFI\CData|null rd_kafka_error_t*
      * @since 1.6.0 of librdkafka
      */
@@ -4039,7 +4039,7 @@ trait Methods
 
     /**
      * @param \FFI\CData|null $rk rd_kafka_t*
-     * @param \FFI\CData|null $partitions rd_kafka_topic_partition_list_t*
+     * @param \FFI\CData|null $partitions const rd_kafka_topic_partition_list_t*
      * @return \FFI\CData|null rd_kafka_error_t*
      * @since 1.6.0 of librdkafka
      */
@@ -4112,7 +4112,7 @@ trait Methods
     }
 
     /**
-     * @param \FFI\CData|null $groupres rd_kafka_group_result_t*
+     * @param \FFI\CData|null $groupres const rd_kafka_group_result_t*
      * @return \FFI\CData|null const rd_kafka_error_t*
      * @since 1.6.0 of librdkafka
      */
@@ -4122,7 +4122,7 @@ trait Methods
     }
 
     /**
-     * @param \FFI\CData|null $groupres rd_kafka_group_result_t*
+     * @param \FFI\CData|null $groupres const rd_kafka_group_result_t*
      * @return string|null const char*
      * @since 1.6.0 of librdkafka
      */
@@ -4132,7 +4132,7 @@ trait Methods
     }
 
     /**
-     * @param \FFI\CData|null $groupres rd_kafka_group_result_t*
+     * @param \FFI\CData|null $groupres const rd_kafka_group_result_t*
      * @return \FFI\CData|null const rd_kafka_topic_partition_list_t*
      * @since 1.6.0 of librdkafka
      */
@@ -4174,7 +4174,7 @@ trait Methods
      * @param \FFI\CData|null $rk rd_kafka_t*
      * @param \FFI\CData|null $del_records rd_kafka_DeleteRecords_t**
      * @param int|null $del_record_cnt size_t
-     * @param \FFI\CData|null $options rd_kafka_AdminOptions_t*
+     * @param \FFI\CData|null $options const rd_kafka_AdminOptions_t*
      * @param \FFI\CData|null $rkqu rd_kafka_queue_t*
      * @since 1.6.0 of librdkafka
      */
@@ -4226,7 +4226,7 @@ trait Methods
      * @param \FFI\CData|null $rk rd_kafka_t*
      * @param \FFI\CData|null $del_groups rd_kafka_DeleteGroup_t**
      * @param int|null $del_group_cnt size_t
-     * @param \FFI\CData|null $options rd_kafka_AdminOptions_t*
+     * @param \FFI\CData|null $options const rd_kafka_AdminOptions_t*
      * @param \FFI\CData|null $rkqu rd_kafka_queue_t*
      * @since 1.6.0 of librdkafka
      */
@@ -4280,7 +4280,7 @@ trait Methods
      * @param \FFI\CData|null $rk rd_kafka_t*
      * @param \FFI\CData|null $del_grpoffsets rd_kafka_DeleteConsumerGroupOffsets_t**
      * @param int|null $del_grpoffsets_cnt size_t
-     * @param \FFI\CData|null $options rd_kafka_AdminOptions_t*
+     * @param \FFI\CData|null $options const rd_kafka_AdminOptions_t*
      * @param \FFI\CData|null $rkqu rd_kafka_queue_t*
      * @since 1.6.0 of librdkafka
      */
@@ -4314,7 +4314,7 @@ trait Methods
      * @param \FFI\CData|null $mcluster rd_kafka_mock_cluster_t*
      * @param int|null $ApiKey int16_t
      * @param int|null $cnt size_t
-     * @param \FFI\CData|null $errors rd_kafka_resp_err_t*
+     * @param \FFI\CData|null $errors const rd_kafka_resp_err_t*
      * @since 1.6.0 of librdkafka
      */
     public static function rd_kafka_mock_push_request_errors_array(?\FFI\CData $mcluster, ?int $ApiKey, ?int $cnt, ?\FFI\CData $errors): void
@@ -4356,7 +4356,7 @@ trait Methods
     }
 
     /**
-     * @param \FFI\CData|null $conf const rd_kafka_conf_t*
+     * @param \FFI\CData|null $conf rd_kafka_conf_t*
      * @param \FFI\CData|object|string|null $callback_data void*
      * @since 1.7.0 of librdkafka
      */
@@ -4400,5 +4400,353 @@ trait Methods
     public static function rd_kafka_mock_broker_push_request_error_rtts(?\FFI\CData $mcluster, ?int $broker_id, ?int $ApiKey, ?int $cnt, ...$args): int
     {
         return static::getFFI()->rd_kafka_mock_broker_push_request_error_rtts($mcluster, $broker_id, $ApiKey, $cnt, ...$args);
+    }
+
+    /**
+     * @param \FFI\CData|null $conf rd_kafka_conf_t*
+     * @param int|null $enable int
+     * @since 1.9.0 of librdkafka
+     */
+    public static function rd_kafka_conf_enable_sasl_queue(?\FFI\CData $conf, ?int $enable): void
+    {
+        static::getFFI()->rd_kafka_conf_enable_sasl_queue($conf, $enable);
+    }
+
+    /**
+     * @param \FFI\CData|null $rk rd_kafka_t*
+     * @return \FFI\CData|null rd_kafka_queue_t*
+     * @since 1.9.0 of librdkafka
+     */
+    public static function rd_kafka_queue_get_sasl(?\FFI\CData $rk): ?\FFI\CData
+    {
+        return static::getFFI()->rd_kafka_queue_get_sasl($rk);
+    }
+
+    /**
+     * @param \FFI\CData|null $rk rd_kafka_t*
+     * @return \FFI\CData|null rd_kafka_error_t*
+     * @since 1.9.0 of librdkafka
+     */
+    public static function rd_kafka_sasl_background_callbacks_enable(?\FFI\CData $rk): ?\FFI\CData
+    {
+        return static::getFFI()->rd_kafka_sasl_background_callbacks_enable($rk);
+    }
+
+    /**
+     * @param \FFI\CData|null $rk rd_kafka_t*
+     * @param \FFI\CData|null $rkqu rd_kafka_queue_t*
+     * @return \FFI\CData|null rd_kafka_error_t*
+     * @since 1.9.0 of librdkafka
+     */
+    public static function rd_kafka_consumer_close_queue(?\FFI\CData $rk, ?\FFI\CData $rkqu): ?\FFI\CData
+    {
+        return static::getFFI()->rd_kafka_consumer_close_queue($rk, $rkqu);
+    }
+
+    /**
+     * @param \FFI\CData|null $rk rd_kafka_t*
+     * @return int|null int
+     * @since 1.9.0 of librdkafka
+     */
+    public static function rd_kafka_consumer_closed(?\FFI\CData $rk): ?int
+    {
+        return static::getFFI()->rd_kafka_consumer_closed($rk);
+    }
+
+    /**
+     * @param \FFI\CData|null $rkev rd_kafka_event_t*
+     * @return \FFI\CData|null const rd_kafka_CreateAcls_result_t*
+     * @since 1.9.0 of librdkafka
+     */
+    public static function rd_kafka_event_CreateAcls_result(?\FFI\CData $rkev): ?\FFI\CData
+    {
+        return static::getFFI()->rd_kafka_event_CreateAcls_result($rkev);
+    }
+
+    /**
+     * @param \FFI\CData|null $rkev rd_kafka_event_t*
+     * @return \FFI\CData|null const rd_kafka_DescribeAcls_result_t*
+     * @since 1.9.0 of librdkafka
+     */
+    public static function rd_kafka_event_DescribeAcls_result(?\FFI\CData $rkev): ?\FFI\CData
+    {
+        return static::getFFI()->rd_kafka_event_DescribeAcls_result($rkev);
+    }
+
+    /**
+     * @param \FFI\CData|null $rkev rd_kafka_event_t*
+     * @return \FFI\CData|null const rd_kafka_DeleteAcls_result_t*
+     * @since 1.9.0 of librdkafka
+     */
+    public static function rd_kafka_event_DeleteAcls_result(?\FFI\CData $rkev): ?\FFI\CData
+    {
+        return static::getFFI()->rd_kafka_event_DeleteAcls_result($rkev);
+    }
+
+    /**
+     * @param int $resource_pattern_type rd_kafka_ResourcePatternType_t
+     * @return string|null const char*
+     * @since 1.9.0 of librdkafka
+     */
+    public static function rd_kafka_ResourcePatternType_name(int $resource_pattern_type): ?string
+    {
+        return static::getFFI()->rd_kafka_ResourcePatternType_name($resource_pattern_type);
+    }
+
+    /**
+     * @param \FFI\CData|null $aclres const rd_kafka_acl_result_t*
+     * @return \FFI\CData|null const rd_kafka_error_t*
+     * @since 1.9.0 of librdkafka
+     */
+    public static function rd_kafka_acl_result_error(?\FFI\CData $aclres): ?\FFI\CData
+    {
+        return static::getFFI()->rd_kafka_acl_result_error($aclres);
+    }
+
+    /**
+     * @param int $acl_operation rd_kafka_AclOperation_t
+     * @return string|null const char*
+     * @since 1.9.0 of librdkafka
+     */
+    public static function rd_kafka_AclOperation_name(int $acl_operation): ?string
+    {
+        return static::getFFI()->rd_kafka_AclOperation_name($acl_operation);
+    }
+
+    /**
+     * @param int $acl_permission_type rd_kafka_AclPermissionType_t
+     * @return string|null const char*
+     * @since 1.9.0 of librdkafka
+     */
+    public static function rd_kafka_AclPermissionType_name(int $acl_permission_type): ?string
+    {
+        return static::getFFI()->rd_kafka_AclPermissionType_name($acl_permission_type);
+    }
+
+    /**
+     * @param int $restype rd_kafka_ResourceType_t
+     * @param string|null $name const char*
+     * @param int $resource_pattern_type rd_kafka_ResourcePatternType_t
+     * @param string|null $principal const char*
+     * @param string|null $host const char*
+     * @param int $operation rd_kafka_AclOperation_t
+     * @param int $permission_type rd_kafka_AclPermissionType_t
+     * @param \FFI\CData|null $errstr char*
+     * @param int|null $errstr_size size_t
+     * @return \FFI\CData|null rd_kafka_AclBinding_t*
+     * @since 1.9.0 of librdkafka
+     */
+    public static function rd_kafka_AclBinding_new(int $restype, ?string $name, int $resource_pattern_type, ?string $principal, ?string $host, int $operation, int $permission_type, ?\FFI\CData $errstr, ?int $errstr_size): ?\FFI\CData
+    {
+        return static::getFFI()->rd_kafka_AclBinding_new($restype, $name, $resource_pattern_type, $principal, $host, $operation, $permission_type, $errstr, $errstr_size);
+    }
+
+    /**
+     * @param int $restype rd_kafka_ResourceType_t
+     * @param string|null $name const char*
+     * @param int $resource_pattern_type rd_kafka_ResourcePatternType_t
+     * @param string|null $principal const char*
+     * @param string|null $host const char*
+     * @param int $operation rd_kafka_AclOperation_t
+     * @param int $permission_type rd_kafka_AclPermissionType_t
+     * @param \FFI\CData|null $errstr char*
+     * @param int|null $errstr_size size_t
+     * @return \FFI\CData|null rd_kafka_AclBindingFilter_t*
+     * @since 1.9.0 of librdkafka
+     */
+    public static function rd_kafka_AclBindingFilter_new(int $restype, ?string $name, int $resource_pattern_type, ?string $principal, ?string $host, int $operation, int $permission_type, ?\FFI\CData $errstr, ?int $errstr_size): ?\FFI\CData
+    {
+        return static::getFFI()->rd_kafka_AclBindingFilter_new($restype, $name, $resource_pattern_type, $principal, $host, $operation, $permission_type, $errstr, $errstr_size);
+    }
+
+    /**
+     * @param \FFI\CData|null $acl const rd_kafka_AclBinding_t*
+     * @return int rd_kafka_ResourceType_t
+     * @since 1.9.0 of librdkafka
+     */
+    public static function rd_kafka_AclBinding_restype(?\FFI\CData $acl): int
+    {
+        return static::getFFI()->rd_kafka_AclBinding_restype($acl);
+    }
+
+    /**
+     * @param \FFI\CData|null $acl const rd_kafka_AclBinding_t*
+     * @return string|null const char*
+     * @since 1.9.0 of librdkafka
+     */
+    public static function rd_kafka_AclBinding_name(?\FFI\CData $acl): ?string
+    {
+        return static::getFFI()->rd_kafka_AclBinding_name($acl);
+    }
+
+    /**
+     * @param \FFI\CData|null $acl const rd_kafka_AclBinding_t*
+     * @return string|null const char*
+     * @since 1.9.0 of librdkafka
+     */
+    public static function rd_kafka_AclBinding_principal(?\FFI\CData $acl): ?string
+    {
+        return static::getFFI()->rd_kafka_AclBinding_principal($acl);
+    }
+
+    /**
+     * @param \FFI\CData|null $acl const rd_kafka_AclBinding_t*
+     * @return string|null const char*
+     * @since 1.9.0 of librdkafka
+     */
+    public static function rd_kafka_AclBinding_host(?\FFI\CData $acl): ?string
+    {
+        return static::getFFI()->rd_kafka_AclBinding_host($acl);
+    }
+
+    /**
+     * @param \FFI\CData|null $acl const rd_kafka_AclBinding_t*
+     * @return int rd_kafka_AclOperation_t
+     * @since 1.9.0 of librdkafka
+     */
+    public static function rd_kafka_AclBinding_operation(?\FFI\CData $acl): int
+    {
+        return static::getFFI()->rd_kafka_AclBinding_operation($acl);
+    }
+
+    /**
+     * @param \FFI\CData|null $acl const rd_kafka_AclBinding_t*
+     * @return int rd_kafka_AclPermissionType_t
+     * @since 1.9.0 of librdkafka
+     */
+    public static function rd_kafka_AclBinding_permission_type(?\FFI\CData $acl): int
+    {
+        return static::getFFI()->rd_kafka_AclBinding_permission_type($acl);
+    }
+
+    /**
+     * @param \FFI\CData|null $acl const rd_kafka_AclBinding_t*
+     * @return int rd_kafka_ResourcePatternType_t
+     * @since 1.9.0 of librdkafka
+     */
+    public static function rd_kafka_AclBinding_resource_pattern_type(?\FFI\CData $acl): int
+    {
+        return static::getFFI()->rd_kafka_AclBinding_resource_pattern_type($acl);
+    }
+
+    /**
+     * @param \FFI\CData|null $acl const rd_kafka_AclBinding_t*
+     * @return \FFI\CData|null const rd_kafka_error_t*
+     * @since 1.9.0 of librdkafka
+     */
+    public static function rd_kafka_AclBinding_error(?\FFI\CData $acl): ?\FFI\CData
+    {
+        return static::getFFI()->rd_kafka_AclBinding_error($acl);
+    }
+
+    /**
+     * @param \FFI\CData|null $acl_binding rd_kafka_AclBinding_t*
+     * @since 1.9.0 of librdkafka
+     */
+    public static function rd_kafka_AclBinding_destroy(?\FFI\CData $acl_binding): void
+    {
+        static::getFFI()->rd_kafka_AclBinding_destroy($acl_binding);
+    }
+
+    /**
+     * @param \FFI\CData|null $acl_bindings rd_kafka_AclBinding_t**
+     * @param int|null $acl_bindings_cnt size_t
+     * @since 1.9.0 of librdkafka
+     */
+    public static function rd_kafka_AclBinding_destroy_array(?\FFI\CData $acl_bindings, ?int $acl_bindings_cnt): void
+    {
+        static::getFFI()->rd_kafka_AclBinding_destroy_array($acl_bindings, $acl_bindings_cnt);
+    }
+
+    /**
+     * @param \FFI\CData|null $result const rd_kafka_CreateAcls_result_t*
+     * @param \FFI\CData|null $cntp size_t*
+     * @return \FFI\CData|null const rd_kafka_acl_result_t**
+     * @since 1.9.0 of librdkafka
+     */
+    public static function rd_kafka_CreateAcls_result_acls(?\FFI\CData $result, ?\FFI\CData $cntp): ?\FFI\CData
+    {
+        return static::getFFI()->rd_kafka_CreateAcls_result_acls($result, $cntp);
+    }
+
+    /**
+     * @param \FFI\CData|null $rk rd_kafka_t*
+     * @param \FFI\CData|null $new_acls rd_kafka_AclBinding_t**
+     * @param int|null $new_acls_cnt size_t
+     * @param \FFI\CData|null $options const rd_kafka_AdminOptions_t*
+     * @param \FFI\CData|null $rkqu rd_kafka_queue_t*
+     * @since 1.9.0 of librdkafka
+     */
+    public static function rd_kafka_CreateAcls(?\FFI\CData $rk, ?\FFI\CData $new_acls, ?int $new_acls_cnt, ?\FFI\CData $options, ?\FFI\CData $rkqu): void
+    {
+        static::getFFI()->rd_kafka_CreateAcls($rk, $new_acls, $new_acls_cnt, $options, $rkqu);
+    }
+
+    /**
+     * @param \FFI\CData|null $result const rd_kafka_DescribeAcls_result_t*
+     * @param \FFI\CData|null $cntp size_t*
+     * @return \FFI\CData|null const rd_kafka_AclBinding_t**
+     * @since 1.9.0 of librdkafka
+     */
+    public static function rd_kafka_DescribeAcls_result_acls(?\FFI\CData $result, ?\FFI\CData $cntp): ?\FFI\CData
+    {
+        return static::getFFI()->rd_kafka_DescribeAcls_result_acls($result, $cntp);
+    }
+
+    /**
+     * @param \FFI\CData|null $rk rd_kafka_t*
+     * @param \FFI\CData|null $acl_filter rd_kafka_AclBindingFilter_t*
+     * @param \FFI\CData|null $options const rd_kafka_AdminOptions_t*
+     * @param \FFI\CData|null $rkqu rd_kafka_queue_t*
+     * @since 1.9.0 of librdkafka
+     */
+    public static function rd_kafka_DescribeAcls(?\FFI\CData $rk, ?\FFI\CData $acl_filter, ?\FFI\CData $options, ?\FFI\CData $rkqu): void
+    {
+        static::getFFI()->rd_kafka_DescribeAcls($rk, $acl_filter, $options, $rkqu);
+    }
+
+    /**
+     * @param \FFI\CData|null $result const rd_kafka_DeleteAcls_result_t*
+     * @param \FFI\CData|null $cntp size_t*
+     * @return \FFI\CData|null const rd_kafka_DeleteAcls_result_response_t**
+     * @since 1.9.0 of librdkafka
+     */
+    public static function rd_kafka_DeleteAcls_result_responses(?\FFI\CData $result, ?\FFI\CData $cntp): ?\FFI\CData
+    {
+        return static::getFFI()->rd_kafka_DeleteAcls_result_responses($result, $cntp);
+    }
+
+    /**
+     * @param \FFI\CData|null $result_response const rd_kafka_DeleteAcls_result_response_t*
+     * @return \FFI\CData|null const rd_kafka_error_t*
+     * @since 1.9.0 of librdkafka
+     */
+    public static function rd_kafka_DeleteAcls_result_response_error(?\FFI\CData $result_response): ?\FFI\CData
+    {
+        return static::getFFI()->rd_kafka_DeleteAcls_result_response_error($result_response);
+    }
+
+    /**
+     * @param \FFI\CData|null $result_response const rd_kafka_DeleteAcls_result_response_t*
+     * @param \FFI\CData|null $matching_acls_cntp size_t*
+     * @return \FFI\CData|null const rd_kafka_AclBinding_t**
+     * @since 1.9.0 of librdkafka
+     */
+    public static function rd_kafka_DeleteAcls_result_response_matching_acls(?\FFI\CData $result_response, ?\FFI\CData $matching_acls_cntp): ?\FFI\CData
+    {
+        return static::getFFI()->rd_kafka_DeleteAcls_result_response_matching_acls($result_response, $matching_acls_cntp);
+    }
+
+    /**
+     * @param \FFI\CData|null $rk rd_kafka_t*
+     * @param \FFI\CData|null $del_acls rd_kafka_AclBindingFilter_t**
+     * @param int|null $del_acls_cnt size_t
+     * @param \FFI\CData|null $options const rd_kafka_AdminOptions_t*
+     * @param \FFI\CData|null $rkqu rd_kafka_queue_t*
+     * @since 1.9.0 of librdkafka
+     */
+    public static function rd_kafka_DeleteAcls(?\FFI\CData $rk, ?\FFI\CData $del_acls, ?int $del_acls_cnt, ?\FFI\CData $options, ?\FFI\CData $rkqu): void
+    {
+        static::getFFI()->rd_kafka_DeleteAcls($rk, $del_acls, $del_acls_cnt, $options, $rkqu);
     }
 }

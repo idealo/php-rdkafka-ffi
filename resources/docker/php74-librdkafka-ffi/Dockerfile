@@ -1,7 +1,7 @@
 FROM php:7.4-cli
 
 # enable ffi and install librdkafka
-ARG LIBRDKAFKA_VERSION=v1.8.2
+ARG LIBRDKAFKA_VERSION=v1.9.2
 ENV LIBRDKAFKA_VERSION=$LIBRDKAFKA_VERSION
 RUN set -e; \
     apt-get update; \
@@ -19,11 +19,11 @@ RUN set -e; \
     rm -rf /tmp/*;
 
 # install xdebug
-ARG XDEBUG_VERSION=stable
+ARG XDEBUG_VERSION=3.1.0
 RUN pecl install xdebug-${XDEBUG_VERSION}; \
     docker-php-ext-enable xdebug;
 
-# install rdkafka
+# install rdkafka ext - this is just required to run the compatibility tests
 ARG RDKAFKA_EXT_VERSION=4.1.x
 RUN git clone --branch "$RDKAFKA_EXT_VERSION" --depth 1 https://github.com/arnaud-lb/php-rdkafka.git /tmp/php-rdkafka; \
     cd /tmp/php-rdkafka; \

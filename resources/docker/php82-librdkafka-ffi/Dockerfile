@@ -1,4 +1,4 @@
-FROM php:8.0-cli
+FROM php:8.2-cli
 
 # enable ffi and install librdkafka
 ARG LIBRDKAFKA_VERSION=v1.9.2
