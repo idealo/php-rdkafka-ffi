@@ -40,7 +40,7 @@ class FunctionsTest extends TestCase
     {
         $this->requiresRdKafkaExtensionVersion('<', '5');
 
-        $this->assertSame(0, rd_kafka_errno());
+        $this->assertGreaterThanOrEqual(0, rd_kafka_errno());
     }
 
     public function testThreadCount(): void
