@@ -73,7 +73,7 @@ jobs:
       GH_TOKEN: ${{ secrets.GH_TOKEN }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Cache librdkafka ${{ matrix.librdkafka }} build
         id: librdkafka-build-cache
@@ -116,7 +116,7 @@ jobs:
 
       - name: Publish code coverage to codeclimate
         if: matrix.publish == true && github.event_name == 'push'
-        uses: paambaati/codeclimate-action@v3.2.0
+        uses: paambaati/codeclimate-action@v5
         env:
           CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
 
@@ -126,7 +126,7 @@ jobs:
           composer prepare-docs
       - name: Setup Python
         if: matrix.publish == true && github.event_name == 'push' && github.ref == 'refs/heads/main'
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: 3.x
       - name: Setup mkdocs-material

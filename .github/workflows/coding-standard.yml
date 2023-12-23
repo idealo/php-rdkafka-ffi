@@ -11,22 +11,22 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       - name: Install PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: 7.4
+          php-version: 8.1
           coverage: none
       - name: Get composer cache directory
         id: composer-cache
         run: |
           echo "::set-output name=dir::$(composer config cache-files-dir)"
       - name: Cache composer cache directory
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ runner.os }}-7.4-composer-${{ hashFiles('**/composer.json') }}
-          restore-keys: ${{ runner.os }}-7.4-composer-
+          key: ${{ runner.os }}-8.1-composer-${{ hashFiles('**/composer.json') }}
+          restore-keys: ${{ runner.os }}-8.1-composer-
       - name: Install dependencies
         run: composer update --prefer-dist --prefer-stable --no-interaction
       - name: Check style

@@ -26,7 +26,7 @@ jobs:
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Install latest librdkafka & kafka via brew
         shell: bash
