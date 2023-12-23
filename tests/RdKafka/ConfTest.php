@@ -218,7 +218,7 @@ class ConfTest extends TestCase
 
     public function testSetErrorCb(): void
     {
-        $errorCallbackStack = new class {
+        $errorCallbackStack = new class() {
             public $stack = [];
         };
 
@@ -247,7 +247,7 @@ class ConfTest extends TestCase
     {
         $expectedOpaque = new \stdClass();
 
-        $opaqueCallbackStack = new class {
+        $opaqueCallbackStack = new class() {
             public $stack = [];
         };
 
@@ -273,7 +273,7 @@ class ConfTest extends TestCase
 
     public function testSetDrMsgCb(): void
     {
-        $drMsgCallbackStack = new class {
+        $drMsgCallbackStack = new class() {
             public $stack = [];
         };
 
@@ -311,7 +311,7 @@ class ConfTest extends TestCase
     {
         $expectedOpaque = new \stdClass();
 
-        $drMsgCallbackStack = new class {
+        $drMsgCallbackStack = new class() {
             public $stack = [];
         };
 
@@ -402,7 +402,7 @@ class ConfTest extends TestCase
      */
     public function testSetRebalanceCb(): void
     {
-        $rebalanceCallbackStack = new class {
+        $rebalanceCallbackStack = new class() {
             public $stack = [];
         };
 
@@ -557,7 +557,7 @@ class ConfTest extends TestCase
 
     public function testSetOffsetCommitCb(): void
     {
-        $offsetCommitCallbackStack = new class {
+        $offsetCommitCallbackStack = new class() {
             public $stack = [];
         };
 
