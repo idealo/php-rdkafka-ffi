@@ -14,7 +14,6 @@ use function strlen;
 class ProducerTopic extends Topic
 {
     /**
-     * @param TopicConf $conf
      * @throws Exception
      */
     public function __construct(Producer $producer, string $name, ?TopicConf $conf = null)
@@ -23,9 +22,6 @@ class ProducerTopic extends Topic
     }
 
     /**
-     * @param string $payload
-     * @param string $key
-     *
      * @throws Exception
      */
     public function produce(int $partition, int $msgflags, ?string $payload = null, ?string $key = null, $opaque = null): void

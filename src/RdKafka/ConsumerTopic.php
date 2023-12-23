@@ -19,7 +19,6 @@ class ConsumerTopic extends Topic
     private array $consuming = [];
 
     /**
-     * @param TopicConf $conf
      * @throws Exception
      */
     public function __construct(Consumer $consumer, string $name, ?TopicConf $conf = null)

@@ -60,7 +60,7 @@ class ConsumerTest extends TestCase
         $conf->set('bootstrap.servers', KAFKA_BROKERS);
         $conf->setLogCb(
             function ($consumer, $level, $fac, $buf): void {
-//            echo "log: $level $fac $buf" . PHP_EOL;
+                // echo "log: $level $fac $buf" . PHP_EOL;
             }
         );
 

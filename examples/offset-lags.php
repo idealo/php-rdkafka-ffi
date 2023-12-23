@@ -81,7 +81,7 @@ do {
     if ($message === null) {
         break;
     }
-//    var_dump($message->key, $message->payload, $message->err);
+    // var_dump($message->key, $message->payload, $message->err);
     if ($message->err === RD_KAFKA_RESP_ERR__TIMED_OUT) {
         echo '-';
         continue;
@@ -92,7 +92,7 @@ do {
         if (count($eofs) === 50) {
             break;
         }
-//        var_export($eofs);
+        // var_export($eofs);
         continue;
     }
 
@@ -117,8 +117,8 @@ foreach ($compactedMessages as $key => $payload) {
     // parse key value
     $keyParser = new MessageKeyParser($key);
     $keyParsed = $keyParser->getParsed();
-//    var_dump($keyParser->getVersion());
-//    var_export($keyParsed);
+    // var_dump($keyParser->getVersion());
+    // var_export($keyParsed);
 
     switch ($keyParser->getVersion()) {
         case MessageKeyParser::V0_OFFSET_COMMIT_KEY:
@@ -126,14 +126,14 @@ foreach ($compactedMessages as $key => $payload) {
             $payloadParser = new OffsetCommitValueParser($payload);
             $parsed = $payloadParser->getParsed();
             $compactedOffsetCommitValues[$keyParsed['group']][$keyParsed['topic']][$keyParsed['partition']] = $parsed['offset'];
-//            var_dump($payloadParser->getVersion());
-//            var_export($parsed);
+            // var_dump($payloadParser->getVersion());
+            // var_export($parsed);
             break;
         case MessageKeyParser::V2_GROUP_METADATA_KEY:
             $payloadParser = new GroupMetadataValueParser($payload);
             $parsed = $payloadParser->getParsed();
-//            var_dump($payloadParser->getVersion());
-//            var_export($parsed);
+            // var_dump($payloadParser->getVersion());
+            // var_export($parsed);
             foreach ($parsed['members'] as $member) {
                 foreach ($member['assignment']['topic_partitions'] as $topicPartition) {
                     foreach ($topicPartition['partitions'] as $partition) {

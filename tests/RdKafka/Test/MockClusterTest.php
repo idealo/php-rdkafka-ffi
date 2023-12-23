@@ -117,7 +117,7 @@ class MockClusterTest extends TestCase
             function (Producer $producer, int $level, string $fac, string $buf) use (&$logStack): void {
                 if (strpos($buf, 'ApiKey') > 0) {
                     $logStack[] = $buf;
-//                    echo $buf . PHP_EOL;
+                    // echo $buf . PHP_EOL;
                 }
             }
         );
@@ -313,7 +313,7 @@ class MockClusterTest extends TestCase
         $consumerConfig = new Conf();
         $consumerConfig->set('log_level', (string) LOG_EMERG);
         $consumerConfig->set('group.id', __METHOD__);
-//        $consumerConfig->set('debug', 'fetch');
+        // $consumerConfig->set('debug', 'fetch');
         $consumerConfig->set('bootstrap.servers', $cluster->getBootstraps());
         $consumer = new KafkaConsumer($consumerConfig);
         $consumer->assign([new TopicPartition(KAFKA_TEST_TOPIC, 0, rd_kafka_offset_tail(1))]);
@@ -357,7 +357,7 @@ class MockClusterTest extends TestCase
         $consumerConfig = new Conf();
         $consumerConfig->set('log_level', (string) LOG_EMERG);
         $consumerConfig->set('group.id', __METHOD__);
-//        $consumerConfig->set('debug', 'fetch');
+        // $consumerConfig->set('debug', 'fetch');
         $consumerConfig->set('bootstrap.servers', $cluster->getBootstraps());
         $consumer = new KafkaConsumer($consumerConfig);
         $consumer->assign([new TopicPartition(KAFKA_TEST_TOPIC, 0, rd_kafka_offset_tail(1))]);
@@ -424,7 +424,7 @@ class MockClusterTest extends TestCase
         $consumerConfig = new Conf();
         $consumerConfig->set('log_level', (string) LOG_EMERG);
         $consumerConfig->set('group.id', __METHOD__);
-//        $consumerConfig->set('debug', 'fetch');
+        // $consumerConfig->set('debug', 'fetch');
         $consumerConfig->set('bootstrap.servers', $cluster->getBootstraps());
         $consumer = new KafkaConsumer($consumerConfig);
         $consumer->assign([new TopicPartition(KAFKA_TEST_TOPIC, 0, rd_kafka_offset_tail(1))]);
@@ -469,7 +469,7 @@ class MockClusterTest extends TestCase
         $consumerConfig = new Conf();
         $consumerConfig->set('log_level', (string) LOG_EMERG);
         $consumerConfig->set('group.id', __METHOD__);
-//        $consumerConfig->set('debug', 'fetch');
+        // $consumerConfig->set('debug', 'fetch');
         $consumerConfig->set('bootstrap.servers', $cluster->getBootstraps());
         $consumer = new KafkaConsumer($consumerConfig);
         $consumer->assign([new TopicPartition(KAFKA_TEST_TOPIC, 0, rd_kafka_offset_tail(1))]);

@@ -32,7 +32,6 @@ class Client
     }
 
     /**
-     * @return Client
      * @throws Exception
      */
     public static function fromConf(Conf $conf): self
