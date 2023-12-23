@@ -32,9 +32,12 @@ class KafkaErrorException extends Exception
 
     public static function fromCData(CData $error)
     {
-        Library::requireVersion('>=', '1.4.0');
+        if (Library::versionMatches('>=', '1.4.0') === false) {
+            Library::rd_kafka_error_destroy($error);
+            Library::requireVersion('>=', '1.4.0');
+        }
 
-        return new static(
+        $instance = new static(
             Library::rd_kafka_error_name($error),
             Library::rd_kafka_error_code($error),
             Library::rd_kafka_error_string($error),
@@ -42,6 +45,10 @@ class KafkaErrorException extends Exception
             (bool) Library::rd_kafka_error_is_retriable($error),
             (bool) Library::rd_kafka_error_txn_requires_abort($error),
         );
+
+        Library::rd_kafka_error_destroy($error);
+
+        return $instance;
     }
 
     public function getErrorString(): string
