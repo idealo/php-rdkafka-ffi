@@ -1,4 +1,4 @@
-FROM php:8.1-cli
+FROM php:8.3-cli
 
 # enable ffi and install librdkafka
 ARG LIBRDKAFKA_VERSION=v2.3.0
@@ -19,7 +19,7 @@ RUN set -e; \
     rm -rf /tmp/*;
 
 # install xdebug
-ARG XDEBUG_VERSION=stable
+ARG XDEBUG_VERSION=beta
 RUN pecl install xdebug-${XDEBUG_VERSION}; \
     docker-php-ext-enable xdebug;
 
@@ -32,8 +32,6 @@ RUN git clone --branch "$RDKAFKA_EXT_VERSION" --depth 1 https://github.com/arnau
     make; \
     make install; \
     rm -rf /tmp/*;
-
-RUN apt-get install -y --no-install-recommends git zip unzip gdb libffi-dev libc6-dev;
 
 ENV COMPOSER_HOME /tmp
 ENV COMPOSER_ALLOW_SUPERUSER 1

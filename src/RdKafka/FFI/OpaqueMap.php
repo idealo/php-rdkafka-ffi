@@ -25,13 +25,13 @@ class OpaqueMap
         }
 
         self::$nextId++;
-        if (self::$nextId === PHP_INT_MAX) {
+        if (self::$nextId > 4294967295) {
             self::$nextId = 1;
         }
 
         self::$map[self::$nextId] = $opaque;
 
-        $cOpaque = \FFI::new('int');
+        $cOpaque = Library::new('unsigned int');
         $cOpaque->cdata = self::$nextId;
         self::$cMap[self::$nextId] = $cOpaque;
 
@@ -47,7 +47,7 @@ class OpaqueMap
             return null;
         }
 
-        $cOpaque = \FFI::cast('int', $cOpaque);
+        $cOpaque = Library::cast('unsigned int', $cOpaque);
         $id = $cOpaque->cdata;
 
         if (array_key_exists($id, self::$map) === false) {
@@ -71,7 +71,7 @@ class OpaqueMap
             return null;
         }
 
-        $cOpaque = \FFI::cast('int', $cOpaque);
+        $cOpaque = Library::cast('unsigned int', $cOpaque);
         $id = $cOpaque->cdata;
 
         if (array_key_exists($id, self::$map) === false) {

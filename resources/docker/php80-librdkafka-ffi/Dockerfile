@@ -1,11 +1,11 @@
 FROM php:8.0-cli
 
 # enable ffi and install librdkafka
-ARG LIBRDKAFKA_VERSION=v2.0.2
+ARG LIBRDKAFKA_VERSION=v2.3.0
 ENV LIBRDKAFKA_VERSION=$LIBRDKAFKA_VERSION
 RUN set -e; \
     apt-get update; \
-    apt-get install -y --no-install-recommends git zip unzip gdb libffi-dev; \
+    apt-get install -y --no-install-recommends git zip unzip gdb libffi-dev libc6-dev; \
     docker-php-ext-configure ffi; \
     docker-php-ext-install -j$(nproc) ffi pcntl; \
     git clone --branch "${LIBRDKAFKA_VERSION}" --depth 1 https://github.com/confluentinc/librdkafka.git /tmp/librdkafka; \

@@ -12,11 +12,11 @@ jobs:
       fail-fast: true
       matrix:
         php:
-          - '8.0'
           - '8.1'
           - '8.2'
+          - '8.3'
         librdkafka:
-          - '2.0.2'
+          - '2.3.0'
     defaults:
       run:
         shell: bash
@@ -35,9 +35,9 @@ jobs:
         run: |
           nuget install librdkafka.redist -Version ${{ matrix.librdkafka }}
           choco install --no-progress wget nssm
-          wget -q -O kafka_2.13-3.3.2.tgz http://ftp.fau.de/apache/kafka/3.3.2/kafka_2.13-3.3.2.tgz
-          tar -xzf kafka_2.13-3.3.2.tgz
-          cp -pr kafka_2.13-3.3.2 /c/kafka
+          wget -q -O kafka_2.13-3.6.1.tgz http://ftp.fau.de/apache/kafka/3.6.1/kafka_2.13-3.6.1.tgz
+          tar -xzf kafka_2.13-3.6.1.tgz
+          cp -pr kafka_2.13-3.6.1 /c/kafka
           sed -i "s|broker.id=0|broker.id=111|g" /c/kafka/config/server.properties
           nssm install zookeeper /c/kafka/bin/windows/zookeeper-server-start.bat /c/kafka/config/zookeeper.properties
           nssm set zookeeper AppExit Default Exit

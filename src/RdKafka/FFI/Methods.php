@@ -626,7 +626,7 @@ trait Methods
     /**
      * <p>Sets a configuration property. </p>
      * <p><code>conf</code> must have been previously created with rd_kafka_conf_new().</p>
-     * <p>Fallthrough: Topic-level configuration properties may be set using this interface in which case they are applied on the <code>default_topic_conf</code>. If no <code>default_topic_conf</code> has been set one will be created. Any sub-sequent rd_kafka_conf_set_default_topic_conf() calls will replace the current default topic configuration.</p>
+     * <p>Fallthrough: Topic-level configuration properties may be set using this interface in which case they are applied on the <code>default_topic_conf</code>. If no <code>default_topic_conf</code> has been set one will be created. Any subsequent rd_kafka_conf_set_default_topic_conf() calls will replace the current default topic configuration.</p>
      *
      * <dl class="section remark"><dt>Remarks</dt><dd>Setting properties or values that were disabled at build time due to missing dependencies will return RD_KAFKA_CONF_INVALID. </dd></dl>
      * @param \FFI\CData|null $conf rd_kafka_conf_t*
@@ -859,7 +859,7 @@ trait Methods
      * <li><code>json_len</code> - Length of <code>json</code> string.</li>
      * <li><code>opaque</code> - Application-provided opaque as set by rd_kafka_conf_set_opaque().</li>
      * </ul>
-     * <p>For more information on the format of <code>json</code>, see https://github.com/edenhill/librdkafka/wiki/Statistics</p>
+     * <p>For more information on the format of <code>json</code>, see https://github.com/confluentinc/librdkafka/wiki/Statistics</p>
      * <p>If the application wishes to hold on to the <code>json</code> pointer and free it at a later time it must return 1 from the <code>stats_cb</code>. If the application returns 0 from the <code>stats_cb</code> then librdkafka will immediately free the <code>json</code> pointer.</p>
      * <p>See STATISTICS.md for a full definition of the JSON object. </p>
      * @param \FFI\CData|null $conf rd_kafka_conf_t*
@@ -1274,7 +1274,7 @@ trait Methods
 
     /**
      * <p>Creates a new Kafka handle and starts its operation according to the specified <code>type</code> (<code>RD_KAFKA_CONSUMER</code> or <code>RD_KAFKA_PRODUCER</code>). </p>
-     * <p><code>conf</code> is an optional struct created with <code>rd_kafka_conf_new()</code> that will be used instead of the default configuration. The <code>conf</code> object is freed by this function on success and must not be used or destroyed by the application sub-sequently. See <code>rd_kafka_conf_set()</code> et.al for more information.</p>
+     * <p><code>conf</code> is an optional struct created with <code>rd_kafka_conf_new()</code> that will be used instead of the default configuration. The <code>conf</code> object is freed by this function on success and must not be used or destroyed by the application subsequently. See <code>rd_kafka_conf_set()</code> et.al for more information.</p>
      * <p><code>errstr</code> must be a pointer to memory of at least size <code>errstr_size</code> where <code>rd_kafka_new()</code> may write a human readable error message in case the creation of a new handle fails. In which case the function returns NULL.</p>
      * <dl class="section remark"><dt>Remarks</dt><dd><b>RD_KAFKA_CONSUMER:</b> When a new <code>RD_KAFKA_CONSUMER</code> rd_kafka_t handle is created it may either operate in the legacy simple consumer mode using the rd_kafka_consume_start() interface, or the High-level KafkaConsumer API. </dd>
      * <dd>
@@ -1386,7 +1386,7 @@ trait Methods
 
     /**
      * <p>Creates a new topic handle for topic named <code>topic</code>. </p>
-     * <p><code>conf</code> is an optional configuration for the topic created with <code>rd_kafka_topic_conf_new()</code> that will be used instead of the default topic configuration. The <code>conf</code> object is freed by this function and must not be used or destroyed by the application sub-sequently. See <code>rd_kafka_topic_conf_set()</code> et.al for more information.</p>
+     * <p><code>conf</code> is an optional configuration for the topic created with <code>rd_kafka_topic_conf_new()</code> that will be used instead of the default topic configuration. The <code>conf</code> object is freed by this function and must not be used or destroyed by the application subsequently. See <code>rd_kafka_topic_conf_set()</code> et.al for more information.</p>
      * <p>Topic handles are refcounted internally and calling rd_kafka_topic_new() again with the same topic name will return the previous topic handle without updating the original handle's configuration. Applications must eventually call rd_kafka_topic_destroy() for each succesfull call to rd_kafka_topic_new() to clear up resources.</p>
      *
      * <dl class="section see"><dt>See also</dt><dd>rd_kafka_topic_destroy() </dd></dl>
@@ -1436,11 +1436,11 @@ trait Methods
 
     /**
      * <p>Polls the provided kafka handle for events. </p>
-     * <p>Events will cause application provided callbacks to be called.</p>
-     * <p>The <code>timeout_ms</code> argument specifies the maximum amount of time (in milliseconds) that the call will block waiting for events. For non-blocking calls, provide 0 as <code>timeout_ms</code>. To wait indefinately for an event, provide -1.</p>
+     * <p>Events will cause application-provided callbacks to be called.</p>
+     * <p>The <code>timeout_ms</code> argument specifies the maximum amount of time (in milliseconds) that the call will block waiting for events. For non-blocking calls, provide 0 as <code>timeout_ms</code>. To wait indefinitely for an event, provide -1.</p>
      * <dl class="section remark"><dt>Remarks</dt><dd>An application should make sure to call poll() at regular intervals to serve any queued callbacks waiting to be called. </dd>
      * <dd>
-     * If your producer doesn't have any callback set (in particular via rd_kafka_conf_set_dr_msg_cb or rd_kafka_conf_set_error_cb) you might chose not to call poll(), though this is not recommended.</dd></dl>
+     * If your producer doesn't have any callback set (in particular via rd_kafka_conf_set_dr_msg_cb or rd_kafka_conf_set_error_cb) you might choose not to call poll(), though this is not recommended.</dd></dl>
      * <p>Events:</p><ul>
      * <li>delivery report callbacks (if dr_cb/dr_msg_cb is configured) [producer]</li>
      * <li>error callbacks (rd_kafka_conf_set_error_cb()) [all]</li>
@@ -1613,7 +1613,9 @@ trait Methods
 
     /**
      * <p>Use rd_kafka_queue_destroy() to loose the reference.</p>
-     * <dl class="section remark"><dt>Remarks</dt><dd>rd_kafka_queue_destroy() MUST be called on this queue prior to calling rd_kafka_consumer_close(). </dd></dl>
+     * <dl class="section remark"><dt>Remarks</dt><dd>rd_kafka_queue_destroy() MUST be called on this queue prior to calling rd_kafka_consumer_close(). </dd>
+     * <dd>
+     * Polling the returned queue counts as a consumer poll, and will reset the timer for max.poll.interval.ms. If this queue is forwarded to a "destq", polling destq also counts as a consumer poll (this works for any number of forwards). However, even if this queue is unforwarded or forwarded elsewhere, polling destq will continue to count as a consumer poll. </dd></dl>
      * @param \FFI\CData|null $rk rd_kafka_t* - )
      * @return \FFI\CData|null rd_kafka_queue_t* - a reference to the librdkafka consumer queue. This is the queue served by rd_kafka_consumer_poll().
      * @since 1.0.0 of librdkafka
@@ -1946,6 +1948,7 @@ trait Methods
     /**
      * <p>Store offset <code>offset</code> + 1 for topic <code>rkt</code> partition <code>partition</code>. </p>
      * <p>The <code>offset</code> + 1 will be committed (written) to broker (or file) according to <code><code>auto.commit.interval.ms</code></code> or manual offset-less commit()</p>
+     * <dl class="deprecated"><dt><b>Deprecated:</b></dt><dd>This API lacks support for partition leader epochs, which makes it at risk for unclean leader election log truncation issues. Use rd_kafka_offsets_store() and rd_kafka_offset_store_message() instead.</dd></dl>
      * <dl class="section warning"><dt>Warning</dt><dd>This method may only be called for partitions that are currently assigned. Non-assigned partitions will fail with RD_KAFKA_RESP_ERR__STATE. Since v1.9.0.</dd>
      * <dd>
      * Avoid storing offsets after calling rd_kafka_seek() (et.al) as this may later interfere with resuming a paused partition, instead store offsets prior to calling seek.</dd></dl>
@@ -1971,7 +1974,9 @@ trait Methods
      * Avoid storing offsets after calling rd_kafka_seek() (et.al) as this may later interfere with resuming a paused partition, instead store offsets prior to calling seek.</dd></dl>
      * <dl class="section remark"><dt>Remarks</dt><dd>The <code></code>.offset field is stored as is, it will NOT be + 1.</dd>
      * <dd>
-     * <code><code>enable.auto.offset.store</code></code> must be set to "false" when using this API.</dd></dl>
+     * <code><code>enable.auto.offset.store</code></code> must be set to "false" when using this API.</dd>
+     * <dd>
+     * The leader epoch, if set, will be used to fence outdated partition leaders. See rd_kafka_topic_partition_set_leader_epoch().</dd></dl>
      * @param \FFI\CData|null $rk rd_kafka_t*
      * @param \FFI\CData|null $offsets rd_kafka_topic_partition_list_t*
      * @return int rd_kafka_resp_err_t - RD_KAFKA_RESP_ERR_NO_ERROR on (partial) success, or RD_KAFKA_RESP_ERR__INVALID_ARG if <code>enable.auto.offset.store</code> is true, or RD_KAFKA_RESP_ERR__UNKNOWN_PARTITION or RD_KAFKA_RESP_ERR__STATE if none of the offsets could be stored.
@@ -2190,7 +2195,7 @@ trait Methods
     /**
      * <p>Produce and send a single message to broker. </p>
      * <p><code>rkt</code> is the target topic which must have been previously created with <code>rd_kafka_topic_new()</code>.</p>
-     * <p><code>rd_kafka_produce()</code> is an asynch non-blocking API. See <code>rd_kafka_conf_set_dr_msg_cb</code> on how to setup a callback to be called once the delivery status (success or failure) is known. The delivery report is trigged by the application calling <code>rd_kafka_poll()</code> (at regular intervals) or <code>rd_kafka_flush()</code> (at termination).</p>
+     * <p><code>rd_kafka_produce()</code> is an asynchronous non-blocking API. See <code>rd_kafka_conf_set_dr_msg_cb</code> on how to setup a callback to be called once the delivery status (success or failure) is known. The delivery report is triggered by the application calling <code>rd_kafka_poll()</code> (at regular intervals) or <code>rd_kafka_flush()</code> (at termination).</p>
      * <p>Since producing is asynchronous, you should call <code>rd_kafka_flush()</code> before you destroy the producer. Otherwise, any outstanding messages will be silently discarded.</p>
      * <p>When temporary errors occur, librdkafka automatically retries to produce the messages. Retries are triggered after retry.backoff.ms and when the leader broker for the given partition is available. Otherwise, librdkafka falls back to polling the topic metadata to monitor when a new leader is elected (see the topic.metadata.refresh.fast.interval.ms and topic.metadata.refresh.interval.ms configurations) and then performs a retry. A delivery error will occur if the message could not be produced within message.timeout.ms.</p>
      * <p>See the "Message reliability" chapter in INTRODUCTION.md for more information.</p>
@@ -2302,7 +2307,7 @@ trait Methods
      *
      * <p>The application will need to call rd_kafka_poll() or rd_kafka_flush() afterwards to serve the delivery report callbacks of the purged messages.</p>
      * <p>Messages purged from internal queues fail with the delivery report error code set to RD_KAFKA_RESP_ERR__PURGE_QUEUE, while purged messages that are in-flight to or from the broker will fail with the error code set to RD_KAFKA_RESP_ERR__PURGE_INFLIGHT.</p>
-     * <dl class="section warning"><dt>Warning</dt><dd>Purging messages that are in-flight to or from the broker will ignore any sub-sequent acknowledgement for these messages received from the broker, effectively making it impossible for the application to know if the messages were successfully produced or not. This may result in duplicate messages if the application retries these messages at a later time.</dd></dl>
+     * <dl class="section warning"><dt>Warning</dt><dd>Purging messages that are in-flight to or from the broker will ignore any subsequent acknowledgement for these messages received from the broker, effectively making it impossible for the application to know if the messages were successfully produced or not. This may result in duplicate messages if the application retries these messages at a later time.</dd></dl>
      * <dl class="section remark"><dt>Remarks</dt><dd>This call may block for a short time while background thread queues are purged.</dd></dl>
      * @param \FFI\CData|null $rk rd_kafka_t* - Client instance.
      * @param int|null $purge_flags int - Tells which messages to purge and how.
@@ -2353,7 +2358,8 @@ trait Methods
      * <p><code>timeout_ms</code> is the (approximate) maximum time to wait for response from brokers and must be a positive value.</p>
      *
      * <p>The <code>grplistp</code> remains untouched if any error code is returned, with the exception of RD_KAFKA_RESP_ERR__PARTIAL which behaves as RD_KAFKA_RESP_ERR__NO_ERROR (success) but with an incomplete group list.</p>
-     * <dl class="section see"><dt>See also</dt><dd>Use rd_kafka_group_list_destroy() to release list memory. </dd></dl>
+     * <dl class="section see"><dt>See also</dt><dd>Use rd_kafka_group_list_destroy() to release list memory.</dd></dl>
+     * <dl class="deprecated"><dt><b>Deprecated:</b></dt><dd>Use rd_kafka_ListConsumerGroups() and rd_kafka_DescribeConsumerGroups() instead. </dd></dl>
      * @param \FFI\CData|null $rk rd_kafka_t*
      * @param string|null $group const char*
      * @param \FFI\CData|null $grplistp const struct rd_kafka_group_list**
@@ -2682,10 +2688,15 @@ trait Methods
      * <li>RD_KAFKA_EVENT_DESCRIBEACLS_RESULT</li>
      * <li>RD_KAFKA_EVENT_DELETEACLS_RESULT</li>
      * <li>RD_KAFKA_EVENT_ALTERCONFIGS_RESULT</li>
+     * <li>RD_KAFKA_EVENT_INCREMENTAL_ALTERCONFIGS_RESULT</li>
      * <li>RD_KAFKA_EVENT_DESCRIBECONFIGS_RESULT</li>
      * <li>RD_KAFKA_EVENT_DELETEGROUPS_RESULT</li>
      * <li>RD_KAFKA_EVENT_DELETECONSUMERGROUPOFFSETS_RESULT</li>
-     * <li>RD_KAFKA_EVENT_DELETERECORDS_RESULT </li>
+     * <li>RD_KAFKA_EVENT_DELETERECORDS_RESULT</li>
+     * <li>RD_KAFKA_EVENT_LISTCONSUMERGROUPS_RESULT</li>
+     * <li>RD_KAFKA_EVENT_DESCRIBECONSUMERGROUPS_RESULT</li>
+     * <li>RD_KAFKA_EVENT_LISTCONSUMERGROUPOFFSETS_RESULT</li>
+     * <li>RD_KAFKA_EVENT_ALTERCONSUMERGROUPOFFSETS_RESULT </li>
      * </ul>
      * @param \FFI\CData|null $rkev rd_kafka_event_t* - )
      * @return \FFI\CData|object|string|null void* - the event opaque (if any) as passed to rd_kafka_commit() (et.al) or rd_kafka_AdminOptions_set_opaque(), depending on event type.
@@ -3066,7 +3077,7 @@ trait Methods
      * @param string|null $ic_name const char* - Interceptor name, used in logging.
      * @param \FFI\CData|\Closure $on_conf_set rd_kafka_conf_res_t(rd_kafka_interceptor_f_on_conf_set_t*)(rd_kafka_conf_t*, const char*, const char*, char*, size_t, void*) - Function pointer.
      * @param \FFI\CData|object|string|null $ic_opaque void* - Opaque value that will be passed to the function.
-     * @return int rd_kafka_resp_err_t - RD_KAFKA_RESP_ERR_NO_ERROR on success or RD_KAFKA_RESP_ERR__CONFLICT if an existing intercepted with the same <code>ic_name</code> and function has already been added to <code>conf</code>.
+     * @return int rd_kafka_resp_err_t - RD_KAFKA_RESP_ERR_NO_ERROR on success or RD_KAFKA_RESP_ERR__CONFLICT if an existing interceptor with the same <code>ic_name</code> and function has already been added to <code>conf</code>.
      * @since 1.0.0 of librdkafka
      * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a97bdeb12b99da10eff18767b3cadbfd2
      */
@@ -3081,7 +3092,7 @@ trait Methods
      * @param string|null $ic_name const char* - Interceptor name, used in logging.
      * @param \FFI\CData|\Closure $on_conf_dup rd_kafka_resp_err_t(rd_kafka_interceptor_f_on_conf_dup_t*)(rd_kafka_conf_t*, const rd_kafka_conf_t*, size_t, const char**, void*) - Function pointer.
      * @param \FFI\CData|object|string|null $ic_opaque void* - Opaque value that will be passed to the function.
-     * @return int rd_kafka_resp_err_t - RD_KAFKA_RESP_ERR_NO_ERROR on success or RD_KAFKA_RESP_ERR__CONFLICT if an existing intercepted with the same <code>ic_name</code> and function has already been added to <code>conf</code>.
+     * @return int rd_kafka_resp_err_t - RD_KAFKA_RESP_ERR_NO_ERROR on success or RD_KAFKA_RESP_ERR__CONFLICT if an existing interceptor with the same <code>ic_name</code> and function has already been added to <code>conf</code>.
      * @since 1.0.0 of librdkafka
      * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a375ce703f6247377305dc6a5dfc84429
      */
@@ -3118,7 +3129,7 @@ trait Methods
      * @param string|null $ic_name const char* - Interceptor name, used in logging.
      * @param \FFI\CData|\Closure $on_new rd_kafka_resp_err_t(rd_kafka_interceptor_f_on_new_t*)(rd_kafka_t*, const rd_kafka_conf_t*, void*, char*, size_t) - Function pointer.
      * @param \FFI\CData|object|string|null $ic_opaque void* - Opaque value that will be passed to the function.
-     * @return int rd_kafka_resp_err_t - RD_KAFKA_RESP_ERR_NO_ERROR on success or RD_KAFKA_RESP_ERR__CONFLICT if an existing intercepted with the same <code>ic_name</code> and function has already been added to <code>conf</code>.
+     * @return int rd_kafka_resp_err_t - RD_KAFKA_RESP_ERR_NO_ERROR on success or RD_KAFKA_RESP_ERR__CONFLICT if an existing interceptor with the same <code>ic_name</code> and function has already been added to <code>conf</code>.
      * @since 1.0.0 of librdkafka
      * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a002ef1d350176725b6e9ba93548edf40
      */
@@ -3133,7 +3144,7 @@ trait Methods
      * @param string|null $ic_name const char* - Interceptor name, used in logging.
      * @param \FFI\CData|\Closure $on_destroy rd_kafka_resp_err_t(rd_kafka_interceptor_f_on_destroy_t*)(rd_kafka_t*, void*) - Function pointer.
      * @param \FFI\CData|object|string|null $ic_opaque void* - Opaque value that will be passed to the function.
-     * @return int rd_kafka_resp_err_t - RD_KAFKA_RESP_ERR_NO_ERROR on success or RD_KAFKA_RESP_ERR__CONFLICT if an existing intercepted with the same <code>ic_name</code> and function has already been added to <code>conf</code>.
+     * @return int rd_kafka_resp_err_t - RD_KAFKA_RESP_ERR_NO_ERROR on success or RD_KAFKA_RESP_ERR__CONFLICT if an existing interceptor with the same <code>ic_name</code> and function has already been added to <code>conf</code>.
      * @since 1.0.0 of librdkafka
      * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a11b835cb99dc1cfa03c52465b9837a47
      */
@@ -3163,7 +3174,7 @@ trait Methods
      * @param string|null $ic_name const char* - Interceptor name, used in logging.
      * @param \FFI\CData|\Closure $on_acknowledgement rd_kafka_resp_err_t(rd_kafka_interceptor_f_on_acknowledgement_t*)(rd_kafka_t*, rd_kafka_message_t*, void*) - Function pointer.
      * @param \FFI\CData|object|string|null $ic_opaque void* - Opaque value that will be passed to the function.
-     * @return int rd_kafka_resp_err_t - RD_KAFKA_RESP_ERR_NO_ERROR on success or RD_KAFKA_RESP_ERR__CONFLICT if an existing intercepted with the same <code>ic_name</code> and function has already been added to <code>conf</code>.
+     * @return int rd_kafka_resp_err_t - RD_KAFKA_RESP_ERR_NO_ERROR on success or RD_KAFKA_RESP_ERR__CONFLICT if an existing interceptor with the same <code>ic_name</code> and function has already been added to <code>conf</code>.
      * @since 1.0.0 of librdkafka
      * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#abaf475ab47fff47ab796be1cecbbd370
      */
@@ -3178,7 +3189,7 @@ trait Methods
      * @param string|null $ic_name const char* - Interceptor name, used in logging.
      * @param \FFI\CData|\Closure $on_consume rd_kafka_resp_err_t(rd_kafka_interceptor_f_on_consume_t*)(rd_kafka_t*, rd_kafka_message_t*, void*) - Function pointer.
      * @param \FFI\CData|object|string|null $ic_opaque void* - Opaque value that will be passed to the function.
-     * @return int rd_kafka_resp_err_t - RD_KAFKA_RESP_ERR_NO_ERROR on success or RD_KAFKA_RESP_ERR__CONFLICT if an existing intercepted with the same <code>ic_name</code> and function has already been added to <code>conf</code>.
+     * @return int rd_kafka_resp_err_t - RD_KAFKA_RESP_ERR_NO_ERROR on success or RD_KAFKA_RESP_ERR__CONFLICT if an existing interceptor with the same <code>ic_name</code> and function has already been added to <code>conf</code>.
      * @since 1.0.0 of librdkafka
      * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a0e722a9930897bba81b33de5fe95b6ed
      */
@@ -3193,7 +3204,7 @@ trait Methods
      * @param string|null $ic_name const char* - Interceptor name, used in logging.
      * @param \FFI\CData|\Closure $on_commit rd_kafka_resp_err_t(rd_kafka_interceptor_f_on_commit_t*)(rd_kafka_t*, const rd_kafka_topic_partition_list_t*, rd_kafka_resp_err_t, void*)
      * @param \FFI\CData|object|string|null $ic_opaque void* - Opaque value that will be passed to the function.
-     * @return int rd_kafka_resp_err_t - RD_KAFKA_RESP_ERR_NO_ERROR on success or RD_KAFKA_RESP_ERR__CONFLICT if an existing intercepted with the same <code>ic_name</code> and function has already been added to <code>conf</code>.
+     * @return int rd_kafka_resp_err_t - RD_KAFKA_RESP_ERR_NO_ERROR on success or RD_KAFKA_RESP_ERR__CONFLICT if an existing interceptor with the same <code>ic_name</code> and function has already been added to <code>conf</code>.
      * @since 1.0.0 of librdkafka
      * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a0d3e29337dbf11762b5a7e492b77b781
      */
@@ -3208,7 +3219,7 @@ trait Methods
      * @param string|null $ic_name const char* - Interceptor name, used in logging.
      * @param \FFI\CData|\Closure $on_request_sent rd_kafka_resp_err_t(rd_kafka_interceptor_f_on_request_sent_t*)(rd_kafka_t*, int, const char*, int32_t, int16_t, int16_t, int32_t, size_t, void*)
      * @param \FFI\CData|object|string|null $ic_opaque void* - Opaque value that will be passed to the function.
-     * @return int rd_kafka_resp_err_t - RD_KAFKA_RESP_ERR_NO_ERROR on success or RD_KAFKA_RESP_ERR__CONFLICT if an existing intercepted with the same <code>ic_name</code> and function has already been added to <code>conf</code>.
+     * @return int rd_kafka_resp_err_t - RD_KAFKA_RESP_ERR_NO_ERROR on success or RD_KAFKA_RESP_ERR__CONFLICT if an existing interceptor with the same <code>ic_name</code> and function has already been added to <code>conf</code>.
      * @since 1.0.0 of librdkafka
      * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a444032455f98839bef2fb76d15f663c3
      */
@@ -3284,7 +3295,7 @@ trait Methods
      *
      * <dl class="section remark"><dt>Remarks</dt><dd>This option is valid for all Admin API requests. </dd></dl>
      * @param \FFI\CData|null $options rd_kafka_AdminOptions_t* - Admin options.
-     * @param int|null $timeout_ms int - Timeout in milliseconds, use -1 for indefinite timeout. Defaults to <code>socket.timeout.ms</code>.
+     * @param int|null $timeout_ms int - Timeout in milliseconds. Defaults to <code>socket.timeout.ms</code>.
      * @param \FFI\CData|null $errstr char* - A human readable error string (nul-terminated) is written to this location that must be of at least <code>errstr_size</code> bytes. The <code>errstr</code> is only written in case of error. - Writable size in <code>errstr</code>.
      * @param int|null $errstr_size size_t
      * @return int rd_kafka_resp_err_t - RD_KAFKA_RESP_ERR_NO_ERROR on success, or RD_KAFKA_RESP_ERR__INVALID_ARG if timeout was out of range in which case an error string will be written <code>errstr</code>.
@@ -3338,6 +3349,7 @@ trait Methods
      * <p>Override what broker the Admin request will be sent to. </p>
      * <p>By default, Admin requests are sent to the controller broker, with the following exceptions:</p><ul>
      * <li>AlterConfigs with a BROKER resource are sent to the broker id set as the resource name.</li>
+     * <li>IncrementalAlterConfigs with a BROKER resource are sent to the broker id set as the resource name.</li>
      * <li>DescribeConfigs with a BROKER resource are sent to the broker id set as the resource name.</li>
      * </ul>
      *
@@ -3879,7 +3891,8 @@ trait Methods
      * <p>Update the configuration for the specified resources. Updates are not transactional so they may succeed for a subset of the provided resources while the others fail. The configuration for a particular resource is updated atomically, replacing values using the provided ConfigEntrys and reverting unspecified ConfigEntrys to their default values. </p>
      * <dl class="section remark"><dt>Remarks</dt><dd>Requires broker version &gt;=0.11.0.0</dd></dl>
      * <dl class="section warning"><dt>Warning</dt><dd>AlterConfigs will replace all existing configuration for the provided resources with the new configuration given, reverting all other configuration to their default values.</dd></dl>
-     * <dl class="section remark"><dt>Remarks</dt><dd>Multiple resources and resource types may be set, but at most one resource of type <code>RD_KAFKA_RESOURCE_BROKER</code> is allowed per call since these resource requests must be sent to the broker specified in the resource. </dd></dl>
+     * <dl class="section remark"><dt>Remarks</dt><dd>Multiple resources and resource types may be set, but at most one resource of type <code>RD_KAFKA_RESOURCE_BROKER</code> is allowed per call since these resource requests must be sent to the broker specified in the resource.</dd></dl>
+     * <dl class="deprecated"><dt><b>Deprecated:</b></dt><dd>Use rd_kafka_IncrementalAlterConfigs().</dd></dl>
      * @param \FFI\CData|null $rk rd_kafka_t*
      * @param \FFI\CData|null $configs rd_kafka_ConfigResource_t**
      * @param int|null $config_cnt size_t
@@ -4013,7 +4026,9 @@ trait Methods
      * <dd>
      * Private and public keys in PEM format may also be set with the <code>ssl.key.pem</code> and <code>ssl.certificate.pem</code> configuration properties.</dd>
      * <dd>
-     * CA certificate in PEM format may also be set with the <code>ssl.ca.pem</code> configuration property. </dd></dl>
+     * CA certificate in PEM format may also be set with the <code>ssl.ca.pem</code> configuration property.</dd>
+     * <dd>
+     * When librdkafka is linked to OpenSSL 3.0 and the certificate is encoded using an obsolete cipher, it might be necessary to set up an OpenSSL configuration file to load the "legacy" provider and set the OPENSSL_CONF environment variable. See https://github.com/openssl/openssl/blob/master/README-PROVIDERS.md for more information. </dd></dl>
      * @param \FFI\CData|null $conf rd_kafka_conf_t* - Configuration object.
      * @param int $cert_type rd_kafka_cert_type_t - Certificate or key type to configure.
      * @param int $cert_enc rd_kafka_cert_enc_t - Buffer <code>encoding</code> type.
@@ -4137,7 +4152,7 @@ trait Methods
      * @param string|null $ic_name const char* - Interceptor name, used in logging.
      * @param \FFI\CData|\Closure $on_thread_start rd_kafka_resp_err_t(rd_kafka_interceptor_f_on_thread_start_t*)(rd_kafka_t*, rd_kafka_thread_type_t, const char*, void*)
      * @param \FFI\CData|object|string|null $ic_opaque void* - Opaque value that will be passed to the function.
-     * @return int rd_kafka_resp_err_t - RD_KAFKA_RESP_ERR_NO_ERROR on success or RD_KAFKA_RESP_ERR__CONFLICT if an existing intercepted with the same <code>ic_name</code> and function has already been added to <code>conf</code>.
+     * @return int rd_kafka_resp_err_t - RD_KAFKA_RESP_ERR_NO_ERROR on success or RD_KAFKA_RESP_ERR__CONFLICT if an existing interceptor with the same <code>ic_name</code> and function has already been added to <code>conf</code>.
      * @since 1.2.0 of librdkafka
      * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#aa46a3bd81acc3861979f43b63f7ea1c8
      */
@@ -4152,7 +4167,7 @@ trait Methods
      * @param string|null $ic_name const char* - Interceptor name, used in logging.
      * @param \FFI\CData|\Closure $on_thread_exit rd_kafka_resp_err_t(rd_kafka_interceptor_f_on_thread_exit_t*)(rd_kafka_t*, rd_kafka_thread_type_t, const char*, void*)
      * @param \FFI\CData|object|string|null $ic_opaque void* - Opaque value that will be passed to the function.
-     * @return int rd_kafka_resp_err_t - RD_KAFKA_RESP_ERR_NO_ERROR on success or RD_KAFKA_RESP_ERR__CONFLICT if an existing intercepted with the same <code>ic_name</code> and function has already been added to <code>conf</code>.
+     * @return int rd_kafka_resp_err_t - RD_KAFKA_RESP_ERR_NO_ERROR on success or RD_KAFKA_RESP_ERR__CONFLICT if an existing interceptor with the same <code>ic_name</code> and function has already been added to <code>conf</code>.
      * @since 1.2.0 of librdkafka
      * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a876a95f3d989ad7cbff048e3449674e6
      */
@@ -4493,11 +4508,13 @@ trait Methods
      * <p>If the last transaction had begun completion (following transaction commit) but not yet finished, this function will await the previous transaction's completion.</p>
      * <p>When any previous transactions have been fenced this function will acquire the internal producer id and epoch, used in all future transactional messages issued by this producer instance.</p>
      *
-     * <dl class="section remark"><dt>Remarks</dt><dd>This function may block up to <code>timeout_ms</code> milliseconds.</dd></dl>
+     * <dl class="section remark"><dt>Remarks</dt><dd>This function may block up to <code>timeout_ms</code> milliseconds.</dd>
+     * <dd>
+     * This call is resumable when a retriable timeout error is returned. Calling the function again will resume the operation that is progressing in the background.</dd></dl>
      *
      * <dl class="section remark"><dt>Remarks</dt><dd>The returned error object (if not NULL) must be destroyed with rd_kafka_error_destroy(). </dd></dl>
      * @param \FFI\CData|null $rk rd_kafka_t* - Producer instance.
-     * @param int|null $timeout_ms int - The maximum time to block. On timeout the operation may continue in the background, depending on state, and it is okay to call init_transactions() again.
+     * @param int|null $timeout_ms int - The maximum time to block. On timeout the operation may continue in the background, depending on state, and it is okay to call init_transactions() again. If an infinite timeout (-1) is passed, the timeout will be adjusted to 2 * <code>transaction.timeout.ms</code>.
      * @return \FFI\CData|null rd_kafka_error_t* - NULL on success or an error object on failure. Check whether the returned error object permits retrying by calling rd_kafka_error_is_retriable(), or whether a fatal error has been raised by calling rd_kafka_error_is_fatal(). Error codes: RD_KAFKA_RESP_ERR__TIMED_OUT if the transaction coordinator could be not be contacted within <code>timeout_ms</code> (retriable), RD_KAFKA_RESP_ERR_COORDINATOR_NOT_AVAILABLE if the transaction coordinator is not available (retriable), RD_KAFKA_RESP_ERR_CONCURRENT_TRANSACTIONS if a previous transaction would not complete within <code>timeout_ms</code> (retriable), RD_KAFKA_RESP_ERR__STATE if transactions have already been started or upon fatal error, RD_KAFKA_RESP_ERR__UNSUPPORTED_FEATURE if the broker(s) do not support transactions (&lt;Apache Kafka 0.11), this also raises a fatal error, RD_KAFKA_RESP_ERR_INVALID_TRANSACTION_TIMEOUT if the configured <code>transaction.timeout.ms</code> is outside the broker-configured range, this also raises a fatal error, RD_KAFKA_RESP_ERR__NOT_CONFIGURED if transactions have not been configured for the producer instance, RD_KAFKA_RESP_ERR__INVALID_ARG if <code>rk</code> is not a producer instance, or <code>timeout_ms</code> is out of range. Other error codes not listed here may be returned, depending on broker version.
      * @since 1.4.0 of librdkafka
      * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#abf3e48791cf53ac2c7e30a17ce896f74
@@ -4542,14 +4559,18 @@ trait Methods
      * <dd>
      * The consumer must disable auto commits (set <code>enable.auto.commit</code> to false on the consumer).</dd>
      * <dd>
-     * Logical and invalid offsets (such as RD_KAFKA_OFFSET_INVALID) in <code>offsets</code> will be ignored, if there are no valid offsets in <code>offsets</code> the function will return RD_KAFKA_RESP_ERR_NO_ERROR and no action will be taken.</dd></dl>
+     * Logical and invalid offsets (such as RD_KAFKA_OFFSET_INVALID) in <code>offsets</code> will be ignored, if there are no valid offsets in <code>offsets</code> the function will return NULL and no action will be taken.</dd>
+     * <dd>
+     * This call is retriable but not resumable, which means a new request with a new set of provided offsets and group metadata will be sent to the transaction coordinator if the call is retried.</dd>
+     * <dd>
+     * It is highly recommended to retry the call (upon retriable error) with identical <code>offsets</code> and <code>cgmetadata</code> parameters. Failure to do so risks inconsistent state between what is actually included in the transaction and what the application thinks is included in the transaction.</dd></dl>
      *
      * <dl class="section remark"><dt>Remarks</dt><dd>The returned error object (if not NULL) must be destroyed with rd_kafka_error_destroy(). </dd></dl>
      * @param \FFI\CData|null $rk rd_kafka_t* - Producer instance.
      * @param \FFI\CData|null $offsets const rd_kafka_topic_partition_list_t* - List of offsets to commit to the consumer group upon successful commit of the transaction. Offsets should be the next message to consume, e.g., last processed message + 1.
      * @param \FFI\CData|null $cgmetadata const rd_kafka_consumer_group_metadata_t* - The current consumer group metadata as returned by rd_kafka_consumer_group_metadata() on the consumer instance the provided offsets were consumed from.
      * @param int|null $timeout_ms int - Maximum time allowed to register the offsets on the broker.
-     * @return \FFI\CData|null rd_kafka_error_t* - NULL on success or an error object on failure. Check whether the returned error object permits retrying by calling rd_kafka_error_is_retriable(), or whether an abortable or fatal error has been raised by calling rd_kafka_error_txn_requires_abort() or rd_kafka_error_is_fatal() respectively. Error codes: RD_KAFKA_RESP_ERR__STATE if not currently in a transaction, RD_KAFKA_RESP_ERR_INVALID_PRODUCER_EPOCH if the current producer transaction has been fenced by a newer producer instance, RD_KAFKA_RESP_ERR_TRANSACTIONAL_ID_AUTHORIZATION_FAILED if the producer is no longer authorized to perform transactional operations, RD_KAFKA_RESP_ERR_GROUP_AUTHORIZATION_FAILED if the producer is not authorized to write the consumer offsets to the group coordinator, RD_KAFKA_RESP_ERR__NOT_CONFIGURED if transactions have not been configured for the producer instance, RD_KAFKA_RESP_ERR__INVALID_ARG if <code>rk</code> is not a producer instance, or if the <code>consumer_group_id</code> or <code>offsets</code> are empty, RD_KAFKA_RESP_ERR__PREV_IN_PROGRESS if a previous rd_kafka_send_offsets_to_transaction() call is still in progress. Other error codes not listed here may be returned, depending on broker version.
+     * @return \FFI\CData|null rd_kafka_error_t* - NULL on success or an error object on failure. Check whether the returned error object permits retrying by calling rd_kafka_error_is_retriable(), or whether an abortable or fatal error has been raised by calling rd_kafka_error_txn_requires_abort() or rd_kafka_error_is_fatal() respectively. Error codes: RD_KAFKA_RESP_ERR__STATE if not currently in a transaction, RD_KAFKA_RESP_ERR_INVALID_PRODUCER_EPOCH if the current producer transaction has been fenced by a newer producer instance, RD_KAFKA_RESP_ERR_TRANSACTIONAL_ID_AUTHORIZATION_FAILED if the producer is no longer authorized to perform transactional operations, RD_KAFKA_RESP_ERR_GROUP_AUTHORIZATION_FAILED if the producer is not authorized to write the consumer offsets to the group coordinator, RD_KAFKA_RESP_ERR__NOT_CONFIGURED if transactions have not been configured for the producer instance, RD_KAFKA_RESP_ERR__INVALID_ARG if <code>rk</code> is not a producer instance, or if the <code>consumer_group_id</code> or <code>offsets</code> are empty. Other error codes not listed here may be returned, depending on broker version.
      * @since 1.4.0 of librdkafka
      * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a288b31742a707ca14cf07312fbcca881
      */
@@ -4567,7 +4588,9 @@ trait Methods
      * <dd>
      * This function will block until all outstanding messages are delivered and the transaction commit request has been successfully handled by the transaction coordinator, or until <code>timeout_ms</code> expires, which ever comes first. On timeout the application may call the function again.</dd>
      * <dd>
-     * Will automatically call rd_kafka_flush() to ensure all queued messages are delivered before attempting to commit the transaction. If the application has enabled RD_KAFKA_EVENT_DR it must serve the event queue in a separate thread since rd_kafka_flush() will not serve delivery reports in this mode.</dd></dl>
+     * Will automatically call rd_kafka_flush() to ensure all queued messages are delivered before attempting to commit the transaction. If the application has enabled RD_KAFKA_EVENT_DR it must serve the event queue in a separate thread since rd_kafka_flush() will not serve delivery reports in this mode.</dd>
+     * <dd>
+     * This call is resumable when a retriable timeout error is returned. Calling the function again will resume the operation that is progressing in the background.</dd></dl>
      *
      * <dl class="section remark"><dt>Remarks</dt><dd>The returned error object (if not NULL) must be destroyed with rd_kafka_error_destroy(). </dd></dl>
      * @param \FFI\CData|null $rk rd_kafka_t* - Producer instance.
@@ -4592,7 +4615,9 @@ trait Methods
      * </pre>
      * <dl class="section remark"><dt>Remarks</dt><dd>It is strongly recommended to always pass -1 (remaining transaction time) as the <code>timeout_ms</code>. Using other values risk internal state desynchronization in case any of the underlying protocol requests fail.</dd>
      * <dd>
-     * This function will block until all outstanding messages are purged and the transaction abort request has been successfully handled by the transaction coordinator, or until <code>timeout_ms</code> expires, which ever comes first. On timeout the application may call the function again. If the application has enabled RD_KAFKA_EVENT_DR it must serve the event queue in a separate thread since rd_kafka_flush() will not serve delivery reports in this mode.</dd></dl>
+     * This function will block until all outstanding messages are purged and the transaction abort request has been successfully handled by the transaction coordinator, or until <code>timeout_ms</code> expires, which ever comes first. On timeout the application may call the function again. If the application has enabled RD_KAFKA_EVENT_DR it must serve the event queue in a separate thread since rd_kafka_flush() will not serve delivery reports in this mode.</dd>
+     * <dd>
+     * This call is resumable when a retriable timeout error is returned. Calling the function again will resume the operation that is progressing in the background.</dd></dl>
      *
      * <dl class="section remark"><dt>Remarks</dt><dd>The returned error object (if not NULL) must be destroyed with rd_kafka_error_destroy(). </dd></dl>
      * @param \FFI\CData|null $rk rd_kafka_t* - Producer instance.
@@ -5061,7 +5086,9 @@ trait Methods
     /**
      * <p>Delete groups from cluster as specified by the <code>del_groups</code> array of size <code>del_group_cnt</code> elements. </p>
      *
-     * <dl class="section remark"><dt>Remarks</dt><dd>The result event type emitted on the supplied queue is of type <code>RD_KAFKA_EVENT_DELETEGROUPS_RESULT</code> </dd></dl>
+     * <dl class="section remark"><dt>Remarks</dt><dd>The result event type emitted on the supplied queue is of type <code>RD_KAFKA_EVENT_DELETEGROUPS_RESULT</code> </dd>
+     * <dd>
+     * This function in called deleteConsumerGroups in the Java client. </dd></dl>
      * @param \FFI\CData|null $rk rd_kafka_t* - Client instance.
      * @param \FFI\CData|null $del_groups rd_kafka_DeleteGroup_t** - Array of groups to delete.
      * @param int|null $del_group_cnt size_t - Number of elements in <code>del_groups</code> array.
@@ -5122,7 +5149,7 @@ trait Methods
     }
 
     /**
-     * <p>Delete committed offsets for a set of partitions in a conusmer group. This will succeed at the partition level only if the group is not actively subscribed to the corresponding topic. </p>
+     * <p>Delete committed offsets for a set of partitions in a consumer group. This will succeed at the partition level only if the group is not actively subscribed to the corresponding topic. </p>
      *
      * <dl class="section remark"><dt>Remarks</dt><dd>The result event type emitted on the supplied queue is of type <code>RD_KAFKA_EVENT_DELETECONSUMERGROUPOFFSETS_RESULT</code> </dd>
      * <dd>
@@ -5206,7 +5233,7 @@ trait Methods
      * @param string|null $ic_name const char* - Interceptor name, used in logging.
      * @param \FFI\CData|\Closure $on_response_received rd_kafka_resp_err_t(rd_kafka_interceptor_f_on_response_received_t*)(rd_kafka_t*, int, const char*, int32_t, int16_t, int16_t, int32_t, size_t, int64_t, rd_kafka_resp_err_t, void*)
      * @param \FFI\CData|object|string|null $ic_opaque void* - Opaque value that will be passed to the function.
-     * @return int rd_kafka_resp_err_t - RD_KAFKA_RESP_ERR_NO_ERROR on success or RD_KAFKA_RESP_ERR__CONFLICT if an existing intercepted with the same <code>ic_name</code> and function has already been added to <code>conf</code>.
+     * @return int rd_kafka_resp_err_t - RD_KAFKA_RESP_ERR_NO_ERROR on success or RD_KAFKA_RESP_ERR__CONFLICT if an existing interceptor with the same <code>ic_name</code> and function has already been added to <code>conf</code>.
      * @since 1.6.1 of librdkafka
      * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a809061ceda162f8d8ad9663cabf66b3d
      */
@@ -5633,8 +5660,7 @@ trait Methods
 
     /**
      * <p>Get an array of resource results from a DescribeAcls result. </p>
-     * <h1>
-     * - describe access control lists.</h1>
+     * <p>DescribeAcls - describe access control lists.</p>
      * <p>The returned <code>resources</code> life-time is the same as the <code>result</code> object. </p>
      * @param \FFI\CData|null $result const rd_kafka_DescribeAcls_result_t* - DescribeAcls result to get acls from.
      * @param \FFI\CData|null $cntp size_t* - is updated to the number of elements in the array.
@@ -5726,9 +5752,15 @@ trait Methods
     }
 
     /**
+     * <p>Set address resolution callback. </p>
+     * <p>The callback is responsible for resolving the hostname <code>node</code> and the service <code>service</code> into a list of socket addresses as <code>getaddrinfo(3)</code> would. The <code>hints</code> and <code>res</code> parameters function as they do for <code>getaddrinfo(3)</code>. The callback's <code>opaque</code> argument is the opaque set with rd_kafka_conf_set_opaque().</p>
+     * <p>If the callback is invoked with a NULL <code>node</code>, <code>service</code>, and <code>hints</code>, the callback should instead free the addrinfo struct specified in <code>res</code>. In this case the callback must succeed; the return value will not be checked by the caller.</p>
+     * <p>The callback's return value is interpreted as the return value of <code><code>getaddrinfo(3)</code>.</code> </p>
+     * <dl class="section remark"><dt>Remarks</dt><dd>The callback will be called from an internal librdkafka thread. </dd></dl>
      * @param \FFI\CData|null $conf rd_kafka_conf_t*
      * @param \FFI\CData|\Closure $resolve_cb int(*)(const char*, const char*, const struct addrinfo*, struct addrinfo**, void*)
      * @since 2.0.0 of librdkafka
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a12bbaef85d4168572eea006c5ce0d2eb
      */
     public static function rd_kafka_conf_set_resolve_cb(?\FFI\CData $conf, $resolve_cb): void
     {
@@ -5736,11 +5768,15 @@ trait Methods
     }
 
     /**
+     * <p>Sets SASL credentials used for SASL PLAIN and SCRAM mechanisms by this Kafka client. </p>
+     * <p>This function sets or resets the SASL username and password credentials used by this Kafka client. The new credentials will be used the next time this client needs to authenticate to a broker. This function will not disconnect existing connections that might have been made using the old credentials.</p>
+     * <dl class="section remark"><dt>Remarks</dt><dd>This function only applies to the SASL PLAIN and SCRAM mechanisms.</dd></dl>
      * @param \FFI\CData|null $rk rd_kafka_t*
      * @param string|null $username const char*
      * @param string|null $password const char*
-     * @return \FFI\CData|null rd_kafka_error_t*
+     * @return \FFI\CData|null rd_kafka_error_t* - NULL on success or an error object on error.
      * @since 2.0.0 of librdkafka
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a8bdca34710185cec1e42e500decbeb2d
      */
     public static function rd_kafka_sasl_set_credentials(?\FFI\CData $rk, ?string $username, ?string $password): ?\FFI\CData
     {
@@ -5748,9 +5784,11 @@ trait Methods
     }
 
     /**
-     * @param \FFI\CData|null $node const rd_kafka_Node_t*
-     * @return int|null int
+     * <p>Get the id of <code>node</code>. </p>
+     * @param \FFI\CData|null $node const rd_kafka_Node_t* - ) - The Node instance.
+     * @return int|null int - The node id.
      * @since 2.0.0 of librdkafka
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#ac0f59992ab0e0ae07b80163afa0ea685
      */
     public static function rd_kafka_Node_id(?\FFI\CData $node): ?int
     {
@@ -5758,9 +5796,14 @@ trait Methods
     }
 
     /**
-     * @param \FFI\CData|null $node const rd_kafka_Node_t*
-     * @return string|null const char*
+     * <p>Get the host of <code>node</code>. </p>
+     *
+     *
+     * <dl class="section remark"><dt>Remarks</dt><dd>The lifetime of the returned memory is the same as the lifetime of the <code>node</code> object. </dd></dl>
+     * @param \FFI\CData|null $node const rd_kafka_Node_t* - ) - The Node instance.
+     * @return string|null const char* - The node host.
      * @since 2.0.0 of librdkafka
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a4916477d9d4a0e76d05dd4b203d92b3b
      */
     public static function rd_kafka_Node_host(?\FFI\CData $node): ?string
     {
@@ -5768,9 +5811,11 @@ trait Methods
     }
 
     /**
-     * @param \FFI\CData|null $node const rd_kafka_Node_t*
-     * @return int|null uint16_t
+     * <p>Get the port of <code>node</code>. </p>
+     * @param \FFI\CData|null $node const rd_kafka_Node_t* - ) - The Node instance.
+     * @return int|null uint16_t - The node port.
      * @since 2.0.0 of librdkafka
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#abc3ff57cdfc63f694d7200e91570ab3a
      */
     public static function rd_kafka_Node_port(?\FFI\CData $node): ?int
     {
@@ -5778,9 +5823,11 @@ trait Methods
     }
 
     /**
-     * @param int $state rd_kafka_consumer_group_state_t
-     * @return string|null const char*
+     * <p>Returns a name for a state code. </p>
+     * @param int $state rd_kafka_consumer_group_state_t - ) - The state value.
+     * @return string|null const char* - The group state name corresponding to the provided group state value.
      * @since 2.0.0 of librdkafka
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#aa9e2cac6e414980eef365394d06014f4
      */
     public static function rd_kafka_consumer_group_state_name(int $state): ?string
     {
@@ -5788,9 +5835,11 @@ trait Methods
     }
 
     /**
-     * @param string|null $name const char*
-     * @return int rd_kafka_consumer_group_state_t
+     * <p>Returns a code for a state name. </p>
+     * @param string|null $name const char* - ) - The state name.
+     * @return int rd_kafka_consumer_group_state_t - The group state value corresponding to the provided group state name.
      * @since 2.0.0 of librdkafka
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a5d7d4a9967f81749cf8bd2b898021d80
      */
     public static function rd_kafka_consumer_group_state_code(?string $name): int
     {
@@ -5798,9 +5847,14 @@ trait Methods
     }
 
     /**
-     * @param \FFI\CData|null $rkev rd_kafka_event_t*
-     * @return \FFI\CData|null const rd_kafka_ListConsumerGroups_result_t*
+     * <p>Get ListConsumerGroups result. </p>
+     *
+     * <dl class="section remark"><dt>Remarks</dt><dd>The lifetime of the returned memory is the same as the lifetime of the <code>rkev</code> object.</dd></dl>
+     * <p>Event types: RD_KAFKA_EVENT_LISTCONSUMERGROUPS_RESULT </p>
+     * @param \FFI\CData|null $rkev rd_kafka_event_t* - )
+     * @return \FFI\CData|null const rd_kafka_ListConsumerGroups_result_t* - the result of a ListConsumerGroups request, or NULL if event is of different type.
      * @since 2.0.0 of librdkafka
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#ae98a40da574c542788d195ac8a0413e6
      */
     public static function rd_kafka_event_ListConsumerGroups_result(?\FFI\CData $rkev): ?\FFI\CData
     {
@@ -5808,9 +5862,14 @@ trait Methods
     }
 
     /**
-     * @param \FFI\CData|null $rkev rd_kafka_event_t*
-     * @return \FFI\CData|null const rd_kafka_DescribeConsumerGroups_result_t*
+     * <p>Get DescribeConsumerGroups result. </p>
+     *
+     * <dl class="section remark"><dt>Remarks</dt><dd>The lifetime of the returned memory is the same as the lifetime of the <code>rkev</code> object.</dd></dl>
+     * <p>Event types: RD_KAFKA_EVENT_DESCRIBECONSUMERGROUPS_RESULT </p>
+     * @param \FFI\CData|null $rkev rd_kafka_event_t* - )
+     * @return \FFI\CData|null const rd_kafka_DescribeConsumerGroups_result_t* - the result of a DescribeConsumerGroups request, or NULL if event is of different type.
      * @since 2.0.0 of librdkafka
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a1c6a620b55cb4c6acbc48c273d334b16
      */
     public static function rd_kafka_event_DescribeConsumerGroups_result(?\FFI\CData $rkev): ?\FFI\CData
     {
@@ -5818,9 +5877,14 @@ trait Methods
     }
 
     /**
-     * @param \FFI\CData|null $rkev rd_kafka_event_t*
-     * @return \FFI\CData|null const rd_kafka_AlterConsumerGroupOffsets_result_t*
+     * <p>Get AlterConsumerGroupOffsets result. </p>
+     *
+     * <dl class="section remark"><dt>Remarks</dt><dd>The lifetime of the returned memory is the same as the lifetime of the <code>rkev</code> object.</dd></dl>
+     * <p>Event types: RD_KAFKA_EVENT_ALTERCONSUMERGROUPOFFSETS_RESULT </p>
+     * @param \FFI\CData|null $rkev rd_kafka_event_t* - )
+     * @return \FFI\CData|null const rd_kafka_AlterConsumerGroupOffsets_result_t* - the result of a AlterConsumerGroupOffsets request, or NULL if event is of different type.
      * @since 2.0.0 of librdkafka
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#aac08437e5b1361291f93b7428b4b1275
      */
     public static function rd_kafka_event_AlterConsumerGroupOffsets_result(?\FFI\CData $rkev): ?\FFI\CData
     {
@@ -5828,9 +5892,14 @@ trait Methods
     }
 
     /**
-     * @param \FFI\CData|null $rkev rd_kafka_event_t*
-     * @return \FFI\CData|null const rd_kafka_ListConsumerGroupOffsets_result_t*
+     * <p>Get ListConsumerGroupOffsets result. </p>
+     *
+     * <dl class="section remark"><dt>Remarks</dt><dd>The lifetime of the returned memory is the same as the lifetime of the <code>rkev</code> object.</dd></dl>
+     * <p>Event types: RD_KAFKA_EVENT_LISTCONSUMERGROUPOFFSETS_RESULT </p>
+     * @param \FFI\CData|null $rkev rd_kafka_event_t* - )
+     * @return \FFI\CData|null const rd_kafka_ListConsumerGroupOffsets_result_t* - the result of a ListConsumerGroupOffsets request, or NULL if event is of different type.
      * @since 2.0.0 of librdkafka
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#ac24d4e077500b38974634f63758aae7e
      */
     public static function rd_kafka_event_ListConsumerGroupOffsets_result(?\FFI\CData $rkev): ?\FFI\CData
     {
@@ -5838,15 +5907,17 @@ trait Methods
     }
 
     /**
-     * @param \FFI\CData|null $rk rd_kafka_t*
-     * @param int|null $broker_id int32_t
-     * @param string|null $secproto const char*
-     * @param string|null $name const char*
-     * @param int|null $port int
-     * @param string|null $state const char*
-     * @param \FFI\CData|object|string|null $ic_opaque void*
-     * @return int rd_kafka_resp_err_t
+     * <p>on_broker_state_change() is called just after a broker has been created or its state has been changed. </p>
+     * @param \FFI\CData|null $rk rd_kafka_t* - The client instance.
+     * @param int|null $broker_id int32_t - The broker id (-1 is used for bootstrap brokers).
+     * @param string|null $secproto const char* - The security protocol.
+     * @param string|null $name const char* - The original name of the broker.
+     * @param int|null $port int - The port of the broker.
+     * @param string|null $state const char* - Broker state name.
+     * @param \FFI\CData|object|string|null $ic_opaque void* - The interceptor's opaque pointer specified in ..add..().
+     * @return int rd_kafka_resp_err_t - an error code on failure, the error is logged but otherwise ignored.
      * @since 2.0.0 of librdkafka
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a50cb62229f969ac9d25d58c8d65950b9
      */
     public static function rd_kafka_interceptor_f_on_broker_state_change_t(?\FFI\CData $rk, ?int $broker_id, ?string $secproto, ?string $name, ?int $port, ?string $state, $ic_opaque): int
     {
@@ -5854,12 +5925,14 @@ trait Methods
     }
 
     /**
-     * @param \FFI\CData|null $rk rd_kafka_t*
-     * @param string|null $ic_name const char*
+     * <p>Append an on_broker_state_change() interceptor. </p>
+     * @param \FFI\CData|null $rk rd_kafka_t* - Client instance.
+     * @param string|null $ic_name const char* - Interceptor name, used in logging.
      * @param \FFI\CData|\Closure $on_broker_state_change rd_kafka_resp_err_t(rd_kafka_interceptor_f_on_broker_state_change_t*)(rd_kafka_t*, int32_t, const char*, const char*, int, const char*, void*)
-     * @param \FFI\CData|object|string|null $ic_opaque void*
-     * @return int rd_kafka_resp_err_t
+     * @param \FFI\CData|object|string|null $ic_opaque void* - Opaque value that will be passed to the function.
+     * @return int rd_kafka_resp_err_t - RD_KAFKA_RESP_ERR_NO_ERROR on success or RD_KAFKA_RESP_ERR__CONFLICT if an existing interceptor with the same <code>ic_name</code> and function has already been added to <code>conf</code>.
      * @since 2.0.0 of librdkafka
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a2b53e29ee63067884bc8962e8637e82b
      */
     public static function rd_kafka_interceptor_add_on_broker_state_change(?\FFI\CData $rk, ?string $ic_name, $on_broker_state_change, $ic_opaque): int
     {
@@ -5867,10 +5940,15 @@ trait Methods
     }
 
     /**
-     * @param \FFI\CData|null $options rd_kafka_AdminOptions_t*
-     * @param int|null $true_or_false int
-     * @return \FFI\CData|null rd_kafka_error_t*
+     * <p>Whether broker should return stable offsets (transaction-committed). </p>
+     *
+     *
+     * <dl class="section remark"><dt>Remarks</dt><dd>This option is valid for ListConsumerGroupOffsets. </dd></dl>
+     * @param \FFI\CData|null $options rd_kafka_AdminOptions_t* - Admin options.
+     * @param int|null $true_or_false int - Defaults to false.
+     * @return \FFI\CData|null rd_kafka_error_t* - NULL on success, a new error instance that must be released with rd_kafka_error_destroy() in case of error.
      * @since 2.0.0 of librdkafka
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a378186db06498feeb35e03a3345fc562
      */
     public static function rd_kafka_AdminOptions_set_require_stable_offsets(?\FFI\CData $options, ?int $true_or_false): ?\FFI\CData
     {
@@ -5878,11 +5956,16 @@ trait Methods
     }
 
     /**
-     * @param \FFI\CData|null $options rd_kafka_AdminOptions_t*
-     * @param \FFI\CData|null $consumer_group_states const rd_kafka_consumer_group_state_t*
-     * @param int|null $consumer_group_states_cnt size_t
-     * @return \FFI\CData|null rd_kafka_error_t*
+     * <p>Set consumer groups states to query for. </p>
+     *
+     *
+     * <dl class="section remark"><dt>Remarks</dt><dd>This option is valid for ListConsumerGroups. </dd></dl>
+     * @param \FFI\CData|null $options rd_kafka_AdminOptions_t* - Admin options.
+     * @param \FFI\CData|null $consumer_group_states const rd_kafka_consumer_group_state_t* - Array of consumer group states.
+     * @param int|null $consumer_group_states_cnt size_t - Size of the <code>consumer_group_states</code> array.
+     * @return \FFI\CData|null rd_kafka_error_t* - NULL on success, a new error instance that must be released with rd_kafka_error_destroy() in case of error.
      * @since 2.0.0 of librdkafka
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a907d23eac09352f32321e9d0140caab1
      */
     public static function rd_kafka_AdminOptions_set_match_consumer_group_states(?\FFI\CData $options, ?\FFI\CData $consumer_group_states, ?int $consumer_group_states_cnt): ?\FFI\CData
     {
@@ -5890,10 +5973,14 @@ trait Methods
     }
 
     /**
-     * @param \FFI\CData|null $rk rd_kafka_t*
-     * @param \FFI\CData|null $options const rd_kafka_AdminOptions_t*
-     * @param \FFI\CData|null $rkqu rd_kafka_queue_t*
+     * <p>List the consumer groups available in the cluster. </p>
+     *
+     * <dl class="section remark"><dt>Remarks</dt><dd>The result event type emitted on the supplied queue is of type <code>RD_KAFKA_EVENT_LISTCONSUMERGROUPS_RESULT</code> </dd></dl>
+     * @param \FFI\CData|null $rk rd_kafka_t* - Client instance.
+     * @param \FFI\CData|null $options const rd_kafka_AdminOptions_t* - Optional admin options, or NULL for defaults.
+     * @param \FFI\CData|null $rkqu rd_kafka_queue_t* - Queue to emit result on.
      * @since 2.0.0 of librdkafka
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#ad386f553c1b0a103bd4f891f48a516c2
      */
     public static function rd_kafka_ListConsumerGroups(?\FFI\CData $rk, ?\FFI\CData $options, ?\FFI\CData $rkqu): void
     {
@@ -5901,9 +5988,14 @@ trait Methods
     }
 
     /**
-     * @param \FFI\CData|null $grplist const rd_kafka_ConsumerGroupListing_t*
-     * @return string|null const char*
+     * <p>Gets the group id for the <code>grplist</code> group. </p>
+     *
+     *
+     * <dl class="section remark"><dt>Remarks</dt><dd>The lifetime of the returned memory is the same as the lifetime of the <code>grplist</code> object. </dd></dl>
+     * @param \FFI\CData|null $grplist const rd_kafka_ConsumerGroupListing_t* - ) - The group listing.
+     * @return string|null const char* - The group id.
      * @since 2.0.0 of librdkafka
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a6527936dcb6222ed4ec34693aacdea24
      */
     public static function rd_kafka_ConsumerGroupListing_group_id(?\FFI\CData $grplist): ?string
     {
@@ -5911,9 +6003,11 @@ trait Methods
     }
 
     /**
-     * @param \FFI\CData|null $grplist const rd_kafka_ConsumerGroupListing_t*
-     * @return int|null int
+     * <p>Is the <code>grplist</code> group a simple consumer group. </p>
+     * @param \FFI\CData|null $grplist const rd_kafka_ConsumerGroupListing_t* - ) - The group listing.
+     * @return int|null int - 1 if the group is a simple consumer group, else 0.
      * @since 2.0.0 of librdkafka
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#ab41e0d25c3a013426d97d0bceb22e91d
      */
     public static function rd_kafka_ConsumerGroupListing_is_simple_consumer_group(?\FFI\CData $grplist): ?int
     {
@@ -5921,9 +6015,11 @@ trait Methods
     }
 
     /**
-     * @param \FFI\CData|null $grplist const rd_kafka_ConsumerGroupListing_t*
-     * @return int rd_kafka_consumer_group_state_t
+     * <p>Gets state for the <code>grplist</code> group. </p>
+     * @param \FFI\CData|null $grplist const rd_kafka_ConsumerGroupListing_t* - ) - The group listing.
+     * @return int rd_kafka_consumer_group_state_t - A group state.
      * @since 2.0.0 of librdkafka
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a050b8eb40679af7564533793b42954e3
      */
     public static function rd_kafka_ConsumerGroupListing_state(?\FFI\CData $grplist): int
     {
@@ -5931,10 +6027,15 @@ trait Methods
     }
 
     /**
-     * @param \FFI\CData|null $result const rd_kafka_ListConsumerGroups_result_t*
-     * @param \FFI\CData|null $cntp size_t*
+     * <p>Get an array of valid list groups from a ListConsumerGroups result. </p>
+     * <p>The returned groups life-time is the same as the <code>result</code> object.</p>
+     *
+     * <dl class="section remark"><dt>Remarks</dt><dd>The lifetime of the returned memory is the same as the lifetime of the <code>result</code> object. </dd></dl>
+     * @param \FFI\CData|null $result const rd_kafka_ListConsumerGroups_result_t* - Result to get group results from.
+     * @param \FFI\CData|null $cntp size_t* - is updated to the number of elements in the array.
      * @return \FFI\CData|null const rd_kafka_ConsumerGroupListing_t**
      * @since 2.0.0 of librdkafka
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a3a0b27d2db47bd67106a02c9ac211ae6
      */
     public static function rd_kafka_ListConsumerGroups_result_valid(?\FFI\CData $result, ?\FFI\CData $cntp): ?\FFI\CData
     {
@@ -5942,10 +6043,16 @@ trait Methods
     }
 
     /**
-     * @param \FFI\CData|null $result const rd_kafka_ListConsumerGroups_result_t*
-     * @param \FFI\CData|null $cntp size_t*
-     * @return \FFI\CData|null const rd_kafka_error_t**
+     * <p>Get an array of errors from a ListConsumerGroups call result. </p>
+     * <p>The returned errors life-time is the same as the <code>result</code> object.</p>
+     *
+     *
+     * <dl class="section remark"><dt>Remarks</dt><dd>The lifetime of the returned memory is the same as the lifetime of the <code>result</code> object. </dd></dl>
+     * @param \FFI\CData|null $result const rd_kafka_ListConsumerGroups_result_t* - ListConsumerGroups result.
+     * @param \FFI\CData|null $cntp size_t* - Is updated to the number of elements in the array.
+     * @return \FFI\CData|null const rd_kafka_error_t** - Array of errors in <code>result</code>.
      * @since 2.0.0 of librdkafka
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a0d1251b00ea55f8bd652c7a056c11425
      */
     public static function rd_kafka_ListConsumerGroups_result_errors(?\FFI\CData $result, ?\FFI\CData $cntp): ?\FFI\CData
     {
@@ -5953,12 +6060,16 @@ trait Methods
     }
 
     /**
-     * @param \FFI\CData|null $rk rd_kafka_t*
-     * @param \FFI\CData|null $groups const char**
-     * @param int|null $groups_cnt size_t
-     * @param \FFI\CData|null $options const rd_kafka_AdminOptions_t*
-     * @param \FFI\CData|null $rkqu rd_kafka_queue_t*
+     * <p>Describe groups from cluster as specified by the <code>groups</code> array of size <code>groups_cnt</code> elements. </p>
+     *
+     * <dl class="section remark"><dt>Remarks</dt><dd>The result event type emitted on the supplied queue is of type <code>RD_KAFKA_EVENT_DESCRIBECONSUMERGROUPS_RESULT</code> </dd></dl>
+     * @param \FFI\CData|null $rk rd_kafka_t* - Client instance.
+     * @param \FFI\CData|null $groups const char** - Array of groups to describe.
+     * @param int|null $groups_cnt size_t - Number of elements in <code>groups</code> array.
+     * @param \FFI\CData|null $options const rd_kafka_AdminOptions_t* - Optional admin options, or NULL for defaults.
+     * @param \FFI\CData|null $rkqu rd_kafka_queue_t* - Queue to emit result on.
      * @since 2.0.0 of librdkafka
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a3c473e95da2231aaaeca990a6ff45ad1
      */
     public static function rd_kafka_DescribeConsumerGroups(?\FFI\CData $rk, ?\FFI\CData $groups, ?int $groups_cnt, ?\FFI\CData $options, ?\FFI\CData $rkqu): void
     {
@@ -5966,10 +6077,15 @@ trait Methods
     }
 
     /**
-     * @param \FFI\CData|null $result const rd_kafka_DescribeConsumerGroups_result_t*
-     * @param \FFI\CData|null $cntp size_t*
+     * <p>Get an array of group results from a DescribeConsumerGroups result. </p>
+     * <p>The returned groups life-time is the same as the <code>result</code> object.</p>
+     *
+     * <dl class="section remark"><dt>Remarks</dt><dd>The lifetime of the returned memory is the same as the lifetime of the <code>result</code> object. </dd></dl>
+     * @param \FFI\CData|null $result const rd_kafka_DescribeConsumerGroups_result_t* - Result to get group results from.
+     * @param \FFI\CData|null $cntp size_t* - is updated to the number of elements in the array.
      * @return \FFI\CData|null const rd_kafka_ConsumerGroupDescription_t**
      * @since 2.0.0 of librdkafka
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a7105546ec6af24791fbb0da90f0d2384
      */
     public static function rd_kafka_DescribeConsumerGroups_result_groups(?\FFI\CData $result, ?\FFI\CData $cntp): ?\FFI\CData
     {
@@ -5977,9 +6093,14 @@ trait Methods
     }
 
     /**
-     * @param \FFI\CData|null $grpdesc const rd_kafka_ConsumerGroupDescription_t*
-     * @return string|null const char*
+     * <p>Gets the group id for the <code>grpdesc</code> group. </p>
+     *
+     *
+     * <dl class="section remark"><dt>Remarks</dt><dd>The lifetime of the returned memory is the same as the lifetime of the <code>grpdesc</code> object. </dd></dl>
+     * @param \FFI\CData|null $grpdesc const rd_kafka_ConsumerGroupDescription_t* - ) - The group description.
+     * @return string|null const char* - The group id.
      * @since 2.0.0 of librdkafka
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a1ac25283379d2cdcd7def61763ea1183
      */
     public static function rd_kafka_ConsumerGroupDescription_group_id(?\FFI\CData $grpdesc): ?string
     {
@@ -5987,9 +6108,14 @@ trait Methods
     }
 
     /**
-     * @param \FFI\CData|null $grpdesc const rd_kafka_ConsumerGroupDescription_t*
-     * @return \FFI\CData|null const rd_kafka_error_t*
+     * <p>Gets the error for the <code>grpdesc</code> group. </p>
+     *
+     *
+     * <dl class="section remark"><dt>Remarks</dt><dd>The lifetime of the returned memory is the same as the lifetime of the <code>grpdesc</code> object. </dd></dl>
+     * @param \FFI\CData|null $grpdesc const rd_kafka_ConsumerGroupDescription_t* - ) - The group description.
+     * @return \FFI\CData|null const rd_kafka_error_t* - The group description error.
      * @since 2.0.0 of librdkafka
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a809554b4c1ba1d54d9daffc72e056d9d
      */
     public static function rd_kafka_ConsumerGroupDescription_error(?\FFI\CData $grpdesc): ?\FFI\CData
     {
@@ -5997,9 +6123,11 @@ trait Methods
     }
 
     /**
-     * @param \FFI\CData|null $grpdesc const rd_kafka_ConsumerGroupDescription_t*
-     * @return int|null int
+     * <p>Is the <code>grpdesc</code> group a simple consumer group. </p>
+     * @param \FFI\CData|null $grpdesc const rd_kafka_ConsumerGroupDescription_t* - ) - The group description.
+     * @return int|null int - 1 if the group is a simple consumer group, else 0.
      * @since 2.0.0 of librdkafka
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#aa142302fb0912b8350254f22d1ebf0cf
      */
     public static function rd_kafka_ConsumerGroupDescription_is_simple_consumer_group(?\FFI\CData $grpdesc): ?int
     {
@@ -6007,9 +6135,14 @@ trait Methods
     }
 
     /**
-     * @param \FFI\CData|null $grpdesc const rd_kafka_ConsumerGroupDescription_t*
-     * @return string|null const char*
+     * <p>Gets the partition assignor for the <code>grpdesc</code> group. </p>
+     *
+     *
+     * <dl class="section remark"><dt>Remarks</dt><dd>The lifetime of the returned memory is the same as the lifetime of the <code>grpdesc</code> object. </dd></dl>
+     * @param \FFI\CData|null $grpdesc const rd_kafka_ConsumerGroupDescription_t* - ) - The group description.
+     * @return string|null const char* - The partition assignor.
      * @since 2.0.0 of librdkafka
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a28ae221b77d6ea9b605b902f92a8022d
      */
     public static function rd_kafka_ConsumerGroupDescription_partition_assignor(?\FFI\CData $grpdesc): ?string
     {
@@ -6017,9 +6150,11 @@ trait Methods
     }
 
     /**
-     * @param \FFI\CData|null $grpdesc const rd_kafka_ConsumerGroupDescription_t*
-     * @return int rd_kafka_consumer_group_state_t
+     * <p>Gets state for the <code>grpdesc</code> group. </p>
+     * @param \FFI\CData|null $grpdesc const rd_kafka_ConsumerGroupDescription_t* - ) - The group description.
+     * @return int rd_kafka_consumer_group_state_t - A group state.
      * @since 2.0.0 of librdkafka
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#acc29475b069d8299cbc20b558fb2bb19
      */
     public static function rd_kafka_ConsumerGroupDescription_state(?\FFI\CData $grpdesc): int
     {
@@ -6027,9 +6162,14 @@ trait Methods
     }
 
     /**
-     * @param \FFI\CData|null $grpdesc const rd_kafka_ConsumerGroupDescription_t*
-     * @return \FFI\CData|null const rd_kafka_Node_t*
+     * <p>Gets the coordinator for the <code>grpdesc</code> group. </p>
+     *
+     *
+     * <dl class="section remark"><dt>Remarks</dt><dd>The lifetime of the returned memory is the same as the lifetime of the <code>grpdesc</code> object. </dd></dl>
+     * @param \FFI\CData|null $grpdesc const rd_kafka_ConsumerGroupDescription_t* - ) - The group description.
+     * @return \FFI\CData|null const rd_kafka_Node_t* - The group coordinator.
      * @since 2.0.0 of librdkafka
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a63c98664bac3c9cda112e0bda18a4328
      */
     public static function rd_kafka_ConsumerGroupDescription_coordinator(?\FFI\CData $grpdesc): ?\FFI\CData
     {
@@ -6037,9 +6177,11 @@ trait Methods
     }
 
     /**
-     * @param \FFI\CData|null $grpdesc const rd_kafka_ConsumerGroupDescription_t*
-     * @return int|null size_t
+     * <p>Gets the members count of <code>grpdesc</code> group. </p>
+     * @param \FFI\CData|null $grpdesc const rd_kafka_ConsumerGroupDescription_t* - ) - The group description.
+     * @return int|null size_t - The member count.
      * @since 2.0.0 of librdkafka
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#aa508c92d434adb9027cdec9022b10acf
      */
     public static function rd_kafka_ConsumerGroupDescription_member_count(?\FFI\CData $grpdesc): ?int
     {
@@ -6047,10 +6189,15 @@ trait Methods
     }
 
     /**
-     * @param \FFI\CData|null $grpdesc const rd_kafka_ConsumerGroupDescription_t*
-     * @param int|null $idx size_t
-     * @return \FFI\CData|null const rd_kafka_MemberDescription_t*
+     * <p>Gets a member of <code>grpdesc</code> group. </p>
+     *
+     *
+     * <dl class="section remark"><dt>Remarks</dt><dd>The lifetime of the returned memory is the same as the lifetime of the <code>grpdesc</code> object. </dd></dl>
+     * @param \FFI\CData|null $grpdesc const rd_kafka_ConsumerGroupDescription_t* - The group description.
+     * @param int|null $idx size_t - The member idx.
+     * @return \FFI\CData|null const rd_kafka_MemberDescription_t* - A member at index <code>idx</code>, or NULL if <code>idx</code> is out of range.
      * @since 2.0.0 of librdkafka
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a7bdfd0d42f52fb3d8d58aca660ef36b0
      */
     public static function rd_kafka_ConsumerGroupDescription_member(?\FFI\CData $grpdesc, ?int $idx): ?\FFI\CData
     {
@@ -6058,9 +6205,14 @@ trait Methods
     }
 
     /**
-     * @param \FFI\CData|null $member const rd_kafka_MemberDescription_t*
-     * @return string|null const char*
+     * <p>Gets client id of <code>member</code>. </p>
+     *
+     *
+     * <dl class="section remark"><dt>Remarks</dt><dd>The lifetime of the returned memory is the same as the lifetime of the <code>member</code> object. </dd></dl>
+     * @param \FFI\CData|null $member const rd_kafka_MemberDescription_t* - ) - The group member.
+     * @return string|null const char* - The client id.
      * @since 2.0.0 of librdkafka
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#af51b7bb5ba85029cf61512e0d577752b
      */
     public static function rd_kafka_MemberDescription_client_id(?\FFI\CData $member): ?string
     {
@@ -6068,9 +6220,14 @@ trait Methods
     }
 
     /**
-     * @param \FFI\CData|null $member const rd_kafka_MemberDescription_t*
-     * @return string|null const char*
+     * <p>Gets group instance id of <code>member</code>. </p>
+     *
+     *
+     * <dl class="section remark"><dt>Remarks</dt><dd>The lifetime of the returned memory is the same as the lifetime of the <code>member</code> object. </dd></dl>
+     * @param \FFI\CData|null $member const rd_kafka_MemberDescription_t* - ) - The group member.
+     * @return string|null const char* - The group instance id, or NULL if not available.
      * @since 2.0.0 of librdkafka
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#ac4a5a27065d4aac5c9cf68cb518a40d3
      */
     public static function rd_kafka_MemberDescription_group_instance_id(?\FFI\CData $member): ?string
     {
@@ -6078,9 +6235,14 @@ trait Methods
     }
 
     /**
-     * @param \FFI\CData|null $member const rd_kafka_MemberDescription_t*
-     * @return string|null const char*
+     * <p>Gets consumer id of <code>member</code>. </p>
+     *
+     *
+     * <dl class="section remark"><dt>Remarks</dt><dd>The lifetime of the returned memory is the same as the lifetime of the <code>member</code> object. </dd></dl>
+     * @param \FFI\CData|null $member const rd_kafka_MemberDescription_t* - ) - The group member.
+     * @return string|null const char* - The consumer id.
      * @since 2.0.0 of librdkafka
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a870f35c37cb290231adb1ef8d4fa7454
      */
     public static function rd_kafka_MemberDescription_consumer_id(?\FFI\CData $member): ?string
     {
@@ -6088,9 +6250,14 @@ trait Methods
     }
 
     /**
-     * @param \FFI\CData|null $member const rd_kafka_MemberDescription_t*
-     * @return string|null const char*
+     * <p>Gets host of <code>member</code>. </p>
+     *
+     *
+     * <dl class="section remark"><dt>Remarks</dt><dd>The lifetime of the returned memory is the same as the lifetime of the <code>member</code> object. </dd></dl>
+     * @param \FFI\CData|null $member const rd_kafka_MemberDescription_t* - ) - The group member.
+     * @return string|null const char* - The host.
      * @since 2.0.0 of librdkafka
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a74681ac4652977e239f18d7e13a40dfe
      */
     public static function rd_kafka_MemberDescription_host(?\FFI\CData $member): ?string
     {
@@ -6098,9 +6265,14 @@ trait Methods
     }
 
     /**
-     * @param \FFI\CData|null $member const rd_kafka_MemberDescription_t*
-     * @return \FFI\CData|null const rd_kafka_MemberAssignment_t*
+     * <p>Gets assignment of <code>member</code>. </p>
+     *
+     *
+     * <dl class="section remark"><dt>Remarks</dt><dd>The lifetime of the returned memory is the same as the lifetime of the <code>member</code> object. </dd></dl>
+     * @param \FFI\CData|null $member const rd_kafka_MemberDescription_t* - ) - The group member.
+     * @return \FFI\CData|null const rd_kafka_MemberAssignment_t* - The member assignment.
      * @since 2.0.0 of librdkafka
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a9c5094e0d39a8d6f96e08355ef11c549
      */
     public static function rd_kafka_MemberDescription_assignment(?\FFI\CData $member): ?\FFI\CData
     {
@@ -6108,9 +6280,14 @@ trait Methods
     }
 
     /**
-     * @param \FFI\CData|null $assignment const rd_kafka_MemberAssignment_t*
-     * @return \FFI\CData|null const rd_kafka_topic_partition_list_t*
+     * <p>Gets assigned partitions of a member <code>assignment</code>. </p>
+     *
+     *
+     * <dl class="section remark"><dt>Remarks</dt><dd>The lifetime of the returned memory is the same as the lifetime of the <code>assignment</code> object. </dd></dl>
+     * @param \FFI\CData|null $assignment const rd_kafka_MemberAssignment_t* - ) - The group member assignment.
+     * @return \FFI\CData|null const rd_kafka_topic_partition_list_t* - The assigned partitions.
      * @since 2.0.0 of librdkafka
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a5da333973857cb6e128a856399a9a21f
      */
     public static function rd_kafka_MemberAssignment_partitions(?\FFI\CData $assignment): ?\FFI\CData
     {
@@ -6118,10 +6295,12 @@ trait Methods
     }
 
     /**
-     * @param string|null $group_id const char*
-     * @param \FFI\CData|null $partitions const rd_kafka_topic_partition_list_t*
-     * @return \FFI\CData|null rd_kafka_ListConsumerGroupOffsets_t*
+     * <p>Create a new ListConsumerGroupOffsets object. This object is later passed to rd_kafka_ListConsumerGroupOffsets(). </p>
+     * @param string|null $group_id const char* - Consumer group id.
+     * @param \FFI\CData|null $partitions const rd_kafka_topic_partition_list_t* - Partitions to list committed offsets for. Only the topic and partition fields are used.
+     * @return \FFI\CData|null rd_kafka_ListConsumerGroupOffsets_t* - a new allocated ListConsumerGroupOffsets object. Use rd_kafka_ListConsumerGroupOffsets_destroy() to free object when done.
      * @since 2.0.0 of librdkafka
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#af96cc3e1031d498fdf46f5590d8a7ea2
      */
     public static function rd_kafka_ListConsumerGroupOffsets_new(?string $group_id, ?\FFI\CData $partitions): ?\FFI\CData
     {
@@ -6148,12 +6327,18 @@ trait Methods
     }
 
     /**
-     * @param \FFI\CData|null $rk rd_kafka_t*
-     * @param \FFI\CData|null $list_grpoffsets rd_kafka_ListConsumerGroupOffsets_t**
-     * @param int|null $list_grpoffsets_cnt size_t
-     * @param \FFI\CData|null $options const rd_kafka_AdminOptions_t*
-     * @param \FFI\CData|null $rkqu rd_kafka_queue_t*
+     * <p>List committed offsets for a set of partitions in a consumer group. </p>
+     *
+     * <dl class="section remark"><dt>Remarks</dt><dd>The result event type emitted on the supplied queue is of type <code>RD_KAFKA_EVENT_LISTCONSUMERGROUPOFFSETS_RESULT</code> </dd>
+     * <dd>
+     * The current implementation only supports one group per invocation. </dd></dl>
+     * @param \FFI\CData|null $rk rd_kafka_t* - Client instance.
+     * @param \FFI\CData|null $list_grpoffsets rd_kafka_ListConsumerGroupOffsets_t** - Array of group committed offsets to list. MUST only be one single element.
+     * @param int|null $list_grpoffsets_cnt size_t - Number of elements in <code>list_grpoffsets</code> array. MUST always be 1.
+     * @param \FFI\CData|null $options const rd_kafka_AdminOptions_t* - Optional admin options, or NULL for defaults.
+     * @param \FFI\CData|null $rkqu rd_kafka_queue_t* - Queue to emit result on.
      * @since 2.0.0 of librdkafka
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#ab51163573f8a19f0ec240428fd8fca3e
      */
     public static function rd_kafka_ListConsumerGroupOffsets(?\FFI\CData $rk, ?\FFI\CData $list_grpoffsets, ?int $list_grpoffsets_cnt, ?\FFI\CData $options, ?\FFI\CData $rkqu): void
     {
@@ -6161,10 +6346,15 @@ trait Methods
     }
 
     /**
-     * @param \FFI\CData|null $result const rd_kafka_ListConsumerGroupOffsets_result_t*
-     * @param \FFI\CData|null $cntp size_t*
+     * <p>Get an array of results from a ListConsumerGroupOffsets result. </p>
+     * <p>The returned groups life-time is the same as the <code>result</code> object.</p>
+     *
+     * <dl class="section remark"><dt>Remarks</dt><dd>The lifetime of the returned memory is the same as the lifetime of the <code>result</code> object. </dd></dl>
+     * @param \FFI\CData|null $result const rd_kafka_ListConsumerGroupOffsets_result_t* - Result to get group results from.
+     * @param \FFI\CData|null $cntp size_t* - is updated to the number of elements in the array.
      * @return \FFI\CData|null const rd_kafka_group_result_t**
      * @since 2.0.0 of librdkafka
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a0b4b3b9c5388038f4aac0e939f56854d
      */
     public static function rd_kafka_ListConsumerGroupOffsets_result_groups(?\FFI\CData $result, ?\FFI\CData $cntp): ?\FFI\CData
     {
@@ -6172,10 +6362,12 @@ trait Methods
     }
 
     /**
-     * @param string|null $group_id const char*
-     * @param \FFI\CData|null $partitions const rd_kafka_topic_partition_list_t*
-     * @return \FFI\CData|null rd_kafka_AlterConsumerGroupOffsets_t*
+     * <p>Create a new AlterConsumerGroupOffsets object. This object is later passed to rd_kafka_AlterConsumerGroupOffsets(). </p>
+     * @param string|null $group_id const char* - Consumer group id.
+     * @param \FFI\CData|null $partitions const rd_kafka_topic_partition_list_t* - Partitions to alter committed offsets for. Only the topic and partition fields are used.
+     * @return \FFI\CData|null rd_kafka_AlterConsumerGroupOffsets_t* - a new allocated AlterConsumerGroupOffsets object. Use rd_kafka_AlterConsumerGroupOffsets_destroy() to free object when done.
      * @since 2.0.0 of librdkafka
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#aa04df04ed898431c1d85e57e9dfb020e
      */
     public static function rd_kafka_AlterConsumerGroupOffsets_new(?string $group_id, ?\FFI\CData $partitions): ?\FFI\CData
     {
@@ -6202,12 +6394,18 @@ trait Methods
     }
 
     /**
-     * @param \FFI\CData|null $rk rd_kafka_t*
-     * @param \FFI\CData|null $alter_grpoffsets rd_kafka_AlterConsumerGroupOffsets_t**
-     * @param int|null $alter_grpoffsets_cnt size_t
-     * @param \FFI\CData|null $options const rd_kafka_AdminOptions_t*
-     * @param \FFI\CData|null $rkqu rd_kafka_queue_t*
+     * <p>Alter committed offsets for a set of partitions in a consumer group. This will succeed at the partition level only if the group is not actively subscribed to the corresponding topic. </p>
+     *
+     * <dl class="section remark"><dt>Remarks</dt><dd>The result event type emitted on the supplied queue is of type <code>RD_KAFKA_EVENT_ALTERCONSUMERGROUPOFFSETS_RESULT</code> </dd>
+     * <dd>
+     * The current implementation only supports one group per invocation. </dd></dl>
+     * @param \FFI\CData|null $rk rd_kafka_t* - Client instance.
+     * @param \FFI\CData|null $alter_grpoffsets rd_kafka_AlterConsumerGroupOffsets_t** - Array of group committed offsets to alter. MUST only be one single element.
+     * @param int|null $alter_grpoffsets_cnt size_t - Number of elements in <code>alter_grpoffsets</code> array. MUST always be 1.
+     * @param \FFI\CData|null $options const rd_kafka_AdminOptions_t* - Optional admin options, or NULL for defaults.
+     * @param \FFI\CData|null $rkqu rd_kafka_queue_t* - Queue to emit result on.
      * @since 2.0.0 of librdkafka
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a3bebec377020469583f6c8e2f0b06ec8
      */
     public static function rd_kafka_AlterConsumerGroupOffsets(?\FFI\CData $rk, ?\FFI\CData $alter_grpoffsets, ?int $alter_grpoffsets_cnt, ?\FFI\CData $options, ?\FFI\CData $rkqu): void
     {
@@ -6215,10 +6413,15 @@ trait Methods
     }
 
     /**
-     * @param \FFI\CData|null $result const rd_kafka_AlterConsumerGroupOffsets_result_t*
-     * @param \FFI\CData|null $cntp size_t*
+     * <p>Get an array of results from a AlterConsumerGroupOffsets result. </p>
+     * <p>The returned groups life-time is the same as the <code>result</code> object.</p>
+     *
+     * <dl class="section remark"><dt>Remarks</dt><dd>The lifetime of the returned memory is the same as the lifetime of the <code>result</code> object. </dd></dl>
+     * @param \FFI\CData|null $result const rd_kafka_AlterConsumerGroupOffsets_result_t* - Result to get group results from.
+     * @param \FFI\CData|null $cntp size_t* - is updated to the number of elements in the array.
      * @return \FFI\CData|null const rd_kafka_group_result_t**
      * @since 2.0.0 of librdkafka
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a7eff1952f24e1d5f2bde678165886731
      */
     public static function rd_kafka_AlterConsumerGroupOffsets_result_groups(?\FFI\CData $result, ?\FFI\CData $cntp): ?\FFI\CData
     {
@@ -6236,5 +6439,801 @@ trait Methods
     public static function rd_kafka_mock_broker_error_stack_cnt(?\FFI\CData $mcluster, ?int $broker_id, ?int $ApiKey, ?\FFI\CData $cntp): int
     {
         return static::getFFI()->rd_kafka_mock_broker_error_stack_cnt($mcluster, $broker_id, $ApiKey, $cntp);
+    }
+
+    /**
+     * <p>Sets the offset leader epoch (use -1 to clear). </p>
+     *
+     * <dl class="section remark"><dt>Remarks</dt><dd>See KIP-320 for more information. </dd></dl>
+     * @param \FFI\CData|null $rktpar rd_kafka_topic_partition_t* - Partition object.
+     * @param int|null $leader_epoch int32_t - Offset leader epoch, use -1 to reset.
+     * @since 2.1.0 of librdkafka
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#ab70804a35d1a6e8c21f276d75ef8ea6e
+     */
+    public static function rd_kafka_topic_partition_set_leader_epoch(?\FFI\CData $rktpar, ?int $leader_epoch): void
+    {
+        static::getFFI()->rd_kafka_topic_partition_set_leader_epoch($rktpar, $leader_epoch);
+    }
+
+    /**
+     * <dl class="section remark"><dt>Remarks</dt><dd>See KIP-320 for more information. </dd></dl>
+     * @param \FFI\CData|null $rktpar const rd_kafka_topic_partition_t* - ) - Partition object.
+     * @return int|null int32_t - the offset leader epoch, if relevant and known, else -1.
+     * @since 2.1.0 of librdkafka
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#ad8ae250ddb522b220b64e0b1627ad8b8
+     */
+    public static function rd_kafka_topic_partition_get_leader_epoch(?\FFI\CData $rktpar): ?int
+    {
+        return static::getFFI()->rd_kafka_topic_partition_get_leader_epoch($rktpar);
+    }
+
+    /**
+     * <dl class="section remark"><dt>Remarks</dt><dd>This API must only be used on consumed messages without error. </dd>
+     * <dd>
+     * Requires broker version &gt;= 2.10 (KIP-320). </dd></dl>
+     * @param \FFI\CData|null $rkmessage const rd_kafka_message_t* - )
+     * @return int|null int32_t - the message's partition leader epoch at the time the message was fetched and if known, else -1.
+     * @since 2.1.0 of librdkafka
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#ad9afdf40e60628338c3efcacba4727a2
+     */
+    public static function rd_kafka_message_leader_epoch(?\FFI\CData $rkmessage): ?int
+    {
+        return static::getFFI()->rd_kafka_message_leader_epoch($rkmessage);
+    }
+
+    /**
+     * <p>Store offset +1 for the consumed message. </p>
+     * <p>The message offset + 1 will be committed to broker according to <code><code>auto.commit.interval.ms</code></code> or manual offset-less commit()</p>
+     * <dl class="section warning"><dt>Warning</dt><dd>This method may only be called for partitions that are currently assigned. Non-assigned partitions will fail with RD_KAFKA_RESP_ERR__STATE. Since v1.9.0.</dd>
+     * <dd>
+     * Avoid storing offsets after calling rd_kafka_seek() (et.al) as this may later interfere with resuming a paused partition, instead store offsets prior to calling seek.</dd></dl>
+     * <dl class="section remark"><dt>Remarks</dt><dd><code><code>enable.auto.offset.store</code></code> must be set to "false" when using this API.</dd></dl>
+     * @param \FFI\CData|null $rkmessage rd_kafka_message_t* - )
+     * @return \FFI\CData|null rd_kafka_error_t* - NULL on success or an error object on failure.
+     * @since 2.1.0 of librdkafka
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a85d589ef6cb2d6a1d34e5594949bc9ee
+     */
+    public static function rd_kafka_offset_store_message(?\FFI\CData $rkmessage): ?\FFI\CData
+    {
+        return static::getFFI()->rd_kafka_offset_store_message($rkmessage);
+    }
+
+    /**
+     * <p>Get IncrementalAlterConfigs result. </p>
+     *
+     * <p>Event types: RD_KAFKA_EVENT_INCREMENTALALTERCONFIGS_RESULT </p>
+     * @param \FFI\CData|null $rkev rd_kafka_event_t* - )
+     * @return \FFI\CData|null const rd_kafka_IncrementalAlterConfigs_result_t* - the result of a IncrementalAlterConfigs request, or NULL if event is of different type.
+     * @since 2.2.0 of librdkafka
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a8e76c2d637218310d8868af31649b97a
+     */
+    public static function rd_kafka_event_IncrementalAlterConfigs_result(?\FFI\CData $rkev): ?\FFI\CData
+    {
+        return static::getFFI()->rd_kafka_event_IncrementalAlterConfigs_result($rkev);
+    }
+
+    /**
+     * <p>Get DescribeUserScramCredentials result. </p>
+     *
+     * <dl class="section remark"><dt>Remarks</dt><dd>The lifetime of the returned memory is the same as the lifetime of the <code>rkev</code> object.</dd></dl>
+     * <p>Event types: RD_KAFKA_EVENT_DESCRIBEUSERSCRAMCREDENTIALS_RESULT </p>
+     * @param \FFI\CData|null $rkev rd_kafka_event_t* - )
+     * @return \FFI\CData|null const rd_kafka_DescribeUserScramCredentials_result_t* - the result of a DescribeUserScramCredentials request, or NULL if event is of different type.
+     * @since 2.2.0 of librdkafka
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a69853c3d64324a45341b2a68b0e2026e
+     */
+    public static function rd_kafka_event_DescribeUserScramCredentials_result(?\FFI\CData $rkev): ?\FFI\CData
+    {
+        return static::getFFI()->rd_kafka_event_DescribeUserScramCredentials_result($rkev);
+    }
+
+    /**
+     * <p>Get AlterUserScramCredentials result. </p>
+     *
+     * <dl class="section remark"><dt>Remarks</dt><dd>The lifetime of the returned memory is the same as the lifetime of the <code>rkev</code> object.</dd></dl>
+     * <p>Event types: RD_KAFKA_EVENT_ALTERUSERSCRAMCREDENTIALS_RESULT </p>
+     * @param \FFI\CData|null $rkev rd_kafka_event_t* - )
+     * @return \FFI\CData|null const rd_kafka_AlterUserScramCredentials_result_t* - the result of a AlterUserScramCredentials request, or NULL if event is of different type.
+     * @since 2.2.0 of librdkafka
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#abb9995f278c3eaf8e4bc6caba254ba0a
+     */
+    public static function rd_kafka_event_AlterUserScramCredentials_result(?\FFI\CData $rkev): ?\FFI\CData
+    {
+        return static::getFFI()->rd_kafka_event_AlterUserScramCredentials_result($rkev);
+    }
+
+    /**
+     * <p>Add the value of the configuration entry for a subsequent incremental alter config operation. APPEND and SUBTRACT are possible for list-type configuration entries only. </p>
+     * @param \FFI\CData|null $config rd_kafka_ConfigResource_t* - ConfigResource to add config property to.
+     * @param string|null $name const char* - Configuration name, depends on resource type.
+     * @param int $op_type rd_kafka_AlterConfigOpType_t - Operation type, one of rd_kafka_AlterConfigOpType_t.
+     * @param string|null $value const char* - Configuration value, depends on resource type and <code>name</code>. Set to <code>NULL</code>, only with with op_type set to DELETE, to revert configuration value to default.
+     * @return \FFI\CData|null rd_kafka_error_t* - NULL on success, or an rd_kafka_error_t * with the corresponding error code and string. Error ownership belongs to the caller. Possible error codes:<ul>
+     * <li>RD_KAFKA_RESP_ERR__INVALID_ARG on invalid input. </li>
+     * </ul>
+     * @since 2.2.0 of librdkafka
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#ae989f95effcebe295a2a37c15d29b5ed
+     */
+    public static function rd_kafka_ConfigResource_add_incremental_config(?\FFI\CData $config, ?string $name, int $op_type, ?string $value): ?\FFI\CData
+    {
+        return static::getFFI()->rd_kafka_ConfigResource_add_incremental_config($config, $name, $op_type, $value);
+    }
+
+    /**
+     * <p>Incrementally update the configuration for the specified resources. Updates are not transactional so they may succeed for some resources while fail for others. The configs for a particular resource are updated atomically, executing the corresponding incremental operations on the provided configurations. </p>
+     * <dl class="section remark"><dt>Remarks</dt><dd>Requires broker version &gt;=2.3.0</dd>
+     * <dd>
+     * Multiple resources and resource types may be set, but at most one resource of type <code>RD_KAFKA_RESOURCE_BROKER</code> is allowed per call since these resource requests must be sent to the broker specified in the resource. Broker option will be ignored in this case.</dd></dl>
+     * @param \FFI\CData|null $rk rd_kafka_t* - Client instance.
+     * @param \FFI\CData|null $configs rd_kafka_ConfigResource_t** - Array of config entries to alter.
+     * @param int|null $config_cnt size_t - Number of elements in <code>configs</code> array.
+     * @param \FFI\CData|null $options const rd_kafka_AdminOptions_t* - Optional admin options, or NULL for defaults.
+     * @param \FFI\CData|null $rkqu rd_kafka_queue_t* - Queue to emit result on.
+     * @since 2.2.0 of librdkafka
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a36805ba8496fed43f6e87421c259804b
+     */
+    public static function rd_kafka_IncrementalAlterConfigs(?\FFI\CData $rk, ?\FFI\CData $configs, ?int $config_cnt, ?\FFI\CData $options, ?\FFI\CData $rkqu): void
+    {
+        static::getFFI()->rd_kafka_IncrementalAlterConfigs($rk, $configs, $config_cnt, $options, $rkqu);
+    }
+
+    /**
+     * <p>Get an array of resource results from a IncrementalAlterConfigs result. </p>
+     * <p>Use <code>rd_kafka_ConfigResource_error()</code> and <code>rd_kafka_ConfigResource_error_string()</code> to extract per-resource error results on the returned array elements.</p>
+     * <p>The returned object life-times are the same as the <code>result</code> object.</p>
+     * @param \FFI\CData|null $result const rd_kafka_IncrementalAlterConfigs_result_t* - Result object to get resource results from.
+     * @param \FFI\CData|null $cntp size_t* - is updated to the number of elements in the array.
+     * @return \FFI\CData|null const rd_kafka_ConfigResource_t** - an array of ConfigResource elements, or NULL if not available.
+     * @since 2.2.0 of librdkafka
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#ad1d8458aa405d06de7feb716ae5144b5
+     */
+    public static function rd_kafka_IncrementalAlterConfigs_result_resources(?\FFI\CData $result, ?\FFI\CData $cntp): ?\FFI\CData
+    {
+        return static::getFFI()->rd_kafka_IncrementalAlterConfigs_result_resources($result, $cntp);
+    }
+
+    /**
+     * @param \FFI\CData|null $scram_credential_info const rd_kafka_ScramCredentialInfo_t*
+     * @return int rd_kafka_ScramMechanism_t
+     * @since 2.2.0 of librdkafka
+     */
+    public static function rd_kafka_ScramCredentialInfo_mechanism(?\FFI\CData $scram_credential_info): int
+    {
+        return static::getFFI()->rd_kafka_ScramCredentialInfo_mechanism($scram_credential_info);
+    }
+
+    /**
+     * @param \FFI\CData|null $scram_credential_info const rd_kafka_ScramCredentialInfo_t*
+     * @return int|null int32_t
+     * @since 2.2.0 of librdkafka
+     */
+    public static function rd_kafka_ScramCredentialInfo_iterations(?\FFI\CData $scram_credential_info): ?int
+    {
+        return static::getFFI()->rd_kafka_ScramCredentialInfo_iterations($scram_credential_info);
+    }
+
+    /**
+     * @param \FFI\CData|null $description const rd_kafka_UserScramCredentialsDescription_t*
+     * @return string|null const char*
+     * @since 2.2.0 of librdkafka
+     */
+    public static function rd_kafka_UserScramCredentialsDescription_user(?\FFI\CData $description): ?string
+    {
+        return static::getFFI()->rd_kafka_UserScramCredentialsDescription_user($description);
+    }
+
+    /**
+     * @param \FFI\CData|null $description const rd_kafka_UserScramCredentialsDescription_t*
+     * @return \FFI\CData|null const rd_kafka_error_t*
+     * @since 2.2.0 of librdkafka
+     */
+    public static function rd_kafka_UserScramCredentialsDescription_error(?\FFI\CData $description): ?\FFI\CData
+    {
+        return static::getFFI()->rd_kafka_UserScramCredentialsDescription_error($description);
+    }
+
+    /**
+     * @param \FFI\CData|null $description const rd_kafka_UserScramCredentialsDescription_t*
+     * @return int|null size_t
+     * @since 2.2.0 of librdkafka
+     */
+    public static function rd_kafka_UserScramCredentialsDescription_scramcredentialinfo_count(?\FFI\CData $description): ?int
+    {
+        return static::getFFI()->rd_kafka_UserScramCredentialsDescription_scramcredentialinfo_count($description);
+    }
+
+    /**
+     * @param \FFI\CData|null $description const rd_kafka_UserScramCredentialsDescription_t*
+     * @param int|null $idx size_t
+     * @return \FFI\CData|null const rd_kafka_ScramCredentialInfo_t*
+     * @since 2.2.0 of librdkafka
+     */
+    public static function rd_kafka_UserScramCredentialsDescription_scramcredentialinfo(?\FFI\CData $description, ?int $idx): ?\FFI\CData
+    {
+        return static::getFFI()->rd_kafka_UserScramCredentialsDescription_scramcredentialinfo($description, $idx);
+    }
+
+    /**
+     * <p>Get an array of descriptions from a DescribeUserScramCredentials result. </p>
+     * <p>The returned value life-time is the same as the <code>result</code> object.</p>
+     * @param \FFI\CData|null $result const rd_kafka_DescribeUserScramCredentials_result_t* - Result to get descriptions from.
+     * @param \FFI\CData|null $cntp size_t* - is updated to the number of elements in the array.
+     * @return \FFI\CData|null const rd_kafka_UserScramCredentialsDescription_t**
+     * @since 2.2.0 of librdkafka
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a1d6db38eb4f640a20a5806da2b12bc47
+     */
+    public static function rd_kafka_DescribeUserScramCredentials_result_descriptions(?\FFI\CData $result, ?\FFI\CData $cntp): ?\FFI\CData
+    {
+        return static::getFFI()->rd_kafka_DescribeUserScramCredentials_result_descriptions($result, $cntp);
+    }
+
+    /**
+     * <p>Describe SASL/SCRAM credentials. This operation is supported by brokers with version 2.7.0 or higher. </p>
+     * @param \FFI\CData|null $rk rd_kafka_t* - Client instance.
+     * @param \FFI\CData|null $users const char** - The users for which credentials are to be described. All users' credentials are described if NULL.
+     * @param int|null $user_cnt size_t - Number of elements in <code>users</code> array.
+     * @param \FFI\CData|null $options const rd_kafka_AdminOptions_t* - Optional admin options, or NULL for defaults.
+     * @param \FFI\CData|null $rkqu rd_kafka_queue_t* - Queue to emit result on.
+     * @since 2.2.0 of librdkafka
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#ac9d2f72dd1dddce0c7d24a4e413b3cf5
+     */
+    public static function rd_kafka_DescribeUserScramCredentials(?\FFI\CData $rk, ?\FFI\CData $users, ?int $user_cnt, ?\FFI\CData $options, ?\FFI\CData $rkqu): void
+    {
+        static::getFFI()->rd_kafka_DescribeUserScramCredentials($rk, $users, $user_cnt, $options, $rkqu);
+    }
+
+    /**
+     * <p>Allocates a new UserScramCredentialUpsertion given its fields. If salt isn't given a 64 B salt is generated using OpenSSL RAND_priv_bytes, if available. </p>
+     *
+     * <dl class="section remark"><dt>Remarks</dt><dd>A random salt is generated, when NULL, only if OpenSSL &gt;= 1.1.1. Otherwise it's a required param.</dd></dl>
+     * @param string|null $username const char* - The username (not empty).
+     * @param int $mechanism rd_kafka_ScramMechanism_t - SASL/SCRAM mechanism.
+     * @param int|null $iterations int32_t - SASL/SCRAM iterations.
+     * @param \FFI\CData|null $password const unsigned char* - Password bytes (not empty).
+     * @param int|null $password_size size_t - Size of <code>password</code> (greater than 0).
+     * @param \FFI\CData|null $salt const unsigned char* - Salt bytes (optional).
+     * @param int|null $salt_size size_t - Size of <code>salt</code> (optional).
+     * @return \FFI\CData|null rd_kafka_UserScramCredentialAlteration_t* - A newly created instance of rd_kafka_UserScramCredentialAlteration_t. Ownership belongs to the caller, use rd_kafka_UserScramCredentialAlteration_destroy to destroy.
+     * @since 2.2.0 of librdkafka
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#ae1707143331cd5b798d25cb8df33df5f
+     */
+    public static function rd_kafka_UserScramCredentialUpsertion_new(?string $username, int $mechanism, ?int $iterations, ?\FFI\CData $password, ?int $password_size, ?\FFI\CData $salt, ?int $salt_size): ?\FFI\CData
+    {
+        return static::getFFI()->rd_kafka_UserScramCredentialUpsertion_new($username, $mechanism, $iterations, $password, $password_size, $salt, $salt_size);
+    }
+
+    /**
+     * <p>Allocates a new UserScramCredentialDeletion given its fields. </p>
+     * @param string|null $username const char* - The username (not empty).
+     * @param int $mechanism rd_kafka_ScramMechanism_t - SASL/SCRAM mechanism.
+     * @return \FFI\CData|null rd_kafka_UserScramCredentialAlteration_t* - A newly created instance of rd_kafka_UserScramCredentialAlteration_t. Ownership belongs to the caller, use rd_kafka_UserScramCredentialAlteration_destroy to destroy.
+     * @since 2.2.0 of librdkafka
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a89e57d12d9415354fcbbf1d7b0072db2
+     */
+    public static function rd_kafka_UserScramCredentialDeletion_new(?string $username, int $mechanism): ?\FFI\CData
+    {
+        return static::getFFI()->rd_kafka_UserScramCredentialDeletion_new($username, $mechanism);
+    }
+
+    /**
+     * @param \FFI\CData|null $alteration rd_kafka_UserScramCredentialAlteration_t*
+     * @since 2.2.0 of librdkafka
+     */
+    public static function rd_kafka_UserScramCredentialAlteration_destroy(?\FFI\CData $alteration): void
+    {
+        static::getFFI()->rd_kafka_UserScramCredentialAlteration_destroy($alteration);
+    }
+
+    /**
+     * @param \FFI\CData|null $alterations rd_kafka_UserScramCredentialAlteration_t**
+     * @param int|null $alteration_cnt size_t
+     * @since 2.2.0 of librdkafka
+     */
+    public static function rd_kafka_UserScramCredentialAlteration_destroy_array(?\FFI\CData $alterations, ?int $alteration_cnt): void
+    {
+        static::getFFI()->rd_kafka_UserScramCredentialAlteration_destroy_array($alterations, $alteration_cnt);
+    }
+
+    /**
+     * @param \FFI\CData|null $response const rd_kafka_AlterUserScramCredentials_result_response_t*
+     * @return string|null const char*
+     * @since 2.2.0 of librdkafka
+     */
+    public static function rd_kafka_AlterUserScramCredentials_result_response_user(?\FFI\CData $response): ?string
+    {
+        return static::getFFI()->rd_kafka_AlterUserScramCredentials_result_response_user($response);
+    }
+
+    /**
+     * @param \FFI\CData|null $response const rd_kafka_AlterUserScramCredentials_result_response_t*
+     * @return \FFI\CData|null const rd_kafka_error_t*
+     * @since 2.2.0 of librdkafka
+     */
+    public static function rd_kafka_AlterUserScramCredentials_result_response_error(?\FFI\CData $response): ?\FFI\CData
+    {
+        return static::getFFI()->rd_kafka_AlterUserScramCredentials_result_response_error($response);
+    }
+
+    /**
+     * <p>Get an array of responses from a AlterUserScramCredentials result. </p>
+     * <p>The returned value life-time is the same as the <code>result</code> object.</p>
+     * @param \FFI\CData|null $result const rd_kafka_AlterUserScramCredentials_result_t* - Result to get responses from.
+     * @param \FFI\CData|null $cntp size_t* - is updated to the number of elements in the array.
+     * @return \FFI\CData|null const rd_kafka_AlterUserScramCredentials_result_response_t**
+     * @since 2.2.0 of librdkafka
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#abf118e72e7bea8ad0cd56a950dcfe2b3
+     */
+    public static function rd_kafka_AlterUserScramCredentials_result_responses(?\FFI\CData $result, ?\FFI\CData $cntp): ?\FFI\CData
+    {
+        return static::getFFI()->rd_kafka_AlterUserScramCredentials_result_responses($result, $cntp);
+    }
+
+    /**
+     * <p>Alter SASL/SCRAM credentials. This operation is supported by brokers with version 2.7.0 or higher. </p>
+     * <dl class="section remark"><dt>Remarks</dt><dd>For upsertions to be processed, librdkfka must be build with OpenSSL support. It's needed to calculate the HMAC.</dd></dl>
+     * @param \FFI\CData|null $rk rd_kafka_t* - Client instance.
+     * @param \FFI\CData|null $alterations rd_kafka_UserScramCredentialAlteration_t** - The alterations to be applied.
+     * @param int|null $alteration_cnt size_t - Number of elements in <code>alterations</code> array.
+     * @param \FFI\CData|null $options const rd_kafka_AdminOptions_t* - Optional admin options, or NULL for defaults.
+     * @param \FFI\CData|null $rkqu rd_kafka_queue_t* - Queue to emit result on.
+     * @since 2.2.0 of librdkafka
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#ab02fa9f8f192f78c1ffb0111b0f5cb2f
+     */
+    public static function rd_kafka_AlterUserScramCredentials(?\FFI\CData $rk, ?\FFI\CData $alterations, ?int $alteration_cnt, ?\FFI\CData $options, ?\FFI\CData $rkqu): void
+    {
+        static::getFFI()->rd_kafka_AlterUserScramCredentials($rk, $alterations, $alteration_cnt, $options, $rkqu);
+    }
+
+    /**
+     * @param \FFI\CData|null $uuid const rd_kafka_Uuid_t*
+     * @return string|null const char*
+     * @since 2.3.0 of librdkafka
+     */
+    public static function rd_kafka_Uuid_base64str(?\FFI\CData $uuid): ?string
+    {
+        return static::getFFI()->rd_kafka_Uuid_base64str($uuid);
+    }
+
+    /**
+     * @param \FFI\CData|null $uuid const rd_kafka_Uuid_t*
+     * @return int|null int64_t
+     * @since 2.3.0 of librdkafka
+     */
+    public static function rd_kafka_Uuid_least_significant_bits(?\FFI\CData $uuid): ?int
+    {
+        return static::getFFI()->rd_kafka_Uuid_least_significant_bits($uuid);
+    }
+
+    /**
+     * @param \FFI\CData|null $uuid const rd_kafka_Uuid_t*
+     * @return int|null int64_t
+     * @since 2.3.0 of librdkafka
+     */
+    public static function rd_kafka_Uuid_most_significant_bits(?\FFI\CData $uuid): ?int
+    {
+        return static::getFFI()->rd_kafka_Uuid_most_significant_bits($uuid);
+    }
+
+    /**
+     * @param int|null $most_significant_bits int64_t
+     * @param int|null $least_significant_bits int64_t
+     * @return \FFI\CData|null rd_kafka_Uuid_t*
+     * @since 2.3.0 of librdkafka
+     */
+    public static function rd_kafka_Uuid_new(?int $most_significant_bits, ?int $least_significant_bits): ?\FFI\CData
+    {
+        return static::getFFI()->rd_kafka_Uuid_new($most_significant_bits, $least_significant_bits);
+    }
+
+    /**
+     * @param \FFI\CData|null $uuid const rd_kafka_Uuid_t*
+     * @return \FFI\CData|null rd_kafka_Uuid_t*
+     * @since 2.3.0 of librdkafka
+     */
+    public static function rd_kafka_Uuid_copy(?\FFI\CData $uuid): ?\FFI\CData
+    {
+        return static::getFFI()->rd_kafka_Uuid_copy($uuid);
+    }
+
+    /**
+     * @param \FFI\CData|null $uuid rd_kafka_Uuid_t*
+     * @since 2.3.0 of librdkafka
+     */
+    public static function rd_kafka_Uuid_destroy(?\FFI\CData $uuid): void
+    {
+        static::getFFI()->rd_kafka_Uuid_destroy($uuid);
+    }
+
+    /**
+     * @param \FFI\CData|null $node const rd_kafka_Node_t*
+     * @return string|null const char*
+     * @since 2.3.0 of librdkafka
+     */
+    public static function rd_kafka_Node_rack(?\FFI\CData $node): ?string
+    {
+        return static::getFFI()->rd_kafka_Node_rack($node);
+    }
+
+    /**
+     * @param \FFI\CData|null $rkev rd_kafka_event_t*
+     * @return \FFI\CData|null const rd_kafka_DescribeTopics_result_t*
+     * @since 2.3.0 of librdkafka
+     */
+    public static function rd_kafka_event_DescribeTopics_result(?\FFI\CData $rkev): ?\FFI\CData
+    {
+        return static::getFFI()->rd_kafka_event_DescribeTopics_result($rkev);
+    }
+
+    /**
+     * @param \FFI\CData|null $rkev rd_kafka_event_t*
+     * @return \FFI\CData|null const rd_kafka_DescribeCluster_result_t*
+     * @since 2.3.0 of librdkafka
+     */
+    public static function rd_kafka_event_DescribeCluster_result(?\FFI\CData $rkev): ?\FFI\CData
+    {
+        return static::getFFI()->rd_kafka_event_DescribeCluster_result($rkev);
+    }
+
+    /**
+     * @param \FFI\CData|null $rkev rd_kafka_event_t*
+     * @return \FFI\CData|null const rd_kafka_ListOffsets_result_t*
+     * @since 2.3.0 of librdkafka
+     */
+    public static function rd_kafka_event_ListOffsets_result(?\FFI\CData $rkev): ?\FFI\CData
+    {
+        return static::getFFI()->rd_kafka_event_ListOffsets_result($rkev);
+    }
+
+    /**
+     * @param \FFI\CData|null $options rd_kafka_AdminOptions_t*
+     * @param int|null $true_or_false int
+     * @return \FFI\CData|null rd_kafka_error_t*
+     * @since 2.3.0 of librdkafka
+     */
+    public static function rd_kafka_AdminOptions_set_include_authorized_operations(?\FFI\CData $options, ?int $true_or_false): ?\FFI\CData
+    {
+        return static::getFFI()->rd_kafka_AdminOptions_set_include_authorized_operations($options, $true_or_false);
+    }
+
+    /**
+     * @param \FFI\CData|null $options rd_kafka_AdminOptions_t*
+     * @param int $value rd_kafka_IsolationLevel_t
+     * @return \FFI\CData|null rd_kafka_error_t*
+     * @since 2.3.0 of librdkafka
+     */
+    public static function rd_kafka_AdminOptions_set_isolation_level(?\FFI\CData $options, int $value): ?\FFI\CData
+    {
+        return static::getFFI()->rd_kafka_AdminOptions_set_isolation_level($options, $value);
+    }
+
+    /**
+     * @param \FFI\CData|null $topics const char**
+     * @param int|null $topics_cnt size_t
+     * @return \FFI\CData|null rd_kafka_TopicCollection_t*
+     * @since 2.3.0 of librdkafka
+     */
+    public static function rd_kafka_TopicCollection_of_topic_names(?\FFI\CData $topics, ?int $topics_cnt): ?\FFI\CData
+    {
+        return static::getFFI()->rd_kafka_TopicCollection_of_topic_names($topics, $topics_cnt);
+    }
+
+    /**
+     * @param \FFI\CData|null $topics rd_kafka_TopicCollection_t*
+     * @since 2.3.0 of librdkafka
+     */
+    public static function rd_kafka_TopicCollection_destroy(?\FFI\CData $topics): void
+    {
+        static::getFFI()->rd_kafka_TopicCollection_destroy($topics);
+    }
+
+    /**
+     * @param \FFI\CData|null $rk rd_kafka_t*
+     * @param \FFI\CData|null $topics const rd_kafka_TopicCollection_t*
+     * @param \FFI\CData|null $options const rd_kafka_AdminOptions_t*
+     * @param \FFI\CData|null $rkqu rd_kafka_queue_t*
+     * @since 2.3.0 of librdkafka
+     */
+    public static function rd_kafka_DescribeTopics(?\FFI\CData $rk, ?\FFI\CData $topics, ?\FFI\CData $options, ?\FFI\CData $rkqu): void
+    {
+        static::getFFI()->rd_kafka_DescribeTopics($rk, $topics, $options, $rkqu);
+    }
+
+    /**
+     * @param \FFI\CData|null $result const rd_kafka_DescribeTopics_result_t*
+     * @param \FFI\CData|null $cntp size_t*
+     * @return \FFI\CData|null const rd_kafka_TopicDescription_t**
+     * @since 2.3.0 of librdkafka
+     */
+    public static function rd_kafka_DescribeTopics_result_topics(?\FFI\CData $result, ?\FFI\CData $cntp): ?\FFI\CData
+    {
+        return static::getFFI()->rd_kafka_DescribeTopics_result_topics($result, $cntp);
+    }
+
+    /**
+     * @param \FFI\CData|null $topicdesc const rd_kafka_TopicDescription_t*
+     * @param \FFI\CData|null $cntp size_t*
+     * @return \FFI\CData|null const rd_kafka_TopicPartitionInfo_t**
+     * @since 2.3.0 of librdkafka
+     */
+    public static function rd_kafka_TopicDescription_partitions(?\FFI\CData $topicdesc, ?\FFI\CData $cntp): ?\FFI\CData
+    {
+        return static::getFFI()->rd_kafka_TopicDescription_partitions($topicdesc, $cntp);
+    }
+
+    /**
+     * @param \FFI\CData|null $partition const rd_kafka_TopicPartitionInfo_t*
+     * @return int|null const int
+     * @since 2.3.0 of librdkafka
+     */
+    public static function rd_kafka_TopicPartitionInfo_partition(?\FFI\CData $partition): ?int
+    {
+        return static::getFFI()->rd_kafka_TopicPartitionInfo_partition($partition);
+    }
+
+    /**
+     * @param \FFI\CData|null $partition const rd_kafka_TopicPartitionInfo_t*
+     * @return \FFI\CData|null const rd_kafka_Node_t*
+     * @since 2.3.0 of librdkafka
+     */
+    public static function rd_kafka_TopicPartitionInfo_leader(?\FFI\CData $partition): ?\FFI\CData
+    {
+        return static::getFFI()->rd_kafka_TopicPartitionInfo_leader($partition);
+    }
+
+    /**
+     * @param \FFI\CData|null $partition const rd_kafka_TopicPartitionInfo_t*
+     * @param \FFI\CData|null $cntp size_t*
+     * @return \FFI\CData|null const rd_kafka_Node_t**
+     * @since 2.3.0 of librdkafka
+     */
+    public static function rd_kafka_TopicPartitionInfo_isr(?\FFI\CData $partition, ?\FFI\CData $cntp): ?\FFI\CData
+    {
+        return static::getFFI()->rd_kafka_TopicPartitionInfo_isr($partition, $cntp);
+    }
+
+    /**
+     * @param \FFI\CData|null $partition const rd_kafka_TopicPartitionInfo_t*
+     * @param \FFI\CData|null $cntp size_t*
+     * @return \FFI\CData|null const rd_kafka_Node_t**
+     * @since 2.3.0 of librdkafka
+     */
+    public static function rd_kafka_TopicPartitionInfo_replicas(?\FFI\CData $partition, ?\FFI\CData $cntp): ?\FFI\CData
+    {
+        return static::getFFI()->rd_kafka_TopicPartitionInfo_replicas($partition, $cntp);
+    }
+
+    /**
+     * @param \FFI\CData|null $topicdesc const rd_kafka_TopicDescription_t*
+     * @param \FFI\CData|null $cntp size_t*
+     * @return \FFI\CData|null const rd_kafka_AclOperation_t*
+     * @since 2.3.0 of librdkafka
+     */
+    public static function rd_kafka_TopicDescription_authorized_operations(?\FFI\CData $topicdesc, ?\FFI\CData $cntp): ?\FFI\CData
+    {
+        return static::getFFI()->rd_kafka_TopicDescription_authorized_operations($topicdesc, $cntp);
+    }
+
+    /**
+     * @param \FFI\CData|null $topicdesc const rd_kafka_TopicDescription_t*
+     * @return string|null const char*
+     * @since 2.3.0 of librdkafka
+     */
+    public static function rd_kafka_TopicDescription_name(?\FFI\CData $topicdesc): ?string
+    {
+        return static::getFFI()->rd_kafka_TopicDescription_name($topicdesc);
+    }
+
+    /**
+     * @param \FFI\CData|null $topicdesc const rd_kafka_TopicDescription_t*
+     * @return \FFI\CData|null const rd_kafka_Uuid_t*
+     * @since 2.3.0 of librdkafka
+     */
+    public static function rd_kafka_TopicDescription_topic_id(?\FFI\CData $topicdesc): ?\FFI\CData
+    {
+        return static::getFFI()->rd_kafka_TopicDescription_topic_id($topicdesc);
+    }
+
+    /**
+     * @param \FFI\CData|null $topicdesc const rd_kafka_TopicDescription_t*
+     * @return int|null int
+     * @since 2.3.0 of librdkafka
+     */
+    public static function rd_kafka_TopicDescription_is_internal(?\FFI\CData $topicdesc): ?int
+    {
+        return static::getFFI()->rd_kafka_TopicDescription_is_internal($topicdesc);
+    }
+
+    /**
+     * @param \FFI\CData|null $topicdesc const rd_kafka_TopicDescription_t*
+     * @return \FFI\CData|null const rd_kafka_error_t*
+     * @since 2.3.0 of librdkafka
+     */
+    public static function rd_kafka_TopicDescription_error(?\FFI\CData $topicdesc): ?\FFI\CData
+    {
+        return static::getFFI()->rd_kafka_TopicDescription_error($topicdesc);
+    }
+
+    /**
+     * @param \FFI\CData|null $rk rd_kafka_t*
+     * @param \FFI\CData|null $options const rd_kafka_AdminOptions_t*
+     * @param \FFI\CData|null $rkqu rd_kafka_queue_t*
+     * @since 2.3.0 of librdkafka
+     */
+    public static function rd_kafka_DescribeCluster(?\FFI\CData $rk, ?\FFI\CData $options, ?\FFI\CData $rkqu): void
+    {
+        static::getFFI()->rd_kafka_DescribeCluster($rk, $options, $rkqu);
+    }
+
+    /**
+     * @param \FFI\CData|null $result const rd_kafka_DescribeCluster_result_t*
+     * @param \FFI\CData|null $cntp size_t*
+     * @return \FFI\CData|null const rd_kafka_Node_t**
+     * @since 2.3.0 of librdkafka
+     */
+    public static function rd_kafka_DescribeCluster_result_nodes(?\FFI\CData $result, ?\FFI\CData $cntp): ?\FFI\CData
+    {
+        return static::getFFI()->rd_kafka_DescribeCluster_result_nodes($result, $cntp);
+    }
+
+    /**
+     * @param \FFI\CData|null $result const rd_kafka_DescribeCluster_result_t*
+     * @param \FFI\CData|null $cntp size_t*
+     * @return \FFI\CData|null const rd_kafka_AclOperation_t*
+     * @since 2.3.0 of librdkafka
+     */
+    public static function rd_kafka_DescribeCluster_result_authorized_operations(?\FFI\CData $result, ?\FFI\CData $cntp): ?\FFI\CData
+    {
+        return static::getFFI()->rd_kafka_DescribeCluster_result_authorized_operations($result, $cntp);
+    }
+
+    /**
+     * @param \FFI\CData|null $result const rd_kafka_DescribeCluster_result_t*
+     * @return \FFI\CData|null const rd_kafka_Node_t*
+     * @since 2.3.0 of librdkafka
+     */
+    public static function rd_kafka_DescribeCluster_result_controller(?\FFI\CData $result): ?\FFI\CData
+    {
+        return static::getFFI()->rd_kafka_DescribeCluster_result_controller($result);
+    }
+
+    /**
+     * @param \FFI\CData|null $result const rd_kafka_DescribeCluster_result_t*
+     * @return string|null const char*
+     * @since 2.3.0 of librdkafka
+     */
+    public static function rd_kafka_DescribeCluster_result_cluster_id(?\FFI\CData $result): ?string
+    {
+        return static::getFFI()->rd_kafka_DescribeCluster_result_cluster_id($result);
+    }
+
+    /**
+     * @param \FFI\CData|null $grpdesc const rd_kafka_ConsumerGroupDescription_t*
+     * @param \FFI\CData|null $cntp size_t*
+     * @return \FFI\CData|null const rd_kafka_AclOperation_t*
+     * @since 2.3.0 of librdkafka
+     */
+    public static function rd_kafka_ConsumerGroupDescription_authorized_operations(?\FFI\CData $grpdesc, ?\FFI\CData $cntp): ?\FFI\CData
+    {
+        return static::getFFI()->rd_kafka_ConsumerGroupDescription_authorized_operations($grpdesc, $cntp);
+    }
+
+    /**
+     * @param \FFI\CData|null $result_info const rd_kafka_ListOffsetsResultInfo_t*
+     * @return \FFI\CData|null const rd_kafka_topic_partition_t*
+     * @since 2.3.0 of librdkafka
+     */
+    public static function rd_kafka_ListOffsetsResultInfo_topic_partition(?\FFI\CData $result_info): ?\FFI\CData
+    {
+        return static::getFFI()->rd_kafka_ListOffsetsResultInfo_topic_partition($result_info);
+    }
+
+    /**
+     * @param \FFI\CData|null $result_info const rd_kafka_ListOffsetsResultInfo_t*
+     * @return int|null int64_t
+     * @since 2.3.0 of librdkafka
+     */
+    public static function rd_kafka_ListOffsetsResultInfo_timestamp(?\FFI\CData $result_info): ?int
+    {
+        return static::getFFI()->rd_kafka_ListOffsetsResultInfo_timestamp($result_info);
+    }
+
+    /**
+     * @param \FFI\CData|null $result const rd_kafka_ListOffsets_result_t*
+     * @param \FFI\CData|null $cntp size_t*
+     * @return \FFI\CData|null const rd_kafka_ListOffsetsResultInfo_t**
+     * @since 2.3.0 of librdkafka
+     */
+    public static function rd_kafka_ListOffsets_result_infos(?\FFI\CData $result, ?\FFI\CData $cntp): ?\FFI\CData
+    {
+        return static::getFFI()->rd_kafka_ListOffsets_result_infos($result, $cntp);
+    }
+
+    /**
+     * @param \FFI\CData|null $rk rd_kafka_t*
+     * @param \FFI\CData|null $topic_partitions rd_kafka_topic_partition_list_t*
+     * @param \FFI\CData|null $options const rd_kafka_AdminOptions_t*
+     * @param \FFI\CData|null $rkqu rd_kafka_queue_t*
+     * @since 2.3.0 of librdkafka
+     */
+    public static function rd_kafka_ListOffsets(?\FFI\CData $rk, ?\FFI\CData $topic_partitions, ?\FFI\CData $options, ?\FFI\CData $rkqu): void
+    {
+        static::getFFI()->rd_kafka_ListOffsets($rk, $topic_partitions, $options, $rkqu);
+    }
+
+    /**
+     * @param \FFI\CData|null $mcluster rd_kafka_mock_cluster_t*
+     * @since 2.3.0 of librdkafka
+     */
+    public static function rd_kafka_mock_start_request_tracking(?\FFI\CData $mcluster): void
+    {
+        static::getFFI()->rd_kafka_mock_start_request_tracking($mcluster);
+    }
+
+    /**
+     * @param \FFI\CData|null $mcluster rd_kafka_mock_cluster_t*
+     * @since 2.3.0 of librdkafka
+     */
+    public static function rd_kafka_mock_stop_request_tracking(?\FFI\CData $mcluster): void
+    {
+        static::getFFI()->rd_kafka_mock_stop_request_tracking($mcluster);
+    }
+
+    /**
+     * @param \FFI\CData|null $mreq rd_kafka_mock_request_t*
+     * @since 2.3.0 of librdkafka
+     */
+    public static function rd_kafka_mock_request_destroy(?\FFI\CData $mreq): void
+    {
+        static::getFFI()->rd_kafka_mock_request_destroy($mreq);
+    }
+
+    /**
+     * @param \FFI\CData|null $mreq rd_kafka_mock_request_t*
+     * @return int|null int32_t
+     * @since 2.3.0 of librdkafka
+     */
+    public static function rd_kafka_mock_request_id(?\FFI\CData $mreq): ?int
+    {
+        return static::getFFI()->rd_kafka_mock_request_id($mreq);
+    }
+
+    /**
+     * @param \FFI\CData|null $mreq rd_kafka_mock_request_t*
+     * @return int|null int16_t
+     * @since 2.3.0 of librdkafka
+     */
+    public static function rd_kafka_mock_request_api_key(?\FFI\CData $mreq): ?int
+    {
+        return static::getFFI()->rd_kafka_mock_request_api_key($mreq);
+    }
+
+    /**
+     * @param \FFI\CData|null $mreq rd_kafka_mock_request_t*
+     * @return int|null int64_t
+     * @since 2.3.0 of librdkafka
+     */
+    public static function rd_kafka_mock_request_timestamp(?\FFI\CData $mreq): ?int
+    {
+        return static::getFFI()->rd_kafka_mock_request_timestamp($mreq);
+    }
+
+    /**
+     * @param \FFI\CData|null $mcluster rd_kafka_mock_cluster_t*
+     * @param \FFI\CData|null $cntp size_t*
+     * @return \FFI\CData|null rd_kafka_mock_request_t**
+     * @since 2.3.0 of librdkafka
+     */
+    public static function rd_kafka_mock_get_requests(?\FFI\CData $mcluster, ?\FFI\CData $cntp): ?\FFI\CData
+    {
+        return static::getFFI()->rd_kafka_mock_get_requests($mcluster, $cntp);
+    }
+
+    /**
+     * @param \FFI\CData|null $mcluster rd_kafka_mock_cluster_t*
+     * @since 2.3.0 of librdkafka
+     */
+    public static function rd_kafka_mock_clear_requests(?\FFI\CData $mcluster): void
+    {
+        static::getFFI()->rd_kafka_mock_clear_requests($mcluster);
     }
 }

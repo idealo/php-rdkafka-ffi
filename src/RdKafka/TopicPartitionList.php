@@ -54,7 +54,7 @@ class TopicPartitionList implements Iterator, Countable
                 $metadata = $item->getMetadata();
                 $metadataNative = Library::new('char[' . $item->getMetadataSize() . ']', false, true);
                 FFI::memcpy($metadataNative, $metadata, $item->getMetadataSize());
-                $nativeTopicPartition->metadata = FFI::cast('char*', $metadataNative);
+                $nativeTopicPartition->metadata = Library::cast('char*', $metadataNative);
                 $nativeTopicPartition->metadata_size = $item->getMetadataSize();
             }
         }

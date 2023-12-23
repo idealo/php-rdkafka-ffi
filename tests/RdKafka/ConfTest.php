@@ -218,24 +218,26 @@ class ConfTest extends TestCase
 
     public function testSetErrorCb(): void
     {
-        $errorCallbackStack = [];
+        $errorCallbackStack = new class {
+            public $stack = [];
+        };
 
         $conf = new Conf();
         $conf->set('log_level', (string) LOG_EMERG);
         $conf->set('bootstrap.servers', 'unknown');
         $conf->setErrorCb(
-            function (Consumer $consumer, $err, $reason, $opaque = null) use (&$errorCallbackStack): void {
-                $errorCallbackStack[] = $err;
+            function (Consumer $consumer, $err, $reason, $opaque = null) use ($errorCallbackStack): void {
+                $errorCallbackStack->stack[] = $err;
             }
         );
 
         $consumer = new Consumer($conf);
         do {
             $consumer->poll(0);
-        } while (\count($errorCallbackStack) < 2);
+        } while (\count($errorCallbackStack->stack) < 2);
 
-        $this->assertSame(RD_KAFKA_RESP_ERR__RESOLVE, $errorCallbackStack[0]);
-        $this->assertSame(RD_KAFKA_RESP_ERR__ALL_BROKERS_DOWN, $errorCallbackStack[1]);
+        $this->assertSame(RD_KAFKA_RESP_ERR__RESOLVE, $errorCallbackStack->stack[0]);
+        $this->assertSame(RD_KAFKA_RESP_ERR__ALL_BROKERS_DOWN, $errorCallbackStack->stack[1]);
     }
 
     /**
@@ -245,37 +247,42 @@ class ConfTest extends TestCase
     {
         $expectedOpaque = new \stdClass();
 
-        $opaqueCallbackStack = [];
+        $opaqueCallbackStack = new class {
+            public $stack = [];
+        };
 
         $conf = new Conf();
         $conf->set('log_level', (string) LOG_EMERG);
         $conf->set('bootstrap.servers', 'unknown');
         $conf->setOpaque($expectedOpaque);
         $conf->setErrorCb(
-            function (Consumer $consumer, int $err, string $reason, $opaque = null) use (&$opaqueCallbackStack): void {
-                $opaqueCallbackStack[] = $opaque;
+            function (Consumer $consumer, int $err, string $reason, $opaque = null) use ($opaqueCallbackStack): void {
+                $opaqueCallbackStack->stack[] = $opaque;
             }
         );
 
         $consumer = new Consumer($conf);
+        $consumer->getOpaque();
         do {
             $consumer->poll(0);
-        } while (\count($opaqueCallbackStack) < 2);
+        } while (\count($opaqueCallbackStack->stack) < 2);
 
-        $this->assertSame($expectedOpaque, $opaqueCallbackStack[0]);
-        $this->assertSame($expectedOpaque, $opaqueCallbackStack[1]);
+        $this->assertSame($expectedOpaque, $opaqueCallbackStack->stack[0]);
+        $this->assertSame($expectedOpaque, $opaqueCallbackStack->stack[1]);
     }
 
     public function testSetDrMsgCb(): void
     {
-        $drMsgCallbackStack = [];
+        $drMsgCallbackStack = new class {
+            public $stack = [];
+        };
 
         $conf = new Conf();
         $conf->set('bootstrap.servers', KAFKA_BROKERS);
         $conf->set('batch.num.messages', (string) 1);
         $conf->setDrMsgCb(
-            function ($producer, $message) use (&$drMsgCallbackStack): void {
-                $drMsgCallbackStack[] = [
+            function ($producer, $message) use ($drMsgCallbackStack): void {
+                $drMsgCallbackStack->stack[] = [
                     'producer' => $producer,
                     'message' => $message,
                 ];
@@ -288,11 +295,11 @@ class ConfTest extends TestCase
         $producerTopic->produce(0, 0, __METHOD__ . '2');
         $producer->poll(KAFKA_TEST_TIMEOUT_MS);
 
-        $this->assertCount(2, $drMsgCallbackStack);
-        $this->assertSame($producer, $drMsgCallbackStack[0]['producer']);
-        $this->assertSame(__METHOD__ . '1', $drMsgCallbackStack[0]['message']->payload);
-        $this->assertSame($producer, $drMsgCallbackStack[1]['producer']);
-        $this->assertSame(__METHOD__ . '2', $drMsgCallbackStack[1]['message']->payload);
+        $this->assertCount(2, $drMsgCallbackStack->stack);
+        $this->assertSame($producer, $drMsgCallbackStack->stack[0]['producer']);
+        $this->assertSame(__METHOD__ . '1', $drMsgCallbackStack->stack[0]['message']->payload);
+        $this->assertSame($producer, $drMsgCallbackStack->stack[1]['producer']);
+        $this->assertSame(__METHOD__ . '2', $drMsgCallbackStack->stack[1]['message']->payload);
 
         $producer->flush(KAFKA_TEST_TIMEOUT_MS);
     }
@@ -304,15 +311,17 @@ class ConfTest extends TestCase
     {
         $expectedOpaque = new \stdClass();
 
-        $drMsgCallbackStack = [];
+        $drMsgCallbackStack = new class {
+            public $stack = [];
+        };
 
         $conf = new Conf();
         $conf->set('bootstrap.servers', KAFKA_BROKERS);
         $conf->set('batch.num.messages', (string) 1);
         $conf->setOpaque($expectedOpaque);
         $conf->setDrMsgCb(
-            function (Producer $producer, Message $message, $opaque = null) use (&$drMsgCallbackStack): void {
-                $drMsgCallbackStack[] = [
+            function (Producer $producer, Message $message, $opaque = null) use ($drMsgCallbackStack): void {
+                $drMsgCallbackStack->stack[] = [
                     'producer' => $producer,
                     'opaque' => $opaque,
                 ];
@@ -325,11 +334,11 @@ class ConfTest extends TestCase
         $producerTopic->produce(0, 0, __METHOD__ . '2');
         $producer->poll(KAFKA_TEST_TIMEOUT_MS);
 
-        $this->assertCount(2, $drMsgCallbackStack);
-        $this->assertSame($producer, $drMsgCallbackStack[0]['producer']);
-        $this->assertSame($expectedOpaque, $drMsgCallbackStack[0]['opaque']);
-        $this->assertSame($producer, $drMsgCallbackStack[1]['producer']);
-        $this->assertSame($expectedOpaque, $drMsgCallbackStack[1]['opaque']);
+        $this->assertCount(2, $drMsgCallbackStack->stack);
+        $this->assertSame($producer, $drMsgCallbackStack->stack[0]['producer']);
+        $this->assertSame($expectedOpaque, $drMsgCallbackStack->stack[0]['opaque']);
+        $this->assertSame($producer, $drMsgCallbackStack->stack[1]['producer']);
+        $this->assertSame($expectedOpaque, $drMsgCallbackStack->stack[1]['opaque']);
 
         $producer->flush(KAFKA_TEST_TIMEOUT_MS);
     }
@@ -393,7 +402,10 @@ class ConfTest extends TestCase
      */
     public function testSetRebalanceCb(): void
     {
-        $rebalanceCallbackStack = [];
+        $rebalanceCallbackStack = new class {
+            public $stack = [];
+        };
+
         $failedTimeoutSec = 30;
 
         $conf = new Conf();
@@ -401,8 +413,8 @@ class ConfTest extends TestCase
         $conf->set('group.id', __METHOD__ . random_int(0, 99999999));
         $conf->set('bootstrap.servers', KAFKA_BROKERS);
         $conf->setRebalanceCb(
-            function (KafkaConsumer $consumer, int $err, array $topicPartitions, $opaque = null) use (&$rebalanceCallbackStack): void {
-                $rebalanceCallbackStack[] = [
+            function (KafkaConsumer $consumer, int $err, array $topicPartitions, $opaque = null) use ($rebalanceCallbackStack): void {
+                $rebalanceCallbackStack->stack[] = [
                     'consumer' => $consumer,
                     'err' => $err,
                     'partitions' => $topicPartitions,
@@ -436,26 +448,26 @@ class ConfTest extends TestCase
             $consumer2->consume((int) 50);
             $consumer3->consume((int) 50);
             $durationSec = time() - $startTime;
-        } while (\count($rebalanceCallbackStack) < 3 && $durationSec < $failedTimeoutSec);
+        } while (\count($rebalanceCallbackStack->stack) < 3 && $durationSec < $failedTimeoutSec);
 
         $this->assertLessThan($failedTimeoutSec, $durationSec, 'adding consumer took too long');
 
-        $assignedConsumers = array_column($rebalanceCallbackStack, 'consumer');
+        $assignedConsumers = array_column($rebalanceCallbackStack->stack, 'consumer');
         $this->assertContains($consumer1, $assignedConsumers);
         $this->assertContains($consumer2, $assignedConsumers);
         $this->assertContains($consumer3, $assignedConsumers);
 
-        $this->assertSame(RD_KAFKA_RESP_ERR__ASSIGN_PARTITIONS, $rebalanceCallbackStack[0]['err']);
-        $this->assertGreaterThanOrEqual(1, $rebalanceCallbackStack[0]['partitions']);
+        $this->assertSame(RD_KAFKA_RESP_ERR__ASSIGN_PARTITIONS, $rebalanceCallbackStack->stack[0]['err']);
+        $this->assertGreaterThanOrEqual(1, $rebalanceCallbackStack->stack[0]['partitions']);
 
-        $this->assertSame(RD_KAFKA_RESP_ERR__ASSIGN_PARTITIONS, $rebalanceCallbackStack[1]['err']);
-        $this->assertGreaterThanOrEqual(1, $rebalanceCallbackStack[1]['partitions']);
+        $this->assertSame(RD_KAFKA_RESP_ERR__ASSIGN_PARTITIONS, $rebalanceCallbackStack->stack[1]['err']);
+        $this->assertGreaterThanOrEqual(1, $rebalanceCallbackStack->stack[1]['partitions']);
 
-        $this->assertSame(RD_KAFKA_RESP_ERR__ASSIGN_PARTITIONS, $rebalanceCallbackStack[2]['err']);
-        $this->assertGreaterThanOrEqual(1, $rebalanceCallbackStack[2]['partitions']);
+        $this->assertSame(RD_KAFKA_RESP_ERR__ASSIGN_PARTITIONS, $rebalanceCallbackStack->stack[2]['err']);
+        $this->assertGreaterThanOrEqual(1, $rebalanceCallbackStack->stack[2]['partitions']);
 
         // reset stack
-        $rebalanceCallbackStack = [];
+        $rebalanceCallbackStack->stack = [];
 
         // revoke
         $consumer1->close();
@@ -466,23 +478,23 @@ class ConfTest extends TestCase
         do {
             usleep(50 * 1000);
             $durationSec = time() - $startTime;
-        } while (\count($rebalanceCallbackStack) < 3 && $durationSec < $failedTimeoutSec);
+        } while (\count($rebalanceCallbackStack->stack) < 3 && $durationSec < $failedTimeoutSec);
 
         $this->assertLessThan($failedTimeoutSec, $durationSec, 'removing consumer took too long');
 
-        $revokedConsumers = array_column($rebalanceCallbackStack, 'consumer');
+        $revokedConsumers = array_column($rebalanceCallbackStack->stack, 'consumer');
         $this->assertContains($consumer1, $revokedConsumers);
         $this->assertContains($consumer2, $revokedConsumers);
         $this->assertContains($consumer3, $revokedConsumers);
 
-        $this->assertSame(RD_KAFKA_RESP_ERR__REVOKE_PARTITIONS, $rebalanceCallbackStack[0]['err']);
-        $this->assertGreaterThanOrEqual(1, $rebalanceCallbackStack[0]['partitions']);
+        $this->assertSame(RD_KAFKA_RESP_ERR__REVOKE_PARTITIONS, $rebalanceCallbackStack->stack[0]['err']);
+        $this->assertGreaterThanOrEqual(1, $rebalanceCallbackStack->stack[0]['partitions']);
 
-        $this->assertSame(RD_KAFKA_RESP_ERR__REVOKE_PARTITIONS, $rebalanceCallbackStack[1]['err']);
-        $this->assertGreaterThanOrEqual(1, $rebalanceCallbackStack[1]['partitions']);
+        $this->assertSame(RD_KAFKA_RESP_ERR__REVOKE_PARTITIONS, $rebalanceCallbackStack->stack[1]['err']);
+        $this->assertGreaterThanOrEqual(1, $rebalanceCallbackStack->stack[1]['partitions']);
 
-        $this->assertSame(RD_KAFKA_RESP_ERR__REVOKE_PARTITIONS, $rebalanceCallbackStack[2]['err']);
-        $this->assertGreaterThanOrEqual(1, $rebalanceCallbackStack[2]['partitions']);
+        $this->assertSame(RD_KAFKA_RESP_ERR__REVOKE_PARTITIONS, $rebalanceCallbackStack->stack[2]['err']);
+        $this->assertGreaterThanOrEqual(1, $rebalanceCallbackStack->stack[2]['partitions']);
     }
 
     /**
@@ -545,7 +557,9 @@ class ConfTest extends TestCase
 
     public function testSetOffsetCommitCb(): void
     {
-        $offsetCommitCallbackStack = [];
+        $offsetCommitCallbackStack = new class {
+            public $stack = [];
+        };
 
         $conf = new Conf();
         $conf->set('group.id', __METHOD__ . random_int(0, 99999999));
@@ -556,8 +570,8 @@ class ConfTest extends TestCase
                 int $err,
                 array $topicPartitions,
                 $opaque = null
-            ) use (&$offsetCommitCallbackStack): void {
-                $offsetCommitCallbackStack[] = [
+            ) use ($offsetCommitCallbackStack): void {
+                $offsetCommitCallbackStack->stack[] = [
                     'consumer' => $consumer,
                     'err' => $err,
                     'topicPartitions' => $topicPartitions,
@@ -572,9 +586,9 @@ class ConfTest extends TestCase
         // trigger callback
         $consumer->consume(0);
 
-        $this->assertSame($consumer, $offsetCommitCallbackStack[0]['consumer']);
-        $this->assertSame(0, $offsetCommitCallbackStack[0]['err']);
-        $this->assertSame(20, $offsetCommitCallbackStack[0]['topicPartitions'][0]->getOffset());
+        $this->assertSame($consumer, $offsetCommitCallbackStack->stack[0]['consumer']);
+        $this->assertSame(0, $offsetCommitCallbackStack->stack[0]['err']);
+        $this->assertSame(20, $offsetCommitCallbackStack->stack[0]['topicPartitions'][0]->getOffset());
     }
 
     /**

@@ -3,6 +3,8 @@ headerFiles:
   - rdkafka_mock.h
 headerSearchPaths:
   - resources/ffigen/tmp
+  - /usr/include/aarch64-linux-gnu
+  - /opt/homebrew/include
 libraryFile: librdkafka.so.1
 generatorClass: RdKafka\FFIGen\MultiVersionGenerator
 outputPath: resources/ffigen/tmp
