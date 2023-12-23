@@ -5,18 +5,26 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [Unreleased]
 
+### Added
+
+- Add support for PHP 8.3 and librdkafka 2.1.0, 2.1.1, 2.2.0, 2.3.0
+
+### Fixed
+
+- Fix handling of native transaction error lifecycle
+
 ## [0.5.0]
 
 This pre-release improves compatible with the [PHP RdKafka extension](https://github.com/arnaud-lb/php-rdkafka) ^5.0 and ^6.0.
 
 Note: compatibility with PHP RdKafka extension ^4.0 is no longer supported.
 
-## Added
+### Added
 
 - Add explicit support for PHP 8.1 and 8.2
 - Add support for librdkafka v1.6.2, v1.9.0, v1.9.1, v1.9.2, v2.0.0, v2.0.1, v2.0.2
 
-## Fixed
+### Fixed
 
 - Fix Message header & len type handling
   - Message::headers is now always of type array
