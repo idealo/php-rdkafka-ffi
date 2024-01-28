@@ -9,7 +9,6 @@ use FFI;
 use FFI\CData;
 use Iterator;
 use RdKafka\FFI\Library;
-
 use function array_key_exists;
 use function count;
 use function current;

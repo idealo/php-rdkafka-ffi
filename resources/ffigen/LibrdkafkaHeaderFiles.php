@@ -13,7 +13,6 @@ class LibrdkafkaHeaderFiles
     private const RELEASE_URL = 'https://api.github.com/repos/confluentinc/librdkafka/releases';
     private const DOWNLOAD_BASE_URL_TEMPLATE = 'https://raw.githubusercontent.com/confluentinc/librdkafka/%s/src';
 
-
     private ConfigInterface $config;
     private ?array $supportedVersions;
     private Filesystem $filesystem;

@@ -6,7 +6,6 @@ namespace RdKafka;
 
 use InvalidArgumentException;
 use RdKafka\FFI\Library;
-
 use function sprintf;
 
 class KafkaConsumerTopic extends Topic

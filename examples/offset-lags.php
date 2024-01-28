@@ -96,7 +96,6 @@ do {
         continue;
     }
 
-
     // apply tombstones
     if ($message->payload === null) {
         echo '0';

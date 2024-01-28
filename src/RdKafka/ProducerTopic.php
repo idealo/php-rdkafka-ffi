@@ -7,7 +7,6 @@ namespace RdKafka;
 use InvalidArgumentException;
 use RdKafka\FFI\Library;
 use RdKafka\FFI\OpaqueMap;
-
 use function sprintf;
 use function strlen;
 

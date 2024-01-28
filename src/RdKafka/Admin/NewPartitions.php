@@ -8,7 +8,6 @@ use FFI;
 use FFI\CData;
 use RdKafka\Exception;
 use RdKafka\FFI\Library;
-
 use function array_values;
 use function count;
 

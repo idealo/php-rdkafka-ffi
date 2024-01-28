@@ -9,7 +9,6 @@ use InvalidArgumentException;
 use RdKafka;
 use RdKafka\FFI\Library;
 use TypeError;
-
 use function count;
 use function is_array;
 use function is_int;

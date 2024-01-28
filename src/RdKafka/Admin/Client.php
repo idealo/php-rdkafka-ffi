@@ -16,7 +16,6 @@ use RdKafka\Producer;
 use RdKafka\Queue;
 use RdKafka\Topic;
 use RdKafka\TopicPartition;
-
 use function array_values;
 use function count;
 use function sprintf;

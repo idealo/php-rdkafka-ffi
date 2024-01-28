@@ -9,7 +9,6 @@ use FFI\CData;
 use FFI\CType;
 use FFI\Exception as FFIException;
 use RuntimeException;
-
 use function file_put_contents;
 use function ini_get;
 use function sprintf;
