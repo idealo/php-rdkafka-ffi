@@ -96,6 +96,7 @@ services:
     image: php83-librdkafka-ffi:latest
     volumes:
       - .:/app
+      - ./resources/docker/php83-librdkafka-ffi/php.ini:/usr/local/etc/php/php.ini
     depends_on:
       - kafka
     networks:
