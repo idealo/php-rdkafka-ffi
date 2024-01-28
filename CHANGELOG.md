@@ -5,6 +5,8 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [Unreleased]
 
+## [0.6.0]
+
 ### Added
 
 - Add support for PHP 8.3 and librdkafka 2.1.0, 2.1.1, 2.2.0, 2.3.0
@@ -98,7 +100,8 @@ Special thanks to [@siad007](https://github.com/siad007) and [@carusogabriel]( h
 - Add examples and basic documentation
 - Add benchmarks
 
-[Unreleased]: https://github.com/idealo/php-rdkafka-ffi/compare/v0.5.0...HEAD
+[Unreleased]: https://github.com/idealo/php-rdkafka-ffi/compare/v0.6.0...HEAD
+[0.6.0]: https://github.com/idealo/php-rdkafka-ffi/compare/v0.5.0...v0.6.0
 [0.5.0]: https://github.com/idealo/php-rdkafka-ffi/compare/v0.4.0...v0.5.0
 [0.4.0]: https://github.com/idealo/php-rdkafka-ffi/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/idealo/php-rdkafka-ffi/compare/v0.2.0...v0.3.0
