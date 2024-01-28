@@ -50,7 +50,8 @@ jobs:
 
       - name: Cache librdkafka ${{ matrix.librdkafka }} build
         id: librdkafka-build-cache
-        uses: actions/cache@v34
+        uses: actions/cache@v4
+        with:
           path: ~/build-cache/librdkafka
           key: ${{ runner.os }}-librdkafka-${{ matrix.librdkafka }}
 
