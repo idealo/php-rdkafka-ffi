@@ -68,7 +68,7 @@ jobs:
         run: |
           export PATH=$PWD/librdkafka.redist.${{ matrix.librdkafka }}/runtimes/win-x64/native:$PATH
           composer test-init
-          vendor/bin/phpunit --verbose --debug;
+          vendor/bin/phpunit --debug;
 
       - name: Stop kafka
         run: |
