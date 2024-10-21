@@ -1,4 +1,4 @@
-FROM php:8.2-cli
+FROM php:8.4-rc-cli
 
 # enable ffi and install librdkafka
 ARG LIBRDKAFKA_VERSION=v2.6.0
@@ -19,7 +19,7 @@ RUN set -e; \
     rm -rf /tmp/*;
 
 # install xdebug
-ARG XDEBUG_VERSION=stable
+ARG XDEBUG_VERSION=beta
 RUN pecl install xdebug-${XDEBUG_VERSION}; \
     docker-php-ext-enable xdebug;
 

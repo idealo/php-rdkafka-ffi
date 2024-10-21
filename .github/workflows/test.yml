@@ -13,11 +13,11 @@ jobs:
       matrix:
         include:
           - php: '8.1'
-            librdkafka: 'v2.3.0'
+            librdkafka: 'v2.6.0'
             publish: true
         exclude:
           - php: '8.1'
-            librdkafka: 'v2.3.0'
+            librdkafka: 'v2.6.0'
             publish: false
         php:
           - '7.4'
@@ -25,7 +25,11 @@ jobs:
           - '8.1'
           - '8.2'
           - '8.3'
+          - '8.4'
         librdkafka:
+          - 'v2.6.0'
+          - 'v2.5.3'
+          - 'v2.4.0'
           - 'v2.3.0'
           - 'v2.2.0'
           - 'v2.1.1'
@@ -46,14 +50,14 @@ jobs:
     continue-on-error: ${{ matrix.librdkafka == 'master' }}
     services:
       zookeeper:
-        image: confluentinc/cp-zookeeper:7.5.3
+        image: confluentinc/cp-zookeeper:7.7.1
         ports:
           - 2181:2181
         env:
           ZOOKEEPER_CLIENT_PORT: 2181
           ZOOKEEPER_TICK_TIME: 2000
       kafka:
-        image: confluentinc/cp-kafka:7.5.3
+        image: confluentinc/cp-kafka:7.7.1
         ports:
           - 9092:9092
         env:

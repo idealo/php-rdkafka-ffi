@@ -1,11 +1,9 @@
-version: '3'
-
 networks:
   php-rdkafka-ffi:
 
 services:
   zookeeper:
-    image: confluentinc/cp-zookeeper:7.5.3
+    image: confluentinc/cp-zookeeper:7.7.1
     ports:
       - 2181:2181
     environment:
@@ -15,7 +13,7 @@ services:
       - php-rdkafka-ffi
 
   kafka:
-    image: confluentinc/cp-kafka:7.5.3
+    image: confluentinc/cp-kafka:7.7.1
     ports:
       - 9092:9092
     hostname: kafka
@@ -97,6 +95,18 @@ services:
     volumes:
       - .:/app
       - ./resources/docker/php83-librdkafka-ffi/php.ini:/usr/local/etc/php/php.ini
+    depends_on:
+      - kafka
+    networks:
+      - php-rdkafka-ffi
+
+  php84:
+    build:
+      context: resources/docker/php84-librdkafka-ffi
+    image: php84-librdkafka-ffi:latest
+    volumes:
+      - .:/app
+      - ./resources/docker/php84-librdkafka-ffi/php.ini:/usr/local/etc/php/php.ini
     depends_on:
       - kafka
     networks:

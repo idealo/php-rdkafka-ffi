@@ -10,7 +10,7 @@ use Symfony\Component\Filesystem\Filesystem;
 
 class LibrdkafkaHeaderFiles
 {
-    private const RELEASE_URL = 'https://api.github.com/repos/confluentinc/librdkafka/releases';
+    private const RELEASE_URL = 'https://api.github.com/repos/confluentinc/librdkafka/releases?per_page=100';
     private const DOWNLOAD_BASE_URL_TEMPLATE = 'https://raw.githubusercontent.com/confluentinc/librdkafka/%s/src';
 
     private ConfigInterface $config;
@@ -94,7 +94,7 @@ class LibrdkafkaHeaderFiles
         foreach ($releases as $release) {
             if ($release->prerelease === false) {
                 $version = str_replace('v', '', $release->tag_name);
-                if (Comparator::greaterThanOrEqualTo($version, '1.0.0') && Comparator::lessThan($version, '2.4.0')) {
+                if (Comparator::greaterThanOrEqualTo($version, '1.0.0') && Comparator::lessThan($version, '2.7.0')) {
                     $supportedVersions[$version] = sprintf(
                         self::DOWNLOAD_BASE_URL_TEMPLATE,
                         $release->tag_name

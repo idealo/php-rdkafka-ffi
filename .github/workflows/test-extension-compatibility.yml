@@ -14,19 +14,19 @@ jobs:
         php:
           - '8.1'
         librdkafka:
-          - 'v1.9.2'
+          - 'v2.6.0'
         rdkafka:
           - '6.x'
     services:
       zookeeper:
-        image: confluentinc/cp-zookeeper:7.5.3
+        image: confluentinc/cp-zookeeper:7.7.1
         ports:
           - 2181:2181
         env:
           ZOOKEEPER_CLIENT_PORT: 2181
           ZOOKEEPER_TICK_TIME: 2000
       kafka:
-        image: confluentinc/cp-kafka:7.5.3
+        image: confluentinc/cp-kafka:7.7.1
         ports:
           - 9092:9092
         env:

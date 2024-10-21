@@ -45,6 +45,13 @@ const RD_KAFKA_RESP_ERR_END_ALL = 82;
 const RD_KAFKA_ADMIN_OP__CNT = 6;
 
 /**
+ * <p>Number of resource types defined </p>
+ * @since 1.0.1 of librdkafka
+ * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#acca83a66d7783ff7683ed2691cc907c9
+ */
+const RD_KAFKA_RESOURCE__CNT = 5;
+
+/**
  * rdkafka.h, rdkafka_mock.h
  * @since 1.0.1 of librdkafka
  */

@@ -7,9 +7,12 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [0.6.0]
 
+This pre-release improves compatible with the [PHP RdKafka extension](https://github.com/arnaud-lb/php-rdkafka) ^5.0 and ^6.0.
+
 ### Added
 
-- Add support for PHP 8.3 and librdkafka 2.1.0, 2.1.1, 2.2.0, 2.3.0
+- Add support for PHP 8.3 and 8.4
+- Add support for librdkafka 2.1.0, 2.1.1, 2.2.0, 2.3.0, 2.4.0, 2.5.0, 2.5.3, 2.6.0
 
 ### Fixed
 
