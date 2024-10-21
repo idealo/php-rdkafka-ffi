@@ -6,6 +6,7 @@ namespace RdKafka\FFI;
 
 use FFI;
 use PHPUnit\Framework\TestCase;
+use RequireVersionTrait;
 
 /**
  * @covers \RdKafka\FFI\Library
@@ -14,7 +15,7 @@ use PHPUnit\Framework\TestCase;
  */
 class LibraryPreloadTest extends TestCase
 {
-    use \RequireVersionTrait;
+    use RequireVersionTrait;
 
     protected function tearDown(): void
     {

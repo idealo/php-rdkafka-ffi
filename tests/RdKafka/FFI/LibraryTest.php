@@ -6,6 +6,7 @@ namespace RdKafka\FFI;
 
 use FFI;
 use PHPUnit\Framework\TestCase;
+use RequireVersionTrait;
 use RuntimeException;
 
 /**
@@ -15,7 +16,7 @@ use RuntimeException;
  */
 class LibraryTest extends TestCase
 {
-    use \RequireVersionTrait;
+    use RequireVersionTrait;
 
     protected function tearDown(): void
     {

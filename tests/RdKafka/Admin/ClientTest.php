@@ -10,6 +10,7 @@ use RdKafka\Conf;
 use RdKafka\KafkaConsumer;
 use RdKafka\Producer;
 use RdKafka\TopicPartition;
+use RequireVersionTrait;
 
 /**
  * @covers \RdKafka\Admin\AlterConfigsOptions
@@ -37,7 +38,7 @@ use RdKafka\TopicPartition;
  */
 class ClientTest extends TestCase
 {
-    use \RequireVersionTrait;
+    use RequireVersionTrait;
 
     public static function setUpBeforeClass(): void
     {

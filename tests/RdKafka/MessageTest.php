@@ -5,13 +5,14 @@ declare(strict_types=1);
 namespace RdKafka;
 
 use PHPUnit\Framework\TestCase;
+use RequireVersionTrait;
 
 /**
  * @covers \RdKafka\Message
  */
 class MessageTest extends TestCase
 {
-    use \RequireVersionTrait;
+    use RequireVersionTrait;
 
     private ?Message $message;
     private Message $producedMessage;
