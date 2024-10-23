@@ -105,9 +105,9 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
-          coverage: pcov
+          coverage: xdebug
           extensions: ffi, pcntl
-          ini-values: "${{ matrix.php == '8.3' && 'zend.max_allowed_stack_size=256k' || '' }}"
+          ini-values: "${{ matrix.php == '8.3' && 'zend.max_allowed_stack_size=-1' || '' }}"
 
       - name: Install dependencies
         uses: ramsey/composer-install@v2
