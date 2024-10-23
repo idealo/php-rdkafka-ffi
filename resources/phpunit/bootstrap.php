@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use RdKafka\FFI\Library;
 
 require __DIR__ . '/../../vendor/autoload.php';
