@@ -27,12 +27,12 @@ if (empty($options['t'])) {
 $conf = new Conf();
 $conf->set('bootstrap.servers', $options['b']);
 $client = Client::fromConf($conf);
-$client->setWaitForResultEventTimeout((int)$options['w']);
+$client->setWaitForResultEventTimeout((int) $options['w']);
 
 $results = $client->deleteTopics(
     [
         new DeleteTopic(
-            (string)$options['t']
+            (string) $options['t']
         ),
     ]
 );

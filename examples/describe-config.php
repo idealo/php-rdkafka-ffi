@@ -32,7 +32,7 @@ $client->setWaitForResultEventTimeout(2000);
 
 $results = $client->describeConfigs(
     [
-        new ConfigResource((int)$options['t'], (string)$options['v']),
+        new ConfigResource((int) $options['t'], (string) $options['v']),
     ]
 );
 
