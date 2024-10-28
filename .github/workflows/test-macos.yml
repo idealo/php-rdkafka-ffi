@@ -25,6 +25,7 @@ jobs:
       COMPOSER_AUTH: ${{ secrets.COMPOSER_AUTH }}
       GH_TOKEN: ${{ secrets.GH_TOKEN }}
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
+      LIBRDKAFKA_LIBRARY_PATH: /opt/homebrew/lib/librdkafka.dylib
     steps:
       - name: Checkout
         uses: actions/checkout@v4

@@ -19,13 +19,17 @@ class LibraryPreloadTest extends TestCase
 
     protected function tearDown(): void
     {
-        Library::init();
+        Library::init(
+            Library::VERSION_AUTODETECT,
+            'RdKafka',
+            LIBRDKAFKA_LIBRARY_PATH
+        );
     }
 
     public function testPreloadWithInvalidCdef(): void
     {
         $this->expectException(\FFI\Exception::class);
-        Library::preload(Library::getLibraryVersion(), 'Any', null, 'invalid');
+        Library::preload(Library::getLibraryVersion(), __METHOD__, LIBRDKAFKA_LIBRARY_PATH, 'invalid');
     }
 
     /**
@@ -33,7 +37,7 @@ class LibraryPreloadTest extends TestCase
      */
     public function testPreload(): void
     {
-        $ffi = Library::preload();
+        $ffi = Library::preload(Library::getLibraryVersion(), __METHOD__, LIBRDKAFKA_LIBRARY_PATH);
 
         $this->assertInstanceOf(FFI::class, $ffi);
         $this->assertMatchesRegularExpression('/^\d+\.\d+\./', $ffi->rd_kafka_version_str());

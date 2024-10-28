@@ -20,7 +20,11 @@ class LibraryTest extends TestCase
 
     protected function tearDown(): void
     {
-        Library::init();
+        Library::init(
+            Library::VERSION_AUTODETECT,
+            'RdKafka',
+            LIBRDKAFKA_LIBRARY_PATH
+        );
     }
 
     public function testGetFFI(): void
