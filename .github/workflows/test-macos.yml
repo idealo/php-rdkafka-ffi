@@ -39,8 +39,8 @@ jobs:
       - name: Start Kafka
         shell: bash
         run: |
-          zookeeper-server-start -daemon /usr/local/etc/kafka/zookeeper.properties;
-          kafka-server-start -daemon /usr/local/etc/kafka/server.properties --override broker.id=111 --override advertised.listeners=${{ env.KAFKA_ADVERTISED_LISTENERS }};
+          zookeeper-server-start -daemon /opt/homebrew/etc/kafka/zookeeper.properties;
+          kafka-server-start -daemon /opt/homebrew/etc/kafka/server.properties --override broker.id=111 --override advertised.listeners=${{ env.KAFKA_ADVERTISED_LISTENERS }};
 
       - name: Install PHP ${{ matrix.php }}
         uses: shivammathur/setup-php@v2
