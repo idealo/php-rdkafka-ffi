@@ -3,9 +3,11 @@
 declare(strict_types=1);
 
 use RdKafka\Conf;
+use RdKafka\FFI\Library;
 use RdKafka\Producer;
 
 require_once dirname(__DIR__) . '/vendor/autoload.php';
+include '_init.php';
 
 $conf = new Conf();
 $conf->set('group.id', 'metadata');

@@ -7,6 +7,7 @@ use RdKafka\Admin\ConfigResource;
 use RdKafka\Conf;
 
 require_once dirname(__DIR__) . '/vendor/autoload.php';
+include '_init.php';
 
 $options = array_merge(
     [
@@ -31,7 +32,7 @@ $client->setWaitForResultEventTimeout(2000);
 
 $results = $client->describeConfigs(
     [
-        new ConfigResource((int) $options['t'], (string) $options['v']),
+        new ConfigResource((int)$options['t'], (string)$options['v']),
     ]
 );
 

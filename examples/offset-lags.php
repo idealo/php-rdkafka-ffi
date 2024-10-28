@@ -37,6 +37,8 @@ use RdKafka\KafkaConsumer;
 $composerLoader = require_once dirname(__DIR__) . '/vendor/autoload.php';
 $composerLoader->addPsr4('RdKafka\\Examples\\', __DIR__);
 
+include '_init.php';
+
 $conf = new Conf();
 $conf->set('bootstrap.servers', 'kafka:9092');
 $conf->set('group.id', 'consumer-offsets.dev');

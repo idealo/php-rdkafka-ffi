@@ -7,6 +7,7 @@ use RdKafka\Admin\NewTopic;
 use RdKafka\Conf;
 
 require_once dirname(__DIR__) . '/vendor/autoload.php';
+include '_init.php';
 
 $options = array_merge(
     [
@@ -28,16 +29,16 @@ if (empty($options['t'])) {
 $conf = new Conf();
 $conf->set('bootstrap.servers', $options['b']);
 $client = Client::fromConf($conf);
-$client->setWaitForResultEventTimeout((int) $options['w']);
+$client->setWaitForResultEventTimeout((int)$options['w']);
 $partitions = $options['p'];
 $replicationFactor = $options['r'];
 
 $results = $client->createTopics(
     [
         new NewTopic(
-            (string) $options['t'],
-            (int) $partitions,
-            (int) $replicationFactor
+            (string)$options['t'],
+            (int)$partitions,
+            (int)$replicationFactor
         ),
     ]
 );

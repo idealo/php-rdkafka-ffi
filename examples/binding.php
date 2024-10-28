@@ -5,6 +5,7 @@ declare(strict_types=1);
 use RdKafka\FFI\Library;
 
 require_once dirname(__DIR__) . '/vendor/autoload.php';
+include '_init.php';
 
 echo 'has method rd_kafka_conf_new:' . PHP_EOL;
 var_dump(Library::hasMethod('rd_kafka_conf_new'));

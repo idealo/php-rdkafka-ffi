@@ -8,6 +8,7 @@ use RdKafka\Producer;
 use RdKafka\TopicConf;
 
 require_once dirname(__DIR__) . '/vendor/autoload.php';
+include '_init.php';
 
 $conf = new Conf();
 $conf->set('bootstrap.servers', 'kafka:9092');

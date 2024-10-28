@@ -13,6 +13,7 @@ use RdKafka\Test\MockCluster;
 use RdKafka\TopicPartition;
 
 require_once dirname(__DIR__) . '/vendor/autoload.php';
+include '_init.php';
 
 $clusterConf = new Conf();
 $clusterConf->set('log_level', (string) LOG_DEBUG);
