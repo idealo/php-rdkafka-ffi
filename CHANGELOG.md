@@ -12,7 +12,7 @@ This pre-release improves compatible with the [PHP RdKafka extension](https://gi
 ### Added
 
 - Add support for PHP 8.3 and 8.4
-- Add support for librdkafka 2.1.0, 2.1.1, 2.2.0, 2.3.0, 2.4.0, 2.5.0, 2.5.3, 2.6.0
+- Add support for librdkafka 2.1.0, 2.1.1, 2.2.0, 2.3.0, 2.4.0, 2.5.0, 2.5.3, 2.6.0, 2.6.1
 
 ### Fixed
 
