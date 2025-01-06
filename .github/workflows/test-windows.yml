@@ -3,6 +3,7 @@ name: Build Windows
 on:
   push:
   pull_request:
+  workflow_dispatch:
 
 jobs:
   tests-windows:

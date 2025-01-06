@@ -3,6 +3,7 @@ name: Build macOS
 on:
   push:
   pull_request:
+  workflow_dispatch:
 
 jobs:
   tests-macos:
