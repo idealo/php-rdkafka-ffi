@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace RdKafka;
 
+use ConsumeTrait;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 
@@ -15,6 +16,8 @@ use PHPUnit\Framework\TestCase;
  */
 class TopicConfTest extends TestCase
 {
+    use ConsumeTrait;
+
     public function testDump(): void
     {
         $conf = new TopicConf();
@@ -88,25 +91,24 @@ class TopicConfTest extends TestCase
         $topic->produce(RD_KAFKA_PARTITION_UA, 0, 'test3', '3');
         // crc32 % 3 = 2
         $topic->produce(RD_KAFKA_PARTITION_UA, 0, 'test4', '1');
-        $producer->flush(KAFKA_TEST_TIMEOUT_MS);
+        $producer->flush(KAFKA_TEST_LONG_TIMEOUT_MS);
 
         $consumer = new Consumer($conf);
         $consumerTopic = $consumer->newTopic(KAFKA_TEST_TOPIC_PARTITIONS, $topicConf);
 
         $consumerTopic->consumeStart(1, rd_kafka_offset_tail(2));
-        $msg2 = $consumerTopic->consume(1, KAFKA_TEST_TIMEOUT_MS);
-        $msg3 = $consumerTopic->consume(1, KAFKA_TEST_TIMEOUT_MS);
+        $messages = $this->consumeMessagesWithConsumerTopic($consumerTopic, 1, 2);
         $consumerTopic->consumeStop(1);
 
+        $this->assertSame('test2', $messages[0]->payload);
+        $this->assertSame('test3', $messages[1]->payload);
+
         $consumerTopic->consumeStart(2, rd_kafka_offset_tail(2));
-        $msg1 = $consumerTopic->consume(2, KAFKA_TEST_TIMEOUT_MS);
-        $msg4 = $consumerTopic->consume(2, KAFKA_TEST_TIMEOUT_MS);
+        $messages = $this->consumeMessagesWithConsumerTopic($consumerTopic, 2, 2);
         $consumerTopic->consumeStop(2);
 
-        $this->assertSame('test1', $msg1->payload);
-        $this->assertSame('test2', $msg2->payload);
-        $this->assertSame('test3', $msg3->payload);
-        $this->assertSame('test4', $msg4->payload);
+        $this->assertSame('test1', $messages[0]->payload);
+        $this->assertSame('test4', $messages[1]->payload);
     }
 
     public function testSetPartitionerWithUnknownId(): void
@@ -139,22 +141,19 @@ class TopicConfTest extends TestCase
         $topic->produce(RD_KAFKA_PARTITION_UA, 0, 'test2', '2');
         $topic->produce(RD_KAFKA_PARTITION_UA, 0, 'test3', '3');
         $topic->produce(RD_KAFKA_PARTITION_UA, 0, 'test4', '1');
-        $producer->flush(KAFKA_TEST_TIMEOUT_MS);
+        $producer->flush(KAFKA_TEST_LONG_TIMEOUT_MS);
 
         $consumer = new Consumer($conf);
         $consumerTopic = $consumer->newTopic(KAFKA_TEST_TOPIC_PARTITIONS, $topicConf);
 
         $consumerTopic->consumeStart(2, rd_kafka_offset_tail(4));
-        $msg1 = $consumerTopic->consume(2, KAFKA_TEST_TIMEOUT_MS);
-        $msg2 = $consumerTopic->consume(2, KAFKA_TEST_TIMEOUT_MS);
-        $msg3 = $consumerTopic->consume(2, KAFKA_TEST_TIMEOUT_MS);
-        $msg4 = $consumerTopic->consume(2, KAFKA_TEST_TIMEOUT_MS);
+        $messages = $this->consumeMessagesWithConsumerTopic($consumerTopic, 2, 4);
         $consumerTopic->consumeStop(2);
 
-        $this->assertSame('test1', $msg1->payload);
-        $this->assertSame('test2', $msg2->payload);
-        $this->assertSame('test3', $msg3->payload);
-        $this->assertSame('test4', $msg4->payload);
+        $this->assertSame('test1', $messages[0]->payload);
+        $this->assertSame('test2', $messages[1]->payload);
+        $this->assertSame('test3', $messages[2]->payload);
+        $this->assertSame('test4', $messages[3]->payload);
     }
 
     /**
@@ -185,16 +184,16 @@ class TopicConfTest extends TestCase
         $topic = $producer->newTopic(KAFKA_TEST_TOPIC_PARTITIONS, $topicConf);
 
         $topic->produce(RD_KAFKA_PARTITION_UA, 0, 'test1', '1', $expectedMessageOpaque);
-        $producer->flush(KAFKA_TEST_TIMEOUT_MS);
+        $producer->flush(KAFKA_TEST_LONG_TIMEOUT_MS);
 
         $consumer = new Consumer($conf);
         $consumerTopic = $consumer->newTopic(KAFKA_TEST_TOPIC_PARTITIONS, $topicConf);
 
         $consumerTopic->consumeStart(2, rd_kafka_offset_tail(1));
-        $msg1 = $consumerTopic->consume(2, KAFKA_TEST_TIMEOUT_MS);
+        $messages = $this->consumeMessagesWithConsumerTopic($consumerTopic, 2, 1);
         $consumerTopic->consumeStop(2);
 
-        $this->assertSame('test1', $msg1->payload);
+        $this->assertSame('test1', $messages[0]->payload);
         $this->assertSame($expectedTopicOpaque, $callbackTopicOpaque);
         $this->assertSame($expectedMessageOpaque, $callbackMessageOpaque);
     }

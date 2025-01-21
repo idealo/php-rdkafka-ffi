@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace RdKafka;
 
+use ConsumeTrait;
 use PHPUnit\Framework\TestCase;
 use RdKafka;
 use RequireVersionTrait;
@@ -14,6 +15,7 @@ use RequireVersionTrait;
  */
 class ProducerTest extends TestCase
 {
+    use ConsumeTrait;
     use RequireVersionTrait;
 
     private Producer $producer;
@@ -43,7 +45,7 @@ class ProducerTest extends TestCase
 
     public function testGetMetadata(): void
     {
-        $metadata = $this->producer->getMetadata(true, null, KAFKA_TEST_TIMEOUT_MS);
+        $metadata = $this->producer->getMetadata(true, null, KAFKA_TEST_LONG_TIMEOUT_MS);
 
         self::assertInstanceOf(Metadata::class, $metadata);
     }
@@ -100,7 +102,7 @@ class ProducerTest extends TestCase
         $conf = new Conf();
         $conf->set('bootstrap.servers', KAFKA_BROKERS);
         $producer = new Producer($conf);
-        $res = $producer->flush(KAFKA_TEST_TIMEOUT_MS);
+        $res = $producer->flush(KAFKA_TEST_LONG_TIMEOUT_MS);
 
         $this->assertSame(0, $res);
     }
@@ -117,7 +119,7 @@ class ProducerTest extends TestCase
 
         $this->expectException(KafkaErrorException::class);
         $this->expectExceptionCode(RD_KAFKA_RESP_ERR__NOT_CONFIGURED);
-        $producer->initTransactions(KAFKA_TEST_TIMEOUT_MS);
+        $producer->initTransactions(KAFKA_TEST_LONG_TIMEOUT_MS);
     }
 
     public function testTransaction(): void
@@ -127,11 +129,11 @@ class ProducerTest extends TestCase
 
         $producerConf = new Conf();
         $producerConf->set('bootstrap.servers', KAFKA_BROKERS);
-        $producerConf->set('transactional.id', __METHOD__);
+        $producerConf->set('transactional.id', __METHOD__ . random_int(0, 1000));
 
         $producer = new Producer($producerConf);
 
-        $producer->initTransactions(KAFKA_TEST_TIMEOUT_MS);
+        $producer->initTransactions(KAFKA_TEST_LONG_TIMEOUT_MS);
 
         // produce and commit
         $producer->beginTransaction();
@@ -141,8 +143,8 @@ class ProducerTest extends TestCase
         $topic->produce(0, 0, __METHOD__ . '2');
         $topic->produce(0, 0, __METHOD__ . '3');
 
-        $producer->commitTransaction(KAFKA_TEST_TIMEOUT_MS);
-        $producer->poll(KAFKA_TEST_TIMEOUT_MS);
+        $producer->commitTransaction(KAFKA_TEST_SHORT_TIMEOUT_MS);
+        $producer->poll(KAFKA_TEST_SHORT_TIMEOUT_MS);
 
         // produce and abort
         $producer->beginTransaction();
@@ -151,23 +153,17 @@ class ProducerTest extends TestCase
         $topic->produce(0, 0, __METHOD__ . '5');
         $topic->produce(0, 0, __METHOD__ . '6');
 
-        $producer->abortTransaction(KAFKA_TEST_TIMEOUT_MS);
-        $producer->poll(KAFKA_TEST_TIMEOUT_MS);
+        $producer->abortTransaction(KAFKA_TEST_SHORT_TIMEOUT_MS);
+        $producer->poll(KAFKA_TEST_SHORT_TIMEOUT_MS);
 
         $consumerConf = new Conf();
         $consumerConf->set('bootstrap.servers', KAFKA_BROKERS);
+
         $consumer = new Consumer($consumerConf);
         $consumerTopic = $consumer->newTopic(KAFKA_TEST_TOPIC);
         $consumerTopic->consumeStart(0, rd_kafka_offset_tail(4));
 
-        $messages = [];
-        do {
-            $message = $consumerTopic->consume(0, KAFKA_TEST_TIMEOUT_MS);
-            if ($message === null) {
-                break;
-            }
-            $messages[] = $message;
-        } while (true);
+        $messages = $this->consumeMessagesWithConsumerTopic($consumerTopic, 0, 3);
 
         $consumerTopic->consumeStop(0);
 

@@ -60,7 +60,7 @@ class ProducerTopicTest extends TestCase
 
         $topic->produce(RD_KAFKA_PARTITION_UA, 0, __METHOD__, 'key-topic-produce');
 
-        $producer->flush(KAFKA_TEST_TIMEOUT_MS);
+        $producer->flush(KAFKA_TEST_LONG_TIMEOUT_MS);
 
         $this->assertSame(__METHOD__, $payload);
     }
@@ -81,7 +81,7 @@ class ProducerTopicTest extends TestCase
 
         $topic->produce(RD_KAFKA_PARTITION_UA, 0, null, 'key-topic-produce');
 
-        $producer->flush(KAFKA_TEST_TIMEOUT_MS);
+        $producer->flush(KAFKA_TEST_LONG_TIMEOUT_MS);
 
         $this->assertNull($payload);
     }
@@ -109,7 +109,7 @@ class ProducerTopicTest extends TestCase
         $topic->produce(RD_KAFKA_PARTITION_UA, 0, 'payload-2', null, $expectedOpaque2);
         $topic->produce(RD_KAFKA_PARTITION_UA, 0, 'payload-3', null, $expectedOpaque3);
 
-        $producer->flush(KAFKA_TEST_TIMEOUT_MS);
+        $producer->flush(KAFKA_TEST_LONG_TIMEOUT_MS);
 
         $this->assertSame($expectedOpaque1, $opaques[0]);
         $this->assertSame($expectedOpaque2, $opaques[1]);
@@ -156,7 +156,7 @@ class ProducerTopicTest extends TestCase
 
         $topic->producev(RD_KAFKA_PARTITION_UA, 0, __METHOD__, 'key-topic-produce');
 
-        $producer->flush(KAFKA_TEST_TIMEOUT_MS);
+        $producer->flush(KAFKA_TEST_LONG_TIMEOUT_MS);
 
         $this->assertSame(__METHOD__, $payload);
     }
@@ -177,7 +177,7 @@ class ProducerTopicTest extends TestCase
 
         $topic->producev(RD_KAFKA_PARTITION_UA, 0, null, 'key-topic-produce');
 
-        $producer->flush(KAFKA_TEST_TIMEOUT_MS);
+        $producer->flush(KAFKA_TEST_LONG_TIMEOUT_MS);
 
         $this->assertNull($payload);
     }
@@ -207,7 +207,7 @@ class ProducerTopicTest extends TestCase
             ]
         );
 
-        $producer->flush(KAFKA_TEST_TIMEOUT_MS);
+        $producer->flush(KAFKA_TEST_LONG_TIMEOUT_MS);
 
         $this->assertSame(__METHOD__, $payload);
         $this->assertSame(
@@ -242,7 +242,7 @@ class ProducerTopicTest extends TestCase
             123456789
         );
 
-        $producer->flush(KAFKA_TEST_TIMEOUT_MS);
+        $producer->flush(KAFKA_TEST_LONG_TIMEOUT_MS);
 
         $this->assertSame(__METHOD__, $payload);
         $this->assertSame(123456789, $timestamp);
@@ -295,7 +295,7 @@ class ProducerTopicTest extends TestCase
             $expectedOpaque3
         );
 
-        $producer->flush(KAFKA_TEST_TIMEOUT_MS);
+        $producer->flush(KAFKA_TEST_LONG_TIMEOUT_MS);
 
         $this->assertSame($expectedOpaque1, $opaques[0]);
         $this->assertSame($expectedOpaque2, $opaques[1]);

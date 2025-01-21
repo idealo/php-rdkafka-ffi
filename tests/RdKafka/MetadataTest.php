@@ -30,7 +30,7 @@ class MetadataTest extends TestCase
         // wait for metadata refresh
         sleep(1);
 
-        $this->metadata = $producer->getMetadata(true, null, KAFKA_TEST_TIMEOUT_MS);
+        $this->metadata = $producer->getMetadata(true, null, KAFKA_TEST_LONG_TIMEOUT_MS);
     }
 
     public function testGetBrokers(): void

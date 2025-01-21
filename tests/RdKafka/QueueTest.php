@@ -20,7 +20,7 @@ class QueueTest extends TestCase
         $producer = new Producer($conf);
         $producerTopic = $producer->newTopic(KAFKA_TEST_TOPIC);
         $producerTopic->produce(0, 0, __METHOD__);
-        $producer->flush(KAFKA_TEST_TIMEOUT_MS);
+        $producer->flush(KAFKA_TEST_LONG_TIMEOUT_MS);
 
         $consumer = new Consumer($conf);
 
@@ -29,7 +29,9 @@ class QueueTest extends TestCase
         $consumerTopic = $consumer->newTopic(KAFKA_TEST_TOPIC);
         $consumerTopic->consumeQueueStart(0, rd_kafka_offset_tail(1), $queue);
 
-        $message = $queue->consume(KAFKA_TEST_TIMEOUT_MS);
+        do {
+            $message = $queue->consume(KAFKA_TEST_SHORT_TIMEOUT_MS);
+        } while ($message === null);
 
         $this->assertInstanceOf(Message::class, $message);
         $this->assertSame(__METHOD__, $message->payload);
@@ -50,7 +52,7 @@ class QueueTest extends TestCase
 
         $mainQueue = new Queue(Library::getFFI()->rd_kafka_queue_get_main($consumer->getCData()));
 
-        $event = $mainQueue->poll(KAFKA_TEST_TIMEOUT_MS);
+        $event = $mainQueue->poll(KAFKA_TEST_LONG_TIMEOUT_MS);
 
         $this->assertInstanceOf(Event::class, $event);
         $this->assertSame(4 /* RD_KAFKA_EVENT_LOG */, $event->type());

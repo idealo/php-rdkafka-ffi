@@ -19,6 +19,7 @@ use RequireVersionTrait;
  */
 class MockClusterTest extends TestCase
 {
+    use \ConsumeTrait;
     use RequireVersionTrait;
 
     protected function setUp(): void
@@ -38,7 +39,7 @@ class MockClusterTest extends TestCase
         $producer = new Producer($producerConfig);
         $producerTopic = $producer->newTopic(KAFKA_TEST_TOPIC);
         $producerTopic->produce(0, 0, __METHOD__, __METHOD__);
-        $producer->flush(KAFKA_TEST_TIMEOUT_MS);
+        $producer->flush(KAFKA_TEST_LONG_TIMEOUT_MS);
 
         $consumerConfig = new Conf();
         $consumerConfig->set('log_level', (string) LOG_EMERG);
@@ -46,7 +47,7 @@ class MockClusterTest extends TestCase
         $consumerConfig->set('group.id', __METHOD__);
         $consumer = new KafkaConsumer($consumerConfig);
         $consumer->assign([new TopicPartition(KAFKA_TEST_TOPIC, 0)]);
-        $message = $consumer->consume(KAFKA_TEST_TIMEOUT_MS);
+        $message = $consumer->consume(KAFKA_TEST_SHORT_TIMEOUT_MS);
 
         $this->assertSame(__METHOD__, $message->payload);
         $this->assertSame(__METHOD__, $message->key);
@@ -131,7 +132,7 @@ class MockClusterTest extends TestCase
         $this->assertStringContainsString('Produce (0) Versions 4..6', $logStack[0]);
         $this->assertStringContainsString('Fetch (1) Versions 6..10', $logStack[1]);
 
-        $producer->flush(KAFKA_TEST_TIMEOUT_MS);
+        $producer->flush(KAFKA_TEST_LONG_TIMEOUT_MS);
     }
 
     public function testSetPartitionFollowerAndLeader(): void
@@ -150,7 +151,7 @@ class MockClusterTest extends TestCase
         $cluster->setPartitionLeader(KAFKA_TEST_TOPIC, 0, 2);
         $cluster->setPartitionFollower(KAFKA_TEST_TOPIC, 0, 1);
 
-        $metadata = $producer->getMetadata(false, $producerTopic, KAFKA_TEST_TIMEOUT_MS);
+        $metadata = $producer->getMetadata(false, $producerTopic, KAFKA_TEST_LONG_TIMEOUT_MS);
         $leader = $metadata->getTopics()->current()->getPartitions()->current()->getLeader();
 
         $this->assertSame(2, $leader);
@@ -158,7 +159,7 @@ class MockClusterTest extends TestCase
         $cluster->setPartitionLeader(KAFKA_TEST_TOPIC, 0, 1);
         $cluster->setPartitionFollower(KAFKA_TEST_TOPIC, 0, 2);
 
-        $metadata = $producer->getMetadata(false, $producerTopic, KAFKA_TEST_TIMEOUT_MS);
+        $metadata = $producer->getMetadata(false, $producerTopic, KAFKA_TEST_LONG_TIMEOUT_MS);
         $leader = $metadata->getTopics()->current()->getPartitions()->current()->getLeader();
 
         $this->assertSame(1, $leader);
@@ -183,14 +184,15 @@ class MockClusterTest extends TestCase
         for ($i = 0; $i < 10; $i++) {
             $producerTopic->produce(0, 0, __METHOD__ . $i, __METHOD__ . $i);
         }
-        $producer->flush(KAFKA_TEST_TIMEOUT_MS);
+        $producer->flush(KAFKA_TEST_SHORT_TIMEOUT_MS);
 
         // prepare consumer
         $consumerConfig = new Conf();
         $consumerConfig->set('log_level', (string) LOG_EMERG);
         $consumerConfig->set('group.id', __METHOD__);
         $consumerConfig->set('auto.offset.reset', 'earliest');
-        $consumerConfig->set('fetch.message.max.bytes', (string) 100);
+        $consumerConfig->set('fetch.min.bytes', (string) 100);
+        $consumerConfig->set('fetch.message.max.bytes', (string) 1000);
         $consumerConfig->set('bootstrap.servers', $cluster->getBootstraps());
         $consumer = new KafkaConsumer($consumerConfig);
         $consumer->assign([new TopicPartition(KAFKA_TEST_TOPIC, 0, RD_KAFKA_OFFSET_INVALID)]);
@@ -198,10 +200,12 @@ class MockClusterTest extends TestCase
         // set high watermark to 6
         $cluster->setPartitionFollowerWatermarks(KAFKA_TEST_TOPIC, 0, -1, 6);
 
+        sleep(1);
+
         // consume until high watermark
         $consumedStack = [];
         do {
-            $message = $consumer->consume(KAFKA_TEST_TIMEOUT_MS);
+            $message = $consumer->consume(KAFKA_TEST_SHORT_TIMEOUT_MS);
             if ($message === null) {
                 continue;
             }
@@ -229,10 +233,12 @@ class MockClusterTest extends TestCase
         // reset high watermark
         $cluster->setPartitionFollowerWatermarks(KAFKA_TEST_TOPIC, 0, -1, -1);
 
+        sleep(1);
+
         // consume rest
         $consumedStack = [];
         do {
-            $message = $consumer->consume(KAFKA_TEST_TIMEOUT_MS);
+            $message = $consumer->consume(KAFKA_TEST_SHORT_TIMEOUT_MS);
             if ($message === null) {
                 continue;
             }
@@ -272,7 +278,7 @@ class MockClusterTest extends TestCase
         sleep(1);
 
         try {
-            $producer->getMetadata(false, null, KAFKA_TEST_TIMEOUT_MS);
+            $producer->getMetadata(false, null, KAFKA_TEST_LONG_TIMEOUT_MS);
             $errorCode = 0;
         } catch (Exception $exception) {
             $errorCode = $exception->getCode();
@@ -281,7 +287,7 @@ class MockClusterTest extends TestCase
         $this->assertSame(RD_KAFKA_RESP_ERR__TRANSPORT, $errorCode);
 
         $cluster->setBrokerUp(1);
-        $metadata = $producer->getMetadata(false, null, KAFKA_TEST_TIMEOUT_MS);
+        $metadata = $producer->getMetadata(false, null, KAFKA_TEST_LONG_TIMEOUT_MS);
 
         $this->assertInstanceOf(Metadata::class, $metadata);
     }
@@ -299,7 +305,7 @@ class MockClusterTest extends TestCase
         $producer = new Producer($producerConfig);
         $producerTopic = $producer->newTopic(KAFKA_TEST_TOPIC);
         $producerTopic->produce(0, 0, __METHOD__);
-        $producer->flush(KAFKA_TEST_TIMEOUT_MS);
+        $producer->flush(KAFKA_TEST_LONG_TIMEOUT_MS);
 
         // first error is retriable, second fatal
         $cluster->pushRequestErrors(
@@ -319,8 +325,8 @@ class MockClusterTest extends TestCase
         $consumer->assign([new TopicPartition(KAFKA_TEST_TOPIC, 0, rd_kafka_offset_tail(1))]);
 
         // try to consume msg
-        $message1 = $consumer->consume(KAFKA_TEST_TIMEOUT_MS);
-        $message2 = $consumer->consume(KAFKA_TEST_TIMEOUT_MS);
+        $message1 = $consumer->consume(KAFKA_TEST_LONG_TIMEOUT_MS);
+        $message2 = $consumer->consume(KAFKA_TEST_LONG_TIMEOUT_MS);
 
         $this->assertSame(RD_KAFKA_RESP_ERR__AUTHENTICATION, $message1->err);
         $this->assertSame(__METHOD__, $message2->payload);
@@ -341,7 +347,7 @@ class MockClusterTest extends TestCase
         $producer = new Producer($producerConfig);
         $producerTopic = $producer->newTopic(KAFKA_TEST_TOPIC);
         $producerTopic->produce(0, 0, __METHOD__);
-        $producer->flush(KAFKA_TEST_TIMEOUT_MS);
+        $producer->flush(KAFKA_TEST_LONG_TIMEOUT_MS);
 
         // first error is retriable, second fatal
         $cluster->pushRequestErrorsArray(
@@ -363,8 +369,8 @@ class MockClusterTest extends TestCase
         $consumer->assign([new TopicPartition(KAFKA_TEST_TOPIC, 0, rd_kafka_offset_tail(1))]);
 
         // try to consume msg
-        $message1 = $consumer->consume(KAFKA_TEST_TIMEOUT_MS);
-        $message2 = $consumer->consume(KAFKA_TEST_TIMEOUT_MS);
+        $message1 = $consumer->consume(KAFKA_TEST_LONG_TIMEOUT_MS);
+        $message2 = $consumer->consume(KAFKA_TEST_LONG_TIMEOUT_MS);
 
         $this->assertSame(RD_KAFKA_RESP_ERR__AUTHENTICATION, $message1->err);
         $this->assertSame(__METHOD__, $message2->payload);
@@ -384,7 +390,7 @@ class MockClusterTest extends TestCase
         $producerConfig->set('bootstrap.servers', $cluster->getBootstraps());
         $producer = new Producer($producerConfig);
         $producerTopic = $producer->newTopic(KAFKA_TEST_TOPIC);
-        $metadata = $producer->getMetadata(false, $producerTopic, KAFKA_TEST_TIMEOUT_MS);
+        $metadata = $producer->getMetadata(false, $producerTopic, KAFKA_TEST_LONG_TIMEOUT_MS);
 
         /** @var Metadata\Topic $topic */
         $topic = $metadata->getTopics()->current();
@@ -409,7 +415,7 @@ class MockClusterTest extends TestCase
         $producer = new Producer($producerConfig);
         $producerTopic = $producer->newTopic(KAFKA_TEST_TOPIC);
         $producerTopic->produce(0, 0, __METHOD__);
-        $producer->flush(KAFKA_TEST_TIMEOUT_MS);
+        $producer->flush(KAFKA_TEST_LONG_TIMEOUT_MS);
 
         // first error is retriable, second fatal
         $cluster->pushBrokerRequestErrors(
@@ -430,8 +436,8 @@ class MockClusterTest extends TestCase
         $consumer->assign([new TopicPartition(KAFKA_TEST_TOPIC, 0, rd_kafka_offset_tail(1))]);
 
         // try to consume msg
-        $message1 = $consumer->consume(KAFKA_TEST_TIMEOUT_MS);
-        $message2 = $consumer->consume(KAFKA_TEST_TIMEOUT_MS);
+        $message1 = $consumer->consume(KAFKA_TEST_SHORT_TIMEOUT_MS);
+        $message2 = $consumer->consume(KAFKA_TEST_SHORT_TIMEOUT_MS);
 
         $this->assertSame(RD_KAFKA_RESP_ERR__AUTHENTICATION, $message1->err);
         $this->assertSame(__METHOD__, $message2->payload);
@@ -452,7 +458,7 @@ class MockClusterTest extends TestCase
         $producer = new Producer($producerConfig);
         $producerTopic = $producer->newTopic(KAFKA_TEST_TOPIC);
         $producerTopic->produce(0, 0, __METHOD__);
-        $producer->flush(KAFKA_TEST_TIMEOUT_MS);
+        $producer->flush(KAFKA_TEST_LONG_TIMEOUT_MS);
 
         // first error is retriable, second fatal
         $cluster->pushBrokerRequestErrorRtts(
@@ -475,8 +481,8 @@ class MockClusterTest extends TestCase
         $consumer->assign([new TopicPartition(KAFKA_TEST_TOPIC, 0, rd_kafka_offset_tail(1))]);
 
         // try to consume msg
-        $message1 = $consumer->consume(KAFKA_TEST_TIMEOUT_MS);
-        $message2 = $consumer->consume(KAFKA_TEST_TIMEOUT_MS);
+        $message1 = $consumer->consume(KAFKA_TEST_LONG_TIMEOUT_MS);
+        $message2 = $consumer->consume(KAFKA_TEST_LONG_TIMEOUT_MS);
 
         $this->assertSame(RD_KAFKA_RESP_ERR__AUTHENTICATION, $message1->err);
         $this->assertSame(__METHOD__, $message2->payload);

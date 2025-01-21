@@ -36,7 +36,7 @@ class MessageTest extends TestCase
         $producerTopic = $producer->newTopic(KAFKA_TEST_TOPIC);
         $this->expectedLatencyInSeconds = microtime(true);
         $producerTopic->producev(...$params);
-        $producer->flush(KAFKA_TEST_TIMEOUT_MS);
+        $producer->flush(KAFKA_TEST_LONG_TIMEOUT_MS);
 
         $consumerConf = new Conf();
         $consumerConf->set('bootstrap.servers', KAFKA_BROKERS);
@@ -44,7 +44,7 @@ class MessageTest extends TestCase
         $consumerTopic = $consumer->newTopic(KAFKA_TEST_TOPIC);
         $consumerTopic->consumeStart(0, rd_kafka_offset_tail(1));
 
-        $this->message = $consumerTopic->consume(0, (int) KAFKA_TEST_TIMEOUT_MS);
+        $this->message = $consumerTopic->consume(0, (int) KAFKA_TEST_LONG_TIMEOUT_MS);
 
         $consumerTopic->consumeStop(0);
     }

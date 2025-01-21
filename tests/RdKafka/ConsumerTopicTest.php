@@ -51,7 +51,7 @@ class ConsumerTopicTest extends TestCase
         $producer = new Producer($conf);
         $producerTopic = $producer->newTopic(KAFKA_TEST_TOPIC);
         $producerTopic->produce(0, 0, __METHOD__);
-        $producer->flush(KAFKA_TEST_TIMEOUT_MS);
+        $producer->flush(KAFKA_TEST_LONG_TIMEOUT_MS);
 
         $consumerConf = new Conf();
         $consumerConf->set('bootstrap.servers', KAFKA_BROKERS);
@@ -59,7 +59,7 @@ class ConsumerTopicTest extends TestCase
         $consumerTopic = $consumer->newTopic(KAFKA_TEST_TOPIC);
         $consumerTopic->consumeStart(0, rd_kafka_offset_tail(1));
 
-        $message = $consumerTopic->consume(0, KAFKA_TEST_TIMEOUT_MS);
+        $message = $consumerTopic->consume(0, KAFKA_TEST_LONG_TIMEOUT_MS);
 
         $consumerTopic->consumeStop(0);
 
@@ -75,7 +75,7 @@ class ConsumerTopicTest extends TestCase
 
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessageMatches('/partition/');
-        $consumerTopic->consume(-2, KAFKA_TEST_TIMEOUT_MS);
+        $consumerTopic->consume(-2, KAFKA_TEST_SHORT_TIMEOUT_MS);
     }
 
     public function testConsumeCallback(): void
@@ -92,7 +92,7 @@ class ConsumerTopicTest extends TestCase
         $producerTopic->produce(0, 0, __METHOD__);
         $producerTopic->produce(0, 0, __METHOD__);
         $producerTopic->produce(0, 0, __METHOD__);
-        $producer->flush(KAFKA_TEST_TIMEOUT_MS);
+        $producer->flush(KAFKA_TEST_LONG_TIMEOUT_MS);
 
         $consumerConf = new Conf();
         $consumerConf->set('bootstrap.servers', KAFKA_BROKERS);
@@ -108,7 +108,7 @@ class ConsumerTopicTest extends TestCase
             $consumed->message = $message;
         };
         do {
-            $messagesConsumed = $consumerTopic->consumeCallback(0, KAFKA_TEST_TIMEOUT_MS, $callback);
+            $messagesConsumed = $consumerTopic->consumeCallback(0, KAFKA_TEST_SHORT_TIMEOUT_MS, $callback);
         } while ($consumed->message === null);
 
         $consumerTopic->consumeStop(0);
@@ -139,7 +139,7 @@ class ConsumerTopicTest extends TestCase
         $producer = new Producer($producerConf);
         $producerTopic = $producer->newTopic(KAFKA_TEST_TOPIC);
         $producerTopic->produce(0, 0, __METHOD__);
-        $producer->flush(KAFKA_TEST_TIMEOUT_MS);
+        $producer->flush(KAFKA_TEST_LONG_TIMEOUT_MS);
 
         $consumer = new Consumer($consumerConf);
         $consumerTopic = $consumer->newTopic(KAFKA_TEST_TOPIC);
@@ -151,7 +151,7 @@ class ConsumerTopicTest extends TestCase
         };
 
         do {
-            $messagesConsumed = $consumerTopic->consumeCallback(0, KAFKA_TEST_TIMEOUT_MS, $callback, $expectedOpaque);
+            $messagesConsumed = $consumerTopic->consumeCallback(0, KAFKA_TEST_SHORT_TIMEOUT_MS, $callback, $expectedOpaque);
         } while ($consumed->message === null);
 
         $consumerTopic->consumeStop(0);
@@ -172,13 +172,13 @@ class ConsumerTopicTest extends TestCase
         for ($i = 0; $i < $batchSize; $i++) {
             $producerTopic->produce(0, 0, __METHOD__ . $i);
         }
-        $producer->flush(KAFKA_TEST_TIMEOUT_MS);
+        $producer->flush(KAFKA_TEST_LONG_TIMEOUT_MS);
 
         $consumer = new Consumer($conf);
         $consumerTopic = $consumer->newTopic(KAFKA_TEST_TOPIC);
         $consumerTopic->consumeStart(0, rd_kafka_offset_tail($batchSize));
 
-        $messages = $consumerTopic->consumeBatch(0, KAFKA_TEST_TIMEOUT_MS, $batchSize);
+        $messages = $consumerTopic->consumeBatch(0, KAFKA_TEST_LONG_TIMEOUT_MS, $batchSize);
 
         $consumerTopic->consumeStop(0);
 
@@ -200,7 +200,7 @@ class ConsumerTopicTest extends TestCase
 
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessageMatches('/partition/');
-        $consumerTopic->consumeBatch(-2, KAFKA_TEST_TIMEOUT_MS, 1);
+        $consumerTopic->consumeBatch(-2, KAFKA_TEST_SHORT_TIMEOUT_MS, 1);
     }
 
     public function testConsumeBatchWithInvalidBatchSizeShouldFail(): void
@@ -212,7 +212,7 @@ class ConsumerTopicTest extends TestCase
 
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessageMatches('/batch_size/');
-        $consumerTopic->consumeBatch(0, KAFKA_TEST_TIMEOUT_MS, 0);
+        $consumerTopic->consumeBatch(0, KAFKA_TEST_SHORT_TIMEOUT_MS, 0);
     }
 
     public function testConsumeQueueStart(): void
@@ -222,14 +222,14 @@ class ConsumerTopicTest extends TestCase
         $producer = new Producer($conf);
         $producerTopic = $producer->newTopic(KAFKA_TEST_TOPIC);
         $producerTopic->produce(0, 0, __METHOD__);
-        $producer->flush(KAFKA_TEST_TIMEOUT_MS);
+        $producer->flush(KAFKA_TEST_LONG_TIMEOUT_MS);
 
         $consumer = new Consumer($conf);
         $queue = $consumer->newQueue();
         $consumerTopic = $consumer->newTopic(KAFKA_TEST_TOPIC);
 
         $consumerTopic->consumeQueueStart(0, rd_kafka_offset_tail(1), $queue);
-        $message = $queue->consume(KAFKA_TEST_TIMEOUT_MS);
+        $message = $queue->consume(KAFKA_TEST_LONG_TIMEOUT_MS);
         $consumerTopic->consumeStop(0);
 
         $this->assertSame(__METHOD__, $message->payload);
@@ -263,7 +263,7 @@ class ConsumerTopicTest extends TestCase
 
         $topicPartitions = $highLevelConsumer->getCommittedOffsets(
             [new TopicPartition(KAFKA_TEST_TOPIC, 0)],
-            KAFKA_TEST_TIMEOUT_MS
+            KAFKA_TEST_LONG_TIMEOUT_MS
         );
         $this->assertSame(-1001, $topicPartitions[0]->getOffset());
 
@@ -282,7 +282,7 @@ class ConsumerTopicTest extends TestCase
 
         $topicPartitions = $highLevelConsumer->getCommittedOffsets(
             [new TopicPartition(KAFKA_TEST_TOPIC, 0)],
-            KAFKA_TEST_TIMEOUT_MS
+            KAFKA_TEST_LONG_TIMEOUT_MS
         );
         $this->assertSame(5, $topicPartitions[0]->getOffset());
     }

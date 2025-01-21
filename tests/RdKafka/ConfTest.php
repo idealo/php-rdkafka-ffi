@@ -291,9 +291,9 @@ class ConfTest extends TestCase
         $producer = new Producer($conf);
         $producerTopic = $producer->newTopic(KAFKA_TEST_TOPIC);
         $producerTopic->produce(0, 0, __METHOD__ . '1');
-        $producer->poll(KAFKA_TEST_TIMEOUT_MS);
+        $producer->poll(KAFKA_TEST_LONG_TIMEOUT_MS);
         $producerTopic->produce(0, 0, __METHOD__ . '2');
-        $producer->poll(KAFKA_TEST_TIMEOUT_MS);
+        $producer->poll(KAFKA_TEST_LONG_TIMEOUT_MS);
 
         $this->assertCount(2, $drMsgCallbackStack->stack);
         $this->assertSame($producer, $drMsgCallbackStack->stack[0]['producer']);
@@ -301,7 +301,7 @@ class ConfTest extends TestCase
         $this->assertSame($producer, $drMsgCallbackStack->stack[1]['producer']);
         $this->assertSame(__METHOD__ . '2', $drMsgCallbackStack->stack[1]['message']->payload);
 
-        $producer->flush(KAFKA_TEST_TIMEOUT_MS);
+        $producer->flush(KAFKA_TEST_LONG_TIMEOUT_MS);
     }
 
     /**
@@ -330,9 +330,9 @@ class ConfTest extends TestCase
         $producer = new Producer($conf);
         $producerTopic = $producer->newTopic(KAFKA_TEST_TOPIC);
         $producerTopic->produce(0, 0, __METHOD__ . '1');
-        $producer->poll(KAFKA_TEST_TIMEOUT_MS);
+        $producer->poll(KAFKA_TEST_LONG_TIMEOUT_MS);
         $producerTopic->produce(0, 0, __METHOD__ . '2');
-        $producer->poll(KAFKA_TEST_TIMEOUT_MS);
+        $producer->poll(KAFKA_TEST_LONG_TIMEOUT_MS);
 
         $this->assertCount(2, $drMsgCallbackStack->stack);
         $this->assertSame($producer, $drMsgCallbackStack->stack[0]['producer']);
@@ -340,7 +340,7 @@ class ConfTest extends TestCase
         $this->assertSame($producer, $drMsgCallbackStack->stack[1]['producer']);
         $this->assertSame($expectedOpaque, $drMsgCallbackStack->stack[1]['opaque']);
 
-        $producer->flush(KAFKA_TEST_TIMEOUT_MS);
+        $producer->flush(KAFKA_TEST_LONG_TIMEOUT_MS);
     }
 
     public function testSetStatsCb(): void

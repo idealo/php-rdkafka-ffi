@@ -61,7 +61,7 @@ class ClientTest extends TestCase
         $conf = new Conf();
         $conf->set('bootstrap.servers', KAFKA_BROKERS);
         $client = Client::fromConf($conf);
-        $client->setWaitForResultEventTimeout(KAFKA_TEST_TIMEOUT_MS);
+        $client->setWaitForResultEventTimeout(KAFKA_TEST_LONG_TIMEOUT_MS);
 
         $topics = [
             new NewTopic('test_admin_1', 1, 1),
@@ -69,8 +69,8 @@ class ClientTest extends TestCase
         ];
 
         $options = $client->newCreateTopicsOptions();
-        $options->setOperationTimeout(KAFKA_TEST_TIMEOUT_MS);
-        $options->setRequestTimeout(KAFKA_TEST_TIMEOUT_MS);
+        $options->setOperationTimeout(KAFKA_TEST_LONG_TIMEOUT_MS);
+        $options->setRequestTimeout(KAFKA_TEST_LONG_TIMEOUT_MS);
         $options->setBrokerId(KAFKA_BROKER_ID);
 
         $result = $client->createTopics($topics, $options);
@@ -123,7 +123,7 @@ class ClientTest extends TestCase
         $conf = new Conf();
         $conf->set('bootstrap.servers', KAFKA_BROKERS);
         $client = Client::fromConf($conf);
-        $client->setWaitForResultEventTimeout(KAFKA_TEST_TIMEOUT_MS);
+        $client->setWaitForResultEventTimeout(KAFKA_TEST_LONG_TIMEOUT_MS);
 
         $partitions = [
             new NewPartitions('test_admin_1', 4),
@@ -131,8 +131,8 @@ class ClientTest extends TestCase
         ];
 
         $options = $client->newCreatePartitionsOptions();
-        $options->setOperationTimeout(KAFKA_TEST_TIMEOUT_MS);
-        $options->setRequestTimeout(KAFKA_TEST_TIMEOUT_MS);
+        $options->setOperationTimeout(KAFKA_TEST_LONG_TIMEOUT_MS);
+        $options->setRequestTimeout(KAFKA_TEST_LONG_TIMEOUT_MS);
         $options->setBrokerId(KAFKA_BROKER_ID);
 
         $result = $client->createPartitions($partitions, $options);
@@ -185,7 +185,7 @@ class ClientTest extends TestCase
         $conf = new Conf();
         $conf->set('bootstrap.servers', KAFKA_BROKERS);
         $client = Client::fromConf($conf);
-        $client->setWaitForResultEventTimeout(KAFKA_TEST_TIMEOUT_MS);
+        $client->setWaitForResultEventTimeout(KAFKA_TEST_LONG_TIMEOUT_MS);
 
         $topics = [
             new DeleteTopic('test_admin_1'),
@@ -193,8 +193,8 @@ class ClientTest extends TestCase
         ];
 
         $options = $client->newDeleteTopicsOptions();
-        $options->setOperationTimeout(KAFKA_TEST_TIMEOUT_MS);
-        $options->setRequestTimeout(KAFKA_TEST_TIMEOUT_MS);
+        $options->setOperationTimeout(KAFKA_TEST_LONG_TIMEOUT_MS);
+        $options->setRequestTimeout(KAFKA_TEST_LONG_TIMEOUT_MS);
         $options->setBrokerId(KAFKA_BROKER_ID);
 
         $result = $client->deleteTopics($topics, $options);
@@ -247,15 +247,15 @@ class ClientTest extends TestCase
         $conf = new Conf();
         $conf->set('bootstrap.servers', KAFKA_BROKERS);
         $client = Client::fromConf($conf);
-        $client->setWaitForResultEventTimeout(KAFKA_TEST_TIMEOUT_MS);
+        $client->setWaitForResultEventTimeout(KAFKA_TEST_LONG_TIMEOUT_MS);
 
         $topic = new NewTopic('test_admin_3', 2, -1);
         $topic->setReplicaAssignment(0, [KAFKA_BROKER_ID]);
         $topic->setReplicaAssignment(1, [KAFKA_BROKER_ID]);
 
         $options = $client->newCreateTopicsOptions();
-        $options->setOperationTimeout(KAFKA_TEST_TIMEOUT_MS);
-        $options->setRequestTimeout(KAFKA_TEST_TIMEOUT_MS);
+        $options->setOperationTimeout(KAFKA_TEST_LONG_TIMEOUT_MS);
+        $options->setRequestTimeout(KAFKA_TEST_LONG_TIMEOUT_MS);
         $options->setBrokerId(KAFKA_BROKER_ID);
 
         $result = $client->createTopics([$topic], $options);
@@ -284,15 +284,15 @@ class ClientTest extends TestCase
         $conf = new Conf();
         $conf->set('bootstrap.servers', KAFKA_BROKERS);
         $client = Client::fromConf($conf);
-        $client->setWaitForResultEventTimeout(KAFKA_TEST_TIMEOUT_MS);
+        $client->setWaitForResultEventTimeout(KAFKA_TEST_LONG_TIMEOUT_MS);
 
         $partition = new NewPartitions('test_admin_3', 4);
         $partition->setReplicaAssignment(0, [KAFKA_BROKER_ID]);
         $partition->setReplicaAssignment(1, [KAFKA_BROKER_ID]);
 
         $options = $client->newCreatePartitionsOptions();
-        $options->setOperationTimeout(KAFKA_TEST_TIMEOUT_MS);
-        $options->setRequestTimeout(KAFKA_TEST_TIMEOUT_MS);
+        $options->setOperationTimeout(KAFKA_TEST_LONG_TIMEOUT_MS);
+        $options->setRequestTimeout(KAFKA_TEST_LONG_TIMEOUT_MS);
         $options->setBrokerId(KAFKA_BROKER_ID);
 
         $result = $client->createPartitions([$partition], $options);
@@ -319,7 +319,7 @@ class ClientTest extends TestCase
         $conf->set('bootstrap.servers', KAFKA_BROKERS);
         $producer = new Producer($conf);
         $metaTopics = [];
-        $metadata = $producer->getMetadata(true, null, KAFKA_TEST_TIMEOUT_MS);
+        $metadata = $producer->getMetadata(true, null, KAFKA_TEST_LONG_TIMEOUT_MS);
         foreach ($metadata->getTopics() as $topic) {
             if (in_array($topic->getTopic(), $topicNames, true)) {
                 $metaTopics[$topic->getTopic()] = $topic;
@@ -338,12 +338,12 @@ class ClientTest extends TestCase
         $conf = new Conf();
         $conf->set('bootstrap.servers', KAFKA_BROKERS);
         $client = Client::fromConf($conf);
-        $client->setWaitForResultEventTimeout(KAFKA_TEST_TIMEOUT_MS);
+        $client->setWaitForResultEventTimeout(KAFKA_TEST_LONG_TIMEOUT_MS);
 
         $configResource = new ConfigResource(RD_KAFKA_RESOURCE_BROKER, (string) KAFKA_BROKER_ID);
 
         $options = $client->newDescribeConfigsOptions();
-        $options->setRequestTimeout(KAFKA_TEST_TIMEOUT_MS);
+        $options->setRequestTimeout(KAFKA_TEST_LONG_TIMEOUT_MS);
         $options->setBrokerId(KAFKA_BROKER_ID);
 
         $result = $client->describeConfigs([$configResource], $options);
@@ -390,17 +390,17 @@ class ClientTest extends TestCase
         $conf->set('bootstrap.servers', KAFKA_BROKERS);
         $conf->set('broker.version.fallback', '2.0.0');
         $client = Client::fromConf($conf);
-        $client->setWaitForResultEventTimeout(KAFKA_TEST_TIMEOUT_MS);
+        $client->setWaitForResultEventTimeout(KAFKA_TEST_LONG_TIMEOUT_MS);
 
         $configResource = new ConfigResource(RD_KAFKA_RESOURCE_BROKER, (string) KAFKA_BROKER_ID);
         $configResource->setConfig('max.connections.per.ip', (string) 500000);
 
         $alterConfigOptions = $client->newAlterConfigsOptions();
-        $alterConfigOptions->setRequestTimeout(KAFKA_TEST_TIMEOUT_MS);
+        $alterConfigOptions->setRequestTimeout(KAFKA_TEST_LONG_TIMEOUT_MS);
         $alterConfigOptions->setBrokerId(KAFKA_BROKER_ID);
 
         $describeConfigsOptions = $client->newDescribeConfigsOptions();
-        $describeConfigsOptions->setRequestTimeout(KAFKA_TEST_TIMEOUT_MS);
+        $describeConfigsOptions->setRequestTimeout(KAFKA_TEST_LONG_TIMEOUT_MS);
         $describeConfigsOptions->setBrokerId(KAFKA_BROKER_ID);
 
         // alter config
@@ -472,20 +472,20 @@ class ClientTest extends TestCase
         $topic = $producer->newTopic(KAFKA_TEST_TOPIC_ADMIN);
         $topic->produce(0, 0, __METHOD__);
         $topic->produce(0, 0, __METHOD__);
-        $producer->flush(KAFKA_TEST_TIMEOUT_MS);
+        $producer->flush(KAFKA_TEST_LONG_TIMEOUT_MS);
 
         $conf = new Conf();
         $conf->set('bootstrap.servers', KAFKA_BROKERS);
         $client = Client::fromConf($conf);
-        $client->setWaitForResultEventTimeout(KAFKA_TEST_TIMEOUT_MS);
-        $client->getMetadata(true, null, KAFKA_TEST_TIMEOUT_MS);
+        $client->setWaitForResultEventTimeout(KAFKA_TEST_LONG_TIMEOUT_MS);
+        $client->getMetadata(true, null, KAFKA_TEST_LONG_TIMEOUT_MS);
 
         $deleteRecords = new DeleteRecords(
             new TopicPartition(KAFKA_TEST_TOPIC_ADMIN, 0, 1)
         );
 
         $deleteRecordsOptions = $client->newDeleteRecordsOptions();
-        $deleteRecordsOptions->setRequestTimeout(KAFKA_TEST_TIMEOUT_MS);
+        $deleteRecordsOptions->setRequestTimeout(KAFKA_TEST_LONG_TIMEOUT_MS);
         $deleteRecordsOptions->setBrokerId(KAFKA_BROKER_ID);
 
         $result = $client->deleteRecords([$deleteRecords], $deleteRecordsOptions);
@@ -508,7 +508,7 @@ class ClientTest extends TestCase
         $topic->produce(0, 0, __METHOD__);
         $topic->produce(0, 0, __METHOD__);
         $topic->produce(0, 0, __METHOD__);
-        $producer->flush(KAFKA_TEST_TIMEOUT_MS);
+        $producer->flush(KAFKA_TEST_LONG_TIMEOUT_MS);
 
         $conf = new Conf();
         $conf->set('bootstrap.servers', KAFKA_BROKERS);
@@ -525,14 +525,14 @@ class ClientTest extends TestCase
         $consumer->commit();
         $topicPartitions = $consumer->getCommittedOffsets(
             [new TopicPartition(KAFKA_TEST_TOPIC_ADMIN, 0)],
-            KAFKA_TEST_TIMEOUT_MS
+            KAFKA_TEST_LONG_TIMEOUT_MS
         );
         $this->assertSame(2, $topicPartitions[0]->getOffset());
 
         $conf = new Conf();
         $conf->set('bootstrap.servers', KAFKA_BROKERS);
         $client = Client::fromConf($conf);
-        $client->setWaitForResultEventTimeout(KAFKA_TEST_TIMEOUT_MS);
+        $client->setWaitForResultEventTimeout(KAFKA_TEST_LONG_TIMEOUT_MS);
 
         $deleteGroupOffsets = new DeleteConsumerGroupOffsets(
             __METHOD__,
@@ -540,7 +540,7 @@ class ClientTest extends TestCase
         );
 
         $deleteGroupOffsetsOptions = $client->newDeleteConsumerGroupOffsetsOptions();
-        $deleteGroupOffsetsOptions->setRequestTimeout(KAFKA_TEST_TIMEOUT_MS);
+        $deleteGroupOffsetsOptions->setRequestTimeout(KAFKA_TEST_LONG_TIMEOUT_MS);
         $deleteGroupOffsetsOptions->setBrokerId(KAFKA_BROKER_ID);
 
         $result = $client->deleteConsumerGroupOffsets($deleteGroupOffsets, $deleteGroupOffsetsOptions);
