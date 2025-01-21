@@ -22,13 +22,13 @@ trait ConsumeTrait
                 $this->fail(sprintf('Consume Kafka Message timeout %s ms exceeded', self::$MAX_CONSUME_TIMEOUT_MS));
             }
             $message = $consumeCallback();
-            if ($message->err === RD_KAFKA_RESP_ERR__TIMED_OUT) {
-                break;
-            }
             if ($message === null) {
                 if ($continueOnNull) {
                     continue;
                 }
+                break;
+            }
+            if ($message->err === RD_KAFKA_RESP_ERR__TIMED_OUT) {
                 break;
             }
             $messages[] = $message;
