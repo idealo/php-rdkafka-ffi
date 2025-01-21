@@ -18,7 +18,7 @@ jobs:
           - '8.3'
           - '8.4'
         librdkafka:
-          - '2.6.1'
+          - '2.8.0'
     defaults:
       run:
         shell: bash

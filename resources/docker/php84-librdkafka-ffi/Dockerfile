@@ -1,7 +1,7 @@
 FROM php:8.4-cli
 
 # enable ffi and install librdkafka
-ARG LIBRDKAFKA_VERSION=v2.6.1
+ARG LIBRDKAFKA_VERSION=v2.8.0
 ENV LIBRDKAFKA_VERSION=$LIBRDKAFKA_VERSION
 RUN set -e; \
     apt-get update; \

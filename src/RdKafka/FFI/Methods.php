@@ -34,7 +34,7 @@ trait Methods
      * <p>Returns the librdkafka version as string. </p>
      * @return string|null const char* - ) - Version string
      * @since 1.0.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a5b48bd8309abc31a7d2256baffb5957d
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a0cc60434083686fd8e379a905652d34a
      */
     public static function rd_kafka_version_str(): ?string
     {
@@ -45,7 +45,7 @@ trait Methods
      * <p>Retrieve supported debug contexts for use with the <code>"debug"</code> configuration property. (runtime) </p>
      * @return string|null const char* - ) - Comma-separated list of available debugging contexts.
      * @since 1.0.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#aac378d7c442a6293754a6de4e2667ab8
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#adece97d3cbdd6ca936df5b0663118c45
      */
     public static function rd_kafka_get_debug_contexts(): ?string
     {
@@ -67,7 +67,7 @@ trait Methods
      * @param int $err rd_kafka_resp_err_t - ) - Error code to translate
      * @return string|null const char*
      * @since 1.0.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a2610f668794c62a459d5c7e5c2880698
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#ab7bfc925e8d63851511b88a1cee94d6d
      */
     public static function rd_kafka_err2str(int $err): ?string
     {
@@ -79,7 +79,7 @@ trait Methods
      * @param int $err rd_kafka_resp_err_t - ) - Error code to translate
      * @return string|null const char*
      * @since 1.0.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a27b6629fddca10bf941a617b2c996321
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a8d5f6f2775ec67b124abeb5dfada2d77
      */
     public static function rd_kafka_err2name(int $err): ?string
     {
@@ -438,7 +438,7 @@ trait Methods
     /**
      * <p>Iterator for all headers. </p>
      * <pre class="fragment">   Same semantics as rd_kafka_header_get()
-     * </pre><dl class="section see"><dt>See also</dt><dd>rd_kafka_header_get() </dd></dl>
+     * </pre> <dl class="section see"><dt>See also</dt><dd>rd_kafka_header_get() </dd></dl>
      * @param \FFI\CData|null $hdrs const rd_kafka_headers_t*
      * @param int|null $idx size_t
      * @param \FFI\CData|null $namep const char**
@@ -1002,7 +1002,7 @@ trait Methods
      * @param \FFI\CData|null $cntp size_t*
      * @return \FFI\CData|null const char**
      * @since 1.0.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a4f3a04ac20df2a36e1d750f71b6d7718
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a6eba851c2af748de6921d708b47dc94c
      */
     public static function rd_kafka_conf_dump(?\FFI\CData $conf, ?\FFI\CData $cntp): ?\FFI\CData
     {
@@ -1017,7 +1017,7 @@ trait Methods
      * @param \FFI\CData|null $cntp size_t*
      * @return \FFI\CData|null const char**
      * @since 1.0.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#adc252b9f225f1fa6e1a1eb83a3560006
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a40a7a88bd5ac81b21c45d1fdd4d9e696
      */
     public static function rd_kafka_topic_conf_dump(?\FFI\CData $conf, ?\FFI\CData $cntp): ?\FFI\CData
     {
@@ -1310,11 +1310,9 @@ trait Methods
     }
 
     /**
-     * <p>Destroy Kafka handle according to specified destroy flags. </p>
      * @param \FFI\CData|null $rk rd_kafka_t*
      * @param int|null $flags int
      * @since 1.0.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#ab4249c99e6b06fbe126d85d09e4735f7
      */
     public static function rd_kafka_destroy_flags(?\FFI\CData $rk, ?int $flags): void
     {
@@ -2565,7 +2563,7 @@ trait Methods
      * @param \FFI\CData|null $rkev const rd_kafka_event_t* - )
      * @return string|null const char* - the event type's name for the given event.
      * @since 1.0.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a3767d551141115d2c7b0946c1b4ffb45
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a608193d1fb486f78c79497c8c5b63866
      */
     public static function rd_kafka_event_name(?\FFI\CData $rkev): ?string
     {
@@ -2598,7 +2596,7 @@ trait Methods
      * @param \FFI\CData|null $rkev rd_kafka_event_t* - )
      * @return \FFI\CData|null const rd_kafka_message_t* - the next message from an event.
      * @since 1.0.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a0f7cdd0f4e8dd965249477553c3e476d
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a3a855eb7bdf17f5797d4911362a5fc7c
      */
     public static function rd_kafka_event_message_next(?\FFI\CData $rkev): ?\FFI\CData
     {
@@ -2662,7 +2660,7 @@ trait Methods
      * @param \FFI\CData|null $rkev rd_kafka_event_t* - )
      * @return string|null const char* - the error string (if any). An application should check that rd_kafka_event_error() returns non-zero before calling this function.
      * @since 1.0.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a79a962de3831a077e687a8fe18d315ec
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#ad76a1b2d6c4f1727725b075678b88793
      */
     public static function rd_kafka_event_error_string(?\FFI\CData $rkev): ?string
     {
@@ -2746,7 +2744,7 @@ trait Methods
      * @param \FFI\CData|null $rkev rd_kafka_event_t* - )
      * @return string|null const char* - stats json string.
      * @since 1.0.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a0d4cb79eb5ea2aeba252176df9504e8c
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#ae8572e38ffb452f96d13a2d046fb71d9
      */
     public static function rd_kafka_event_stats(?\FFI\CData $rkev): ?string
     {
@@ -2789,7 +2787,7 @@ trait Methods
      * @param \FFI\CData|null $rkev rd_kafka_event_t* - )
      * @return \FFI\CData|null const rd_kafka_CreateTopics_result_t* - the result of a CreateTopics request, or NULL if event is of different type.
      * @since 1.0.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a28f75ccfca2dc17050fbb819dffd27bc
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a0aa821ae098ca3b88c1a7fdec25c645e
      */
     public static function rd_kafka_event_CreateTopics_result(?\FFI\CData $rkev): ?\FFI\CData
     {
@@ -2803,7 +2801,7 @@ trait Methods
      * @param \FFI\CData|null $rkev rd_kafka_event_t* - )
      * @return \FFI\CData|null const rd_kafka_DeleteTopics_result_t* - the result of a DeleteTopics request, or NULL if event is of different type.
      * @since 1.0.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#aae9b197ecfae378bb37d32b05488280a
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a4cd8e837f75589842581110890740f65
      */
     public static function rd_kafka_event_DeleteTopics_result(?\FFI\CData $rkev): ?\FFI\CData
     {
@@ -2817,7 +2815,7 @@ trait Methods
      * @param \FFI\CData|null $rkev rd_kafka_event_t* - )
      * @return \FFI\CData|null const rd_kafka_CreatePartitions_result_t* - the result of a CreatePartitions request, or NULL if event is of different type.
      * @since 1.0.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#aa56b2b4df18fd4ce09c14b523c6435ca
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#ab4f667a48124ac6be89a2b9bcd5f8d47
      */
     public static function rd_kafka_event_CreatePartitions_result(?\FFI\CData $rkev): ?\FFI\CData
     {
@@ -2831,7 +2829,7 @@ trait Methods
      * @param \FFI\CData|null $rkev rd_kafka_event_t* - )
      * @return \FFI\CData|null const rd_kafka_AlterConfigs_result_t* - the result of a AlterConfigs request, or NULL if event is of different type.
      * @since 1.0.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a2edf39234111a75b8cd7a6eb1e8de82c
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a97d0666a40b2bd014d564de332eacf3f
      */
     public static function rd_kafka_event_AlterConfigs_result(?\FFI\CData $rkev): ?\FFI\CData
     {
@@ -2845,7 +2843,7 @@ trait Methods
      * @param \FFI\CData|null $rkev rd_kafka_event_t* - )
      * @return \FFI\CData|null const rd_kafka_DescribeConfigs_result_t* - the result of a DescribeConfigs request, or NULL if event is of different type.
      * @since 1.0.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a86331ff58f167ecaebbbb8c028fecd0d
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a0e1a04881f39aa850cd47b43583f5a90
      */
     public static function rd_kafka_event_DescribeConfigs_result(?\FFI\CData $rkev): ?\FFI\CData
     {
@@ -3255,7 +3253,7 @@ trait Methods
      * @param \FFI\CData|null $topicres const rd_kafka_topic_result_t* - )
      * @return string|null const char* - the human readable error string for the given topic result, or NULL if there was no error.
      * @since 1.0.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a7f04b553274f482e2886c0a22257cab3
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a1e6596b6138eff2342da6e5c56ce9133
      */
     public static function rd_kafka_topic_result_error_string(?\FFI\CData $topicres): ?string
     {
@@ -3267,7 +3265,7 @@ trait Methods
      * @param \FFI\CData|null $topicres const rd_kafka_topic_result_t* - )
      * @return string|null const char* - the name of the topic for the given topic result.
      * @since 1.0.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a8c4abbefa7f716f3f35ad7927021e0da
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a4073e9165eda071afc6f2af6a824e967
      */
     public static function rd_kafka_topic_result_name(?\FFI\CData $topicres): ?string
     {
@@ -3497,7 +3495,7 @@ trait Methods
      * @param \FFI\CData|null $cntp size_t* - Updated to the number of elements in the array.
      * @return \FFI\CData|null const rd_kafka_topic_result_t**
      * @since 1.0.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a8ee8ad354e6eb6689ad3e9025251b095
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a49451d78d3c7e5bd23367624c03897ea
      */
     public static function rd_kafka_CreateTopics_result_topics(?\FFI\CData $result, ?\FFI\CData $cntp): ?\FFI\CData
     {
@@ -3559,7 +3557,7 @@ trait Methods
      * @param \FFI\CData|null $cntp size_t* - is updated to the number of elements in the array.
      * @return \FFI\CData|null const rd_kafka_topic_result_t**
      * @since 1.0.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a2bb352835e3d9f409377391ffbe27fc8
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#aef97d0923f7e8cec4fbec9866d32614a
      */
     public static function rd_kafka_DeleteTopics_result_topics(?\FFI\CData $result, ?\FFI\CData $cntp): ?\FFI\CData
     {
@@ -3655,7 +3653,7 @@ trait Methods
      * @param \FFI\CData|null $cntp size_t* - is updated to the number of elements in the array.
      * @return \FFI\CData|null const rd_kafka_topic_result_t**
      * @since 1.0.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#aeb762fa2b79cccb4e569c94b3c0c08db
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a2c2b415181b4e4d633d40a63ac01d681
      */
     public static function rd_kafka_CreatePartitions_result_topics(?\FFI\CData $result, ?\FFI\CData $cntp): ?\FFI\CData
     {
@@ -3667,7 +3665,7 @@ trait Methods
      * @param int $confsource rd_kafka_ConfigSource_t - )
      * @return string|null const char* - a string representation of the <code>confsource</code>.
      * @since 1.0.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#ac12e21fba3216ac6f1f1eb5aa2859b9c
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#ad946f1e500a4ce28ed9378d495586076
      */
     public static function rd_kafka_ConfigSource_name(int $confsource): ?string
     {
@@ -3679,7 +3677,7 @@ trait Methods
      * @param \FFI\CData|null $entry const rd_kafka_ConfigEntry_t* - )
      * @return string|null const char* - the configuration property name
      * @since 1.0.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#ab379f1b0d46879d4fdeb05ca818e5724
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#ad68d560b00fdbad3a1e994bc423791f6
      */
     public static function rd_kafka_ConfigEntry_name(?\FFI\CData $entry): ?string
     {
@@ -3691,7 +3689,7 @@ trait Methods
      * @param \FFI\CData|null $entry const rd_kafka_ConfigEntry_t* - )
      * @return string|null const char* - the configuration value, may be NULL for sensitive or unset properties.
      * @since 1.0.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#af1e740ad0e7ebf9c708b8e6cba7dd3e7
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a744ffc08e0ad1a86e62fa4d4da956770
      */
     public static function rd_kafka_ConfigEntry_value(?\FFI\CData $entry): ?string
     {
@@ -3768,7 +3766,7 @@ trait Methods
      * @param \FFI\CData|null $cntp size_t* - is updated to the number of elements in the array.
      * @return \FFI\CData|null const rd_kafka_ConfigEntry_t** - the synonym config entry array.
      * @since 1.0.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a192933700fd215908d4bfd1e4e93ff51
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a8a9e60a1274f1889a6d20d8ac6ffb948
      */
     public static function rd_kafka_ConfigEntry_synonyms(?\FFI\CData $entry, ?\FFI\CData $cntp): ?\FFI\CData
     {
@@ -3780,7 +3778,7 @@ trait Methods
      * @param int $restype rd_kafka_ResourceType_t - )
      * @return string|null const char* - a string representation of the <code>restype</code>
      * @since 1.0.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a731d80842dc9d8388abe94e7b27f053c
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#ac026f797b199338b30a684087d2365f8
      */
     public static function rd_kafka_ResourceType_name(int $restype): ?string
     {
@@ -3842,7 +3840,7 @@ trait Methods
      * @param \FFI\CData|null $cntp size_t* - is updated to the number of elements in the array.
      * @return \FFI\CData|null const rd_kafka_ConfigEntry_t**
      * @since 1.0.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a3ee9b18e3b1dc3367f5ef3f3347bf098
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a5e95b289deaebe43f7a73874e8428f4d
      */
     public static function rd_kafka_ConfigResource_configs(?\FFI\CData $config, ?\FFI\CData $cntp): ?\FFI\CData
     {
@@ -3866,7 +3864,7 @@ trait Methods
      * @param \FFI\CData|null $config const rd_kafka_ConfigResource_t* - )
      * @return string|null const char* - the name for <code>config</code>
      * @since 1.0.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#abecdb6f1b926e529c5df5aa82874cb9d
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#af70880e690cb45ff728a331e7e40baac
      */
     public static function rd_kafka_ConfigResource_name(?\FFI\CData $config): ?string
     {
@@ -3890,7 +3888,7 @@ trait Methods
      * @param \FFI\CData|null $config const rd_kafka_ConfigResource_t* - )
      * @return string|null const char* - the error string for this resource from an AlterConfigs request, or NULL if no error.
      * @since 1.0.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a96f9d507d6d89c21bd597b75fcd99c27
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a077c4a83e8b7fcf23057dad5a2af812f
      */
     public static function rd_kafka_ConfigResource_error_string(?\FFI\CData $config): ?string
     {
@@ -3924,7 +3922,7 @@ trait Methods
      * @param \FFI\CData|null $cntp size_t* - is updated to the number of elements in the array.
      * @return \FFI\CData|null const rd_kafka_ConfigResource_t** - an array of ConfigResource elements, or NULL if not available.
      * @since 1.0.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#af477d5420ddcad9a0f09435de060dafb
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a7a8a2fdf3473111a84e14bcb0a88ef05
      */
     public static function rd_kafka_AlterConfigs_result_resources(?\FFI\CData $result, ?\FFI\CData $cntp): ?\FFI\CData
     {
@@ -3960,7 +3958,7 @@ trait Methods
      * @param \FFI\CData|null $cntp size_t* - is updated to the number of elements in the array.
      * @return \FFI\CData|null const rd_kafka_ConfigResource_t**
      * @since 1.0.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a30da84abba0df9f93460d15dc064f3ef
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a1f8eb6562e32b2638d75ca22161ab185
      */
     public static function rd_kafka_DescribeConfigs_result_resources(?\FFI\CData $result, ?\FFI\CData $cntp): ?\FFI\CData
     {
@@ -3972,7 +3970,7 @@ trait Methods
      * @param \FFI\CData|null $rk rd_kafka_t* - )
      * @return \FFI\CData|null const rd_kafka_conf_t* - the configuration object used by an rd_kafka_t instance. For use with rd_kafka_conf_get(), et.al., to extract configuration properties from a running client.
      * @since 1.1.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#ac5497485329acb55ef3aa08ef00f6702
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a71e233cd19b13572772df2d43074a97d
      */
     public static function rd_kafka_conf(?\FFI\CData $rk): ?\FFI\CData
     {
@@ -4063,7 +4061,7 @@ trait Methods
      * @param \FFI\CData|null $rkev rd_kafka_event_t* - )
      * @return string|null const char* - the associated configuration string for the event, or NULL if the configuration property is not set or if not applicable for the given event type.
      * @since 1.1.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a79126bbee3e5c7930459469d6ee20952
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a7e1534cd509d7b233ba4b3d2efea5278
      */
     public static function rd_kafka_event_config_string(?\FFI\CData $rkev): ?string
     {
@@ -4319,7 +4317,7 @@ trait Methods
      * @param \FFI\CData|null $error const rd_kafka_error_t* - )
      * @return string|null const char* - the error code name for <code>error</code>, e.g, "ERR_UNKNOWN_MEMBER_ID", or an empty string if <code>error</code> is NULL.
      * @since 1.4.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#ab632db46f371bca77685da2e6245b5be
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a3b32c027854efbf7f52392019a15bc67
      */
     public static function rd_kafka_error_name(?\FFI\CData $error): ?string
     {
@@ -4331,7 +4329,7 @@ trait Methods
      * @param \FFI\CData|null $error const rd_kafka_error_t* - )
      * @return string|null const char* - a human readable error string for <code>error</code>, or an empty string if <code>error</code> is NULL.
      * @since 1.4.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#ad45afa13cd9d23ed5ffade73b0c4272f
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#aea75812786d33b35175b3764e7a342df
      */
     public static function rd_kafka_error_string(?\FFI\CData $error): ?string
     {
@@ -4730,7 +4728,7 @@ trait Methods
      * @param \FFI\CData|null $rkmessage const rd_kafka_message_t* - )
      * @return string|null const char*
      * @since 1.5.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a4d06383f90911ab9257bc468053bfa36
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a5908f68997a5bc42695cff2a703618dd
      */
     public static function rd_kafka_message_errstr(?\FFI\CData $rkmessage): ?string
     {
@@ -4881,7 +4879,7 @@ trait Methods
      * @param \FFI\CData|null $rk rd_kafka_t* - )
      * @return string|null const char* - NULL on error, or one of "NONE", "EAGER", "COOPERATIVE" on success.
      * @since 1.6.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#ae8c9ec99ace76e89a6b77b89ff15c970
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a57d367712406848d59cdaae97ab29354
      */
     public static function rd_kafka_rebalance_protocol(?\FFI\CData $rk): ?string
     {
@@ -4923,7 +4921,7 @@ trait Methods
      * @param \FFI\CData|null $rkev rd_kafka_event_t* - )
      * @return \FFI\CData|null const rd_kafka_DeleteRecords_result_t* - the result of a DeleteRecords request, or NULL if event is of different type.
      * @since 1.6.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a4f56557b7e82e145dca38d6f0409476c
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#ad98fee7bec920114c73c1af90be53416
      */
     public static function rd_kafka_event_DeleteRecords_result(?\FFI\CData $rkev): ?\FFI\CData
     {
@@ -4937,7 +4935,7 @@ trait Methods
      * @param \FFI\CData|null $rkev rd_kafka_event_t* - )
      * @return \FFI\CData|null const rd_kafka_DeleteGroups_result_t* - the result of a DeleteGroups request, or NULL if event is of different type.
      * @since 1.6.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a4d60f12ec39f5d51399e35ff26160f37
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#ad417e30a46183425d3549acb0a2c7e9f
      */
     public static function rd_kafka_event_DeleteGroups_result(?\FFI\CData $rkev): ?\FFI\CData
     {
@@ -4951,7 +4949,7 @@ trait Methods
      * @param \FFI\CData|null $rkev rd_kafka_event_t* - )
      * @return \FFI\CData|null const rd_kafka_DeleteConsumerGroupOffsets_result_t* - the result of a DeleteConsumerGroupOffsets request, or NULL if event is of different type.
      * @since 1.6.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#aa1d97f635157900a0a37e76818149125
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a36ec38fe2135740ac6b41a4141fbc566
      */
     public static function rd_kafka_event_DeleteConsumerGroupOffsets_result(?\FFI\CData $rkev): ?\FFI\CData
     {
@@ -4965,7 +4963,7 @@ trait Methods
      * @param \FFI\CData|null $groupres const rd_kafka_group_result_t* - )
      * @return \FFI\CData|null const rd_kafka_error_t* - the error for the given group result, or NULL on success.
      * @since 1.6.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a4b31907b1a13fbb6bdab1622aacce611
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a97cda56301d566204aad9320e2b748ba
      */
     public static function rd_kafka_group_result_error(?\FFI\CData $groupres): ?\FFI\CData
     {
@@ -4977,7 +4975,7 @@ trait Methods
      * @param \FFI\CData|null $groupres const rd_kafka_group_result_t* - )
      * @return string|null const char* - the name of the group for the given group result.
      * @since 1.6.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#ae0af23582029dd553ec3e6786e4aa0b7
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a7f8f41cfe01a2b977e4a2d54644e765d
      */
     public static function rd_kafka_group_result_name(?\FFI\CData $groupres): ?string
     {
@@ -4989,7 +4987,7 @@ trait Methods
      * @param \FFI\CData|null $groupres const rd_kafka_group_result_t* - )
      * @return \FFI\CData|null const rd_kafka_topic_partition_list_t* - the partitions/offsets for the given group result, if applicable to the request type, else NULL.
      * @since 1.6.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#afb53d17790ca12c4d945a9febf183409
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a5c039926ae9dca773ebec2f9147f2fa1
      */
     public static function rd_kafka_group_result_partitions(?\FFI\CData $groupres): ?\FFI\CData
     {
@@ -5055,7 +5053,7 @@ trait Methods
      * @param \FFI\CData|null $result const rd_kafka_DeleteRecords_result_t* - )
      * @return \FFI\CData|null const rd_kafka_topic_partition_list_t*
      * @since 1.6.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#aadccd815e56ad7434bd0e7865ae5b4c5
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#ac894a0e005db1fa671c1802ba3563b69
      */
     public static function rd_kafka_DeleteRecords_result_offsets(?\FFI\CData $result): ?\FFI\CData
     {
@@ -5119,7 +5117,7 @@ trait Methods
      * @param \FFI\CData|null $cntp size_t* - is updated to the number of elements in the array.
      * @return \FFI\CData|null const rd_kafka_group_result_t**
      * @since 1.6.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a0246ba70addd9d3c8f8091ea433cabb7
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a20097b0ced17760c9aa624552dbf47e7
      */
     public static function rd_kafka_DeleteGroups_result_groups(?\FFI\CData $result, ?\FFI\CData $cntp): ?\FFI\CData
     {
@@ -5184,7 +5182,7 @@ trait Methods
      * @param \FFI\CData|null $cntp size_t* - is updated to the number of elements in the array.
      * @return \FFI\CData|null const rd_kafka_group_result_t**
      * @since 1.6.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a039a9e287e641e3f017c94ab1c48b18b
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a014654eaec7601933e6ec5d5613ef4b0
      */
     public static function rd_kafka_DeleteConsumerGroupOffsets_result_groups(?\FFI\CData $result, ?\FFI\CData $cntp): ?\FFI\CData
     {
@@ -5400,7 +5398,7 @@ trait Methods
      * @param \FFI\CData|null $rkev rd_kafka_event_t* - )
      * @return \FFI\CData|null const rd_kafka_CreateAcls_result_t* - the result of a CreateAcls request, or NULL if event is of different type.
      * @since 1.9.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a24b0e95c5d86a9490daf8ca8a8122ed6
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#aa605a0d0500ccb783ed7da23670075d9
      */
     public static function rd_kafka_event_CreateAcls_result(?\FFI\CData $rkev): ?\FFI\CData
     {
@@ -5412,7 +5410,7 @@ trait Methods
      * @param \FFI\CData|null $rkev rd_kafka_event_t* - )
      * @return \FFI\CData|null const rd_kafka_DescribeAcls_result_t* - the result of a DescribeAcls request, or NULL if event is of different type.
      * @since 1.9.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a5f3c26dc9f796315211c8bf46cfb1753
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#adba2388c1eac2bb6d3e56fdaf4da0839
      */
     public static function rd_kafka_event_DescribeAcls_result(?\FFI\CData $rkev): ?\FFI\CData
     {
@@ -5424,7 +5422,7 @@ trait Methods
      * @param \FFI\CData|null $rkev rd_kafka_event_t* - )
      * @return \FFI\CData|null const rd_kafka_DeleteAcls_result_t* - the result of a DeleteAcls request, or NULL if event is of different type.
      * @since 1.9.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a818f0a66803e94ed186747cef3d4b012
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a9b456786cd867418fd7f8e3cb5f25478
      */
     public static function rd_kafka_event_DeleteAcls_result(?\FFI\CData $rkev): ?\FFI\CData
     {
@@ -5436,7 +5434,7 @@ trait Methods
      * @param int $resource_pattern_type rd_kafka_ResourcePatternType_t - )
      * @return string|null const char* - a string representation of the <code>resource_pattern_type</code>
      * @since 1.9.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a311aad04500432476964426971baf7de
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a488574082a549170e09adb67faca2f46
      */
     public static function rd_kafka_ResourcePatternType_name(int $resource_pattern_type): ?string
     {
@@ -5448,7 +5446,7 @@ trait Methods
      * @param \FFI\CData|null $aclres const rd_kafka_acl_result_t* - )
      * @return \FFI\CData|null const rd_kafka_error_t* - the error object for the given acl result, or NULL on success.
      * @since 1.9.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a433383bc595e0d1fa028243ac2b2b5df
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#aebde4f3d06cf6ae74b4be39bca9107bb
      */
     public static function rd_kafka_acl_result_error(?\FFI\CData $aclres): ?\FFI\CData
     {
@@ -5460,7 +5458,7 @@ trait Methods
      * @param int $acl_operation rd_kafka_AclOperation_t - )
      * @return string|null const char* - a string representation of the <code>acl_operation</code>
      * @since 1.9.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a191c77d49f59377c37d934ee78c13cd6
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#afeab00c55bf43b5152ecef5167baa227
      */
     public static function rd_kafka_AclOperation_name(int $acl_operation): ?string
     {
@@ -5472,7 +5470,7 @@ trait Methods
      * @param int $acl_permission_type rd_kafka_AclPermissionType_t - )
      * @return string|null const char* - a string representation of the <code>acl_permission_type</code>
      * @since 1.9.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#aaae7406b5febd7ab37daf6cd56405a7c
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a9df29768d60a17013bb4e2860378f248
      */
     public static function rd_kafka_AclPermissionType_name(int $acl_permission_type): ?string
     {
@@ -5536,7 +5534,7 @@ trait Methods
      * @param \FFI\CData|null $acl const rd_kafka_AclBinding_t* - )
      * @return string|null const char* - the resource name for the given acl binding.
      * @since 1.9.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#ae8aec3bdc076a78fbaf37dc39ea0983c
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#acb03634b4456326f3592b79584c551ea
      */
     public static function rd_kafka_AclBinding_name(?\FFI\CData $acl): ?string
     {
@@ -5548,7 +5546,7 @@ trait Methods
      * @param \FFI\CData|null $acl const rd_kafka_AclBinding_t* - )
      * @return string|null const char* - the principal for the given acl binding.
      * @since 1.9.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a1e50b091f4562bffd21405799e4f6597
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#ad99b0868262484fc46b7c36b7db2173b
      */
     public static function rd_kafka_AclBinding_principal(?\FFI\CData $acl): ?string
     {
@@ -5560,7 +5558,7 @@ trait Methods
      * @param \FFI\CData|null $acl const rd_kafka_AclBinding_t* - )
      * @return string|null const char* - the host for the given acl binding.
      * @since 1.9.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#ad5428eeaee75110564762eed82b7ab54
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a8c242229f6b0b8faeb078fc814261fa7
      */
     public static function rd_kafka_AclBinding_host(?\FFI\CData $acl): ?string
     {
@@ -5608,7 +5606,7 @@ trait Methods
      * @param \FFI\CData|null $acl const rd_kafka_AclBinding_t* - )
      * @return \FFI\CData|null const rd_kafka_error_t* - the error object for the given acl binding, or NULL on success.
      * @since 1.9.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a3d71c7575dcf5dabfbf6f85ec25db7e5
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a047abe192b6445a37cbab1f1be355f3d
      */
     public static function rd_kafka_AclBinding_error(?\FFI\CData $acl): ?\FFI\CData
     {
@@ -5641,7 +5639,7 @@ trait Methods
      * @param \FFI\CData|null $cntp size_t* - is updated to the number of elements in the array.
      * @return \FFI\CData|null const rd_kafka_acl_result_t**
      * @since 1.9.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a03ef006de8d9d739e33f1c6951e34872
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#abfcceea2bb29d6fd800f11224f0f4238
      */
     public static function rd_kafka_CreateAcls_result_acls(?\FFI\CData $result, ?\FFI\CData $cntp): ?\FFI\CData
     {
@@ -5670,12 +5668,13 @@ trait Methods
 
     /**
      * <p>Get an array of resource results from a DescribeAcls result. </p>
-     * <p>DescribeAcls - describe access control lists. The returned <code>resources</code> life-time is the same as the <code>result</code> object. </p>
+     * <p>DescribeAcls - describe access control lists.</p>
+     * <p>The returned <code>resources</code> life-time is the same as the <code>result</code> object. </p>
      * @param \FFI\CData|null $result const rd_kafka_DescribeAcls_result_t* - DescribeAcls result to get acls from.
      * @param \FFI\CData|null $cntp size_t* - is updated to the number of elements in the array.
      * @return \FFI\CData|null const rd_kafka_AclBinding_t**
      * @since 1.9.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a218f0d67fb21c4275df3dd5a030bb500
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#aa5d797f84a5dcf3c069636c1dc408934
      */
     public static function rd_kafka_DescribeAcls_result_acls(?\FFI\CData $result, ?\FFI\CData $cntp): ?\FFI\CData
     {
@@ -5708,7 +5707,7 @@ trait Methods
      * @param \FFI\CData|null $cntp size_t* - is updated to the number of elements in the array.
      * @return \FFI\CData|null const rd_kafka_DeleteAcls_result_response_t**
      * @since 1.9.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a244823e75162a97908ef8a9ebe011ddf
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#af22ab28bfc36ac13ee043e95b0741dc0
      */
     public static function rd_kafka_DeleteAcls_result_responses(?\FFI\CData $result, ?\FFI\CData $cntp): ?\FFI\CData
     {
@@ -5720,7 +5719,7 @@ trait Methods
      * @param \FFI\CData|null $result_response const rd_kafka_DeleteAcls_result_response_t* - )
      * @return \FFI\CData|null const rd_kafka_error_t* - the error object for the given DeleteAcls result response, or NULL on success.
      * @since 1.9.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a3a4767716acf53669f0259f72e63d4cc
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a519cf227ea6f1cadd19a767d430209c1
      */
     public static function rd_kafka_DeleteAcls_result_response_error(?\FFI\CData $result_response): ?\FFI\CData
     {
@@ -5733,7 +5732,7 @@ trait Methods
      * @param \FFI\CData|null $matching_acls_cntp size_t*
      * @return \FFI\CData|null const rd_kafka_AclBinding_t** - the matching acls array for the given DeleteAcls result response.
      * @since 1.9.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#adb7705eb3f43feba306e857093e6f96c
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a157a9b9ab67703b3e531a67f7a8da7de
      */
     public static function rd_kafka_DeleteAcls_result_response_matching_acls(?\FFI\CData $result_response, ?\FFI\CData $matching_acls_cntp): ?\FFI\CData
     {
@@ -5812,7 +5811,7 @@ trait Methods
      * @param \FFI\CData|null $node const rd_kafka_Node_t* - ) - The Node instance.
      * @return string|null const char* - The node host.
      * @since 2.0.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a5669ca3bdf89fc5d473d42bd3edf1002
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a4916477d9d4a0e76d05dd4b203d92b3b
      */
     public static function rd_kafka_Node_host(?\FFI\CData $node): ?string
     {
@@ -5836,7 +5835,7 @@ trait Methods
      * @param int $state rd_kafka_consumer_group_state_t - ) - The state value.
      * @return string|null const char* - The group state name corresponding to the provided group state value.
      * @since 2.0.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a77bdc3f9d644c879f64ff033a5814284
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#aa9e2cac6e414980eef365394d06014f4
      */
     public static function rd_kafka_consumer_group_state_name(int $state): ?string
     {
@@ -5863,7 +5862,7 @@ trait Methods
      * @param \FFI\CData|null $rkev rd_kafka_event_t* - )
      * @return \FFI\CData|null const rd_kafka_ListConsumerGroups_result_t* - the result of a ListConsumerGroups request, or NULL if event is of different type.
      * @since 2.0.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#ab7f0c4e335f10db1af2babab5b29dcd3
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#ae98a40da574c542788d195ac8a0413e6
      */
     public static function rd_kafka_event_ListConsumerGroups_result(?\FFI\CData $rkev): ?\FFI\CData
     {
@@ -5878,7 +5877,7 @@ trait Methods
      * @param \FFI\CData|null $rkev rd_kafka_event_t* - )
      * @return \FFI\CData|null const rd_kafka_DescribeConsumerGroups_result_t* - the result of a DescribeConsumerGroups request, or NULL if event is of different type.
      * @since 2.0.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a8cb01d10326bea4a31ebe173c56ee8e7
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a1c6a620b55cb4c6acbc48c273d334b16
      */
     public static function rd_kafka_event_DescribeConsumerGroups_result(?\FFI\CData $rkev): ?\FFI\CData
     {
@@ -5893,7 +5892,7 @@ trait Methods
      * @param \FFI\CData|null $rkev rd_kafka_event_t* - )
      * @return \FFI\CData|null const rd_kafka_AlterConsumerGroupOffsets_result_t* - the result of a AlterConsumerGroupOffsets request, or NULL if event is of different type.
      * @since 2.0.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#ab13890c7914612fb1ac89b2352b84f3b
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#aac08437e5b1361291f93b7428b4b1275
      */
     public static function rd_kafka_event_AlterConsumerGroupOffsets_result(?\FFI\CData $rkev): ?\FFI\CData
     {
@@ -5908,7 +5907,7 @@ trait Methods
      * @param \FFI\CData|null $rkev rd_kafka_event_t* - )
      * @return \FFI\CData|null const rd_kafka_ListConsumerGroupOffsets_result_t* - the result of a ListConsumerGroupOffsets request, or NULL if event is of different type.
      * @since 2.0.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a3b0211470e7ad47b7ddf6d88f46473ca
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#ac24d4e077500b38974634f63758aae7e
      */
     public static function rd_kafka_event_ListConsumerGroupOffsets_result(?\FFI\CData $rkev): ?\FFI\CData
     {
@@ -6004,7 +6003,7 @@ trait Methods
      * @param \FFI\CData|null $grplist const rd_kafka_ConsumerGroupListing_t* - ) - The group listing.
      * @return string|null const char* - The group id.
      * @since 2.0.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a6a27124991b0decc2fb03078fa7b902d
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a6527936dcb6222ed4ec34693aacdea24
      */
     public static function rd_kafka_ConsumerGroupListing_group_id(?\FFI\CData $grplist): ?string
     {
@@ -6044,7 +6043,7 @@ trait Methods
      * @param \FFI\CData|null $cntp size_t* - is updated to the number of elements in the array.
      * @return \FFI\CData|null const rd_kafka_ConsumerGroupListing_t**
      * @since 2.0.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a70aed36558cd405af861a4dbeb6ccd21
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a3a0b27d2db47bd67106a02c9ac211ae6
      */
     public static function rd_kafka_ListConsumerGroups_result_valid(?\FFI\CData $result, ?\FFI\CData $cntp): ?\FFI\CData
     {
@@ -6061,7 +6060,7 @@ trait Methods
      * @param \FFI\CData|null $cntp size_t* - Is updated to the number of elements in the array.
      * @return \FFI\CData|null const rd_kafka_error_t** - Array of errors in <code>result</code>.
      * @since 2.0.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a54dd847029c30daa85d90aa434ccb59c
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a0d1251b00ea55f8bd652c7a056c11425
      */
     public static function rd_kafka_ListConsumerGroups_result_errors(?\FFI\CData $result, ?\FFI\CData $cntp): ?\FFI\CData
     {
@@ -6096,7 +6095,7 @@ trait Methods
      * @param \FFI\CData|null $cntp size_t* - is updated to the number of elements in the array.
      * @return \FFI\CData|null const rd_kafka_ConsumerGroupDescription_t**
      * @since 2.0.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a804bc69aede27fdd90977971a16d228f
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a7105546ec6af24791fbb0da90f0d2384
      */
     public static function rd_kafka_DescribeConsumerGroups_result_groups(?\FFI\CData $result, ?\FFI\CData $cntp): ?\FFI\CData
     {
@@ -6111,7 +6110,7 @@ trait Methods
      * @param \FFI\CData|null $grpdesc const rd_kafka_ConsumerGroupDescription_t* - ) - The group description.
      * @return string|null const char* - The group id.
      * @since 2.0.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a67ac9d914b5748579972cd83c52718b9
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a1ac25283379d2cdcd7def61763ea1183
      */
     public static function rd_kafka_ConsumerGroupDescription_group_id(?\FFI\CData $grpdesc): ?string
     {
@@ -6126,7 +6125,7 @@ trait Methods
      * @param \FFI\CData|null $grpdesc const rd_kafka_ConsumerGroupDescription_t* - ) - The group description.
      * @return \FFI\CData|null const rd_kafka_error_t* - The group description error.
      * @since 2.0.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a20e364a289b27f317bb6badf792d258d
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a809554b4c1ba1d54d9daffc72e056d9d
      */
     public static function rd_kafka_ConsumerGroupDescription_error(?\FFI\CData $grpdesc): ?\FFI\CData
     {
@@ -6153,7 +6152,7 @@ trait Methods
      * @param \FFI\CData|null $grpdesc const rd_kafka_ConsumerGroupDescription_t* - ) - The group description.
      * @return string|null const char* - The partition assignor.
      * @since 2.0.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a26883b4c05b244fc198e17cde819afa1
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a28ae221b77d6ea9b605b902f92a8022d
      */
     public static function rd_kafka_ConsumerGroupDescription_partition_assignor(?\FFI\CData $grpdesc): ?string
     {
@@ -6180,7 +6179,7 @@ trait Methods
      * @param \FFI\CData|null $grpdesc const rd_kafka_ConsumerGroupDescription_t* - ) - The group description.
      * @return \FFI\CData|null const rd_kafka_Node_t* - The group coordinator.
      * @since 2.0.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a5106552902a7666627ed96957b18b7f5
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a63c98664bac3c9cda112e0bda18a4328
      */
     public static function rd_kafka_ConsumerGroupDescription_coordinator(?\FFI\CData $grpdesc): ?\FFI\CData
     {
@@ -6208,7 +6207,7 @@ trait Methods
      * @param int|null $idx size_t - The member idx.
      * @return \FFI\CData|null const rd_kafka_MemberDescription_t* - A member at index <code>idx</code>, or NULL if <code>idx</code> is out of range.
      * @since 2.0.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a0ffb23c272f79cd548f71b7c0ad24fc4
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a7bdfd0d42f52fb3d8d58aca660ef36b0
      */
     public static function rd_kafka_ConsumerGroupDescription_member(?\FFI\CData $grpdesc, ?int $idx): ?\FFI\CData
     {
@@ -6223,7 +6222,7 @@ trait Methods
      * @param \FFI\CData|null $member const rd_kafka_MemberDescription_t* - ) - The group member.
      * @return string|null const char* - The client id.
      * @since 2.0.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a7e553ceb0b76a8ef939a0339e9e861ad
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#af51b7bb5ba85029cf61512e0d577752b
      */
     public static function rd_kafka_MemberDescription_client_id(?\FFI\CData $member): ?string
     {
@@ -6238,7 +6237,7 @@ trait Methods
      * @param \FFI\CData|null $member const rd_kafka_MemberDescription_t* - ) - The group member.
      * @return string|null const char* - The group instance id, or NULL if not available.
      * @since 2.0.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a0b746957ba9447dc2c73aae8df177e80
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#ac4a5a27065d4aac5c9cf68cb518a40d3
      */
     public static function rd_kafka_MemberDescription_group_instance_id(?\FFI\CData $member): ?string
     {
@@ -6253,7 +6252,7 @@ trait Methods
      * @param \FFI\CData|null $member const rd_kafka_MemberDescription_t* - ) - The group member.
      * @return string|null const char* - The consumer id.
      * @since 2.0.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#ac359a93ea6b7b7d9bd050cad1be55f21
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a870f35c37cb290231adb1ef8d4fa7454
      */
     public static function rd_kafka_MemberDescription_consumer_id(?\FFI\CData $member): ?string
     {
@@ -6268,7 +6267,7 @@ trait Methods
      * @param \FFI\CData|null $member const rd_kafka_MemberDescription_t* - ) - The group member.
      * @return string|null const char* - The host.
      * @since 2.0.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#add167499632d1f617bb16802a5bb2d2b
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a74681ac4652977e239f18d7e13a40dfe
      */
     public static function rd_kafka_MemberDescription_host(?\FFI\CData $member): ?string
     {
@@ -6283,7 +6282,7 @@ trait Methods
      * @param \FFI\CData|null $member const rd_kafka_MemberDescription_t* - ) - The group member.
      * @return \FFI\CData|null const rd_kafka_MemberAssignment_t* - The member assignment.
      * @since 2.0.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a2e6070360cb854c549bc123222372eb2
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a9c5094e0d39a8d6f96e08355ef11c549
      */
     public static function rd_kafka_MemberDescription_assignment(?\FFI\CData $member): ?\FFI\CData
     {
@@ -6298,7 +6297,7 @@ trait Methods
      * @param \FFI\CData|null $assignment const rd_kafka_MemberAssignment_t* - ) - The group member assignment.
      * @return \FFI\CData|null const rd_kafka_topic_partition_list_t* - The assigned partitions.
      * @since 2.0.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a42f960ea967772f9d79a201abc507ac6
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a5da333973857cb6e128a856399a9a21f
      */
     public static function rd_kafka_MemberAssignment_partitions(?\FFI\CData $assignment): ?\FFI\CData
     {
@@ -6365,7 +6364,7 @@ trait Methods
      * @param \FFI\CData|null $cntp size_t* - is updated to the number of elements in the array.
      * @return \FFI\CData|null const rd_kafka_group_result_t**
      * @since 2.0.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a23b262447d3f65fc2ba52f5002d9c195
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a0b4b3b9c5388038f4aac0e939f56854d
      */
     public static function rd_kafka_ListConsumerGroupOffsets_result_groups(?\FFI\CData $result, ?\FFI\CData $cntp): ?\FFI\CData
     {
@@ -6432,7 +6431,7 @@ trait Methods
      * @param \FFI\CData|null $cntp size_t* - is updated to the number of elements in the array.
      * @return \FFI\CData|null const rd_kafka_group_result_t**
      * @since 2.0.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a8b9eb384ca33b0e87606e9decd07d3eb
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a7eff1952f24e1d5f2bde678165886731
      */
     public static function rd_kafka_AlterConsumerGroupOffsets_result_groups(?\FFI\CData $result, ?\FFI\CData $cntp): ?\FFI\CData
     {
@@ -6516,7 +6515,7 @@ trait Methods
      * @param \FFI\CData|null $rkev rd_kafka_event_t* - )
      * @return \FFI\CData|null const rd_kafka_IncrementalAlterConfigs_result_t* - the result of a IncrementalAlterConfigs request, or NULL if event is of different type.
      * @since 2.2.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a7005c1f446376c4e0d07c11b2ddc8918
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a8e76c2d637218310d8868af31649b97a
      */
     public static function rd_kafka_event_IncrementalAlterConfigs_result(?\FFI\CData $rkev): ?\FFI\CData
     {
@@ -6531,7 +6530,7 @@ trait Methods
      * @param \FFI\CData|null $rkev rd_kafka_event_t* - )
      * @return \FFI\CData|null const rd_kafka_DescribeUserScramCredentials_result_t* - the result of a DescribeUserScramCredentials request, or NULL if event is of different type.
      * @since 2.2.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a8c2dbdc07da30740430e66c527b05cf2
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a69853c3d64324a45341b2a68b0e2026e
      */
     public static function rd_kafka_event_DescribeUserScramCredentials_result(?\FFI\CData $rkev): ?\FFI\CData
     {
@@ -6546,7 +6545,7 @@ trait Methods
      * @param \FFI\CData|null $rkev rd_kafka_event_t* - )
      * @return \FFI\CData|null const rd_kafka_AlterUserScramCredentials_result_t* - the result of a AlterUserScramCredentials request, or NULL if event is of different type.
      * @since 2.2.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a1f09d94a5a87834a917794450cd6cd46
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#abb9995f278c3eaf8e4bc6caba254ba0a
      */
     public static function rd_kafka_event_AlterUserScramCredentials_result(?\FFI\CData $rkev): ?\FFI\CData
     {
@@ -6596,7 +6595,7 @@ trait Methods
      * @param \FFI\CData|null $cntp size_t* - is updated to the number of elements in the array.
      * @return \FFI\CData|null const rd_kafka_ConfigResource_t** - an array of ConfigResource elements, or NULL if not available.
      * @since 2.2.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#ae6b92f7bfcbc102ed47b463c8c6d7608
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#ad1d8458aa405d06de7feb716ae5144b5
      */
     public static function rd_kafka_IncrementalAlterConfigs_result_resources(?\FFI\CData $result, ?\FFI\CData $cntp): ?\FFI\CData
     {
@@ -6671,7 +6670,7 @@ trait Methods
      * @param \FFI\CData|null $cntp size_t* - is updated to the number of elements in the array.
      * @return \FFI\CData|null const rd_kafka_UserScramCredentialsDescription_t**
      * @since 2.2.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a6cff8d4ffdc15521a29993994904b4ef
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a1d6db38eb4f640a20a5806da2b12bc47
      */
     public static function rd_kafka_DescribeUserScramCredentials_result_descriptions(?\FFI\CData $result, ?\FFI\CData $cntp): ?\FFI\CData
     {
@@ -6772,7 +6771,7 @@ trait Methods
      * @param \FFI\CData|null $cntp size_t* - is updated to the number of elements in the array.
      * @return \FFI\CData|null const rd_kafka_AlterUserScramCredentials_result_response_t**
      * @since 2.2.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#adb851385d7dba3b96468f2a3a4a5868f
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#abf118e72e7bea8ad0cd56a950dcfe2b3
      */
     public static function rd_kafka_AlterUserScramCredentials_result_responses(?\FFI\CData $result, ?\FFI\CData $cntp): ?\FFI\CData
     {
@@ -6800,7 +6799,7 @@ trait Methods
      * @param \FFI\CData|null $uuid const rd_kafka_Uuid_t* - ) - UUID for which base64 encoding is required.
      * @return string|null const char* - base64 encoded string for the given UUID or NULL in case of some issue with the conversion or the conversion is not supported.
      * @since 2.3.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a1186ff610c5c603461bafa1886c2f64a
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a50639fc35e5e639ab5851857ed806b93
      */
     public static function rd_kafka_Uuid_base64str(?\FFI\CData $uuid): ?string
     {
@@ -6878,7 +6877,7 @@ trait Methods
      * @param \FFI\CData|null $node const rd_kafka_Node_t* - ) - The Node instance
      * @return string|null const char* - The node rack id. May be NULL.
      * @since 2.3.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a8ec4583d6314400e4602007c9f8ae2da
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a4082b53761808c022c49700988138dc7
      */
     public static function rd_kafka_Node_rack(?\FFI\CData $node): ?string
     {
@@ -6893,7 +6892,7 @@ trait Methods
      * @param \FFI\CData|null $rkev rd_kafka_event_t* - )
      * @return \FFI\CData|null const rd_kafka_DescribeTopics_result_t* - the result of a DescribeTopics request, or NULL if event is of different type.
      * @since 2.3.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#ae309867e52a99067ece1a7cadd99dd18
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a3bdad3fc99fb284859e6ef258efcae89
      */
     public static function rd_kafka_event_DescribeTopics_result(?\FFI\CData $rkev): ?\FFI\CData
     {
@@ -6908,7 +6907,7 @@ trait Methods
      * @param \FFI\CData|null $rkev rd_kafka_event_t* - )
      * @return \FFI\CData|null const rd_kafka_DescribeCluster_result_t* - the result of a DescribeCluster request, or NULL if event is of different type.
      * @since 2.3.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#ad929f688a6f83e1a746f9671a3afca07
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#aeb5c6a8c359bc0f0a769f8e6efa72c44
      */
     public static function rd_kafka_event_DescribeCluster_result(?\FFI\CData $rkev): ?\FFI\CData
     {
@@ -6923,7 +6922,7 @@ trait Methods
      * @param \FFI\CData|null $rkev rd_kafka_event_t* - )
      * @return \FFI\CData|null const rd_kafka_ListOffsets_result_t* - the result of a ListOffsets request, or NULL if event is of different type.
      * @since 2.3.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a7235a4c443405ed3e2800c7154824451
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a3851a3f25c563e7e2f18c756772d84be
      */
     public static function rd_kafka_event_ListOffsets_result(?\FFI\CData $rkev): ?\FFI\CData
     {
@@ -7005,7 +7004,7 @@ trait Methods
      * @param \FFI\CData|null $cntp size_t* - is updated to the number of elements in the array.
      * @return \FFI\CData|null const rd_kafka_TopicDescription_t**
      * @since 2.3.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#ad05681eacf78ab2e1e6444638f753dfb
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a88c8a277f6001c95bf5d04fde169c4e2
      */
     public static function rd_kafka_DescribeTopics_result_topics(?\FFI\CData $result, ?\FFI\CData $cntp): ?\FFI\CData
     {
@@ -7021,7 +7020,7 @@ trait Methods
      * @param \FFI\CData|null $cntp size_t* - is updated to the number of partitions in the array.
      * @return \FFI\CData|null const rd_kafka_TopicPartitionInfo_t** - An array of TopicPartitionInfos.
      * @since 2.3.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a78585749002fec9bc7c5f7199d2ce365
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a55b846a85b6ca8174d976e559c82f999
      */
     public static function rd_kafka_TopicDescription_partitions(?\FFI\CData $topicdesc, ?\FFI\CData $cntp): ?\FFI\CData
     {
@@ -7033,7 +7032,7 @@ trait Methods
      * @param \FFI\CData|null $partition const rd_kafka_TopicPartitionInfo_t* - ) - The partition info.
      * @return int|null const int - The partition id.
      * @since 2.3.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a3e0bd5738c9af79beb40c3e6d1dd60a3
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#af75739639e889e477d6f1a98cea88b25
      */
     public static function rd_kafka_TopicPartitionInfo_partition(?\FFI\CData $partition): ?int
     {
@@ -7048,7 +7047,7 @@ trait Methods
      * @param \FFI\CData|null $partition const rd_kafka_TopicPartitionInfo_t* - ) - The partition info.
      * @return \FFI\CData|null const rd_kafka_Node_t* - The partition leader.
      * @since 2.3.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a1c6306ac9839416784f1cb2805e57132
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a678305c429a8566a0b78d4298847ab03
      */
     public static function rd_kafka_TopicPartitionInfo_leader(?\FFI\CData $partition): ?\FFI\CData
     {
@@ -7064,7 +7063,7 @@ trait Methods
      * @param \FFI\CData|null $cntp size_t* - is updated with in-sync replicas count.
      * @return \FFI\CData|null const rd_kafka_Node_t** - The in-sync replica nodes.
      * @since 2.3.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a78ca7c71358bb9ed387fa6384e87731c
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a1eb96b873cacfb0e1e418432e41d7a05
      */
     public static function rd_kafka_TopicPartitionInfo_isr(?\FFI\CData $partition, ?\FFI\CData $cntp): ?\FFI\CData
     {
@@ -7080,7 +7079,7 @@ trait Methods
      * @param \FFI\CData|null $cntp size_t* - is updated with partition replicas count.
      * @return \FFI\CData|null const rd_kafka_Node_t** - The partition replicas nodes.
      * @since 2.3.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#aa27f09e729ee3314a2a69a2966155bd5
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a50e33ecb1e7714bee26986a7dcc7fe49
      */
     public static function rd_kafka_TopicPartitionInfo_replicas(?\FFI\CData $partition, ?\FFI\CData $cntp): ?\FFI\CData
     {
@@ -7096,7 +7095,7 @@ trait Methods
      * @param \FFI\CData|null $cntp size_t* - is updated with authorized ACL operations count.
      * @return \FFI\CData|null const rd_kafka_AclOperation_t* - The topic authorized operations. Is NULL if operations were not requested.
      * @since 2.3.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a848c8f05aa765d3caa943a5b5fb58bb4
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#af2d93ccb01cc15e96cb11a39718f11b8
      */
     public static function rd_kafka_TopicDescription_authorized_operations(?\FFI\CData $topicdesc, ?\FFI\CData $cntp): ?\FFI\CData
     {
@@ -7111,7 +7110,7 @@ trait Methods
      * @param \FFI\CData|null $topicdesc const rd_kafka_TopicDescription_t* - ) - The topic description.
      * @return string|null const char* - The topic name.
      * @since 2.3.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a66dd715323222bcfbe161712bf69febe
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a490e028c8ed8fda61ae24da3a814322c
      */
     public static function rd_kafka_TopicDescription_name(?\FFI\CData $topicdesc): ?string
     {
@@ -7126,7 +7125,7 @@ trait Methods
      * @param \FFI\CData|null $topicdesc const rd_kafka_TopicDescription_t* - ) - The topic description.
      * @return \FFI\CData|null const rd_kafka_Uuid_t* - The topic id
      * @since 2.3.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a4896084f819b95b9cc0fd5ee2082efdb
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a557e353e835117478b865d085dededfd
      */
     public static function rd_kafka_TopicDescription_topic_id(?\FFI\CData $topicdesc): ?\FFI\CData
     {
@@ -7153,7 +7152,7 @@ trait Methods
      * @param \FFI\CData|null $topicdesc const rd_kafka_TopicDescription_t* - ) - The topic description.
      * @return \FFI\CData|null const rd_kafka_error_t* - The topic description error.
      * @since 2.3.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a32ad6034f5b75c921bfa3a98d4f8f686
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a122980e677b8673357e0ead8278d122e
      */
     public static function rd_kafka_TopicDescription_error(?\FFI\CData $topicdesc): ?\FFI\CData
     {
@@ -7186,7 +7185,7 @@ trait Methods
      * @param \FFI\CData|null $cntp size_t* - is updated with the count of broker nodes.
      * @return \FFI\CData|null const rd_kafka_Node_t** - An array of broker nodes.
      * @since 2.3.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#abff01b7298dc6294e3e71cf68a8a030d
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#add39eff7e0f0cde3614b661594310e28
      */
     public static function rd_kafka_DescribeCluster_result_nodes(?\FFI\CData $result, ?\FFI\CData $cntp): ?\FFI\CData
     {
@@ -7202,7 +7201,7 @@ trait Methods
      * @param \FFI\CData|null $cntp size_t* - is updated with authorized ACL operations count.
      * @return \FFI\CData|null const rd_kafka_AclOperation_t* - The cluster authorized operations. Is NULL if operations were not requested.
      * @since 2.3.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#aa988aaac59fe7e1d2c6160a360a5d409
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#aa0f78bad0da719956778d43fedc42454
      */
     public static function rd_kafka_DescribeCluster_result_authorized_operations(?\FFI\CData $result, ?\FFI\CData $cntp): ?\FFI\CData
     {
@@ -7214,7 +7213,7 @@ trait Methods
      * @param \FFI\CData|null $result const rd_kafka_DescribeCluster_result_t* - ) - The result of DescribeCluster.
      * @return \FFI\CData|null const rd_kafka_Node_t* - The cluster current controller.
      * @since 2.3.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#ae3b6f12975ae0fdbdcc965c57fc93e09
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a268e83f5e58ea81ea87c2a9fb8a28af1
      */
     public static function rd_kafka_DescribeCluster_result_controller(?\FFI\CData $result): ?\FFI\CData
     {
@@ -7229,7 +7228,7 @@ trait Methods
      * @param \FFI\CData|null $result const rd_kafka_DescribeCluster_result_t* - ) - The result of DescribeCluster.
      * @return string|null const char* - The cluster id.
      * @since 2.3.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a942e7ebd44cea3347bd5f2a179ef4af0
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a70813d17f662b9b4524f42078a8ddd0f
      */
     public static function rd_kafka_DescribeCluster_result_cluster_id(?\FFI\CData $result): ?string
     {
@@ -7245,7 +7244,7 @@ trait Methods
      * @param \FFI\CData|null $cntp size_t* - is updated with authorized ACL operations count.
      * @return \FFI\CData|null const rd_kafka_AclOperation_t* - The group authorized operations. Is NULL if operations were not requested.
      * @since 2.3.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#ac0e7847f00bf23095790e2d472416825
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a9bfd676eceeb2c768fbf9cb4df2f63c1
      */
     public static function rd_kafka_ConsumerGroupDescription_authorized_operations(?\FFI\CData $grpdesc, ?\FFI\CData $cntp): ?\FFI\CData
     {
@@ -7386,7 +7385,7 @@ trait Methods
      * @param \FFI\CData|null $rkmessage const rd_kafka_message_t* - )
      * @return string|null const char*
      * @since 2.4.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a93122a1eaa68bcc9ae33bf3f75cde040
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a308971e7560a146d2af791d7915b38a0
      */
     public static function rd_kafka_message_produce_errstr(?\FFI\CData $rkmessage): ?string
     {
@@ -7398,10 +7397,10 @@ trait Methods
      *
      *
      * <dl class="section remark"><dt>Remarks</dt><dd>The returned pointer has the same lifetime as <code>group_metadata</code>. </dd></dl>
-     * @param \FFI\CData|null $group_metadata const rd_kafka_consumer_group_metadata_t* - ) - The group metadata
+     * @param \FFI\CData|null $group_metadata const rd_kafka_consumer_group_metadata_t* - ) - The group metadata.
      * @return string|null const char* - The member id contained in the passed <code>group_metadata</code>.
      * @since 2.4.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#abc50e7689e6e3975ef0dd3accacff87a
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a2d472b3e20962fd2027d6a99f85e5149
      */
     public static function rd_kafka_consumer_group_metadata_member_id(?\FFI\CData $group_metadata): ?string
     {
@@ -7460,7 +7459,7 @@ trait Methods
      * @param int $type rd_kafka_consumer_group_type_t - ) - The group type value.
      * @return string|null const char* - The group type name corresponding to the provided group type value.
      * @since 2.6.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a2dd724a00756c8da5ceb24e11f580b6f
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#aa1832cc57552f789d1e27faaa93943d1
      */
     public static function rd_kafka_consumer_group_type_name(int $type): ?string
     {
@@ -7489,7 +7488,7 @@ trait Methods
      * @param \FFI\CData|null $rkev rd_kafka_event_t* - )
      * @return \FFI\CData|null const rd_kafka_ElectLeaders_result_t* - the result of a ElectLeaders request, or NULL if event is of different type.
      * @since 2.6.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#accb1216ca1ee4ece892fa100c0979c6d
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#abf08b888315fc6bd49f397703b035233
      */
     public static function rd_kafka_event_ElectLeaders_result(?\FFI\CData $rkev): ?\FFI\CData
     {
@@ -7503,7 +7502,7 @@ trait Methods
      * @param \FFI\CData|null $partition_result const rd_kafka_topic_partition_result_t* - )
      * @return \FFI\CData|null const rd_kafka_topic_partition_t* - the topic partition object from the topic partition result object.
      * @since 2.6.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a2a72bc6dee45e2c291a4e4934d4f8ed3
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a6b516428ccc72a544681f16c130a8dd9
      */
     public static function rd_kafka_topic_partition_result_partition(?\FFI\CData $partition_result): ?\FFI\CData
     {
@@ -7515,7 +7514,7 @@ trait Methods
      * @param \FFI\CData|null $partition_result const rd_kafka_topic_partition_result_t* - )
      * @return \FFI\CData|null const rd_kafka_error_t* - the error object from the topic partition result object.
      * @since 2.6.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#aef373e6e147ea24ccd9d581bf53d4609
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a6d6090e9f0cfe26744aa1c4489e4515c
      */
     public static function rd_kafka_topic_partition_result_error(?\FFI\CData $partition_result): ?\FFI\CData
     {
@@ -7603,7 +7602,7 @@ trait Methods
      * @param \FFI\CData|null $cntp size_t* - The number of elements in the array.
      * @return \FFI\CData|null const rd_kafka_topic_partition_result_t** - the array of topic partition result objects from the elect leaders result event.
      * @since 2.6.0 of librdkafka
-     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a0d79dcd7889ec3b02c2448a3d1486cf2
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a7b745712f0acd7f6c1d8f916d7ad6581
      */
     public static function rd_kafka_ElectLeaders_result_partitions(?\FFI\CData $result, ?\FFI\CData $cntp): ?\FFI\CData
     {
@@ -7618,5 +7617,99 @@ trait Methods
     public static function rd_kafka_mock_group_initial_rebalance_delay_ms(?\FFI\CData $mcluster, ?int $delay_ms): void
     {
         static::getFFI()->rd_kafka_mock_group_initial_rebalance_delay_ms($mcluster, $delay_ms);
+    }
+
+    /**
+     * <p>Get group id of a group metadata. </p>
+     *
+     *
+     * <dl class="section remark"><dt>Remarks</dt><dd>The returned pointer has the same lifetime as <code>group_metadata</code>. </dd></dl>
+     * @param \FFI\CData|null $group_metadata const rd_kafka_consumer_group_metadata_t* - ) - The group metadata.
+     * @return string|null const char* - The group id contained in the passed <code>group_metadata</code>.
+     * @since 2.8.0 of librdkafka
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#ab916ea76159290e3f1e644c40816a042
+     */
+    public static function rd_kafka_consumer_group_metadata_group_id(?\FFI\CData $group_metadata): ?string
+    {
+        return static::getFFI()->rd_kafka_consumer_group_metadata_group_id($group_metadata);
+    }
+
+    /**
+     * <p>Get group instance id of a group metadata. </p>
+     *
+     *
+     * <dl class="section remark"><dt>Remarks</dt><dd>The returned pointer has the same lifetime as <code>group_metadata</code>. </dd></dl>
+     * @param \FFI\CData|null $group_metadata const rd_kafka_consumer_group_metadata_t* - ) - The group metadata.
+     * @return string|null const char* - The group instance id contained in the passed <code>group_metadata</code> or NULL.
+     * @since 2.8.0 of librdkafka
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#ad74ae94a86e81db03afcd772fad96c45
+     */
+    public static function rd_kafka_consumer_group_metadata_group_instance_id(?\FFI\CData $group_metadata): ?string
+    {
+        return static::getFFI()->rd_kafka_consumer_group_metadata_group_instance_id($group_metadata);
+    }
+
+    /**
+     * <p>Get the generation id (classic protocol) or member epoch (consumer protocol) of a group metadata. </p>
+     * @param \FFI\CData|null $group_metadata const rd_kafka_consumer_group_metadata_t* - ) - The group metadata.
+     * @return int|null int32_t - The generation id or member epoch contained in the passed <code>group_metadata</code>.
+     * @since 2.8.0 of librdkafka
+     * @link https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html#a851a24b70797902f3600a4650b7f82f0
+     */
+    public static function rd_kafka_consumer_group_metadata_generation_id(?\FFI\CData $group_metadata): ?int
+    {
+        return static::getFFI()->rd_kafka_consumer_group_metadata_generation_id($group_metadata);
+    }
+
+    /**
+     * @param \FFI\CData|null $member_ids char**
+     * @param int|null $member_cnt int
+     * @param \FFI\CData|null $assignment rd_kafka_topic_partition_list_t**
+     * @return \FFI\CData|null rd_kafka_mock_cgrp_consumer_target_assignment_t*
+     * @since 2.8.0 of librdkafka
+     */
+    public static function rd_kafka_mock_cgrp_consumer_target_assignment_new(?\FFI\CData $member_ids, ?int $member_cnt, ?\FFI\CData $assignment): ?\FFI\CData
+    {
+        return static::getFFI()->rd_kafka_mock_cgrp_consumer_target_assignment_new($member_ids, $member_cnt, $assignment);
+    }
+
+    /**
+     * @param \FFI\CData|null $target_assignment rd_kafka_mock_cgrp_consumer_target_assignment_t*
+     * @since 2.8.0 of librdkafka
+     */
+    public static function rd_kafka_mock_cgrp_consumer_target_assignment_destroy(?\FFI\CData $target_assignment): void
+    {
+        static::getFFI()->rd_kafka_mock_cgrp_consumer_target_assignment_destroy($target_assignment);
+    }
+
+    /**
+     * @param \FFI\CData|null $mcluster rd_kafka_mock_cluster_t*
+     * @param string|null $group_id const char*
+     * @param \FFI\CData|null $target_assignment rd_kafka_mock_cgrp_consumer_target_assignment_t*
+     * @since 2.8.0 of librdkafka
+     */
+    public static function rd_kafka_mock_cgrp_consumer_target_assignment(?\FFI\CData $mcluster, ?string $group_id, ?\FFI\CData $target_assignment): void
+    {
+        static::getFFI()->rd_kafka_mock_cgrp_consumer_target_assignment($mcluster, $group_id, $target_assignment);
+    }
+
+    /**
+     * @param \FFI\CData|null $mcluster rd_kafka_mock_cluster_t*
+     * @param int|null $group_consumer_session_timeout_ms int
+     * @since 2.8.0 of librdkafka
+     */
+    public static function rd_kafka_mock_set_group_consumer_session_timeout_ms(?\FFI\CData $mcluster, ?int $group_consumer_session_timeout_ms): void
+    {
+        static::getFFI()->rd_kafka_mock_set_group_consumer_session_timeout_ms($mcluster, $group_consumer_session_timeout_ms);
+    }
+
+    /**
+     * @param \FFI\CData|null $mcluster rd_kafka_mock_cluster_t*
+     * @param int|null $group_consumer_heartbeat_interval_ms int
+     * @since 2.8.0 of librdkafka
+     */
+    public static function rd_kafka_mock_set_group_consumer_heartbeat_interval_ms(?\FFI\CData $mcluster, ?int $group_consumer_heartbeat_interval_ms): void
+    {
+        static::getFFI()->rd_kafka_mock_set_group_consumer_heartbeat_interval_ms($mcluster, $group_consumer_heartbeat_interval_ms);
     }
 }

@@ -94,7 +94,7 @@ class LibrdkafkaHeaderFiles
         foreach ($releases as $release) {
             if ($release->prerelease === false) {
                 $version = str_replace('v', '', $release->tag_name);
-                if (Comparator::greaterThanOrEqualTo($version, '1.0.0') && Comparator::lessThan($version, '2.7.0')) {
+                if (Comparator::greaterThanOrEqualTo($version, '1.0.0') && Comparator::lessThan($version, '2.9.0')) {
                     $supportedVersions[$version] = sprintf(
                         self::DOWNLOAD_BASE_URL_TEMPLATE,
                         $release->tag_name

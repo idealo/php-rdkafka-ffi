@@ -15,7 +15,7 @@ jobs:
         php:
           - '8.1'
         librdkafka:
-          - 'v2.6.0'
+          - 'v2.8.0'
         rdkafka:
           - '6.x'
     services:
