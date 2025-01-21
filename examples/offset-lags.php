@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Do NOT use in production - play around against local dev kafka only.
  *

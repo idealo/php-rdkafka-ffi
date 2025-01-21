@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Experimental mock cluster support in librdkafka ^1.3.0
  * @see https://github.com/confluentinc/librdkafka/blob/master/src/rdkafka_mock.h#L44
