@@ -94,7 +94,7 @@ class TopicConfTest extends TestCase
         $producer->flush(KAFKA_TEST_LONG_TIMEOUT_MS);
 
         $consumer = new Consumer($conf);
-        $consumerTopic = $consumer->newTopic(KAFKA_TEST_TOPIC_PARTITIONS, $topicConf);
+        $consumerTopic = $consumer->newTopic(KAFKA_TEST_TOPIC_PARTITIONS);
 
         $consumerTopic->consumeStart(1, rd_kafka_offset_tail(2));
         $messages = $this->consumeMessagesWithConsumerTopic($consumerTopic, 1, 2);
@@ -144,7 +144,7 @@ class TopicConfTest extends TestCase
         $producer->flush(KAFKA_TEST_LONG_TIMEOUT_MS);
 
         $consumer = new Consumer($conf);
-        $consumerTopic = $consumer->newTopic(KAFKA_TEST_TOPIC_PARTITIONS, $topicConf);
+        $consumerTopic = $consumer->newTopic(KAFKA_TEST_TOPIC_PARTITIONS);
 
         $consumerTopic->consumeStart(2, rd_kafka_offset_tail(4));
         $messages = $this->consumeMessagesWithConsumerTopic($consumerTopic, 2, 4);
@@ -187,7 +187,7 @@ class TopicConfTest extends TestCase
         $producer->flush(KAFKA_TEST_LONG_TIMEOUT_MS);
 
         $consumer = new Consumer($conf);
-        $consumerTopic = $consumer->newTopic(KAFKA_TEST_TOPIC_PARTITIONS, $topicConf);
+        $consumerTopic = $consumer->newTopic(KAFKA_TEST_TOPIC_PARTITIONS);
 
         $consumerTopic->consumeStart(2, rd_kafka_offset_tail(1));
         $messages = $this->consumeMessagesWithConsumerTopic($consumerTopic, 2, 1);
