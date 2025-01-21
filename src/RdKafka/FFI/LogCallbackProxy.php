@@ -11,11 +11,15 @@ class LogCallbackProxy extends CallbackProxy
 {
     public function __invoke(CData $rdkafka, int $level, string $facility, string $message): void
     {
-        ($this->callback)(
-            RdKafka::resolveFromCData($rdkafka),
-            $level,
-            $facility,
-            $message
-        );
+        try {
+            ($this->callback)(
+                RdKafka::resolveFromCData($rdkafka),
+                $level,
+                $facility,
+                $message
+            );
+        } catch (\Throwable $exception) {
+            error_log($exception->getMessage(), E_ERROR);
+        }
     }
 }

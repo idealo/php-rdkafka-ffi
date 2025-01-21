@@ -25,14 +25,20 @@ class NativePartitionerCallbackProxy
         ?CData $topic_opaque = null,
         ?CData $msg_opaque = null
     ): int {
-        return (int) Library::{$this->partitionerMethod}(
-            $topic,
-            $keydata,
-            $keylen,
-            $partition_cnt,
-            OpaqueMap::get($topic_opaque),
-            OpaqueMap::get($msg_opaque)
-        );
+        try {
+            return (int) Library::{$this->partitionerMethod}(
+                $topic,
+                $keydata,
+                $keylen,
+                $partition_cnt,
+                OpaqueMap::get($topic_opaque),
+                OpaqueMap::get($msg_opaque)
+            );
+        } catch (\Throwable $exception) {
+            error_log($exception->getMessage(), E_ERROR);
+        }
+
+        return RD_KAFKA_PARTITION_UA;
     }
 
     public static function create(string $partitionerMethod): Closure

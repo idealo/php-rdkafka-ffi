@@ -11,9 +11,13 @@ class ConsumeCallbackProxy extends CallbackProxy
 {
     public function __invoke(CData $nativeMessage, ?CData $opaque = null): void
     {
-        ($this->callback)(
-            new Message($nativeMessage),
-            OpaqueMap::get($opaque)
-        );
+        try {
+            ($this->callback)(
+                new Message($nativeMessage),
+                OpaqueMap::get($opaque)
+            );
+        } catch (\Throwable $exception) {
+            error_log($exception->getMessage(), E_ERROR);
+        }
     }
 }

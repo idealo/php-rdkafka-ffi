@@ -11,11 +11,15 @@ class ErrorCallbackProxy extends CallbackProxy
 {
     public function __invoke(CData $consumerOrProducer, int $err, string $reason, ?CData $opaque = null): void
     {
-        ($this->callback)(
-            RdKafka::resolveFromCData($consumerOrProducer),
-            $err,
-            $reason,
-            OpaqueMap::get($opaque)
-        );
+        try {
+            ($this->callback)(
+                RdKafka::resolveFromCData($consumerOrProducer),
+                $err,
+                $reason,
+                OpaqueMap::get($opaque)
+            );
+        } catch (\Throwable $exception) {
+            error_log($exception->getMessage(), E_ERROR);
+        }
     }
 }

@@ -12,12 +12,16 @@ class StatsCallbackProxy extends CallbackProxy
 {
     public function __invoke(CData $consumerOrProducer, CData $json, int $json_len, ?CData $opaque = null): int
     {
-        ($this->callback)(
-            RdKafka::resolveFromCData($consumerOrProducer),
-            FFI::string($json, $json_len),
-            $json_len,
-            OpaqueMap::get($opaque)
-        );
+        try {
+            ($this->callback)(
+                RdKafka::resolveFromCData($consumerOrProducer),
+                FFI::string($json, $json_len),
+                $json_len,
+                OpaqueMap::get($opaque)
+            );
+        } catch (\Throwable $exception) {
+            error_log($exception->getMessage(), E_ERROR);
+        }
 
         return 0;
     }

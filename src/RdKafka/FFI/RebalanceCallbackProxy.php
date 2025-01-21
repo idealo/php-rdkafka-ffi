@@ -12,11 +12,15 @@ class RebalanceCallbackProxy extends CallbackProxy
 {
     public function __invoke(CData $consumer, int $err, CData $nativeTopicPartitionList, ?CData $opaque = null): void
     {
-        ($this->callback)(
-            RdKafka::resolveFromCData($consumer),
-            $err,
-            TopicPartitionList::fromCData($nativeTopicPartitionList)->asArray(),
-            OpaqueMap::get($opaque)
-        );
+        try {
+            ($this->callback)(
+                RdKafka::resolveFromCData($consumer),
+                $err,
+                TopicPartitionList::fromCData($nativeTopicPartitionList)->asArray(),
+                OpaqueMap::get($opaque)
+            );
+        } catch (\Throwable $exception) {
+            error_log($exception->getMessage(), E_ERROR);
+        }
     }
 }

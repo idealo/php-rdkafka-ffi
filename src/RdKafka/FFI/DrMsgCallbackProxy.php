@@ -12,10 +12,14 @@ class DrMsgCallbackProxy extends CallbackProxy
 {
     public function __invoke(CData $producer, CData $nativeMessage, ?CData $opaque = null): void
     {
-        ($this->callback)(
-            RdKafka::resolveFromCData($producer),
-            new Message($nativeMessage),
-            OpaqueMap::get($opaque)
-        );
+        try {
+            ($this->callback)(
+                RdKafka::resolveFromCData($producer),
+                new Message($nativeMessage),
+                OpaqueMap::get($opaque)
+            );
+        } catch (\Throwable $exception) {
+            error_log($exception->getMessage(), E_ERROR);
+        }
     }
 }
