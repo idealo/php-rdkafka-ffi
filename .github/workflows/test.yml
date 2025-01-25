@@ -110,8 +110,8 @@ jobs:
         with:
           php-version: ${{ matrix.php }}
           coverage: xdebug
-          extensions: ffi, pcntl
-          ini-values: "${{ matrix.php == '8.3' && 'zend.max_allowed_stack_size=-1' || '' }}"
+          extensions: ffi, pcntl, xdebug
+          ini-values: "${{ (matrix.php == '8.3' || matrix.php == '8.4') && 'zend.max_allowed_stack_size=-1' || '' }}"
 
       - name: Install dependencies
         uses: ramsey/composer-install@v2
