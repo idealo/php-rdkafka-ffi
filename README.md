@@ -9,7 +9,8 @@
 [![Maintainability](https://api.codeclimate.com/v1/badges/9ee55cb5587fbf64dea8/maintainability)](https://codeclimate.com/github/idealo/php-rdkafka-ffi/maintainability)
 [![Packagist](https://img.shields.io/packagist/v/idealo/php-rdkafka-ffi)](https://packagist.org/packages/idealo/php-rdkafka-ffi)
 
-This is a Kafka client library for PHP ^7.4 and ^8.0 with a slim [librdkafka](https://github.com/confluentinc/librdkafka) binding via  [FFI](https://www.php.net/manual/en/book.ffi.php).
+This is a Kafka client library for PHP ^7.4 and ^8.0 with a slim [librdkafka](https://github.com/confluentinc/librdkafka) binding
+via  [FFI](https://www.php.net/manual/en/book.ffi.php).
 
 It supports the same interfaces as the [PHP RdKafka extension](https://github.com/arnaud-lb/php-rdkafka) ^5.0 and ^6.0.
 
@@ -30,15 +31,19 @@ It supports the same interfaces as the [PHP RdKafka extension](https://github.co
     * zend opcache extension for preloading
     * pcntl extension for faster shutdown in request/response context
 
+Note: From PHP 8.3 onwards, you must disable the stack overflow check by setting `zend.max_allowed_stack_size=-1` in your php.ini. This is
+necessary because FFI callbacks are executed off the main thread, and the overflow checks do not handle this scenario properly.
+
 Note: Support for macOS and Windows is experimental.
 
 ## Installation
 
     composer require idealo/php-rdkafka-ffi
-    
+
 Note: Expect breaking changes along all 0.* pre-releases.
-This changes may depend on upcoming major releases of the RdKafka extension or improved interfaces for the experimental features like transactional producer, mock cluster and admin client.
-    
+This changes may depend on upcoming major releases of the RdKafka extension or improved interfaces for the experimental features like
+transactional producer, mock cluster and admin client.
+
 ## Documentation
 
 https://idealo.github.io/php-rdkafka-ffi/
