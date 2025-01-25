@@ -128,7 +128,7 @@ class TopicConfTest extends TestCase
         $conf = new TopicConf();
 
         $this->expectException(\RuntimeException::class);
-        $this->expectExceptionMessageMatches('/rd_kafka_msg_partitioner_fnv1a_random/');
+        $this->expectExceptionMessageMatches('/rd_kafka_msg_partitioner_fnv1a/');
         $conf->setPartitioner(RD_KAFKA_MSG_PARTITIONER_FNV1A);
     }
 
