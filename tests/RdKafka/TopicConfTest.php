@@ -7,6 +7,7 @@ namespace RdKafka;
 use ConsumeTrait;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
+use RequireVersionTrait;
 
 /**
  * @covers \RdKafka\TopicConf
@@ -16,6 +17,7 @@ use PHPUnit\Framework\TestCase;
  */
 class TopicConfTest extends TestCase
 {
+    use RequireVersionTrait;
     use ConsumeTrait;
 
     public function testDump(): void
@@ -119,6 +121,17 @@ class TopicConfTest extends TestCase
         $conf->setPartitioner(9999);
     }
 
+    public function testSetPartitionerWithUnsupportedTypeShouldFail(): void
+    {
+        $this->requiresLibrdkafkaVersion('<', '1.4.0');
+
+        $conf = new TopicConf();
+
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessageMatches('/rd_kafka_msg_partitioner_fnv1a_random/');
+        $conf->setPartitioner(RD_KAFKA_MSG_PARTITIONER_FNV1A);
+    }
+
     /**
      * @group ffiOnly
      */
@@ -170,7 +183,11 @@ class TopicConfTest extends TestCase
         $topicConf = new TopicConf();
         $topicConf->setOpaque($expectedTopicOpaque);
         $topicConf->setPartitionerCb(
-            function (?string $key, int $partitionCount, ?object $topic_opaque = null, ?object $message_opaque = null) use (&$callbackTopicOpaque, &$callbackMessageOpaque) {
+            function (?string $key, int $partitionCount, ?object $topic_opaque = null, ?object $message_opaque = null) use (
+                &
+                $callbackTopicOpaque,
+                &$callbackMessageOpaque
+            ) {
                 $callbackTopicOpaque = $topic_opaque;
                 $callbackMessageOpaque = $message_opaque;
                 // force partition 2

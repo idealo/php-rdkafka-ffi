@@ -40,7 +40,7 @@ class TopicConf
     {
         $count = Library::new('size_t');
         $dump = Library::rd_kafka_topic_conf_dump($this->topicConf, FFI::addr($count));
-        $count = (int) $count->cdata;
+        $count = (int)$count->cdata;
 
         $result = [];
         for ($i = 0; $i < $count; $i += 2) {
@@ -106,12 +106,14 @@ class TopicConf
                 break;
 
             default:
-                throw new InvalidArgumentException('Invalid partitioner');
-                break;
+                throw new InvalidArgumentException('Invalid partitioner given');
         }
+
+        Library::requireMethod($partitionerMethod);
 
         Library::rd_kafka_topic_conf_set_partitioner_cb(
             $this->topicConf,
+            // todo: replace with Library::getFFI()->$partitionerMethod when dropping php < 8.1
             NativePartitionerCallbackProxy::create($partitionerMethod)
         );
     }
