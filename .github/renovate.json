@@ -1,7 +1,7 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "local>idealo/ibt-renovate-config",
+    "config:recommended",
     "group:allNonMajor",
     "schedule:earlyMondays"
   ]
