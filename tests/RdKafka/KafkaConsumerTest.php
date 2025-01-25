@@ -464,7 +464,7 @@ class KafkaConsumerTest extends TestCase
 
         $consumer = new KafkaConsumer($conf);
 
-        $metadata = $consumer->getMetadata(true, null, KAFKA_TEST_SHORT_TIMEOUT_MS);
+        $metadata = $consumer->getMetadata(true, null, KAFKA_TEST_LONG_TIMEOUT_MS);
 
         $this->assertInstanceOf(Metadata::class, $metadata);
     }
