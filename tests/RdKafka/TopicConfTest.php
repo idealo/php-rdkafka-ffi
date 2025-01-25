@@ -184,8 +184,7 @@ class TopicConfTest extends TestCase
         $topicConf->setOpaque($expectedTopicOpaque);
         $topicConf->setPartitionerCb(
             function (?string $key, int $partitionCount, ?object $topic_opaque = null, ?object $message_opaque = null) use (
-                &
-                $callbackTopicOpaque,
+                &$callbackTopicOpaque,
                 &$callbackMessageOpaque
             ) {
                 $callbackTopicOpaque = $topic_opaque;

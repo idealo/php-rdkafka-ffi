@@ -30,11 +30,11 @@ class MockClusterTest extends TestCase
     public function testCreateWithProducingAndConsuming(): void
     {
         $clusterConfig = new Conf();
-        $clusterConfig->set('log_level', (string)LOG_EMERG);
+        $clusterConfig->set('log_level', (string) LOG_EMERG);
         $cluster = MockCluster::create(1, $clusterConfig);
 
         $producerConfig = new Conf();
-        $producerConfig->set('log_level', (string)LOG_EMERG);
+        $producerConfig->set('log_level', (string) LOG_EMERG);
         $producerConfig->set('bootstrap.servers', $cluster->getBootstraps());
         $producer = new Producer($producerConfig);
         $producerTopic = $producer->newTopic(KAFKA_TEST_TOPIC);
@@ -42,7 +42,7 @@ class MockClusterTest extends TestCase
         $producer->flush(KAFKA_TEST_LONG_TIMEOUT_MS);
 
         $consumerConfig = new Conf();
-        $consumerConfig->set('log_level', (string)LOG_EMERG);
+        $consumerConfig->set('log_level', (string) LOG_EMERG);
         $consumerConfig->set('bootstrap.servers', $cluster->getBootstraps());
         $consumerConfig->set('group.id', __METHOD__);
         $consumer = new KafkaConsumer($consumerConfig);
@@ -65,8 +65,8 @@ class MockClusterTest extends TestCase
         $this->requiresLibrdkafkaVersion('>=', '1.4.0');
 
         $producerConfig = new Conf();
-        $producerConfig->set('log_level', (string)LOG_EMERG);
-        $producerConfig->set('test.mock.num.brokers', (string)3);
+        $producerConfig->set('log_level', (string) LOG_EMERG);
+        $producerConfig->set('test.mock.num.brokers', (string) 3);
         $producer = new Producer($producerConfig);
 
         $cluster = MockCluster::fromProducer($producer);
@@ -79,7 +79,7 @@ class MockClusterTest extends TestCase
         $this->requiresLibrdkafkaVersion('>=', '1.4.0');
 
         $producerConfig = new Conf();
-        $producerConfig->set('log_level', (string)LOG_EMERG);
+        $producerConfig->set('log_level', (string) LOG_EMERG);
         $producer = new Producer($producerConfig);
 
         $this->expectException(Exception::class);
@@ -90,7 +90,7 @@ class MockClusterTest extends TestCase
     public function testGetBootstraps(): void
     {
         $clusterConfig = new Conf();
-        $clusterConfig->set('log_level', (string)LOG_EMERG);
+        $clusterConfig->set('log_level', (string) LOG_EMERG);
         $cluster = MockCluster::create(3, $clusterConfig);
 
         $bootstrap = $cluster->getBootstraps();
@@ -105,7 +105,7 @@ class MockClusterTest extends TestCase
         $logStack = [];
 
         $clusterConfig = new Conf();
-        $clusterConfig->set('log_level', (string)LOG_EMERG);
+        $clusterConfig->set('log_level', (string) LOG_EMERG);
         $cluster = MockCluster::create(1, $clusterConfig);
 
         $cluster->setApiVersion(ApiKey::Produce, 4, 6);
@@ -138,13 +138,13 @@ class MockClusterTest extends TestCase
     public function testSetPartitionFollowerAndLeader(): void
     {
         $clusterConfig = new Conf();
-        $clusterConfig->set('log_level', (string)LOG_EMERG);
+        $clusterConfig->set('log_level', (string) LOG_EMERG);
         $cluster = MockCluster::create(2, $clusterConfig);
 
         $producerConfig = new Conf();
-        $producerConfig->set('log_level', (string)LOG_EMERG);
+        $producerConfig->set('log_level', (string) LOG_EMERG);
         $producerConfig->set('bootstrap.servers', $cluster->getBootstraps());
-        $producerConfig->set('topic.metadata.refresh.interval.ms', (string)50);
+        $producerConfig->set('topic.metadata.refresh.interval.ms', (string) 50);
         $producer = new Producer($producerConfig);
         $producerTopic = $producer->newTopic(KAFKA_TEST_TOPIC);
 
@@ -168,7 +168,7 @@ class MockClusterTest extends TestCase
     public function testSetPartitionFollowerWatermarks(): void
     {
         $clusterConfig = new Conf();
-        $clusterConfig->set('log_level', (string)LOG_EMERG);
+        $clusterConfig->set('log_level', (string) LOG_EMERG);
         $cluster = MockCluster::create(3, $clusterConfig);
 
         $cluster->setPartitionLeader(KAFKA_TEST_TOPIC, 0, 1);
@@ -176,9 +176,9 @@ class MockClusterTest extends TestCase
 
         // produce 10 msgs
         $producerConfig = new Conf();
-        $producerConfig->set('log_level', (string)LOG_EMERG);
+        $producerConfig->set('log_level', (string) LOG_EMERG);
         $producerConfig->set('bootstrap.servers', $cluster->getBootstraps());
-        $producerConfig->set('batch.num.messages', (string)1);
+        $producerConfig->set('batch.num.messages', (string) 1);
         $producer = new Producer($producerConfig);
         $producerTopic = $producer->newTopic(KAFKA_TEST_TOPIC);
         for ($i = 0; $i < 10; $i++) {
@@ -188,11 +188,11 @@ class MockClusterTest extends TestCase
 
         // prepare consumer
         $consumerConfig = new Conf();
-        $consumerConfig->set('log_level', (string)LOG_EMERG);
+        $consumerConfig->set('log_level', (string) LOG_EMERG);
         $consumerConfig->set('group.id', __METHOD__);
         $consumerConfig->set('auto.offset.reset', 'earliest');
-        $consumerConfig->set('fetch.min.bytes', (string)100);
-        $consumerConfig->set('fetch.message.max.bytes', (string)1000);
+        $consumerConfig->set('fetch.min.bytes', (string) 100);
+        $consumerConfig->set('fetch.message.max.bytes', (string) 1000);
         $consumerConfig->set('bootstrap.servers', $cluster->getBootstraps());
         $consumer = new KafkaConsumer($consumerConfig);
         $consumer->assign([new TopicPartition(KAFKA_TEST_TOPIC, 0, RD_KAFKA_OFFSET_INVALID)]);
@@ -261,13 +261,13 @@ class MockClusterTest extends TestCase
         $this->requiresLibrdkafkaVersion('>=', '1.4.0');
 
         $clusterConfig = new Conf();
-        $clusterConfig->set('log_level', (string)LOG_EMERG);
+        $clusterConfig->set('log_level', (string) LOG_EMERG);
         $cluster = MockCluster::create(1, $clusterConfig);
 
         $producerConfig = new Conf();
-        $producerConfig->set('log_level', (string)LOG_EMERG);
+        $producerConfig->set('log_level', (string) LOG_EMERG);
         $producerConfig->set('bootstrap.servers', $cluster->getBootstraps());
-        $producerConfig->set('reconnect.backoff.max.ms', (string)1000);
+        $producerConfig->set('reconnect.backoff.max.ms', (string) 1000);
         $producer = new Producer($producerConfig);
 
         $cluster->setBrokerDown(1);
@@ -291,12 +291,12 @@ class MockClusterTest extends TestCase
     public function testPushRequestErrors(): void
     {
         $clusterConfig = new Conf();
-        $clusterConfig->set('log_level', (string)LOG_EMERG);
+        $clusterConfig->set('log_level', (string) LOG_EMERG);
         $cluster = MockCluster::create(1, $clusterConfig);
 
         // produce msg
         $producerConfig = new Conf();
-        $producerConfig->set('log_level', (string)LOG_EMERG);
+        $producerConfig->set('log_level', (string) LOG_EMERG);
         $producerConfig->set('bootstrap.servers', $cluster->getBootstraps());
         $producer = new Producer($producerConfig);
         $producerTopic = $producer->newTopic(KAFKA_TEST_TOPIC);
@@ -313,7 +313,7 @@ class MockClusterTest extends TestCase
 
         // try to consume msg
         $consumerConfig = new Conf();
-        $consumerConfig->set('log_level', (string)LOG_EMERG);
+        $consumerConfig->set('log_level', (string) LOG_EMERG);
         $consumerConfig->set('group.id', __METHOD__);
         // $consumerConfig->set('debug', 'fetch');
         $consumerConfig->set('bootstrap.servers', $cluster->getBootstraps());
@@ -333,12 +333,12 @@ class MockClusterTest extends TestCase
         $this->requiresLibrdkafkaVersion('>=', '1.7.0');
 
         $clusterConfig = new Conf();
-        $clusterConfig->set('log_level', (string)LOG_EMERG);
+        $clusterConfig->set('log_level', (string) LOG_EMERG);
         $cluster = MockCluster::create(1, $clusterConfig);
 
         // produce msg
         $producerConfig = new Conf();
-        $producerConfig->set('log_level', (string)LOG_EMERG);
+        $producerConfig->set('log_level', (string) LOG_EMERG);
         $producerConfig->set('bootstrap.servers', $cluster->getBootstraps());
         $producer = new Producer($producerConfig);
         $producerTopic = $producer->newTopic(KAFKA_TEST_TOPIC);
@@ -357,7 +357,7 @@ class MockClusterTest extends TestCase
 
         // try to consume msg
         $consumerConfig = new Conf();
-        $consumerConfig->set('log_level', (string)LOG_EMERG);
+        $consumerConfig->set('log_level', (string) LOG_EMERG);
         $consumerConfig->set('group.id', __METHOD__);
         // $consumerConfig->set('debug', 'fetch');
         $consumerConfig->set('bootstrap.servers', $cluster->getBootstraps());
@@ -377,12 +377,12 @@ class MockClusterTest extends TestCase
         $this->requiresLibrdkafkaVersion('>=', '1.4.0');
 
         $clusterConfig = new Conf();
-        $clusterConfig->set('log_level', (string)LOG_EMERG);
+        $clusterConfig->set('log_level', (string) LOG_EMERG);
         $cluster = MockCluster::create(1, $clusterConfig);
         $cluster->createTopic(KAFKA_TEST_TOPIC, 12, 1);
 
         $producerConfig = new Conf();
-        $producerConfig->set('log_level', (string)LOG_EMERG);
+        $producerConfig->set('log_level', (string) LOG_EMERG);
         $producerConfig->set('bootstrap.servers', $cluster->getBootstraps());
         $producer = new Producer($producerConfig);
         $producerTopic = $producer->newTopic(KAFKA_TEST_TOPIC);
@@ -401,12 +401,12 @@ class MockClusterTest extends TestCase
         $this->requiresLibrdkafkaVersion('<', '1.7.0');
 
         $clusterConfig = new Conf();
-        $clusterConfig->set('log_level', (string)LOG_EMERG);
+        $clusterConfig->set('log_level', (string) LOG_EMERG);
         $cluster = MockCluster::create(1, $clusterConfig);
 
         // produce msg
         $producerConfig = new Conf();
-        $producerConfig->set('log_level', (string)LOG_EMERG);
+        $producerConfig->set('log_level', (string) LOG_EMERG);
         $producerConfig->set('bootstrap.servers', $cluster->getBootstraps());
         $producer = new Producer($producerConfig);
         $producerTopic = $producer->newTopic(KAFKA_TEST_TOPIC);
@@ -424,7 +424,7 @@ class MockClusterTest extends TestCase
 
         // try to consume msg
         $consumerConfig = new Conf();
-        $consumerConfig->set('log_level', (string)LOG_EMERG);
+        $consumerConfig->set('log_level', (string) LOG_EMERG);
         $consumerConfig->set('group.id', __METHOD__);
         // $consumerConfig->set('debug', 'fetch');
         $consumerConfig->set('bootstrap.servers', $cluster->getBootstraps());
@@ -444,12 +444,12 @@ class MockClusterTest extends TestCase
         $this->requiresLibrdkafkaVersion('>=', '1.7.0');
 
         $clusterConfig = new Conf();
-        $clusterConfig->set('log_level', (string)LOG_EMERG);
+        $clusterConfig->set('log_level', (string) LOG_EMERG);
         $cluster = MockCluster::create(1, $clusterConfig);
 
         // produce msg
         $producerConfig = new Conf();
-        $producerConfig->set('log_level', (string)LOG_EMERG);
+        $producerConfig->set('log_level', (string) LOG_EMERG);
         $producerConfig->set('bootstrap.servers', $cluster->getBootstraps());
         $producer = new Producer($producerConfig);
         $producerTopic = $producer->newTopic(KAFKA_TEST_TOPIC);
@@ -469,7 +469,7 @@ class MockClusterTest extends TestCase
 
         // try to consume msg
         $consumerConfig = new Conf();
-        $consumerConfig->set('log_level', (string)LOG_EMERG);
+        $consumerConfig->set('log_level', (string) LOG_EMERG);
         $consumerConfig->set('group.id', __METHOD__);
         // $consumerConfig->set('debug', 'fetch');
         $consumerConfig->set('bootstrap.servers', $cluster->getBootstraps());

@@ -40,7 +40,7 @@ class TopicConf
     {
         $count = Library::new('size_t');
         $dump = Library::rd_kafka_topic_conf_dump($this->topicConf, FFI::addr($count));
-        $count = (int)$count->cdata;
+        $count = (int) $count->cdata;
 
         $result = [];
         for ($i = 0; $i < $count; $i += 2) {
