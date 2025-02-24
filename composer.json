@@ -42,7 +42,7 @@
         "ext-rdkafka": "*"
     },
     "require-dev": {
-        "phpunit/phpunit": "^9.4 || ^10.5",
+        "phpunit/phpunit": "^9.4 || ^10.5 || ^12.0",
         "ircmaxell/php-c-parser": "dev-master#fd8f5efefd0fcc6c5119d945694acaa3a6790ada",
         "symplify/easy-coding-standard": "^12.0",
         "klitsche/ffigen": "0.8.1",
