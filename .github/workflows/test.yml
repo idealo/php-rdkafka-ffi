@@ -125,7 +125,7 @@ jobs:
 
       - name: Publish code coverage to codeclimate
         if: matrix.publish == true && github.event_name == 'push'
-        uses: paambaati/codeclimate-action@v5
+        uses: paambaati/codeclimate-action@v9
         env:
           CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
 
