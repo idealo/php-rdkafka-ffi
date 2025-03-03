@@ -47,8 +47,8 @@
         "symplify/easy-coding-standard": "^12.0",
         "klitsche/ffigen": "0.8.1",
         "klitsche/dog": "^0.4",
-        "symfony/dom-crawler": "^5.1",
-        "symfony/css-selector": "^5.1",
+        "symfony/dom-crawler": "^7.0",
+        "symfony/css-selector": "^7.0",
         "phpbench/phpbench": "^1.1",
         "composer/semver": "^3.2"
     },
