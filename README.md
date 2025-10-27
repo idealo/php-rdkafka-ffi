@@ -1,3 +1,5 @@
+> **⚠️ Status:** _This project is no longer maintained._
+
 # <img src="docs/img/php-rdkafka.svg" width="100" /> PHP Kafka Client
 
 [![Build](https://github.com/idealo/php-rdkafka-ffi/workflows/Build/badge.svg)](https://github.com/idealo/php-rdkafka-ffi/actions?query=workflow%3Atest)
