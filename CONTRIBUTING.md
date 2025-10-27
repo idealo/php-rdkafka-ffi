@@ -1,5 +1,7 @@
 # Contributing
 
+> **⚠️ Status:** _This project is no longer maintained._
+
 We welcome any contributions whether it's,
 
 * Submitting feedback
